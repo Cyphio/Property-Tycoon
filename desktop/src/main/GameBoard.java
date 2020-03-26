@@ -33,7 +33,7 @@ public class GameBoard {
 
         board = builder.getTiles();
 
-        ConfigValidator validator = new ConfigValidator();
+        ConfigValidator validator = new ConfigValidator(board);
         validator.validate(board);
 
         dice = new Dice();
