@@ -1,8 +1,6 @@
 package main;
 
 
-import java.util.EventListener;
-
 public class GameController implements GameControllerInterface {
 
 
