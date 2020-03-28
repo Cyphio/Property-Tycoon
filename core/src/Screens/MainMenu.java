@@ -2,77 +2,94 @@ package Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
 public class MainMenu implements Screen {
 
     private final PropertyTycoon game;
-    private OrthographicCamera camera;
     private Texture mainMenuTexture;
-    private TextureRegion mainMenuTextureRegion;
-    private TextureRegionDrawable mainMenuTextureRegionDrawable;
     private Skin mainMenuSkin;
     private Stage stage;
 
     public MainMenu(PropertyTycoon game) {
         this.game = game;
-        this.camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 720);
         this.stage = new Stage(new ScreenViewport());
         this.mainMenuTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
-        this.mainMenuSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+        this.mainMenuSkin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
+    }
+
+    @Override
+    public void show() {
+        Table table = new Table();
+        table.setFillParent(true);
+        table.setDebug(true);
+        stage.addActor(table);
+
+        Button newGame = new TextButton("New Game", mainMenuSkin);
+        Button preferences = new TextButton("Preferences", mainMenuSkin);
+        Button exit = new TextButton("Exit", mainMenuSkin);
+
+        table.add(newGame).fillX().uniformY();
+        table.row().pad(10, 0, 10, 0);
+        table.add(preferences).fillX().uniformY();
+        table.row();
+        table.add(exit).fillX().uniformY();
+
+        exit.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.exit();
+            }
+        });
+
+        newGame.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new GameScreen(game));
+            }
+        });
+
+        preferences.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new PreferenceScreen(game));
+            }
+        });
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 1, 1, 0);
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
+
         game.batch.draw(mainMenuTexture, 0, 0);
-        game.font.draw(game.batch, "Property Tycoon", 100, 150);
-        game.font.draw(game.batch, "Tap anywhere to begin", 100, 100);
+        game.font.getData().setScale(2);
+        game.font.draw(game.batch, "Property Tycoon", 100, 100);
+
         game.batch.end();
 
-        /**Button button1 = new TextButton("Start", mainMenuSkin, "small");
-        button1.setSize(100, 100);
-        button1.setPosition(400, 400);
-        button1.addListener(new InputListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new GameScreen(game));
-                dispose();
-                return true;
-            }
-        });
-        stage.addActor(button1);**/
-
-
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
     }
 
     @Override
-    public void dispose() {}
+    public void dispose() {
+        stage.dispose();
+    }
 
     @Override
-    public void show() {}
-
-    @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
 
     @Override
     public void pause() {}
