@@ -29,8 +29,11 @@ public class MainMenu implements Screen {
 
     public MainMenu(PropertyTycoon game) {
         this.game = game;
-        camera = new OrthographicCamera();
+        this.camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 720);
+        this.stage = new Stage(new ScreenViewport());
+        this.mainMenuTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
+        this.mainMenuSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
     @Override
@@ -39,12 +42,6 @@ public class MainMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
-
-        mainMenuTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
-        mainMenuSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
-
-        /**stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);**/
 
         game.batch.begin();
         game.batch.draw(mainMenuTexture, 0, 0);
@@ -72,9 +69,7 @@ public class MainMenu implements Screen {
     public void dispose() {}
 
     @Override
-    public void show() {
-
-    }
+    public void show() {}
 
     @Override
     public void resize(int width, int height) {}
