@@ -11,20 +11,23 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
-//use height and width parameters
-
 public class MainMenu implements Screen {
 
     private final PropertyTycoon game;
     private Texture mainMenuTexture;
     private Skin mainMenuSkin;
     private Stage stage;
+    private int height;
+    private int width;
 
     public MainMenu(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
         this.mainMenuTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
         this.mainMenuSkin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
+        this.height = Gdx.graphics.getHeight();
+        this.width = Gdx.graphics.getWidth();
     }
 
     @Override
@@ -60,10 +63,8 @@ public class MainMenu implements Screen {
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //This doesn't exit the program, needs some work done...
-                //System.out.println("Exit");
                 Gdx.app.exit();
-                //System.exit(0);
+                System.exit(0);
             }
         });
     }
