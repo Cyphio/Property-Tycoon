@@ -23,7 +23,7 @@ public class MainMenu implements Screen {
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         this.mainMenuTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
-        this.mainMenuSkin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
+        this.mainMenuSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
     @Override
@@ -42,17 +42,17 @@ public class MainMenu implements Screen {
         table.row();
         table.add(exit).fillX().uniformY();
 
-        options.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.OPTIONS);
-            }
-        });
-
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.changeScreen(game.GAME);
+            }
+        });
+
+        options.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(game.OPTIONS);
             }
         });
 
