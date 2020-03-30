@@ -33,26 +33,26 @@ public class MainMenu implements Screen {
         stage.addActor(table);
 
         Button newGame = new TextButton("New Game", mainMenuSkin);
-        Button preferences = new TextButton("Preferences", mainMenuSkin);
+        Button options = new TextButton("Options", mainMenuSkin);
         Button exit = new TextButton("Exit", mainMenuSkin);
 
         table.add(newGame).fillX().uniformY();
         table.row().pad(10, 0, 10, 0);
-        table.add(preferences).fillX().uniformY();
+        table.add(options).fillX().uniformY();
         table.row();
         table.add(exit).fillX().uniformY();
 
-        preferences.addListener(new ChangeListener() {
+        options.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new OptionsScreen(game));
+                game.changeScreen(game.OPTIONS);
             }
         });
 
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new GameScreen(game));
+                game.changeScreen(game.GAME);
             }
         });
 

@@ -24,7 +24,7 @@ public class OptionsScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        this.optionsScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
+        this.optionsScreenTexture = new Texture(Gdx.files.internal("optionsScreenTexture.png"));
         this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
     }
 
@@ -71,7 +71,7 @@ public class OptionsScreen implements Screen {
         fxVolumeSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                game.getPreferences().setMusicVolume(fxVolumeSlider.getValue());
+                game.getPrefs().setMusicVolume(fxVolumeSlider.getValue());
                 return false;
             }
         });
