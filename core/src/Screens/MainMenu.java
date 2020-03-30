@@ -17,8 +17,6 @@ public class MainMenu implements Screen {
     private Texture mainMenuTexture;
     private Skin mainMenuSkin;
     private Stage stage;
-    private int height;
-    private int width;
 
     public MainMenu(PropertyTycoon game) {
         this.game = game;
@@ -26,8 +24,6 @@ public class MainMenu implements Screen {
         Gdx.input.setInputProcessor(stage);
         this.mainMenuTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
         this.mainMenuSkin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
-        this.height = Gdx.graphics.getHeight();
-        this.width = Gdx.graphics.getWidth();
     }
 
     @Override
