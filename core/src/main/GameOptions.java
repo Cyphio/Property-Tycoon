@@ -9,7 +9,7 @@ public class GameOptions {
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOL = "sound";
-    private static final String PREFS_NAME = "b2dtut";
+    private static final String PREFS_NAME = "Property Tycoon";
 
     protected com.badlogic.gdx.Preferences getPrefs() {
         return Gdx.app.getPreferences(PREFS_NAME);
