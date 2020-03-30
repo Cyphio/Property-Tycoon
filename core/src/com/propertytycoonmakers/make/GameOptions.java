@@ -1,4 +1,4 @@
-package main;
+package com.propertytycoonmakers.make;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -11,7 +11,7 @@ public class GameOptions {
     private static final String PREF_SOUND_VOL = "sound";
     private static final String PREFS_NAME = "Property Tycoon";
 
-    protected com.badlogic.gdx.Preferences getPrefs() {
+    protected Preferences getPrefs() {
         return Gdx.app.getPreferences(PREFS_NAME);
     }
 
@@ -33,7 +33,7 @@ public class GameOptions {
         getPrefs().flush();
     }
 
-        public float getMusicVolume() {
+    public float getMusicVolume() {
         return getPrefs().getFloat(PREF_MUSIC_VOLUME, 0.5f);
     }
 

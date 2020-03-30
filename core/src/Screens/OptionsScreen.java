@@ -1,6 +1,7 @@
 package Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,11 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.propertytycoonmakers.make.GameOptions;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
 public class OptionsScreen implements Screen {
 
-    private final PropertyTycoon game;
+    private PropertyTycoon game;
     private Texture optionsScreenTexture;
     private Skin optionsScreenSkin;
     private Stage stage;
@@ -24,8 +26,8 @@ public class OptionsScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        this.optionsScreenTexture = new Texture(Gdx.files.internal("optionsScreenTexture.png"));
-        this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/craftacular-ui.json"));
+        this.optionsScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
+        this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
     @Override
@@ -60,10 +62,10 @@ public class OptionsScreen implements Screen {
         table.add(fxOnOff);
         table.add(back);
 
-        musicVolumeSlider.addListener(new EventListener() {
+        /**musicVolumeSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                game.getPreferences().setMusicVolume(musicVolumeSlider.getValue());
+                Gdx.app.getPreferences().setMusicVolume(musicVolumeSlider.getValue());
                 return false;
             }
         });
@@ -71,7 +73,7 @@ public class OptionsScreen implements Screen {
         fxVolumeSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                game.getPrefs().setMusicVolume(fxVolumeSlider.getValue());
+                game.getPreferences().setMusicVolume(fxVolumeSlider.getValue());
                 return false;
             }
         });
@@ -99,7 +101,7 @@ public class OptionsScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new MainMenu(game));
             }
-        });
+        });**/
     }
 
     @Override
