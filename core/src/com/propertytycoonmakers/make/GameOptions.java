@@ -7,20 +7,20 @@ public class GameOptions {
 
     private static final String PREF_MUSIC_VOLUME = "volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
-    private static final String PREF_SOUND_ENABLED = "sound.enabled";
-    private static final String PREF_SOUND_VOL = "sound";
+    private static final String PREF_FX_ENABLED = "sound.enabled";
+    private static final String PREF_FX_VOL = "sound";
     private static final String PREFS_NAME = "Property Tycoon";
 
     protected Preferences getPrefs() {
         return Gdx.app.getPreferences(PREFS_NAME);
     }
 
-    public boolean isSoundEffectsEnabled() {
-        return getPrefs().getBoolean(PREF_SOUND_ENABLED, true);
+    public float getMusicVolume() {
+        return getPrefs().getFloat(PREF_MUSIC_VOLUME, 0.5f);
     }
 
-    public void setSoundEffectsEnabled(boolean soundEffectsEnabled) {
-        getPrefs().putBoolean(PREF_SOUND_ENABLED, soundEffectsEnabled);
+    public void setMusicVolume(float volume) {
+        getPrefs().putFloat(PREF_MUSIC_VOLUME, volume);
         getPrefs().flush();
     }
 
@@ -33,21 +33,21 @@ public class GameOptions {
         getPrefs().flush();
     }
 
-    public float getMusicVolume() {
-        return getPrefs().getFloat(PREF_MUSIC_VOLUME, 0.5f);
+    public float getFxVolume() {
+        return getPrefs().getFloat(PREF_FX_VOL, 0.5f);
     }
 
-    public void setMusicVolume(float volume) {
-        getPrefs().putFloat(PREF_MUSIC_VOLUME, volume);
+    public void setFxVolume(float volume) {
+        getPrefs().putFloat(PREF_FX_VOL, volume);
         getPrefs().flush();
     }
 
-    public float getSoundVolume() {
-        return getPrefs().getFloat(PREF_SOUND_VOL, 0.5f);
+    public boolean isFxEnabled() {
+        return getPrefs().getBoolean(PREF_FX_ENABLED, true);
     }
 
-    public void setSoundVolume(float volume) {
-        getPrefs().putFloat(PREF_SOUND_VOL, volume);
+    public void setFxEnabled(boolean fxEnabled) {
+        getPrefs().putBoolean(PREF_FX_ENABLED, fxEnabled);
         getPrefs().flush();
     }
 }

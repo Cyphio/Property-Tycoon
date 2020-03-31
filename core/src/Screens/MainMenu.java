@@ -23,7 +23,7 @@ public class MainMenu implements Screen {
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         this.mainMenuTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
-        this.mainMenuSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+        this.mainMenuSkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
     }
 
     @Override

@@ -12,10 +12,11 @@ public class PropertyTycoon extends Game {
 	public SpriteBatch batch;
 	public BitmapFont font;
 
+	private GameOptions options;
+
 	private OptionsScreen optionsScreen;
 	private MainMenu mainMenu;
 	private GameScreen gameScreen;
-
 	public final static int MAINMENU = 0;
 	public final static int OPTIONS = 1;
 	public final static int GAME = 2;
@@ -24,6 +25,7 @@ public class PropertyTycoon extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
+		options = new GameOptions();
 		this.setScreen(new MainMenu(this));
 	}
 
@@ -36,6 +38,10 @@ public class PropertyTycoon extends Game {
 	public void dispose () {
 		batch.dispose();
 		font.dispose();
+	}
+
+	public GameOptions getPreferences() {
+		return options;
 	}
 
 	public void changeScreen(int screen){

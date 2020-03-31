@@ -1,18 +1,13 @@
 package Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.propertytycoonmakers.make.GameOptions;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
 public class OptionsScreen implements Screen {
@@ -25,83 +20,88 @@ public class OptionsScreen implements Screen {
     public OptionsScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
         this.optionsScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
-        this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+        this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+
         Table table = new Table();
         table.setFillParent(true);
+        stage.clear();
         stage.addActor(table);
 
+        Label musicVolumeLabel = new Label("Music Volume", optionsScreenSkin);
+        Label musicOnOffLabel = new Label("Music On/Off", optionsScreenSkin);
+        Label fxVolumeLabel = new Label("FX Volume", optionsScreenSkin);
+        Label fxOnOffLabel = new Label("FX On/Off", optionsScreenSkin);
+
         final Slider musicVolumeSlider = new Slider(0f, 1f, 0.1f, false, optionsScreenSkin);
-        final Slider fxVolumeSlider = new Slider(0f, 1f, 0.1f, false, optionsScreenSkin);
-        final CheckBox musicOnOff = new CheckBox(null, optionsScreenSkin);
-        final CheckBox fxOnOff = new CheckBox(null, optionsScreenSkin);
-        final TextButton back = new TextButton("Back", optionsScreenSkin);
-        Label titleLabel = new Label("Preferences", optionsScreenSkin);
-        Label musicVolumeLabel = new Label(null, optionsScreenSkin);
-        Label fxVolumeLabel = new Label(null, optionsScreenSkin);
-        Label musicOnOffLabel = new Label(null, optionsScreenSkin);
-        Label fxOnOffLabel = new Label(null, optionsScreenSkin);
-
-        table.add(titleLabel);
-        table.row();
-        table.add(musicVolumeLabel);
-        table.add(musicVolumeSlider);
-        table.row();
-        table.add(musicOnOffLabel);
-        table.add(musicOnOff);
-        table.row();
-        table.add(fxVolumeLabel);
-        table.add(fxVolumeSlider);
-        table.row();
-        table.add(fxOnOffLabel);
-        table.add(fxOnOff);
-        table.add(back);
-
-        /**musicVolumeSlider.addListener(new EventListener() {
+        musicVolumeSlider.setValue(game.getPreferences().getMusicVolume());
+        musicVolumeSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                Gdx.app.getPreferences().setMusicVolume(musicVolumeSlider.getValue());
+                game.getPreferences().setMusicVolume(musicVolumeSlider.getValue());
                 return false;
             }
         });
 
+        final Slider fxVolumeSlider = new Slider(0f, 1f, 0.1f, false, optionsScreenSkin);
+        fxVolumeSlider.setValue(game.getPreferences().getFxVolume());
         fxVolumeSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                game.getPreferences().setMusicVolume(fxVolumeSlider.getValue());
+                game.getPreferences().setFxVolume(fxVolumeSlider.getValue());
                 return false;
             }
         });
 
+        final CheckBox musicOnOff = new CheckBox(null, optionsScreenSkin);
+        musicOnOff.setChecked(game.getPreferences().isMusicEnabled());
         musicOnOff.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 boolean isOn = musicOnOff.isChecked();
-                game.getPreferences.setMusicEnabled(isOn);
+                game.getPreferences().setMusicEnabled(isOn);
                 return false;
             }
         });
 
+        final CheckBox fxOnOff = new CheckBox(null, optionsScreenSkin);
+        fxOnOff.setChecked(game.getPreferences().isFxEnabled());
         fxOnOff.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 boolean isOn = fxOnOff.isChecked();
-                game.getPreferences.setMusicEnabled(isOn);
+                game.getPreferences().setFxEnabled(isOn);
                 return false;
             }
         });
 
+        final TextButton back = new TextButton("Back", optionsScreenSkin, "small");
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new MainMenu(game));
             }
-        });**/
+        });
+
+        table.row().pad(10, 0, 0, 20);
+        table.add(musicVolumeLabel).left();
+        table.add(musicVolumeSlider);
+        table.row().pad(10, 0, 0, 20);
+        table.add(musicOnOffLabel).left();
+        table.add(musicOnOff);
+        table.row().pad(10, 0, 0, 20);
+        table.add(fxVolumeLabel).left();
+        table.add(fxVolumeSlider);
+        table.row().pad(10, 0, 0, 20);
+        table.add(fxOnOffLabel).left();
+        table.add(fxOnOff);
+        table.row().pad(10, 0, 0, 20);
+        table.add(back).colspan(2);
     }
 
     @Override
@@ -112,8 +112,8 @@ public class OptionsScreen implements Screen {
         game.batch.begin();
 
         game.batch.draw(optionsScreenTexture, 0, 0);
-        //game.font.getData().setScale(2);
-        //game.font.draw(game.batch, "Property Tycoon", 100, 100);
+        game.font.getData().setScale(2);
+        game.font.draw(game.batch, "Property Tycoon Options", 100, 100);
 
         game.batch.end();
 
