@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
         camera.update();
-        tiledMap = new TmxMapLoader().load("core/assets/board textures/LMAP.tmx");
+        tiledMap = new TmxMapLoader().load("core/assets/board/untitled.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
     }
 
