@@ -62,8 +62,14 @@ public class GameScreen implements Screen {
         stage.clear();
         stage.addActor(table);
 
+
+
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
+
+
+
         camera.update();
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
@@ -97,6 +103,10 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
+
+        camera.position.set(768,768,0);
+        camera.zoom = (float) 1.5;
+
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
