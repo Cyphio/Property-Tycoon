@@ -62,6 +62,7 @@ public class MainMenu implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit();
                 System.exit(0);
+
             }
         });
     }

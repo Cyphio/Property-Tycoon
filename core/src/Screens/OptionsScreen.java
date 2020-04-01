@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
@@ -25,14 +26,44 @@ public class OptionsScreen implements Screen {
         this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
+
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+
+        // Pause Window
+        final Window paused = new Window("PAUSE", optionsScreenSkin);
+        TextButton resumeButton = new TextButton("Resume", optionsScreenSkin);
+        resumeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                paused.setVisible(false);
+            }
+
+        });
+
+        TextButton exitButton = new TextButton("Exit", optionsScreenSkin);
+        exitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.exit();
+                System.exit(0);
+            }
+        });
+        paused.padTop(32);
+        paused.add(resumeButton).row();
+        paused.add(exitButton);
+        paused.setSize(stage.getWidth() / 2.5f, stage.getHeight() / 2.5f);
+        paused.setPosition((stage.getWidth()/ 2 - paused.getWidth()/2),(stage.getHeight()/2 - paused.getHeight()/2));
+        paused.setMovable(false);
+
 
         Table table = new Table();
         table.setFillParent(true);
         stage.clear();
         stage.addActor(table);
+        stage.addActor(paused);
 
         Label musicVolumeLabel = new Label("Music Volume", optionsScreenSkin);
         Label musicOnOffLabel = new Label("Music On/Off", optionsScreenSkin);

@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		config.title = "Property Tycoon";
 		config.width = 1920;
 		config.height = 1080;
-		config.fullscreen = true;
+		//config.fullscreen = true;
 		new LwjglApplication(new PropertyTycoon(), config);
 	}
 }
