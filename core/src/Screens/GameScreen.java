@@ -17,8 +17,8 @@ public class GameScreen implements Screen {
     private final PropertyTycoon game;
     private OrthographicCamera camera;
 
-    private int HEIGHT = 1080;
-    private int WIDTH = 1920;
+    private int HEIGHT = 1440;
+    private int WIDTH = 2560;
 
     private GameScreen gameScreen;
     public final static int MAINMENU = 0;
@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
         camera.update();
-        tiledMap = new TmxMapLoader().load("core/assets/board/untitled.tmx");
+        tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
     }
 
