@@ -10,12 +10,23 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
 public class GameScreen implements Screen {
 
     private final PropertyTycoon game;
     private OrthographicCamera camera;
+    private Stage stage;
+    private Texture gameScreenTexture;
+    private Skin gameScreenSkin;
 
     private int HEIGHT = 1440;
     private int WIDTH = 2560;
@@ -32,18 +43,52 @@ public class GameScreen implements Screen {
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
+        this.stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+        this.gameScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
+        this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
+        this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
+        Table table = new Table();
+        table.setFillParent(true);
+        table.right().pad(0, 0, 0, 75);
+        stage.clear();
+        stage.addActor(table);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
         camera.update();
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+
+        Button options = new TextButton("Options", gameScreenSkin);
+        Button rollDice = new TextButton("Roll Dice", gameScreenSkin);
+
+        options.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //open options menu
+            }
+        });
+
+        rollDice.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //roll the dice
+            }
+        });
+
+        table.row().pad(10, 0, 0, 20);
+        table.add(options);
+        table.row().pad(10, 0, 0, 20);
+        table.add(rollDice);
     }
 
     @Override
@@ -54,6 +99,8 @@ public class GameScreen implements Screen {
         camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
     }
 
     @Override
