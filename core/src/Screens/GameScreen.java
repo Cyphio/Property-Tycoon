@@ -11,11 +11,10 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
@@ -54,6 +53,43 @@ public class GameScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
+        // Pause Window
+        final Window paused = new Window("PAUSE", gameScreenSkin);
+        TextButton resumeButton = new TextButton("Resume", gameScreenSkin);
+        resumeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                paused.setVisible(false);
+            }
+
+        });
+
+        TextButton exitButton = new TextButton("Exit", gameScreenSkin);
+        exitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.exit();
+                System.exit(0);
+            }
+        });
+
+        TextButton optionsButton = new TextButton("Options", gameScreenSkin);
+        optionsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(game.OPTIONS);
+            }
+        });
+
+        paused.padTop(32);
+        paused.add(resumeButton).row();
+        paused.add(optionsButton).row();
+        paused.add(exitButton);
+        paused.setSize(stage.getWidth() / 2.5f, stage.getHeight() / 2.5f);
+        paused.setPosition((stage.getWidth()/ 2 - paused.getWidth()/2),(stage.getHeight()/2 - paused.getHeight()/2));
+        paused.setMovable(false);
+
+
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         Table table = new Table();
@@ -61,6 +97,8 @@ public class GameScreen implements Screen {
         table.right().pad(0, 0, 0, 75);
         stage.clear();
         stage.addActor(table);
+        stage.addActor(paused);
+        paused.setVisible(false);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
@@ -75,6 +113,7 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //open options menu
+                paused.setVisible(true);
             }
         });
 
