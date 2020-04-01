@@ -37,12 +37,6 @@ public class MainMenu implements Screen {
         Button options = new TextButton("Options", mainMenuSkin);
         Button exit = new TextButton("Exit", mainMenuSkin);
 
-        table.add(newGame).fillX().uniformY();
-        table.row().pad(10, 0, 10, 0);
-        table.add(options).fillX().uniformY();
-        table.row();
-        table.add(exit).fillX().uniformY();
-
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -64,6 +58,12 @@ public class MainMenu implements Screen {
                 System.exit(0);
             }
         });
+
+        table.add(newGame).fillX().uniformY();
+        table.row().pad(10, 0, 10, 0);
+        table.add(options).fillX().uniformY();
+        table.row();
+        table.add(exit).fillX().uniformY();
     }
 
     @Override
