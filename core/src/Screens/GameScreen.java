@@ -62,9 +62,6 @@ public class GameScreen implements Screen {
         stage.clear();
         stage.addActor(table);
 
-
-
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
 
@@ -106,6 +103,10 @@ public class GameScreen implements Screen {
 
         camera.position.set(768,768,0);
         camera.zoom = (float) 1.5;
+
+
+
+
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
