@@ -21,7 +21,8 @@ public class OptionsScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
         this.optionsScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
-        this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+        this.optionsScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
+        this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
     @Override
@@ -80,7 +81,7 @@ public class OptionsScreen implements Screen {
             }
         });
 
-        final TextButton back = new TextButton("Back", optionsScreenSkin, "small");
+        final TextButton back = new TextButton("Back", optionsScreenSkin);
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -140,4 +141,3 @@ public class OptionsScreen implements Screen {
     @Override
     public void hide() {}
 }
-
