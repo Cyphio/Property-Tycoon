@@ -67,13 +67,13 @@ public class GameScreen implements Screen {
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
-        Button options = new TextButton("Options", gameScreenSkin);
+        Button pause = new TextButton("Pause", gameScreenSkin);
         Button rollDice = new TextButton("Roll Dice", gameScreenSkin);
 
-        options.addListener(new ChangeListener() {
+        pause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //change screen
+                game.changeScreen(game.PAUSE);
             }
         });
 
@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
         });
 
         table.row().pad(10, 0, 0, 20);
-        table.add(options);
+        table.add(pause);
         table.row().pad(10, 0, 0, 20);
         table.add(rollDice);
     }

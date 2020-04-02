@@ -1,8 +1,6 @@
 package com.propertytycoonmakers.make;
 
-import Screens.GameScreen;
-import Screens.MainMenu;
-import Screens.OptionsScreen;
+import Screens.*;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,16 +17,19 @@ public class PropertyTycoon extends Game {
 	private OptionsScreen optionsScreen;
 	private MainMenu mainMenu;
 	private GameScreen gameScreen;
+	private PauseScreen pauseScreen;
 	public final static int MAINMENU = 0;
 	public final static int OPTIONS = 1;
-	public final static int GAME = 2;
+	public final static int PAUSE = 2;
+	public final static int GAME = 3;
+
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		options = new GameOptions();
-		this.setScreen(new MainMenu(this));
+		this.setScreen(new LoadingScreen(this));
 	}
 
 	@Override
@@ -55,6 +56,10 @@ public class PropertyTycoon extends Game {
 			case OPTIONS:
 				if(optionsScreen == null) optionsScreen = new OptionsScreen(this);
 				this.setScreen(optionsScreen);
+				break;
+			case PAUSE:
+				if(pauseScreen == null) pauseScreen = new PauseScreen(this);
+				this.setScreen(pauseScreen);
 				break;
 			case GAME:
 				if(gameScreen == null) gameScreen = new GameScreen(this);
