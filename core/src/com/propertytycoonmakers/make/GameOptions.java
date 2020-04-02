@@ -10,6 +10,7 @@ public class GameOptions {
     private static final String PREF_FX_ENABLED = "sound.enabled";
     private static final String PREF_FX_VOL = "sound";
     private static final String PREFS_NAME = "Property Tycoon";
+    private static final String PREFS_FULLSCREEN = "fullscreen";
 
     protected Preferences getPrefs() {
         return Gdx.app.getPreferences(PREFS_NAME);
@@ -24,12 +25,22 @@ public class GameOptions {
         getPrefs().flush();
     }
 
+
     public boolean isMusicEnabled() {
         return getPrefs().getBoolean(PREF_MUSIC_ENABLED, true);
     }
 
     public void setMusicEnabled(boolean musicEnabled) {
         getPrefs().putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
+        getPrefs().flush();
+    }
+
+    public boolean isFullscreen() {
+        return getPrefs().getBoolean(PREFS_FULLSCREEN, true);
+    }
+
+    public void setPrefsFullscreen(boolean fullscreen){
+        getPrefs().putBoolean(PREFS_FULLSCREEN, fullscreen);
         getPrefs().flush();
     }
 
