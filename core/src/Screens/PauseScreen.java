@@ -1,6 +1,7 @@
 package Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -40,6 +41,7 @@ public class PauseScreen implements Screen {
         Label musicOnOffLabel = new Label("Music On/Off", pauseScreenSkin);
         Label fxVolumeLabel = new Label("FX Volume", pauseScreenSkin);
         Label fxOnOffLabel = new Label("FX On/Off", pauseScreenSkin);
+        Label fullscreenOnOffLabel = new Label("Fullscreen", pauseScreenSkin);
 
         final Slider musicVolumeSlider = new Slider(0f, 1f, 0.1f, false, pauseScreenSkin);
         musicVolumeSlider.setValue(game.getPreferences().getMusicVolume());
@@ -58,6 +60,24 @@ public class PauseScreen implements Screen {
             public boolean handle(Event event) {
                 game.getPreferences().setFxVolume(fxVolumeSlider.getValue());
                 return false;
+            }
+        });
+
+        final CheckBox fullscreenOnOff = new CheckBox(null, pauseScreenSkin);
+        fullscreenOnOff.setChecked(game.getPreferences().isFullscreen());
+        fullscreenOnOff.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                boolean isOn = fullscreenOnOff.isChecked();
+                game.getPreferences().setPrefsFullscreen(isOn);
+                Boolean fullScreen = !game.getPreferences().isFullscreen();
+                Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
+                if (fullScreen == true)
+                    Gdx.graphics.setWindowedMode(1920, 1080);
+                else
+                    Gdx.graphics.setFullscreenMode(currentMode);
+                return false;
+
             }
         });
 
@@ -111,6 +131,9 @@ public class PauseScreen implements Screen {
         table.row().pad(10, 0, 0, 20);
         table.add(fxOnOffLabel).left();
         table.add(fxOnOff);
+        table.row().pad(10, 0, 0, 20);
+        table.add(fullscreenOnOffLabel).left();
+        table.add(fullscreenOnOff);
         table.row().pad(10, 0, 0, 20);
         table.add(resume).colspan(2);
         table.row().pad(10, 0, 0, 20);
