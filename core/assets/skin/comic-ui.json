@@ -206,7 +206,8 @@ com.badlogic.gdx.scenes.scene2d.ui.Tree$TreeStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 	default: {
 		background: window
-		titleFont: font
+		titleFont: font,
+		titleFontColor: black
 	}
 	alt: {
 		background: narration-box

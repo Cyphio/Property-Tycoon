@@ -23,7 +23,7 @@ public class Tile implements TileInterface {
 
     }
 
-    /**
+    /**2
      * setBuyable sets isBuyable to true or false.
      *
      * @param TrueOrFalse wether the property is buyable or not (true if yes, else false).
