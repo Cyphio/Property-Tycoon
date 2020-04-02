@@ -47,7 +47,7 @@ public class MainMenu implements Screen {
         options.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.OPTIONSxMAINMENU);
+                game.changeScreen(game.OPTIONS);
             }
         });
 

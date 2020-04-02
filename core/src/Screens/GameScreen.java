@@ -73,7 +73,7 @@ public class GameScreen implements Screen {
         options.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.OPTIONSxGAME);
+                //change screen
             }
         });
 
