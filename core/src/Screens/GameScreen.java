@@ -31,10 +31,6 @@ public class GameScreen implements Screen {
     private int HEIGHT = 1440;
     private int WIDTH = 2560;
 
-    private GameScreen gameScreen;
-    public final static int MAINMENU = 0;
-    public final static int OPTIONS = 1;
-    public final static int GAME = 2;
     MapRenderer renderer;
 
     Texture img;
@@ -77,7 +73,7 @@ public class GameScreen implements Screen {
         options.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //open options menu
+                game.changeScreen(game.OPTIONSxGAME);
             }
         });
 

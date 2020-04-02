@@ -16,10 +16,12 @@ public class OptionsScreen implements Screen {
     private Texture optionsScreenTexture;
     private Skin optionsScreenSkin;
     private Stage stage;
+    private Screen backScreen;
 
-    public OptionsScreen(PropertyTycoon game) {
+    public OptionsScreen(PropertyTycoon game, Screen backScreen) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
+        this.backScreen = backScreen;
         this.optionsScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
         this.optionsScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
@@ -85,7 +87,7 @@ public class OptionsScreen implements Screen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MainMenu(game));
+                game.setScreen(backScreen);
             }
         });
 

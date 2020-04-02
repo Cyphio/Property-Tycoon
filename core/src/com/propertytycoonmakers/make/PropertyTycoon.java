@@ -4,6 +4,7 @@ import Screens.GameScreen;
 import Screens.MainMenu;
 import Screens.OptionsScreen;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -18,8 +19,9 @@ public class PropertyTycoon extends Game {
 	private MainMenu mainMenu;
 	private GameScreen gameScreen;
 	public final static int MAINMENU = 0;
-	public final static int OPTIONS = 1;
-	public final static int GAME = 2;
+	public final static int OPTIONSxMAINMENU = 1;
+	public final static int OPTIONSxGAME = 2;
+	public final static int GAME = 3;
 	
 	@Override
 	public void create () {
@@ -50,8 +52,12 @@ public class PropertyTycoon extends Game {
 				if(mainMenu == null) mainMenu = new MainMenu(this);
 				this.setScreen(mainMenu);
 				break;
-			case OPTIONS:
-				if(optionsScreen == null) optionsScreen = new OptionsScreen(this);
+			case OPTIONSxMAINMENU:
+				if(optionsScreen == null) optionsScreen = new OptionsScreen(this, mainMenu);
+				this.setScreen(optionsScreen);
+				break;
+			case OPTIONSxGAME:
+				if(optionsScreen == null) optionsScreen = new OptionsScreen(this, gameScreen);
 				this.setScreen(optionsScreen);
 				break;
 			case GAME:
