@@ -21,7 +21,6 @@ public class MainMenu implements Screen {
     public MainMenu(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
         this.mainMenuTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
         this.mainMenuTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.mainMenuSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
@@ -29,6 +28,8 @@ public class MainMenu implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);

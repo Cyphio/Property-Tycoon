@@ -31,10 +31,6 @@ public class GameScreen implements Screen {
     private int HEIGHT = 1440;
     private int WIDTH = 2560;
 
-    private GameScreen gameScreen;
-    public final static int MAINMENU = 0;
-    public final static int OPTIONS = 1;
-    public final static int GAME = 2;
     MapRenderer renderer;
 
     Texture img;
@@ -71,13 +67,13 @@ public class GameScreen implements Screen {
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
-        Button options = new TextButton("Options", gameScreenSkin);
+        Button pause = new TextButton("Pause", gameScreenSkin);
         Button rollDice = new TextButton("Roll Dice", gameScreenSkin);
 
-        options.addListener(new ChangeListener() {
+        pause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //open options menu
+                game.changeScreen(game.PAUSE);
             }
         });
 
@@ -89,7 +85,7 @@ public class GameScreen implements Screen {
         });
 
         table.row().pad(10, 0, 0, 20);
-        table.add(options);
+        table.add(pause);
         table.row().pad(10, 0, 0, 20);
         table.add(rollDice);
     }
