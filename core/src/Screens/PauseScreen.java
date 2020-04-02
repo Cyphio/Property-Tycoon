@@ -83,11 +83,19 @@ public class PauseScreen implements Screen {
             }
         });
 
-        final TextButton back = new TextButton("Back", pauseScreenSkin);
-        back.addListener(new ChangeListener() {
+        final TextButton resume = new TextButton("Resume", pauseScreenSkin);
+        resume.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.changeScreen(game.GAME);
+            }
+        });
+
+        final TextButton backToMainMenu = new TextButton("Back To Main Menu", pauseScreenSkin);
+        backToMainMenu.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(game.MAINMENU);
             }
         });
 
@@ -104,7 +112,9 @@ public class PauseScreen implements Screen {
         table.add(fxOnOffLabel).left();
         table.add(fxOnOff);
         table.row().pad(10, 0, 0, 20);
-        table.add(back).colspan(2);
+        table.add(resume).colspan(2);
+        table.row().pad(10, 0, 0, 20);
+        table.add(backToMainMenu).colspan(2);
     }
 
     @Override

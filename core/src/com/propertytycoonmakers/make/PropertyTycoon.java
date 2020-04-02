@@ -2,10 +2,8 @@ package com.propertytycoonmakers.make;
 
 import Screens.*;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import jdk.tools.jaotc.Main;
 
 public class PropertyTycoon extends Game {
 
@@ -23,7 +21,7 @@ public class PropertyTycoon extends Game {
 	public final static int PAUSE = 2;
 	public final static int GAME = 3;
 
-	
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -36,7 +34,7 @@ public class PropertyTycoon extends Game {
 	public void render () {
 		super.render();
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
