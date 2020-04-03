@@ -36,7 +36,8 @@ public class GameOptions {
     }
 
     public boolean isFullscreen() {
-        return getPrefs().getBoolean(PREFS_FULLSCREEN, true);
+        return getPrefs().getBoolean(PREFS_FULLSCREEN, false);
+
     }
 
     public void setPrefsFullscreen(boolean fullscreen){
