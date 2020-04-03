@@ -12,7 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
+
+import javax.swing.text.View;
 
 public class PauseScreen implements Screen {
 
@@ -20,6 +24,7 @@ public class PauseScreen implements Screen {
     private Texture pauseScreenTexture;
     private Skin pauseScreenSkin;
     private Stage stage;
+    private Viewport viewport;
 
     public PauseScreen(PropertyTycoon game) {
         this.game = game;
@@ -31,6 +36,7 @@ public class PauseScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         Table table = new Table();
         table.setFillParent(true);
@@ -151,6 +157,7 @@ public class PauseScreen implements Screen {
         game.batch.draw(pauseScreenTexture, 0, 0);
         game.font.getData().setScale(2);
         game.font.draw(game.batch, "Property Tycoon Paused", 100, 100);
+        game.batch.draw(pauseScreenTexture, 0, 0, viewport.getWorldWidth(),viewport.getWorldHeight());
 
         game.batch.end();
 

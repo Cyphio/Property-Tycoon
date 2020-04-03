@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
 import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.actor;
@@ -19,18 +21,19 @@ public class OptionsScreen implements Screen {
     private Texture optionsScreenTexture;
     private Skin optionsScreenSkin;
     private Stage stage;
+    private Viewport viewport;
 
     public OptionsScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
         this.optionsScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
-        //this.optionsScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         Table table = new Table();
         table.setFillParent(true);
@@ -141,6 +144,7 @@ public class OptionsScreen implements Screen {
         game.batch.draw(optionsScreenTexture, 0, 0);
         game.font.getData().setScale(2);
         game.font.draw(game.batch, "Property Tycoon Options", 100, 100);
+        game.batch.draw(optionsScreenTexture, 0, 0, viewport.getWorldWidth(),viewport.getWorldHeight());
 
         game.batch.end();
 
