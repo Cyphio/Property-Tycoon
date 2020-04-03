@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
+import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.actor;
+
 public class OptionsScreen implements Screen {
 
     private PropertyTycoon game;
@@ -73,22 +75,23 @@ public class OptionsScreen implements Screen {
         });
 
         final CheckBox fullscreenOnOff = new CheckBox(null, optionsScreenSkin);
-        fullscreenOnOff.setChecked(game.getPreferences().isFullscreen());
-       fullscreenOnOff.addListener(new EventListener() {
+        fullscreenOnOff.setChecked(Gdx.graphics.isFullscreen());
+        fullscreenOnOff.addListener(new ChangeListener() {
             @Override
-            public boolean handle(Event event) {
-                boolean isOn = fullscreenOnOff.isChecked();
-                game.getPreferences().setPrefsFullscreen(isOn);
-                Boolean fullScreen = !game.getPreferences().isFullscreen();
+            public void changed(ChangeEvent event, Actor actor) {
                 Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
-                if (fullScreen == true)
-                    Gdx.graphics.setWindowedMode(1920, 1080);
-                else
-                    Gdx.graphics.setFullscreenMode(currentMode);
-                    return false;
+
+                if (Gdx.graphics.isFullscreen()) {
+                    Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
+                    game.getPreferences().setPrefsFullscreen(fullscreenOnOff.isChecked());
+
+                } else
+                Gdx.graphics.setFullscreenMode(currentMode);
+                game.getPreferences().setPrefsFullscreen(fullscreenOnOff.isChecked());
 
             }
         });
+
 
         final CheckBox fxOnOff = new CheckBox(null, optionsScreenSkin);
         fxOnOff.setChecked(game.getPreferences().isFxEnabled());
