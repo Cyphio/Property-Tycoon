@@ -59,10 +59,7 @@ public class GameScreen implements Screen {
         stage.addActor(table);
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,w,h);
-
-
-
+        camera.setToOrtho(false, w, h);
         camera.update();
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
@@ -99,10 +96,6 @@ public class GameScreen implements Screen {
 
         camera.position.set(768,768,0);
         camera.zoom = (float) 1.5;
-
-
-
-
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
