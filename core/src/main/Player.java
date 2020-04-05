@@ -143,7 +143,7 @@ public class Player implements PlayerInterface {
     }
 
     /**
-     * getProperties returns an array list with all the properties that the player owns
+            * getProperties returns an array list with all the properties that the player owns
      * @return returns properties, ArrayList with all the properties player owns
      */
     @Override

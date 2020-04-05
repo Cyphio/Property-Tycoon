@@ -2,6 +2,7 @@ package main;
 
 import Tiles.OpportunityKnocks;
 import Tiles.PotLuck;
+import Tiles.Property;
 import Tiles.Tile;
 import misc.Card;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-public class GameBoard {
+public class GameBoard implements GameBoardInterface{
 
     private static Tile[] board;
 
@@ -49,6 +50,7 @@ public class GameBoard {
     // Functional dice setup, logic should be working
     // Logic behind rolling doubles and when to go to jail setup
     // Need the process of going to jail to be implemented
+    @Override
     public void playerTurn(Player player){
         currentPlayer = player;
         movePlayer(player, dice.getValue());
@@ -62,6 +64,7 @@ public class GameBoard {
      * @param player the player who's position is being searched
      * @return the position of Player player
      */
+    @Override
     public int getPlayerPos(Player player) {
         return playerPos.get(player);
     }
@@ -72,7 +75,8 @@ public class GameBoard {
      * @param player The player to move
      * @param pos    Where to move the player
      */
-    private void setPlayerPos(Player player, int pos) {
+    @Override
+    public void setPlayerPos(Player player, int pos) {
         playerPos.put(player, pos);
     }
 
@@ -83,7 +87,8 @@ public class GameBoard {
      * @param player The player to move
      * @param moves  how many spaces to move the player
      */
-    private void movePlayer(Player player, int moves) {
+    @Override
+    public void movePlayer(Player player, int moves) {
         int position = getPlayerPos(currentPlayer);
         int moveTo = position + moves;
 
@@ -102,7 +107,8 @@ public class GameBoard {
 
 
     //check if the player has landed on another players properties etc
-    private void checkBoardCircumstances() {
+    @Override
+    public void checkBoardCircumstances() {
 
         Tile x = board[playerPos.get(currentPlayer)];
 
@@ -123,8 +129,8 @@ public class GameBoard {
 
     }
 
-
-    private void performCardAction(Card card) {
+    @Override
+    public void performCardAction(Card card) {
 
         switch (card.getAction()) {
             case "pay":
@@ -140,7 +146,16 @@ public class GameBoard {
 
     }
 
-
+    @Override
+    public void purchaseProperty(Player player, Property prop){
+        if(player.getFirstLap() == false){
+            if(player.getMoney() >= prop.getCost()){
+                prop.buy();
+                player.makePurchase(prop.getCost());
+                player.addProperty(prop);
+            }
+        }
+    }
 
 
 }
