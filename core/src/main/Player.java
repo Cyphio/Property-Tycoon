@@ -13,11 +13,13 @@ public class Player implements PlayerInterface {
 //    private int tilePosition;
     private int getOfJailCards;
     private String gameToken;
+    private boolean firstLap;
 
     public Player(){
         getOfJailCards = 0;
         balance = 1500;
 //        tilePosition = 0;
+        firstLap = true;
 }
 
     /**
@@ -164,6 +166,14 @@ public class Player implements PlayerInterface {
 
     }
 
+    @Override
+    public void endFirstLap(){firstLap = false;}
 
+    @Override
+    public boolean getFirstLap(){return firstLap;}
 
+    @Override
+    public void makePurchase(int cost){
+        balance -= cost;
+    }
 }

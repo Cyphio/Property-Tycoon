@@ -17,4 +17,8 @@ public interface PlayerInterface {
     void setPlayerToken(String token);
 
     void payPlayer(int amount);
+
+    void endFirstLap();
+    boolean getFirstLap();
+    void makePurchase(int cost);
 }
