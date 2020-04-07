@@ -11,12 +11,10 @@ import java.awt.*;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "Property Tycoon";
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		config.width = (int)dimension.getWidth();
 		config.height = (int)dimension.getHeight();
 		System.out.println(dimension.getHeight());
-		//config.fullscreen = false;
 		new LwjglApplication(new PropertyTycoon(), config);
 	}
 }

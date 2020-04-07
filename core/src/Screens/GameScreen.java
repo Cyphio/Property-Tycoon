@@ -104,27 +104,17 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-
-    }
+    public void dispose() { stage.dispose(); }
 
     @Override
-    public void pause() {
-
-    }
+    public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
 
     @Override
-    public void resume() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void dispose() {
-
-    }
+    public void hide() {}
 }

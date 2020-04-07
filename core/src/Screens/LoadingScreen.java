@@ -1,6 +1,5 @@
 package Screens;
 
-import Tiles.Property;
 import com.badlogic.gdx.Screen;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
@@ -13,9 +12,7 @@ public class LoadingScreen implements Screen {
     }
 
     @Override
-    public void show() {
-
-    }
+    public void show() {}
 
     @Override
     public void render(float delta) {
@@ -23,27 +20,17 @@ public class LoadingScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-
-    }
+    public void dispose() {}
 
     @Override
-    public void pause() {
-
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void resume() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void dispose() {
-
-    }
+    public void hide() {}
 }
