@@ -113,7 +113,16 @@ public class GameScreen implements Screen {
                 camera.unproject(mouse);
 
                 System.out.println(mouse);
-                System.out.println(layer.getCell( (((int) mouse.x) / 64), (((int) mouse.y) / 64)).setTile(null));
+
+                try {
+                    System.out.println(layer.getCell( (((int) mouse.x) / 64), (((int) mouse.y) / 64)).setTile(null));
+                }
+                catch(Exception e) {
+                    System.out.println("No tile");
+                }
+
+
+
             }
         });
 
