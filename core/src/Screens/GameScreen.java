@@ -5,9 +5,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,8 +21,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
+import javafx.scene.control.Tab;
 
 public class GameScreen implements Screen {
 
@@ -28,8 +35,8 @@ public class GameScreen implements Screen {
     private Texture gameScreenTexture;
     private Skin gameScreenSkin;
 
-    private int HEIGHT = 1440;
-    private int WIDTH = 2560;
+
+
 
     MapRenderer renderer;
 
@@ -41,7 +48,7 @@ public class GameScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        this.gameScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
+        this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
         this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
@@ -49,23 +56,67 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
-        Table table = new Table();
-        table.setFillParent(true);
-        table.right().pad(0, 0, 0, 75);
-        stage.clear();
-        stage.addActor(table);
+        Table buttons = new Table();
+        Table mainUI = new Table();
+        Table boardCells = new Table();
 
+
+        mainUI.setFillParent(true);
+        mainUI.setDebug(true);
+        buttons.setDebug(true);
+
+
+
+        stage.clear();
+        stage.addActor(mainUI);
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, w, h);
+        camera.setToOrtho(false,w,h);
+        camera.position.set(w/2,h/2,0);
+        camera.zoom = (float) 1.5;
+
+
         camera.update();
-        tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+//        tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
+//        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+//
+//        TiledMapTileLayer layer = (TiledMapTileLayer) tiledMap.getLayers().get(0);
+//
+
+
+
+
+
+        //this chiggaaaa---------------------------------------------------------------------------------------
+
+        for(int u = 0; u <25; u++) {
+            for (int i = 0; i < 25; i++) {
+
+
+                Button newGame = new TextButton("", gameScreenSkin);
+
+                boardCells.add(newGame).height(64).width(64);
+
+            }
+            boardCells.row();
+        }
+
+        boardCells.setBackground(new TextureRegionDrawable(gameScreenTexture));
+        boardCells.setDebug(true);
+
+        ///-----------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
 
         Button pause = new TextButton("Pause", gameScreenSkin);
         Button rollDice = new TextButton("Roll Dice", gameScreenSkin);
+
 
         pause.addListener(new ChangeListener() {
             @Override
@@ -81,10 +132,21 @@ public class GameScreen implements Screen {
             }
         });
 
-        table.row().pad(10, 0, 0, 20);
-        table.add(pause);
-        table.row().pad(10, 0, 0, 20);
-        table.add(rollDice);
+
+
+        buttons.row().pad(10, 0, 0, 20);
+        buttons.add(pause);
+        buttons.row().pad(10, 0, 0, 20);
+        buttons.add(rollDice);
+
+
+        boardCells.pad(10,10,10,10);
+
+        mainUI.add();
+        mainUI.add(boardCells);
+        mainUI.add(buttons);
+//        System.out.println(layer.getCell((int) h/2,(int) w/2));
+
     }
 
     @Override
@@ -94,14 +156,17 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
 
-        camera.position.set(768,768,0);
-        camera.zoom = (float) 1.5;
+//        camera.position.set(768,768,0);
+//        camera.zoom = (float) 1.5;
 
-        tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render();
+//        tiledMapRenderer.setView(camera);
+//        tiledMapRenderer.render();
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
+
+
 
     @Override
     public void resize(int width, int height) {
