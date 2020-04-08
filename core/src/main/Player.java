@@ -5,7 +5,7 @@ import Tiles.Tile;
 
 import java.util.ArrayList;
 
-public class Player implements PlayerInterface {
+public class Player implements PlayerInterface{
     private ArrayList<Tile> properties;
     private ArrayList<Tile> morgagedProperties;
     private int balance;
