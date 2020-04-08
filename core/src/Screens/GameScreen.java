@@ -14,13 +14,17 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -51,67 +55,30 @@ public class GameScreen implements Screen {
         this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
         this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
+        final float w = Gdx.graphics.getWidth();
+        final float h = Gdx.graphics.getHeight();
         Table buttons = new Table();
-        Table mainUI = new Table();
-        Table boardCells = new Table();
-
-
-        mainUI.setFillParent(true);
-        mainUI.setDebug(true);
+        buttons.setFillParent(true);
         buttons.setDebug(true);
-
-
+        buttons.right();
+        buttons.pad(0,0,0,75);
 
         stage.clear();
-        stage.addActor(mainUI);
+        stage.addActor(buttons);
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
-        camera.position.set(w/2,h/2,0);
-        camera.zoom = (float) 1.5;
-
-
         camera.update();
-//        tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
-//        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-//
-//        TiledMapTileLayer layer = (TiledMapTileLayer) tiledMap.getLayers().get(0);
-//
 
 
-
-
-
-        //------------------------------------------
-
-        for(int u = 0; u <25; u++) {
-            for (int i = 0; i < 25; i++) {
-
-
-                Button newGame = new TextButton("", gameScreenSkin);
-
-                boardCells.add(newGame).height(64).width(64);
-
-            }
-            boardCells.row();
-        }
-
-        boardCells.setBackground(new TextureRegionDrawable(gameScreenTexture));
-        boardCells.setDebug(true);
-
-        ///-----------------------------------------------------------------------------------------------
-
-
-
-
-
-
+        tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        final TiledMapTileLayer layer = (TiledMapTileLayer) tiledMap.getLayers().get("Tile Layer 1");
 
 
         Button pause = new TextButton("Pause", gameScreenSkin);
@@ -139,28 +106,37 @@ public class GameScreen implements Screen {
         buttons.row().pad(10, 0, 0, 20);
         buttons.add(rollDice);
 
+        stage.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(mouse);
 
-        boardCells.pad(10,10,10,10);
+                System.out.println(mouse);
+                System.out.println(layer.getCell( (((int) mouse.x) / 64), (((int) mouse.y) / 64)).setTile(null));
+            }
+        });
 
-        mainUI.add();
-        mainUI.add(boardCells);
-        mainUI.add(buttons);
-//        System.out.println(layer.getCell((int) h/2,(int) w/2));
+
+
+
 
     }
+
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         camera.update();
 
-//        camera.position.set(768,768,0);
-//        camera.zoom = (float) 1.5;
+        camera.position.set(768,768,0);
+        camera.zoom = (float) 1.2;
 
-//        tiledMapRenderer.setView(camera);
-//        tiledMapRenderer.render();
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
