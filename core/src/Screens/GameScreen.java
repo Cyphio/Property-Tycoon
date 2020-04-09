@@ -121,6 +121,10 @@ public class GameScreen implements Screen {
                     System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
 
 
+
+
+
+
                 } catch (Exception e) {
                     System.out.println("No tile");
                 }
