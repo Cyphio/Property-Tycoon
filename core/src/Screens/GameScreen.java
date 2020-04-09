@@ -1,35 +1,27 @@
 package Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.Map;
-import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
-import javafx.scene.control.Tab;
+
 
 public class GameScreen implements Screen {
 
@@ -39,12 +31,6 @@ public class GameScreen implements Screen {
     private Texture gameScreenTexture;
     private Skin gameScreenSkin;
 
-
-
-
-    MapRenderer renderer;
-
-    Texture img;
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
 
@@ -67,12 +53,12 @@ public class GameScreen implements Screen {
         buttons.setFillParent(true);
         buttons.setDebug(true);
         buttons.right();
-        buttons.pad(0,0,0,75);
+        buttons.pad(0, 0, 0, 75);
 
         stage.clear();
         stage.addActor(buttons);
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,w,h);
+        camera.setToOrtho(false, w, h);
         camera.update();
 
 
@@ -100,13 +86,13 @@ public class GameScreen implements Screen {
         });
 
 
-
         buttons.row().pad(10, 0, 0, 20);
         buttons.add(pause);
         buttons.row().pad(10, 0, 0, 20);
         buttons.add(rollDice);
 
-        stage.addListener(new ClickListener(){
+
+        stage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -115,19 +101,14 @@ public class GameScreen implements Screen {
                 System.out.println(mouse);
 
                 try {
-                    System.out.println(layer.getCell( (((int) mouse.x) / 64), (((int) mouse.y) / 64)).setTile(null));
-                }
-                catch(Exception e) {
+                    System.out.println(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)).setTile(null));
+                } catch (Exception e) {
                     System.out.println("No tile");
                 }
 
 
-
             }
         });
-
-
-
 
 
     }
@@ -141,30 +122,51 @@ public class GameScreen implements Screen {
 
         camera.update();
 
-        camera.position.set(768,768,0);
+        camera.position.set(768, 768, 0);
         camera.zoom = (float) 1.2;
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
 
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+
+            camera.rotate(90);
+            camera.update();
+        }
+
+
+            stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+            stage.draw();
+        }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 
 
-
-    @Override
-    public void dispose() { stage.dispose(); }
-
-    @Override
-    public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
-
-    @Override
-    public void hide() {}
 }
+
+
+
