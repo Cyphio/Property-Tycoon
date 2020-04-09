@@ -7,6 +7,7 @@ import misc.Card;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class GameBoard {
@@ -22,6 +23,8 @@ public class GameBoard {
 
 
     public GameBoard(Player[] players) {
+
+        playerPos = new HashMap<Player, Integer>();
 
 
         // sets all players position to GO tile at 0
@@ -99,6 +102,16 @@ public class GameBoard {
             this.setPlayerPos(currentPlayer, moveTo);
         }
     }
+
+
+    public Tile getTile(int i){
+
+        return board[i];
+
+
+    }
+
+
 
 
     //check if the player has landed on another players properties etc

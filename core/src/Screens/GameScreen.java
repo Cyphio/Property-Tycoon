@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
+import main.GameController;
 
 
 public class GameScreen implements Screen {
@@ -30,6 +31,11 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Texture gameScreenTexture;
     private Skin gameScreenSkin;
+    TiledMapTileLayer layer;
+
+    private GameController gameCon;
+
+
 
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
@@ -41,6 +47,18 @@ public class GameScreen implements Screen {
         this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
         this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+        tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("Tile Layer 1");
+
+
+        gameCon = new GameController(layer);
+
+
+
+
+//        Thread gameThread = new Thread((Runnable) gameCon);
+//        gameThread.start();
 
     }
 
@@ -62,9 +80,7 @@ public class GameScreen implements Screen {
         camera.update();
 
 
-        tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-        final TiledMapTileLayer layer = (TiledMapTileLayer) tiledMap.getLayers().get("Tile Layer 1");
+
 
 
         Button pause = new TextButton("Pause", gameScreenSkin);
@@ -102,6 +118,9 @@ public class GameScreen implements Screen {
 
                 try {
                     System.out.println(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)).setTile(null));
+                    System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
+
+
                 } catch (Exception e) {
                     System.out.println("No tile");
                 }
