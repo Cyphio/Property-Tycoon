@@ -89,9 +89,7 @@ public class MainMenu implements Screen {
     }
 
     @Override
-    public void dispose() {
-        stage.dispose();
-    }
+    public void dispose() { stage.dispose(); }
 
     @Override
     public void resize(int width, int height) {

@@ -1,5 +1,7 @@
 package main;
 import Tiles.*;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 import java.util.ArrayList;
 
 public interface PlayerInterface {
@@ -12,9 +14,9 @@ public interface PlayerInterface {
 
     boolean getOutOfJailFree(); // return whether the player has GOJF card
     //boolean getIsBankrupt(); // return whether the player is bankrupt
-    String getPlayerToken(); // return a string representation of the player's token
+    Sprite getPlayerToken(); // return a string representation of the player's token
 
-    void setPlayerToken(String token);
+    void setPlayerToken(Sprite token);
 
     void payPlayer(int amount);
 }

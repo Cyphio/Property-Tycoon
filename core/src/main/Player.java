@@ -2,17 +2,18 @@ package main;
 
 import Tiles.Property;
 import Tiles.Tile;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import java.util.ArrayList;
 
-public class Player implements PlayerInterface{
+public class Player extends Sprite implements PlayerInterface {
     private ArrayList<Tile> properties;
     private ArrayList<Tile> morgagedProperties;
     private int balance;
 //    private Tile position;
 //    private int tilePosition;
     private int getOfJailCards;
-    private String gameToken;
+    private Sprite gameToken;
 
     public Player(){
         getOfJailCards = 0;
@@ -132,24 +133,21 @@ public class Player implements PlayerInterface{
 
     /**
      * getPlayerToken will return the game piece that the player is using in the current game
-     * @return returns gameToken as a string
+     * @return returns gameToken as a Sprite
      */
     @Override
-    public String getPlayerToken(){
+    public Sprite getPlayerToken(){
         // This needs work depending on how we want to implement game pieces
         return gameToken;
     }
 
     /**
-     * getProperties returns an array list with all the properties that the player owns
+     * stePlayerToken sets the players Token
      * @return returns properties, ArrayList with all the properties player owns
      */
     @Override
-    public void setPlayerToken(String token){
-
+    public void setPlayerToken(Sprite token){
         gameToken = token;
-
-
     }
 
     /**
@@ -158,10 +156,7 @@ public class Player implements PlayerInterface{
      */
     @Override
     public void payPlayer(int amount){
-
         balance += amount;
-
-
     }
 
 
