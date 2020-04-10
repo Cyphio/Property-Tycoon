@@ -17,7 +17,7 @@ public class GameController implements GameControllerInterface {
     private Player currentPlayer;
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
 
-    
+
     
     public GameController(TiledMapTileLayer layer){
 

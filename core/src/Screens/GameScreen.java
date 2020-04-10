@@ -35,7 +35,6 @@ public class GameScreen implements Screen {
     private GameController gameCon;
 
 
-
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
 
@@ -43,6 +42,8 @@ public class GameScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+        this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
+        this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
@@ -51,6 +52,10 @@ public class GameScreen implements Screen {
         gameCon = new GameController(layer);
 
 
+
+
+//        Thread gameThread = new Thread((Runnable) gameCon);
+//        gameThread.start();
 
     }
 
@@ -82,7 +87,7 @@ public class GameScreen implements Screen {
         pause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.PAUSE);
+                game.setScreen(new PauseScreen(game));
             }
         });
 
@@ -115,7 +120,7 @@ public class GameScreen implements Screen {
 
 
                 } catch (Exception e) {
-                    System.out.println("No tile");
+                    System.out.println(e.getMessage());
                 }
 
 

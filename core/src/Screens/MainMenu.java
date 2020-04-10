@@ -16,7 +16,7 @@ import com.propertytycoonmakers.make.PropertyTycoon;
 
 public class MainMenu implements Screen {
 
-    private final PropertyTycoon game;
+    private PropertyTycoon game;
     private Texture mainMenuTexture;
     private Skin mainMenuSkin;
     private Stage stage;
@@ -44,14 +44,14 @@ public class MainMenu implements Screen {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.SETUP);
+                game.setScreen(new GameSetUpScreen(game));
             }
         });
 
         options.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.OPTIONS);
+                game.setScreen(new OptionsScreen(game));
             }
         });
 
@@ -103,7 +103,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void resume() {}
-
     @Override
     public void hide() {}
 }

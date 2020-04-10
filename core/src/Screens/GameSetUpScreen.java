@@ -45,16 +45,15 @@ public class GameSetUpScreen implements Screen {
 
         Table table = new Table();
         table.setFillParent(true);
+        stage.clear();
         stage.addActor(table);
 
 
         final SelectBox<Integer> numPlayersBox = new SelectBox(optionsScreenSkin);
 
-        numPlayersBox.setItems(new Integer[]{2, 3, 4,5,6});
+        numPlayersBox.setItems(new Integer[]{2, 3, 4, 5, 6});
 
-
-        Label numPlayers = new Label("Number of players:", optionsScreenSkin);
-
+        final Label numPlayers = new Label("Number of players:", optionsScreenSkin);
 
         final TextField player1Field = new TextField("Player 1 name", optionsScreenSkin);
         final TextField player2Field = new TextField("Player 2 name", optionsScreenSkin);
@@ -122,11 +121,7 @@ public class GameSetUpScreen implements Screen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
-
-
-
-                game.changeScreen(game.MAINMENU);
+                game.setScreen(new MainMenu(game));
             }
         });
 
