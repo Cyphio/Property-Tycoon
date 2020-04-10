@@ -27,6 +27,7 @@ public class GameSetUpScreen implements Screen {
     private Stage stage;
     private Viewport viewport;
 
+
     public GameSetUpScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -41,33 +42,81 @@ public class GameSetUpScreen implements Screen {
 
         Table table = new Table();
         table.setFillParent(true);
-        stage.clear();
         stage.addActor(table);
 
 
+        final SelectBox<Integer> numPlayersBox = new SelectBox(optionsScreenSkin);
 
-
-        final SelectBox<Integer> numPlayersBox = new SelectBox( optionsScreenSkin);
-
-        numPlayersBox.setItems(new Integer[]{1,2,3,4});
-
-
-
+        numPlayersBox.setItems(new Integer[]{1, 2, 3, 4,5,6});
 
 
         Label numPlayers = new Label("Number of players:", optionsScreenSkin);
 
 
+        final TextField player1Field = new TextField("Player 1 name", optionsScreenSkin);
+        final TextField player2Field = new TextField("Player 2 name", optionsScreenSkin);
+        final TextField player3Field = new TextField("Player 3 name", optionsScreenSkin);
+        final TextField player4Field = new TextField("Player 4 name", optionsScreenSkin);
+        final TextField player5Field = new TextField("Player 5 name", optionsScreenSkin);
+        final TextField player6Field = new TextField("Player 6 name", optionsScreenSkin);
 
+        player3Field.setVisible(false);
+        player4Field.setVisible(false);
+        player5Field.setVisible(false);
+        player6Field.setVisible(false);
 
-
-        Label numberPlayers = new Label("Music On/Off", optionsScreenSkin);
-        Label fxVolumeLabel = new Label("FX Volume", optionsScreenSkin);
-        Label fxOnOffLabel = new Label("FX On/Off", optionsScreenSkin);
-        Label fullscreenOnOffLabel = new Label("Fullscreen", optionsScreenSkin);
 
 
         final TextButton back = new TextButton("Back", optionsScreenSkin);
+
+
+        numPlayersBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                if (numPlayersBox.getSelected() == 2){
+
+                    player3Field.setVisible(false);
+                    player4Field.setVisible(false);
+                    player5Field.setVisible(false);
+                    player6Field.setVisible(false);
+
+
+                }else if (numPlayersBox.getSelected() == 3){
+                    player3Field.setVisible(true);
+                    player4Field.setVisible(false);
+                    player5Field.setVisible(false);
+                    player6Field.setVisible(false);
+
+                }else if (numPlayersBox.getSelected() == 4){
+                    player3Field.setVisible(true);
+                    player4Field.setVisible(true);
+                    player5Field.setVisible(false);
+                    player6Field.setVisible(false);
+
+                }else if (numPlayersBox.getSelected() == 5){
+                    player3Field.setVisible(true);
+                    player4Field.setVisible(true);
+                    player5Field.setVisible(true);
+                    player6Field.setVisible(false);
+
+                }else if (numPlayersBox.getSelected() == 6){
+                    player3Field.setVisible(true);
+                    player4Field.setVisible(true);
+                    player5Field.setVisible(true);
+                    player6Field.setVisible(true);
+
+                }
+
+
+
+            }
+        });
+
+
+
+
+
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -80,13 +129,15 @@ public class GameSetUpScreen implements Screen {
         TextButton test = new TextButton("test", optionsScreenSkin);
 
 
+        test.addListener(new ChangeListener() {
 
-        test.addListener(new ClickListener(){
-            public void clicked(Event event, Actor actor) {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
 
                 back.setVisible(false);
             }
-                         });
+
+        });
 
 
         startGame.addListener(new ChangeListener() {
@@ -100,18 +151,23 @@ public class GameSetUpScreen implements Screen {
         table.add(numPlayers).left();
         table.add(numPlayersBox);
         table.row().pad(10, 0, 0, 20);
+        table.add(player1Field);
+        table.row().pad(10, 0, 0, 20);
+        table.add(player2Field);
+        table.row().pad(10, 0, 0, 20);
+        table.add(player3Field);
+        table.row().pad(10, 0, 0, 20);
+        table.add(player4Field);
+        table.row().pad(10, 0, 0, 20);
+        table.add(player5Field);
+        table.row().pad(10, 0, 0, 20);
+        table.add(player6Field);
+        table.row().pad(10, 0, 0, 20);
         table.add(startGame);
         table.row().pad(10, 0, 0, 20);
         table.add(back);
         table.row().pad(10, 0, 0, 20);
         table.add(test);
-
-
-
-
-
-
-
 
 
     }
@@ -121,12 +177,13 @@ public class GameSetUpScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
         game.batch.begin();
 
         game.batch.draw(optionsScreenTexture, 0, 0);
         game.font.getData().setScale(2);
         game.font.draw(game.batch, "Property Tycoon Options", 100, 100);
-        game.batch.draw(optionsScreenTexture, 0, 0, viewport.getWorldWidth(),viewport.getWorldHeight());
+        game.batch.draw(optionsScreenTexture, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
 
         game.batch.end();
 
@@ -145,11 +202,14 @@ public class GameSetUpScreen implements Screen {
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 }

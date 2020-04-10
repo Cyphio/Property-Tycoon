@@ -7,11 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class PropertyTycoon extends Game {
 
+
 	public SpriteBatch batch;
 	public BitmapFont font;
 
-	private GameOptions options;
 
+	private GameOptions options;
 	private OptionsScreen optionsScreen;
 	private MainMenu mainMenu;
 	private GameScreen gameScreen;
@@ -19,16 +20,11 @@ public class PropertyTycoon extends Game {
 	private GameSetUpScreen setupScreen;
 
 
-
-
-
-
 	public final static int MAINMENU = 0;
 	public final static int OPTIONS = 1;
 	public final static int PAUSE = 2;
 	public final static int GAME = 3;
 	public final static int SETUP = 4;
-
 
 
 	@Override
@@ -78,4 +74,6 @@ public class PropertyTycoon extends Game {
 				break;
 		}
 	}
+
+
 }

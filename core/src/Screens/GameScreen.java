@@ -73,7 +73,7 @@ public class GameScreen implements Screen {
         buttons.right();
         buttons.pad(0, 0, 0, 75);
 
-        stage.clear();
+//        stage.clear();
         stage.addActor(buttons);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w, h);
@@ -119,9 +119,6 @@ public class GameScreen implements Screen {
                 try {
                     System.out.println(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)).setTile(null));
                     System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
-
-
-
 
 
 
