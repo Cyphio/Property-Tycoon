@@ -155,7 +155,7 @@ public class GameSetUpScreen implements Screen {
                 for(int i = 0 ; i < numPlayersBox.getSelected(); i++){
 
 
-                    players[i] = new Player(fields[i].getMessageText(), "token");
+                    players[i] = new Player(fields[i].getText(), "token");
 
                 }
                 game.changeScreen(game.GAME);

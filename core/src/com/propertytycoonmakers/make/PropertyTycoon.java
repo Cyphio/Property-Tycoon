@@ -21,6 +21,8 @@ public class PropertyTycoon extends Game {
 	public final static int GAME = 0;
 
 
+
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
