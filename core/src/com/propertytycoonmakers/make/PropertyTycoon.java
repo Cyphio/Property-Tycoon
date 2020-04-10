@@ -16,10 +16,19 @@ public class PropertyTycoon extends Game {
 	private MainMenu mainMenu;
 	private GameScreen gameScreen;
 	private PauseScreen pauseScreen;
+	private GameSetUpScreen setupScreen;
+
+
+
+
+
+
 	public final static int MAINMENU = 0;
 	public final static int OPTIONS = 1;
 	public final static int PAUSE = 2;
 	public final static int GAME = 3;
+	public final static int SETUP = 4;
+
 
 
 	@Override
@@ -62,6 +71,10 @@ public class PropertyTycoon extends Game {
 			case GAME:
 				if(gameScreen == null) gameScreen = new GameScreen(this);
 				this.setScreen(gameScreen);
+				break;
+			case SETUP:
+				if(setupScreen== null) setupScreen = new GameSetUpScreen(this);
+				this.setScreen(setupScreen);
 				break;
 		}
 	}
