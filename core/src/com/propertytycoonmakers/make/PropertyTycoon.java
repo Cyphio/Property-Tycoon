@@ -4,13 +4,14 @@ import Screens.*;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import main.GameController;
 
 public class PropertyTycoon extends Game {
 
 
 	public SpriteBatch batch;
 	public BitmapFont font;
-
+	public GameController gameCon;
 
 	private GameOptions options;
 	private OptionsScreen optionsScreen;
@@ -18,7 +19,6 @@ public class PropertyTycoon extends Game {
 	private GameScreen gameScreen;
 	private PauseScreen pauseScreen;
 	private GameSetUpScreen setupScreen;
-
 
 	public final static int MAINMENU = 0;
 	public final static int OPTIONS = 1;
@@ -32,6 +32,7 @@ public class PropertyTycoon extends Game {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		options = new GameOptions();
+		gameCon = new GameController();
 		this.setScreen(new LoadingScreen(this));
 	}
 

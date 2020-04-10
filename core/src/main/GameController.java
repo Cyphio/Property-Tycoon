@@ -4,29 +4,24 @@ package main;
 import Tiles.Tile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class GameController implements GameControllerInterface {
 
-
+    public static Player[] players;
     private int height;
     private int width;
     private boolean running;
     private static GameBoard board;
     private Player currentPlayer;
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
-
     private Player p;
-    
-    
-    public GameController(TiledMapTileLayer layer){
 
-        cellToTile = new HashMap<>();
-
-
-
- //for testing purposes
+    public GameController() {
+    /**
+    //for testing purposes
         p = new Player();
 
         Player[] ps = new Player[1];
@@ -34,57 +29,44 @@ public class GameController implements GameControllerInterface {
         ps[0] = p;
         board = new GameBoard(ps);
         buildCellReference(layer);
-//=============================================
+//=============================================**/
+    }
 
+    public void setTiledMapTileLayer(TiledMapTileLayer layer) {
+        this.cellToTile = new HashMap<>();
+        board = new GameBoard(getPlayers());
+        buildCellReference(layer);
+    }
 
-        }
+    public void setPlayers(Player[] players) {
+        this.players = players;
+    }
 
+    public Player[] getPlayers() {
+        return players;
+    }
 
-        public Tile retTile(TiledMapTileLayer.Cell cell){
-
-
+    public Tile retTile(TiledMapTileLayer.Cell cell) {
         return cellToTile.get(cell);
-
-        }
-        
-        
-        
-        
-
-    
-    
-    
+    }
 
     /**
      * getCurrentPlayer provides functionality to return the current player outside of this class
      * @return returns the player who's turn it currently is
      */
-    public Player getCurrentPlayer(){
-
+    public Player getCurrentPlayer() {
         return this.currentPlayer;
     }
 
-
-
     public void buildCellReference(TiledMapTileLayer l ) {
-
-
-
         int tileNUm = 0;
-
         int cordY = 0;
-
-
-
-
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {
                 cellToTile.put(l.getCell(x, y), board.getTile(tileNUm));
             }
         }
-
         tileNUm++;
-
         for (int y = 3; y < 21; y++) {
             for (int x = 0; x < 3; x++) {
                 cellToTile.put(l.getCell(x, cordY + y), board.getTile(tileNUm));
@@ -94,26 +76,17 @@ public class GameController implements GameControllerInterface {
                 tileNUm++;
             }
         }
-
         for (int y = 21; y < 24; y++) {
             for (int x = 0; x < 3; x++) {
                 cellToTile.put(l.getCell(x, cordY + y), board.getTile(tileNUm));
             }
         }
         tileNUm++;
-
-
         System.out.println("built");
-
-
-
-        }
-
+    }
 
     @Override
-    public void endGame() {
-
-    }
+    public void endGame() {}
 }
 
 

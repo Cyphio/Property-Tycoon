@@ -18,6 +18,9 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 import com.sun.org.apache.xpath.internal.operations.String;
+import main.Player;
+
+import java.util.ArrayList;
 
 public class GameSetUpScreen implements Screen {
 
@@ -44,14 +47,11 @@ public class GameSetUpScreen implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-
         final SelectBox<Integer> numPlayersBox = new SelectBox(optionsScreenSkin);
 
-        numPlayersBox.setItems(new Integer[]{2, 3, 4,5,6});
+        numPlayersBox.setItems(new Integer[]{2, 3, 4, 5, 6});
 
-
-        Label numPlayers = new Label("Number of players:", optionsScreenSkin);
-
+        final Label numPlayers = new Label("Number of players:", optionsScreenSkin);
 
         final TextField player1Field = new TextField("Player 1 name", optionsScreenSkin);
         final TextField player2Field = new TextField("Player 2 name", optionsScreenSkin);
@@ -65,7 +65,6 @@ public class GameSetUpScreen implements Screen {
         player5Field.setVisible(false);
         player6Field.setVisible(false);
 
-
         final TextButton back = new TextButton("Back", optionsScreenSkin);
 
         numPlayersBox.addListener(new ChangeListener() {
@@ -73,12 +72,10 @@ public class GameSetUpScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
 
                 if (numPlayersBox.getSelected() == 2){
-
                     player3Field.setVisible(false);
                     player4Field.setVisible(false);
                     player5Field.setVisible(false);
                     player6Field.setVisible(false);
-
 
                 }else if (numPlayersBox.getSelected() == 3){
                     player3Field.setVisible(true);
@@ -103,17 +100,9 @@ public class GameSetUpScreen implements Screen {
                     player4Field.setVisible(true);
                     player5Field.setVisible(true);
                     player6Field.setVisible(true);
-
                 }
-
-
-
             }
         });
-
-
-
-
 
         back.addListener(new ChangeListener() {
             @Override
@@ -123,24 +112,14 @@ public class GameSetUpScreen implements Screen {
         });
 
         TextButton startGame = new TextButton("Start", optionsScreenSkin);
-
-        TextButton test = new TextButton("test", optionsScreenSkin);
-
-
-        test.addListener(new ChangeListener() {
-
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-
-                back.setVisible(false);
-            }
-
-        });
-
-
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Player[] players = new Player[numPlayersBox.getSelected()];
+                for (int i = 0; i < players.length; i++) {
+                    players[i] = new Player();
+                }
+                game.gameCon.setPlayers(players);
                 game.changeScreen(game.GAME);
             }
         });
@@ -165,7 +144,6 @@ public class GameSetUpScreen implements Screen {
         table.row().pad(10, 0, 0, 20);
         table.add(back);
         table.row().pad(10, 0, 0, 20);
-        table.add(test);
 
 
     }

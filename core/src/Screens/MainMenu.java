@@ -103,7 +103,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void resume() {}
-
     @Override
     public void hide() {}
 }
