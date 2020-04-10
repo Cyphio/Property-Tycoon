@@ -66,9 +66,7 @@ public class GameSetUpScreen implements Screen {
         player6Field.setVisible(false);
 
 
-
         final TextButton back = new TextButton("Back", optionsScreenSkin);
-
 
         numPlayersBox.addListener(new ChangeListener() {
             @Override
@@ -162,7 +160,7 @@ public class GameSetUpScreen implements Screen {
         table.add(player5Field);
         table.row().pad(10, 0, 0, 20);
         table.add(player6Field);
-        table.row().pad(10, 0, 0, 20);
+        table.row().pad(50, 0, 0, 20);
         table.add(startGame);
         table.row().pad(10, 0, 0, 20);
         table.add(back);
