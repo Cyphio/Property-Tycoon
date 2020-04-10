@@ -22,6 +22,8 @@ public class GameBoard {
     private static Player currentPlayer;
 
 
+
+
     public GameBoard(Player[] players) {
 
         playerPos = new HashMap<Player, Integer>();

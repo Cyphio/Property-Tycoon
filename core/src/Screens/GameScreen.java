@@ -73,7 +73,6 @@ public class GameScreen implements Screen {
         buttons.right();
         buttons.pad(0, 0, 0, 75);
 
-//        stage.clear();
         stage.addActor(buttons);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w, h);
