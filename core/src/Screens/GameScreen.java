@@ -31,8 +31,7 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Texture gameScreenTexture;
     private Skin gameScreenSkin;
-    TiledMapTileLayer layer;
-
+    private TiledMapTileLayer layer;
     private GameController gameCon;
 
 

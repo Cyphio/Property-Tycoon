@@ -17,24 +17,15 @@ public class GameController implements GameControllerInterface {
     private Player currentPlayer;
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
 
-    private Player p;
     
     
     public GameController(TiledMapTileLayer layer){
 
         cellToTile = new HashMap<>();
 
-
-
- //for testing purposes
-        p = new Player();
-
-        Player[] ps = new Player[1];
-
-        ps[0] = p;
-        board = new GameBoard(ps);
+        board = new GameBoard();
         buildCellReference(layer);
-//=============================================
+
 
 
         }

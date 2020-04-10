@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static Screens.GameSetUpScreen.players;
+
 public class GameBoard {
 
     private static Tile[] board;
@@ -22,7 +24,8 @@ public class GameBoard {
     private static Player currentPlayer;
 
 
-    public GameBoard(Player[] players) {
+
+    public GameBoard() {
 
         playerPos = new HashMap<Player, Integer>();
 

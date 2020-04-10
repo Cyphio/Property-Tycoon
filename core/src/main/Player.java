@@ -13,8 +13,13 @@ public class Player implements PlayerInterface{
 //    private int tilePosition;
     private int getOfJailCards;
     private String gameToken;
+    private String name;
 
-    public Player(){
+    public Player(String name, String token){
+
+        this.name = name;
+        this.gameToken = token;
+
         getOfJailCards = 0;
         balance = 1500;
 //        tilePosition = 0;

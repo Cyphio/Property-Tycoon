@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 import com.sun.org.apache.xpath.internal.operations.String;
+import main.Player;
 
 public class GameSetUpScreen implements Screen {
 
@@ -26,6 +27,8 @@ public class GameSetUpScreen implements Screen {
     private Skin optionsScreenSkin;
     private Stage stage;
     private Viewport viewport;
+    public static Player[] players;
+
 
 
     public GameSetUpScreen(PropertyTycoon game) {
@@ -111,6 +114,7 @@ public class GameSetUpScreen implements Screen {
             }
         });
 
+        final TextField[] fields = new TextField[]{player1Field,player2Field,player3Field,player4Field,player5Field,player6Field};
 
 
 
@@ -118,6 +122,10 @@ public class GameSetUpScreen implements Screen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+
+
+
+
                 game.changeScreen(game.MAINMENU);
             }
         });
@@ -132,6 +140,9 @@ public class GameSetUpScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
+
+
+
                 back.setVisible(false);
             }
 
@@ -141,6 +152,15 @@ public class GameSetUpScreen implements Screen {
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+
+                players = new Player[numPlayersBox.getSelected()];
+
+
+                for(int i = 0 ; i < numPlayersBox.getSelected(); i++){
+
+                    players[i] = new Player(fields[i].getMessageText(), "token");
+
+                }
                 game.changeScreen(game.GAME);
             }
         });
