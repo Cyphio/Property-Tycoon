@@ -53,6 +53,9 @@ public class GameBoard implements GameBoardInterface{
 
         System.out.println(players.length);
         System.out.println(players[0].getName());
+
+
+
     }
 
 
@@ -116,7 +119,6 @@ public class GameBoard implements GameBoardInterface{
 
 
     public Tile getTile(int i){
-
         return board[i];
 
 

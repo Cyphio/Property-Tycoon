@@ -187,7 +187,7 @@ public class GameSetUpScreen implements Screen {
                 for(int i = 0 ; i < numPlayersBox.getSelected(); i++){
 
 // CHANGE THE TOKEN TYPE LATER WHEN MAKING A SELECTOR
-                    players[i] = new Player(fields[i].getText(), null);
+                    players[i] = new Player(fields[i].getText(), tokenSelector1.getSelected());
                 }
                 game.changeScreen(game.GAME);
             }
@@ -198,6 +198,7 @@ public class GameSetUpScreen implements Screen {
         table.add(numPlayersBox);
         table.row().pad(10, 0, 0, 20);
         table.add(player1Field);
+    table.add(tokenSelector1);
         table.row().pad(10, 0, 0, 20);
         table.add(player2Field);
         table.row().pad(10, 0, 0, 20);
