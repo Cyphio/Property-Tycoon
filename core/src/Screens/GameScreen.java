@@ -44,8 +44,6 @@ public class GameScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
-        this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
@@ -142,8 +140,8 @@ public class GameScreen implements Screen {
 
         camera.update();
 
-        camera.position.set(768, 768, 0);
-        camera.zoom = (float) 1.2;
+        camera.position.set(1120, 1120, 0);
+        camera.zoom = (float) 1.8;
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
