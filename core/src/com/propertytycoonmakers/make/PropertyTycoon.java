@@ -4,6 +4,7 @@ import Screens.*;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import main.Player;
 
 public class PropertyTycoon extends Game {
 
@@ -18,6 +19,7 @@ public class PropertyTycoon extends Game {
 	private GameScreen gameScreen;
 	private PauseScreen pauseScreen;
 	private GameSetUpScreen setupScreen;
+	public static Player[] players;
 
 
 	public final static int MAINMENU = 0;

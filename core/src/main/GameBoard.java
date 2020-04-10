@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import static Screens.GameSetUpScreen.players;
+import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 public class GameBoard {
 
@@ -49,6 +48,10 @@ public class GameBoard {
         Collections.shuffle(potluckCards);
         oppourtunityKnocksCards = builder.getCommunityChestCards();
         Collections.shuffle(oppourtunityKnocksCards);
+
+
+        System.out.println(players.length);
+        System.out.println(players[0].getName());
     }
 
 
@@ -113,6 +116,8 @@ public class GameBoard {
 
 
     }
+
+
 
 
 

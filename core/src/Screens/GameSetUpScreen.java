@@ -20,6 +20,8 @@ import com.propertytycoonmakers.make.PropertyTycoon;
 import com.sun.org.apache.xpath.internal.operations.String;
 import main.Player;
 
+import static com.propertytycoonmakers.make.PropertyTycoon.players;
+
 public class GameSetUpScreen implements Screen {
 
     private PropertyTycoon game;
@@ -27,8 +29,6 @@ public class GameSetUpScreen implements Screen {
     private Skin optionsScreenSkin;
     private Stage stage;
     private Viewport viewport;
-    public static Player[] players;
-
 
 
     public GameSetUpScreen(PropertyTycoon game) {
@@ -155,12 +155,17 @@ public class GameSetUpScreen implements Screen {
 
                 players = new Player[numPlayersBox.getSelected()];
 
-
                 for(int i = 0 ; i < numPlayersBox.getSelected(); i++){
+
 
                     players[i] = new Player(fields[i].getMessageText(), "token");
 
                 }
+
+
+
+
+
                 game.changeScreen(game.GAME);
             }
         });

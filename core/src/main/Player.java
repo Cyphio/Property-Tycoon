@@ -122,6 +122,13 @@ public class Player implements PlayerInterface{
         }
     }
 
+    public String getName(){
+
+        return this.name;
+
+    }
+
+
     /*boolean getIsBankrupt(int cost){
         if (balance < cost){
             int subcost = 0;
