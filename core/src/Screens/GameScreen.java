@@ -33,8 +33,6 @@ public class GameScreen implements Screen {
     private Skin gameScreenSkin;
     TiledMapTileLayer layer;
 
-    private GameController gameCon;
-
 
 
     TiledMap tiledMap;
@@ -117,7 +115,7 @@ public class GameScreen implements Screen {
 
                 try {
                     System.out.println(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)).setTile(null));
-                    System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
+                    System.out.println(game.gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
 
 
 

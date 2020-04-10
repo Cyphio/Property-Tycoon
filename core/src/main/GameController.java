@@ -20,6 +20,7 @@ public class GameController implements GameControllerInterface {
     private Player p;
 
     public GameController() {
+        this.cellToTile = new HashMap<>();
     /**
     //for testing purposes
         p = new Player();
@@ -33,7 +34,6 @@ public class GameController implements GameControllerInterface {
     }
 
     public void setTiledMapTileLayer(TiledMapTileLayer layer) {
-        this.cellToTile = new HashMap<>();
         board = new GameBoard(getPlayers());
         buildCellReference(layer);
     }
