@@ -48,14 +48,9 @@ public class GameScreen implements Screen {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("Tile Layer 1");
 
-
         gameCon = new GameController(layer);
 
 
-
-
-//        Thread gameThread = new Thread((Runnable) gameCon);
-//        gameThread.start();
 
     }
 

@@ -153,6 +153,8 @@ public class GameSetUpScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
+
+                players=null;
                 players = new Player[numPlayersBox.getSelected()];
 
                 for(int i = 0 ; i < numPlayersBox.getSelected(); i++){
@@ -161,11 +163,6 @@ public class GameSetUpScreen implements Screen {
                     players[i] = new Player(fields[i].getMessageText(), "token");
 
                 }
-
-
-
-
-
                 game.changeScreen(game.GAME);
             }
         });
