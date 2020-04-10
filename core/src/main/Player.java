@@ -2,6 +2,7 @@ package main;
 
 import Tiles.Property;
 import Tiles.Tile;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import java.util.ArrayList;
 
@@ -12,10 +13,10 @@ public class Player implements PlayerInterface{
 //    private Tile position;
 //    private int tilePosition;
     private int getOfJailCards;
-    private String gameToken;
+    private Sprite gameToken;
     private String name;
 
-    public Player(String name, String token){
+    public Player(String name, Sprite token){
 
         this.name = name;
         this.gameToken = token;
@@ -147,7 +148,7 @@ public class Player implements PlayerInterface{
      * @return returns gameToken as a string
      */
     @Override
-    public String getPlayerToken(){
+    public Sprite getPlayerToken(){
         // This needs work depending on how we want to implement game pieces
         return gameToken;
     }
@@ -157,7 +158,7 @@ public class Player implements PlayerInterface{
      * @return returns properties, ArrayList with all the properties player owns
      */
     @Override
-    public void setPlayerToken(String token){
+    public void setPlayerToken(Sprite token){
 
         gameToken = token;
 
