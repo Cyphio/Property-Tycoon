@@ -52,6 +52,9 @@ public class GameBoard {
 
         System.out.println(players.length);
         System.out.println(players[0].getName());
+
+
+
     }
 
 
@@ -111,7 +114,6 @@ public class GameBoard {
 
 
     public Tile getTile(int i){
-
         return board[i];
 
 
