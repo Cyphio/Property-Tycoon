@@ -45,6 +45,7 @@ public class GameSetUpScreen implements Screen {
 
         Table table = new Table();
         table.setFillParent(true);
+        stage.clear();
         stage.addActor(table);
 
         final SelectBox<Integer> numPlayersBox = new SelectBox(optionsScreenSkin);
@@ -107,7 +108,7 @@ public class GameSetUpScreen implements Screen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.MAINMENU);
+                game.setScreen(new MainMenu(game));
             }
         });
 

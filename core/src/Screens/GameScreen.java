@@ -26,7 +26,7 @@ import main.GameController;
 
 public class GameScreen implements Screen {
 
-    private final PropertyTycoon game;
+    private PropertyTycoon game;
     private OrthographicCamera camera;
     private Stage stage;
     private Texture gameScreenTexture;
@@ -52,7 +52,7 @@ public class GameScreen implements Screen {
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("Tile Layer 1");
         game.gameCon.setTiledMapTileLayer(layer);
 
-        System.out.println(game.gameCon.getPlayers());
+        System.out.println(game.gameCon.getPlayers().length);
 
 
 //        Thread gameThread = new Thread((Runnable) gameCon);
@@ -87,7 +87,7 @@ public class GameScreen implements Screen {
         pause.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.PAUSE);
+                game.setScreen(new PauseScreen(game));
             }
         });
 
