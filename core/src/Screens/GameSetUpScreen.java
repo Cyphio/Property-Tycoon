@@ -47,7 +47,7 @@ public class GameSetUpScreen implements Screen {
 
         final SelectBox<Integer> numPlayersBox = new SelectBox(optionsScreenSkin);
 
-        numPlayersBox.setItems(new Integer[]{1, 2, 3, 4,5,6});
+        numPlayersBox.setItems(new Integer[]{2, 3, 4,5,6});
 
 
         Label numPlayers = new Label("Number of players:", optionsScreenSkin);
