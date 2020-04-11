@@ -169,9 +169,6 @@ public class GameController implements GameControllerInterface {
 
         }
 
-
-
-
         System.out.println("built");
 
 
