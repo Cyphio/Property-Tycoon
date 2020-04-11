@@ -2,6 +2,7 @@ package Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,26 +10,29 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
 public class MainMenu implements Screen {
 
-    private final PropertyTycoon game;
+    private PropertyTycoon game;
     private Texture mainMenuTexture;
     private Skin mainMenuSkin;
     private Stage stage;
-
+    private Viewport viewport;
     public MainMenu(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
         this.mainMenuTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
-        this.mainMenuTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.mainMenuSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
+        viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -40,14 +44,14 @@ public class MainMenu implements Screen {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.GAME);
+                game.setScreen(new GameSetUpScreen(game));
             }
         });
 
         options.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.OPTIONS);
+                game.setScreen(new OptionsScreen(game));
             }
         });
 
@@ -76,6 +80,7 @@ public class MainMenu implements Screen {
         game.batch.draw(mainMenuTexture, 0, 0);
         game.font.getData().setScale(2);
         game.font.draw(game.batch, "Property Tycoon", 100, 100);
+        game.batch.draw(mainMenuTexture, 0, 0, viewport.getWorldWidth(),viewport.getWorldHeight());
 
         game.batch.end();
 
@@ -98,7 +103,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void resume() {}
-
     @Override
     public void hide() {}
 }

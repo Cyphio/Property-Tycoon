@@ -5,7 +5,10 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -13,21 +16,21 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
-import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.actor;
+import javax.swing.text.View;
 
-public class OptionsScreen implements Screen {
+public class PauseScreen implements Screen {
 
     private PropertyTycoon game;
-    private Texture optionsScreenTexture;
-    private Skin optionsScreenSkin;
+    private Texture pauseScreenTexture;
+    private Skin pauseScreenSkin;
     private Stage stage;
     private Viewport viewport;
 
-    public OptionsScreen(PropertyTycoon game) {
+    public PauseScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
-        this.optionsScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
-        this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+        this.pauseScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
+        this.pauseScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
     @Override
@@ -40,13 +43,13 @@ public class OptionsScreen implements Screen {
         stage.clear();
         stage.addActor(table);
 
-        Label musicVolumeLabel = new Label("Music Volume", optionsScreenSkin);
-        Label musicOnOffLabel = new Label("Music On/Off", optionsScreenSkin);
-        Label fxVolumeLabel = new Label("FX Volume", optionsScreenSkin);
-        Label fxOnOffLabel = new Label("FX On/Off", optionsScreenSkin);
-        Label fullscreenOnOffLabel = new Label("Fullscreen", optionsScreenSkin);
+        Label musicVolumeLabel = new Label("Music Volume", pauseScreenSkin);
+        Label musicOnOffLabel = new Label("Music On/Off", pauseScreenSkin);
+        Label fxVolumeLabel = new Label("FX Volume", pauseScreenSkin);
+        Label fxOnOffLabel = new Label("FX On/Off", pauseScreenSkin);
+        Label fullscreenOnOffLabel = new Label("Fullscreen", pauseScreenSkin);
 
-        final Slider musicVolumeSlider = new Slider(0f, 1f, 0.1f, false, optionsScreenSkin);
+        final Slider musicVolumeSlider = new Slider(0f, 1f, 0.1f, false, pauseScreenSkin);
         musicVolumeSlider.setValue(game.getPreferences().getMusicVolume());
         musicVolumeSlider.addListener(new EventListener() {
             @Override
@@ -56,7 +59,7 @@ public class OptionsScreen implements Screen {
             }
         });
 
-        final Slider fxVolumeSlider = new Slider(0f, 1f, 0.1f, false, optionsScreenSkin);
+        final Slider fxVolumeSlider = new Slider(0f, 1f, 0.1f, false,pauseScreenSkin);
         fxVolumeSlider.setValue(game.getPreferences().getFxVolume());
         fxVolumeSlider.addListener(new EventListener() {
             @Override
@@ -66,18 +69,7 @@ public class OptionsScreen implements Screen {
             }
         });
 
-        final CheckBox musicOnOff = new CheckBox(null, optionsScreenSkin);
-        musicOnOff.setChecked(game.getPreferences().isMusicEnabled());
-        musicOnOff.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                boolean isOn = musicOnOff.isChecked();
-                game.getPreferences().setMusicEnabled(isOn);
-                return false;
-            }
-        });
-
-        final CheckBox fullscreenOnOff = new CheckBox(null, optionsScreenSkin);
+        final CheckBox fullscreenOnOff = new CheckBox(null, pauseScreenSkin);
         fullscreenOnOff.setChecked(Gdx.graphics.isFullscreen());
         fullscreenOnOff.addListener(new ChangeListener() {
             @Override
@@ -89,14 +81,25 @@ public class OptionsScreen implements Screen {
                     game.getPreferences().setPrefsFullscreen(fullscreenOnOff.isChecked());
 
                 } else
-                Gdx.graphics.setFullscreenMode(currentMode);
+                    Gdx.graphics.setFullscreenMode(currentMode);
                 game.getPreferences().setPrefsFullscreen(fullscreenOnOff.isChecked());
 
             }
         });
 
 
-        final CheckBox fxOnOff = new CheckBox(null, optionsScreenSkin);
+        final CheckBox musicOnOff = new CheckBox(null, pauseScreenSkin);
+        musicOnOff.setChecked(game.getPreferences().isMusicEnabled());
+        musicOnOff.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                boolean isOn = musicOnOff.isChecked();
+                game.getPreferences().setMusicEnabled(isOn);
+                return false;
+            }
+        });
+
+        final CheckBox fxOnOff = new CheckBox(null, pauseScreenSkin);
         fxOnOff.setChecked(game.getPreferences().isFxEnabled());
         fxOnOff.addListener(new EventListener() {
             @Override
@@ -107,8 +110,16 @@ public class OptionsScreen implements Screen {
             }
         });
 
-        final TextButton back = new TextButton("Back", optionsScreenSkin);
-        back.addListener(new ChangeListener() {
+        final TextButton resume = new TextButton("Resume", pauseScreenSkin);
+        resume.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(game.GAME);
+            }
+        });
+
+        final TextButton backToMainMenu = new TextButton("Back To Main Menu", pauseScreenSkin);
+        backToMainMenu.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new MainMenu(game));
@@ -131,7 +142,9 @@ public class OptionsScreen implements Screen {
         table.add(fullscreenOnOffLabel).left();
         table.add(fullscreenOnOff);
         table.row().pad(10, 0, 0, 20);
-        table.add(back).colspan(2);
+        table.add(resume).colspan(2);
+        table.row().pad(10, 0, 0, 20);
+        table.add(backToMainMenu).colspan(2);
     }
 
     @Override
@@ -141,10 +154,10 @@ public class OptionsScreen implements Screen {
 
         game.batch.begin();
 
-        game.batch.draw(optionsScreenTexture, 0, 0);
+        game.batch.draw(pauseScreenTexture, 0, 0);
         game.font.getData().setScale(2);
-        game.font.draw(game.batch, "Property Tycoon Options", 100, 100);
-        game.batch.draw(optionsScreenTexture, 0, 0, viewport.getWorldWidth(),viewport.getWorldHeight());
+        game.font.draw(game.batch, "Property Tycoon Paused", 100, 100);
+        game.batch.draw(pauseScreenTexture, 0, 0, viewport.getWorldWidth(),viewport.getWorldHeight());
 
         game.batch.end();
 

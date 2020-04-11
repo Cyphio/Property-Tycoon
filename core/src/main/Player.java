@@ -2,22 +2,31 @@ package main;
 
 import Tiles.Property;
 import Tiles.Tile;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import java.util.ArrayList;
 
-public class Player implements PlayerInterface {
+public class Player implements PlayerInterface{
     private ArrayList<Tile> properties;
     private ArrayList<Tile> morgagedProperties;
     private int balance;
 //    private Tile position;
 //    private int tilePosition;
     private int getOfJailCards;
-    private String gameToken;
 
-    public Player(){
+    private Sprite gameToken;
+    private String name;
+    private boolean firstLap;
+
+    public Player(String name, Sprite token){
+
+        this.name = name;
+        this.gameToken = token;
+
         getOfJailCards = 0;
         balance = 1500;
 //        tilePosition = 0;
+        firstLap = true;
 }
 
     /**
@@ -117,6 +126,13 @@ public class Player implements PlayerInterface {
         }
     }
 
+    public String getName(){
+
+        return this.name;
+
+    }
+
+
     /*boolean getIsBankrupt(int cost){
         if (balance < cost){
             int subcost = 0;
@@ -135,17 +151,17 @@ public class Player implements PlayerInterface {
      * @return returns gameToken as a string
      */
     @Override
-    public String getPlayerToken(){
+    public Sprite getPlayerToken(){
         // This needs work depending on how we want to implement game pieces
         return gameToken;
     }
 
     /**
-     * getProperties returns an array list with all the properties that the player owns
+            * getProperties returns an array list with all the properties that the player owns
      * @return returns properties, ArrayList with all the properties player owns
      */
     @Override
-    public void setPlayerToken(String token){
+    public void setPlayerToken(Sprite token){
 
         gameToken = token;
 
@@ -164,6 +180,12 @@ public class Player implements PlayerInterface {
 
     }
 
+    @Override
+    public void endFirstLap(){firstLap = false;}
 
+    @Override
+    public boolean getFirstLap(){return firstLap;}
 
+    @Override
+    public void makePurchase(int cost){ balance -= cost; }
 }
