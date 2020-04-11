@@ -41,6 +41,7 @@ public class GameSetUpScreen implements Screen {
 
     private ArrayList<Sprite> spriteList;
     private SelectBox[] tokenSBList;
+    private Image[] tokenImageList;
 
     public GameSetUpScreen(PropertyTycoon game) {
         this.game = game;
@@ -92,6 +93,7 @@ public class GameSetUpScreen implements Screen {
         final Image token4Image = new Image(getTokenDrawable(spriteList.get(3)));
         final Image token5Image = new Image(getTokenDrawable(spriteList.get(4)));
         final Image token6Image = new Image(getTokenDrawable(spriteList.get(5)));
+        tokenImageList = new Image[]{token1Image, token2Image, token3Image, token4Image, token5Image, token6Image};
 
         String[] valueList = new String[]{"white", "blue", "green", "yellow", "orange", "rainbow"};
         final SelectBox<String> token1SB = new SelectBox(gameSetUpScreenSkin);
@@ -203,12 +205,7 @@ public class GameSetUpScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 swapSprites(0, token1SB.getSelected());
                 updateSB();
-                token1Image.setDrawable(getTokenDrawable(spriteList.get(0)));
-                token2Image.setDrawable(getTokenDrawable(spriteList.get(1)));
-                token3Image.setDrawable(getTokenDrawable(spriteList.get(2)));
-                token4Image.setDrawable(getTokenDrawable(spriteList.get(3)));
-                token5Image.setDrawable(getTokenDrawable(spriteList.get(4)));
-                token6Image.setDrawable(getTokenDrawable(spriteList.get(5)));
+                updateTokenImageList();
             }
         });
 
@@ -217,12 +214,7 @@ public class GameSetUpScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 swapSprites(1, token2SB.getSelected());
                 updateSB();
-                token1Image.setDrawable(getTokenDrawable(spriteList.get(0)));
-                token2Image.setDrawable(getTokenDrawable(spriteList.get(1)));
-                token3Image.setDrawable(getTokenDrawable(spriteList.get(2)));
-                token4Image.setDrawable(getTokenDrawable(spriteList.get(3)));
-                token5Image.setDrawable(getTokenDrawable(spriteList.get(4)));
-                token6Image.setDrawable(getTokenDrawable(spriteList.get(5)));
+                updateTokenImageList();
             }
         });
 
@@ -231,12 +223,7 @@ public class GameSetUpScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 swapSprites(2, token3SB.getSelected());
                 updateSB();
-                token1Image.setDrawable(getTokenDrawable(spriteList.get(0)));
-                token2Image.setDrawable(getTokenDrawable(spriteList.get(1)));
-                token3Image.setDrawable(getTokenDrawable(spriteList.get(2)));
-                token4Image.setDrawable(getTokenDrawable(spriteList.get(3)));
-                token5Image.setDrawable(getTokenDrawable(spriteList.get(4)));
-                token6Image.setDrawable(getTokenDrawable(spriteList.get(5)));
+                updateTokenImageList();
             }
         });
 
@@ -245,12 +232,7 @@ public class GameSetUpScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 swapSprites(3, token4SB.getSelected());
                 updateSB();
-                token1Image.setDrawable(getTokenDrawable(spriteList.get(0)));
-                token2Image.setDrawable(getTokenDrawable(spriteList.get(1)));
-                token3Image.setDrawable(getTokenDrawable(spriteList.get(2)));
-                token4Image.setDrawable(getTokenDrawable(spriteList.get(3)));
-                token5Image.setDrawable(getTokenDrawable(spriteList.get(4)));
-                token6Image.setDrawable(getTokenDrawable(spriteList.get(5)));
+                updateTokenImageList();
             }
         });
 
@@ -259,12 +241,7 @@ public class GameSetUpScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 swapSprites(4, token5SB.getSelected());
                 updateSB();
-                token1Image.setDrawable(getTokenDrawable(spriteList.get(0)));
-                token2Image.setDrawable(getTokenDrawable(spriteList.get(1)));
-                token3Image.setDrawable(getTokenDrawable(spriteList.get(2)));
-                token4Image.setDrawable(getTokenDrawable(spriteList.get(3)));
-                token5Image.setDrawable(getTokenDrawable(spriteList.get(4)));
-                token6Image.setDrawable(getTokenDrawable(spriteList.get(5)));
+                updateTokenImageList();
             }
         });
 
@@ -273,12 +250,7 @@ public class GameSetUpScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 swapSprites(5, token6SB.getSelected());
                 updateSB();
-                token1Image.setDrawable(getTokenDrawable(spriteList.get(0)));
-                token2Image.setDrawable(getTokenDrawable(spriteList.get(1)));
-                token3Image.setDrawable(getTokenDrawable(spriteList.get(2)));
-                token4Image.setDrawable(getTokenDrawable(spriteList.get(3)));
-                token5Image.setDrawable(getTokenDrawable(spriteList.get(4)));
-                token6Image.setDrawable(getTokenDrawable(spriteList.get(5)));
+                updateTokenImageList();
             }
         });
 
@@ -380,12 +352,6 @@ public class GameSetUpScreen implements Screen {
         }
     }
 
-    private void updateSB() {
-        for(int i=0; i<spriteList.size(); i++) {
-            tokenSBList[i].setSelected(getSpriteTitle(spriteList.get(i)));
-        }
-    }
-
     private String getSpriteTitle(Sprite sprite) {
         if (sprite == sprite1) {
             return "white";
@@ -406,6 +372,18 @@ public class GameSetUpScreen implements Screen {
             return "rainbow";
         }
         return "ERROR";
+    }
+
+    private void updateSB() {
+        for(int i=0; i<spriteList.size(); i++) {
+            tokenSBList[i].setSelected(getSpriteTitle(spriteList.get(i)));
+        }
+    }
+
+    private void updateTokenImageList() {
+        for(int i=0; i<spriteList.size(); i++) {
+            tokenImageList[i].setDrawable(getTokenDrawable(spriteList.get(i)));
+        }
     }
 
     @Override
