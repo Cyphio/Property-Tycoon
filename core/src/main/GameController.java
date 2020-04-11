@@ -60,39 +60,114 @@ public class GameController implements GameControllerInterface {
     public void buildCellReference(TiledMapTileLayer l ) {
 
 
-
         int tileNUm = 0;
 
-        int cordY = 0;
+
+        int count = 0;
 
 
-
-
-        for (int y = 0; y < 3; y++) {
-            for (int x = 0; x < 3; x++) {
+//go 1
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 4; x++) {
                 cellToTile.put(l.getCell(x, y), board.getTile(tileNUm));
             }
         }
 
         tileNUm++;
+// vertical row 10
+        for (int y = 4; y < 31; y++) {
 
-        for (int y = 3; y < 21; y++) {
-            for (int x = 0; x < 3; x++) {
-                cellToTile.put(l.getCell(x, cordY + y), board.getTile(tileNUm));
-            }
-            if (y % 2 == 0) {
 
+            if (count == 3) {
+                count = 0;
                 tileNUm++;
+
+
             }
+            for (int x = 0; x < 4; x++) {
+                cellToTile.put(l.getCell(x, y), board.getTile(tileNUm));
+            }
+            count++;
+
         }
 
-        for (int y = 21; y < 24; y++) {
-            for (int x = 0; x < 3; x++) {
-                cellToTile.put(l.getCell(x, cordY + y), board.getTile(tileNUm));
-            }
-        }
         tileNUm++;
 
+        //jail 1 (12)
+
+        for (int y = 31; y < 35; y++) {
+            for (int x = 0; x < 4; x++) {
+                cellToTile.put(l.getCell(x, y), board.getTile(tileNUm));
+            }
+        }
+
+
+        //row horizontal
+        for (int x = 4; x<31; x++){
+
+            if (count == 3) {
+                count = 0;
+                tileNUm++;
+            }
+
+            for (int y = 31; y < 35; y++) {
+                cellToTile.put(l.getCell(x, y), board.getTile(tileNUm));
+            }
+
+            count++;
+
+
+        }
+
+
+        tileNUm++;
+
+//free parking
+        for (int y = 31; y < 35; y++) {
+            for (int x = 31; x < 35; x++) {
+                cellToTile.put(l.getCell(x, y), board.getTile(tileNUm));
+            }
+        }
+
+        //vertical row
+        for (int y = 30; y > 3; y--) {
+
+            if (count == 3) {
+                count = 0;
+                tileNUm++;
+
+            }
+            for (int x = 31; x < 35; x++) {
+                cellToTile.put(l.getCell(x, y), board.getTile(tileNUm));
+            }
+            count++;
+        }
+        tileNUm++;
+        //go to jail
+        for (int y = 0; y < 4; y++) {
+            for (int x = 31; x < 35; x++) {
+                cellToTile.put(l.getCell(x, y), board.getTile(tileNUm));
+            }
+        }
+
+
+        //horizontal final row
+        for (int x = 30; x>3; x--){
+
+
+            if (count == 3) {
+                count = 0;
+                tileNUm++;
+            }
+
+            for (int y = 0; y < 4; y++) {
+                cellToTile.put(l.getCell(x, y), board.getTile(tileNUm));
+            }
+
+            count++;
+
+
+        }
 
         System.out.println("built");
 
