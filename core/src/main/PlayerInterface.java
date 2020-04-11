@@ -20,5 +20,5 @@ public interface PlayerInterface {
 
     void endFirstLap();
     boolean getFirstLap();
-    void chargePlayer(int cost);
+    void makePurchase(int cost);
 }

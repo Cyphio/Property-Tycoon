@@ -143,8 +143,8 @@ public class Player implements PlayerInterface {
     }
 
     /**
-     * setPlayerToken will set a token to a player that will be used to identify the player during the game
-     * @param token will be used to represent player during the game
+            * getProperties returns an array list with all the properties that the player owns
+     * @return returns properties, ArrayList with all the properties player owns
      */
     @Override
     public void setPlayerToken(String token){
@@ -155,8 +155,8 @@ public class Player implements PlayerInterface {
     }
 
     /**
-     * payPlayer will add money that other player payed them to their balance.
-     * @param amount will be used to specify how much money the player will receive
+     * getProperties returns an array list with all the properties that the player owns
+     * @return returns properties, ArrayList with all the properties player owns
      */
     @Override
     public void payPlayer(int amount){
@@ -166,26 +166,12 @@ public class Player implements PlayerInterface {
 
     }
 
-    /**
-     * endFirstLap sets firstLap variable to false for the current player to indicate that the player did
-     * one lap around the board.
-     */
     @Override
     public void endFirstLap(){firstLap = false;}
 
-    /**
-     * getFirstLap returns a boolean value that represents if the current player went once around the board or not.
-     * @return returns firstLap, boolean value that represents if player completed one lap around the game-board
-     */
     @Override
     public boolean getFirstLap(){return firstLap;}
 
-    /**
-     * chargePlayer will take away the cost  from the the players money balance
-     * @param cost will be used to specify how much player needs to pay
-     */
     @Override
-    public void chargePlayer(int cost){
-        balance -= cost;
-    }
+    public void makePurchase(int cost){ balance -= cost; }
 }
