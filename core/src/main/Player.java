@@ -13,8 +13,10 @@ public class Player implements PlayerInterface{
 //    private Tile position;
 //    private int tilePosition;
     private int getOfJailCards;
+
     private Sprite gameToken;
     private String name;
+    private boolean firstLap;
 
     public Player(String name, Sprite token){
 
@@ -24,6 +26,7 @@ public class Player implements PlayerInterface{
         getOfJailCards = 0;
         balance = 1500;
 //        tilePosition = 0;
+        firstLap = true;
 }
 
     /**
@@ -154,7 +157,7 @@ public class Player implements PlayerInterface{
     }
 
     /**
-     * getProperties returns an array list with all the properties that the player owns
+            * getProperties returns an array list with all the properties that the player owns
      * @return returns properties, ArrayList with all the properties player owns
      */
     @Override
@@ -177,6 +180,12 @@ public class Player implements PlayerInterface{
 
     }
 
+    @Override
+    public void endFirstLap(){firstLap = false;}
 
+    @Override
+    public boolean getFirstLap(){return firstLap;}
 
+    @Override
+    public void makePurchase(int cost){ balance -= cost; }
 }
