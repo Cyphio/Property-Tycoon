@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -16,12 +18,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 import com.sun.org.apache.xpath.internal.operations.String;
+import com.sun.scenario.Settings;
 import main.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
@@ -33,12 +42,36 @@ public class GameSetUpScreen implements Screen {
     private Stage stage;
     private Viewport viewport;
 
+    private Sprite sprite1;
+    private Sprite sprite2;
+    private Sprite sprite3;
+    private Sprite sprite4;
+    private Sprite sprite5;
+    private Sprite sprite6;
+
+    private ArrayList<Sprite> spriteList;
 
     public GameSetUpScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
         this.optionsScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
         this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+
+        Texture texture1 = new Texture(Gdx.files.internal("tokens/token1.png"));
+        Texture texture2 = new Texture(Gdx.files.internal("tokens/token2.png"));
+        Texture texture3 = new Texture(Gdx.files.internal("tokens/token3.png"));
+        Texture texture4 = new Texture(Gdx.files.internal("tokens/token4.png"));
+        Texture texture5 = new Texture(Gdx.files.internal("tokens/token5.png"));
+        Texture texture6 = new Texture(Gdx.files.internal("tokens/token6.png"));
+
+        this.sprite1 = new Sprite(texture1);
+        this.sprite2 = new Sprite(texture2);
+        this.sprite3 = new Sprite(texture3);
+        this.sprite4 = new Sprite(texture4);
+        this.sprite5 = new Sprite(texture5);
+        this.sprite6 = new Sprite(texture6);
+
+        this.spriteList = new ArrayList<>(Arrays.asList(sprite1, sprite2, sprite3, sprite4, sprite5, sprite6));
     }
 
     @Override
@@ -51,49 +84,9 @@ public class GameSetUpScreen implements Screen {
         stage.clear();
         stage.addActor(table);
 
-// Texture and sprites for tokens
-        Texture texture1 = new Texture(Gdx.files.internal("tokens/token1.png"));
-        Sprite sprite1 = new Sprite(texture1);
-
-        Texture texture2= new Texture(Gdx.files.internal("tokens/token2.png"));
-        Sprite sprite2 = new Sprite(texture2);
-
-        Texture texture3 = new Texture(Gdx.files.internal("tokens/token3.png"));
-        Sprite sprite3= new Sprite(texture3);
-
-        Texture texture4 = new Texture(Gdx.files.internal("tokens/token4.png"));
-        Sprite sprite4 = new Sprite(texture4);
-
-        Texture texture5= new Texture(Gdx.files.internal("tokens/token5.png"));
-        Sprite sprite5 = new Sprite(texture5);
-
-        Texture texture6= new Texture(Gdx.files.internal("tokens/token6.png"));
-        Sprite sprite6 = new Sprite(texture6);
-
-//        ImageButton tokenButton1 = new ImageButton("tokens/token6.png");
-//        ImageButton tokenButton2 = new ImageButton((Drawable) texture2);
-//        ImageButton tokenButton3 = new ImageButton((Drawable) texture3);
-//        ImageButton tokenButton4 = new ImageButton((Drawable) texture4);
-//        ImageButton tokenButton5 = new ImageButton((Drawable) texture5);
-//        ImageButton tokenButton6 = new ImageButton((Drawable) texture6);
-
         final SelectBox<Integer> numPlayersBox = new SelectBox(optionsScreenSkin);
         numPlayersBox.setItems(new Integer[]{2, 3, 4, 5, 6});
         final Label numPlayers = new Label("Number of players:", optionsScreenSkin);
-
-//select boxes for sprites in player set up (doesnt display images so might not use)
-        final SelectBox<Sprite> tokenSelector1 = new SelectBox(optionsScreenSkin);
-        tokenSelector1.setItems(new Sprite[]{sprite1,sprite2,sprite3,sprite4,sprite5,sprite6});
-        final SelectBox<Sprite> tokenSelector2 = new SelectBox(optionsScreenSkin);
-        tokenSelector2.setItems(new Sprite[]{sprite1,sprite2,sprite3,sprite4,sprite5,sprite6});
-        final SelectBox<Sprite> tokenSelector3 = new SelectBox(optionsScreenSkin);
-        tokenSelector3.setItems(new Sprite[]{sprite1,sprite2,sprite3,sprite4,sprite5,sprite6});
-        final SelectBox<Sprite> tokenSelector4 = new SelectBox(optionsScreenSkin);
-        tokenSelector4.setItems(new Sprite[]{sprite1,sprite2,sprite3,sprite4,sprite5,sprite6});
-        final SelectBox<Sprite> tokenSelector5 = new SelectBox(optionsScreenSkin);
-        tokenSelector5.setItems(new Sprite[]{sprite1,sprite2,sprite3,sprite4,sprite5,sprite6});
-        final SelectBox<Sprite> tokenSelector6 = new SelectBox(optionsScreenSkin);
-        tokenSelector6.setItems(new Sprite[]{sprite1,sprite2,sprite3,sprite4,sprite5,sprite6});
 
         final TextField player1Field = new TextField("Player 1", optionsScreenSkin);
         final TextField player2Field = new TextField("Player 2", optionsScreenSkin);
@@ -102,94 +95,187 @@ public class GameSetUpScreen implements Screen {
         final TextField player5Field = new TextField("Player 5", optionsScreenSkin);
         final TextField player6Field = new TextField("Player 6", optionsScreenSkin);
 
+        final ImageButton token1Button = new ImageButton(getTokenDrawable(spriteList.get(0)));
+        final ImageButton token2Button = new ImageButton(getTokenDrawable(spriteList.get(1)));
+        final ImageButton token3Button = new ImageButton(getTokenDrawable(spriteList.get(2)));
+        final ImageButton token4Button = new ImageButton(getTokenDrawable(spriteList.get(3)));
+        final ImageButton token5Button = new ImageButton(getTokenDrawable(spriteList.get(4)));
+        final ImageButton token6Button = new ImageButton(getTokenDrawable(spriteList.get(5)));
+
         player3Field.setVisible(false);
+        token3Button.setVisible(false);
         player4Field.setVisible(false);
+        token4Button.setVisible(false);
         player5Field.setVisible(false);
+        token5Button.setVisible(false);
         player6Field.setVisible(false);
-
-
-        final TextButton back = new TextButton("Back", optionsScreenSkin);
+        token6Button.setVisible(false);
 
         numPlayersBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
-                if (numPlayersBox.getSelected() == 2){
-
+                if (numPlayersBox.getSelected() == 2) {
                     player3Field.setVisible(false);
                     player4Field.setVisible(false);
                     player5Field.setVisible(false);
                     player6Field.setVisible(false);
-
-
-                }else if (numPlayersBox.getSelected() == 3){
+                    token3Button.setVisible(false);
+                    token4Button.setVisible(false);
+                    token5Button.setVisible(false);
+                    token6Button.setVisible(false);
+                }
+                else if (numPlayersBox.getSelected() == 3) {
                     player3Field.setVisible(true);
                     player4Field.setVisible(false);
                     player5Field.setVisible(false);
                     player6Field.setVisible(false);
-
-                }else if (numPlayersBox.getSelected() == 4){
+                    token3Button.setVisible(true);
+                    token4Button.setVisible(false);
+                    token5Button.setVisible(false);
+                    token6Button.setVisible(false);
+                }
+                else if (numPlayersBox.getSelected() == 4) {
                     player3Field.setVisible(true);
                     player4Field.setVisible(true);
                     player5Field.setVisible(false);
                     player6Field.setVisible(false);
-
-                }else if (numPlayersBox.getSelected() == 5){
+                    token3Button.setVisible(true);
+                    token4Button.setVisible(true);
+                    token5Button.setVisible(false);
+                    token6Button.setVisible(false);
+                }
+                else if (numPlayersBox.getSelected() == 5) {
                     player3Field.setVisible(true);
                     player4Field.setVisible(true);
                     player5Field.setVisible(true);
                     player6Field.setVisible(false);
-
-                }else if (numPlayersBox.getSelected() == 6){
+                    token3Button.setVisible(true);
+                    token4Button.setVisible(true);
+                    token5Button.setVisible(true);
+                    token6Button.setVisible(false);
+                }
+                else if (numPlayersBox.getSelected() == 6) {
                     player3Field.setVisible(true);
                     player4Field.setVisible(true);
                     player5Field.setVisible(true);
                     player6Field.setVisible(true);
-
+                    token3Button.setVisible(true);
+                    token4Button.setVisible(true);
+                    token5Button.setVisible(true);
+                    token6Button.setVisible(true);
                 }
-
-
-
             }
         });
 
-        final TextField[] fields = new TextField[]{player1Field,player2Field,player3Field,player4Field,player5Field,player6Field};
-
-        back.addListener(new ChangeListener() {
+        token1Button.addListener(new ChangeListener() {
+            int swapPos1 = 1;
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MainMenu(game));
+                swapSprites(0, swapPos1);
+                swapPos1 = (swapPos1 + 1) % spriteList.size();
+                token1Button.getStyle().imageUp = getTokenDrawable(spriteList.get(0));
+                token2Button.getStyle().imageUp = getTokenDrawable(spriteList.get(1));
+                token3Button.getStyle().imageUp = getTokenDrawable(spriteList.get(2));
+                token4Button.getStyle().imageUp = getTokenDrawable(spriteList.get(3));
+                token5Button.getStyle().imageUp = getTokenDrawable(spriteList.get(4));
+                token6Button.getStyle().imageUp = getTokenDrawable(spriteList.get(5));
+            }
+        });
+
+        token2Button.addListener(new ChangeListener() {
+            int swapPos1 = 2;
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                swapSprites(1, swapPos1);
+                swapPos1 = (swapPos1 + 1) % spriteList.size();
+                token1Button.getStyle().imageUp = getTokenDrawable(spriteList.get(0));
+                token2Button.getStyle().imageUp = getTokenDrawable(spriteList.get(1));
+                token3Button.getStyle().imageUp = getTokenDrawable(spriteList.get(2));
+                token4Button.getStyle().imageUp = getTokenDrawable(spriteList.get(3));
+                token5Button.getStyle().imageUp = getTokenDrawable(spriteList.get(4));
+                token6Button.getStyle().imageUp = getTokenDrawable(spriteList.get(5));
+            }
+        });
+
+        token3Button.addListener(new ChangeListener() {
+            int swapPos1 = 3;
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                swapSprites(2, swapPos1);
+                swapPos1 = (swapPos1 + 1) % spriteList.size();
+                token1Button.getStyle().imageUp = getTokenDrawable(spriteList.get(0));
+                token2Button.getStyle().imageUp = getTokenDrawable(spriteList.get(1));
+                token3Button.getStyle().imageUp = getTokenDrawable(spriteList.get(2));
+                token4Button.getStyle().imageUp = getTokenDrawable(spriteList.get(3));
+                token5Button.getStyle().imageUp = getTokenDrawable(spriteList.get(4));
+                token6Button.getStyle().imageUp = getTokenDrawable(spriteList.get(5));
+            }
+        });
+
+        token4Button.addListener(new ChangeListener() {
+            int swapPos1 = 4;
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                swapSprites(3, swapPos1);
+                swapPos1 = (swapPos1 + 1) % spriteList.size();
+                token1Button.getStyle().imageUp = getTokenDrawable(spriteList.get(0));
+                token2Button.getStyle().imageUp = getTokenDrawable(spriteList.get(1));
+                token3Button.getStyle().imageUp = getTokenDrawable(spriteList.get(2));
+                token4Button.getStyle().imageUp = getTokenDrawable(spriteList.get(3));
+                token5Button.getStyle().imageUp = getTokenDrawable(spriteList.get(4));
+                token6Button.getStyle().imageUp = getTokenDrawable(spriteList.get(5));
+            }
+        });
+
+        token5Button.addListener(new ChangeListener() {
+            int swapPos1 = 5;
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                swapSprites(4, swapPos1);
+                swapPos1 = (swapPos1 + 1) % spriteList.size();
+                token1Button.getStyle().imageUp = getTokenDrawable(spriteList.get(0));
+                token2Button.getStyle().imageUp = getTokenDrawable(spriteList.get(1));
+                token3Button.getStyle().imageUp = getTokenDrawable(spriteList.get(2));
+                token4Button.getStyle().imageUp = getTokenDrawable(spriteList.get(3));
+                token5Button.getStyle().imageUp = getTokenDrawable(spriteList.get(4));
+                token6Button.getStyle().imageUp = getTokenDrawable(spriteList.get(5));
+            }
+        });
+
+        token6Button.addListener(new ChangeListener() {
+            int swapPos1 = 0;
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                swapSprites(5, swapPos1);
+                swapPos1 = (swapPos1 + 1) % spriteList.size();
+                token1Button.getStyle().imageUp = getTokenDrawable(spriteList.get(0));
+                token2Button.getStyle().imageUp = getTokenDrawable(spriteList.get(1));
+                token3Button.getStyle().imageUp = getTokenDrawable(spriteList.get(2));
+                token4Button.getStyle().imageUp = getTokenDrawable(spriteList.get(3));
+                token5Button.getStyle().imageUp = getTokenDrawable(spriteList.get(4));
+                token6Button.getStyle().imageUp = getTokenDrawable(spriteList.get(5));
             }
         });
 
         TextButton startGame = new TextButton("Start", optionsScreenSkin);
-
-        TextButton test = new TextButton("test", optionsScreenSkin);
-
-
-        test.addListener(new ChangeListener() {
-
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                back.setVisible(false);
-            }
-
-        });
-
-
+        final TextField[] playerNames = new TextField[]{player1Field,player2Field,player3Field,player4Field,player5Field,player6Field};
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
                 players=null;
                 players = new Player[numPlayersBox.getSelected()];
-
                 for(int i = 0 ; i < numPlayersBox.getSelected(); i++){
-
-// CHANGE THE TOKEN TYPE LATER WHEN MAKING A SELECTOR
-                    players[i] = new Player(fields[i].getText(), tokenSelector1.getSelected());
+                    players[i] = new Player(playerNames[i].getText(), spriteList.get(i));
                 }
                 game.changeScreen(game.GAME);
+            }
+        });
+
+        final TextButton back = new TextButton("Back", optionsScreenSkin);
+        back.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new MainMenu(game));
             }
         });
 
@@ -198,23 +284,26 @@ public class GameSetUpScreen implements Screen {
         table.add(numPlayersBox);
         table.row().pad(10, 0, 0, 20);
         table.add(player1Field);
-    table.add(tokenSelector1);
+        table.add(token1Button);
         table.row().pad(10, 0, 0, 20);
         table.add(player2Field);
+        table.add(token2Button);
         table.row().pad(10, 0, 0, 20);
         table.add(player3Field);
+        table.add(token3Button);
         table.row().pad(10, 0, 0, 20);
         table.add(player4Field);
+        table.add(token4Button);
         table.row().pad(10, 0, 0, 20);
         table.add(player5Field);
+        table.add(token5Button);
         table.row().pad(10, 0, 0, 20);
         table.add(player6Field);
-        table.row().pad(50, 0, 0, 20);
-        table.add(startGame);
+        table.add(token6Button);
         table.row().pad(10, 0, 0, 20);
-        table.add(back);
+        table.add(startGame).colspan(2);
         table.row().pad(10, 0, 0, 20);
-        table.add(test);
+        table.add(back).colspan(2);
     }
 
     @Override
@@ -235,6 +324,15 @@ public class GameSetUpScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
+
+    public Drawable getTokenDrawable(Sprite sprite) {
+        return new TextureRegionDrawable(new TextureRegion(sprite.getTexture()));
+    }
+
+    public void swapSprites(int s1pos, int s2pos) {
+        Collections.swap(spriteList, s1pos, s2pos);
+    }
+
 
     @Override
     public void dispose() {
