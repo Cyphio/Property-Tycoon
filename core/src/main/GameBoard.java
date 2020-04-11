@@ -8,7 +8,9 @@ import misc.Card;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
+import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 public class GameBoard implements GameBoardInterface{
 
@@ -22,7 +24,10 @@ public class GameBoard implements GameBoardInterface{
     private static Player currentPlayer;
 
 
-    public GameBoard(Player[] players) {
+
+    public GameBoard() {
+
+        playerPos = new HashMap<Player, Integer>();
 
 
         // sets all players position to GO tile at 0
@@ -44,6 +49,10 @@ public class GameBoard implements GameBoardInterface{
         Collections.shuffle(potluckCards);
         oppourtunityKnocksCards = builder.getCommunityChestCards();
         Collections.shuffle(oppourtunityKnocksCards);
+
+
+        System.out.println(players.length);
+        System.out.println(players[0].getName());
     }
 
 
@@ -104,6 +113,18 @@ public class GameBoard implements GameBoardInterface{
             this.setPlayerPos(currentPlayer, moveTo);
         }
     }
+
+
+    public Tile getTile(int i){
+
+        return board[i];
+
+
+    }
+
+
+
+
 
 
     //check if the player has landed on another players properties etc
