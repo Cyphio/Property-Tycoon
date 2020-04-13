@@ -54,4 +54,18 @@ public class PropertyTycoon extends Game {
 				break;
 		}
 	}
+	public void newGame(){
+		gameScreen = null;
+
+	}
+
+	public Boolean isGameInProgress(){
+
+		return gameScreen != null;
+
+	}
+
+
+
+
 }
