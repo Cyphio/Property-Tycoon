@@ -331,7 +331,7 @@ public class GameSetUpScreen implements Screen {
 
     }
 
-    //cant make switch statment because sprite not accepted type
+
     private String getSpriteTitle(Sprite sprite) {
         if (sprite == sprite1) {
             return "white";
