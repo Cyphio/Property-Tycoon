@@ -144,24 +144,12 @@ public class GameSetUpScreen implements Screen {
         startGame = new TextButton("Start", gameSetUpScreenSkin);
         playerNames = new TextField[]{player1Field, player2Field, player3Field, player4Field, player5Field, player6Field};
         back = new TextButton("Back", gameSetUpScreenSkin);
-    }
-
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(stage);
-        viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        stage.clear();
-        stage.addActor(table);
-
-        updateSB();
-        showUIElements();
 
 
         numPlayersBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                showUIElements();
+                ();
             }
         });
 
@@ -219,25 +207,6 @@ public class GameSetUpScreen implements Screen {
             }
         });
 
-        startGame.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                players = null;
-                players = new Player[numPlayersBox.getSelected()];
-                for (int i = 0; i < numPlayersBox.getSelected(); i++) {
-                    players[i] = new Player(playerNames[i].getText(), spriteList.get(i));
-                }
-                game.changeScreen(game.GAME);
-            }
-        });
-
-        back.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MainMenu(game));
-            }
-        });
-
         table.row().pad(10, 0, 0, 20);
         table.add(numPlayers).left();
         table.add(numPlayersBox);
@@ -269,6 +238,40 @@ public class GameSetUpScreen implements Screen {
         table.add(startGame).colspan(3);
         table.row().pad(10, 0, 0, 20);
         table.add(back).colspan(3);
+
+        updateSB();
+        setUIVisibility();
+
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+        viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        stage.clear();
+        stage.addActor(table);
+
+
+        startGame.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                players = null;
+                players = new Player[numPlayersBox.getSelected()];
+                for (int i = 0; i < numPlayersBox.getSelected(); i++) {
+                    players[i] = new Player(playerNames[i].getText(), spriteList.get(i));
+                }
+                game.changeScreen(game.GAME);
+            }
+        });
+
+        back.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new MainMenu(game));
+            }
+        });
+
     }
 
 
@@ -355,7 +358,7 @@ public class GameSetUpScreen implements Screen {
         }
     }
 
-    public void showUIElements(){
+    public void setUIVisibility(){
         switch (numPlayersBox.getSelected()) {
             case 2:
                 setUIVisibility(false, false, false, false);
