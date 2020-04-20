@@ -3,6 +3,7 @@ package main;
 import Tiles.Property;
 import Tiles.Tile;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import misc.Coordinate;
 
 import java.util.ArrayList;
 
@@ -17,11 +18,14 @@ public class Player implements PlayerInterface{
     private Sprite gameToken;
     private String name;
     private boolean firstLap;
+    private Coordinate currentCoordinates;
 
     public Player(String name, Sprite token){
 
         this.name = name;
         this.gameToken = token;
+
+        currentCoordinates = new Coordinate(0,0);
 
         getOfJailCards = 0;
         balance = 1500;
@@ -180,6 +184,8 @@ public class Player implements PlayerInterface{
 
     }
 
+
+
     @Override
     public void endFirstLap(){firstLap = false;}
 
@@ -188,4 +194,12 @@ public class Player implements PlayerInterface{
 
     @Override
     public void makePurchase(int cost){ balance -= cost; }
+
+    public Coordinate getCurrentCoordinates() {
+        return currentCoordinates;
+    }
+
+    public void setCurrentCoordinates(Coordinate currentCoordinates) {
+        this.currentCoordinates = currentCoordinates;
+    }
 }

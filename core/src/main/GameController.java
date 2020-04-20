@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.propertytycoonmakers.make.PropertyTycoon.players;
+
 public class GameController implements GameControllerInterface {
 
 
@@ -21,12 +23,22 @@ public class GameController implements GameControllerInterface {
 
 
     
-    public GameController(TiledMapTileLayer layer){
+    public GameController(TiledMapTileLayer layer) {
 
         cellToTile = new HashMap<>();
         board = new GameBoard();
         buildCellReference(layer);
+
+
+        Tile tile = board.getTile(0);
+
+        for (Player p : players) {
+            Coordinate coord = tile.getAvailableCoordinates();
+            p.setCurrentCoordinates(coord);
+
+
         }
+    }
 
 
         public Tile retTile(TiledMapTileLayer.Cell cell){

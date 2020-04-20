@@ -5,6 +5,7 @@ import Tiles.PotLuck;
 import Tiles.Property;
 import Tiles.Tile;
 import misc.Card;
+import misc.Coordinate;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +59,14 @@ public class GameBoard implements GameBoardInterface{
 
 
 
+
+
+
+
     }
+
+
+
 
 
     // Functional dice setup, logic should be working

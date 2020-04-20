@@ -124,11 +124,8 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             tile = new Utility();
                             break;
                     }
-
-
                     //ASK IF WATSON GAMES WANTS CHANGEABLE NAMES FOR JAIL FOR THEMABLE GAMES
                     //tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
-
 
                     tile.setTilePos(i);
                     tileList[i] = tile;
@@ -150,7 +147,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
      *
      * @param
      */
-
 
     @Override
     public void genCards() {

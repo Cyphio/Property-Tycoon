@@ -139,9 +139,11 @@ public class Tile implements TileInterface {
 
     public Coordinate getAvailableCoordinates(){
 
-        System.out.println(coordinates.size());
+        System.out.println(coordinates.get(0).getX());
 
-        return coordinates.get(tilePlayers.size());
+
+
+        return coordinates.get(0);
 
 
     }

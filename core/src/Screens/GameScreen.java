@@ -56,11 +56,11 @@ public class GameScreen implements Screen {
         this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
-        //TOKEN ADDED TO GO SCREEN
-        spriteBatch = new SpriteBatch();
-        for(Player p : game.players) {
-            p.getPlayerToken().setPosition(p.getCoordinates().getX(), p.getCoordinates().getY());
-        }
+        System.out.print("HERE");
+
+
+
+
 
         //TILED MAP INITIALIZATION
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
@@ -70,6 +70,18 @@ public class GameScreen implements Screen {
 
         //GAME CONTROLLER
         gameCon = new GameController(layer);
+
+
+
+        //TOKEN ADDED TO GO SCREEN
+        spriteBatch = new SpriteBatch();
+
+        for(Player p : game.players) {
+
+            p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
+        }
+
+
 
 
         // POP UP MENU FOR PROPERTIES
@@ -106,8 +118,9 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        final float w = Gdx.graphics.getWidth();
-        final float h = Gdx.graphics.getHeight();
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+
         Table buttons = new Table();
         buttons.setFillParent(true);
         buttons.setDebug(true);
@@ -207,15 +220,20 @@ public class GameScreen implements Screen {
 
         camera.update();
 
-        camera.position.set(1120, 1120, 0);
-        camera.zoom = (float) 2.5;
+
+//        camera.position.set(1120, 1120, 0);
+//        camera.zoom = (float) 2.5;
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
 
+
+
         spriteBatch.begin();
         for(Player p : game.players) {
             p.getPlayerToken().draw(spriteBatch);
+
+
         }
         spriteBatch.end();
 
