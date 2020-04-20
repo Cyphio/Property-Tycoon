@@ -1,7 +1,9 @@
 package Screens;
 
+import Tiles.Jail;
 import Tiles.Property;
 import Tiles.Tile;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -179,10 +181,14 @@ public class GameScreen implements Screen {
 
                         tilePopUpMenu.getTitleLabel().setText(tile.getTileName());
                         tilePopUpMenu.getTitleLabel().setColor(Color.BLUE);
-
                         tilePopUpMenu.setVisible(true);
 
 
+
+
+                    }else if (tile instanceof Jail){
+
+                        System.out.print(tile.getCoordinates().get(1).getX());
 
 
                     }else{
@@ -193,7 +199,7 @@ public class GameScreen implements Screen {
                     }
 
 
-                    boolean debugMode = false;
+                    boolean debugMode = true;
                     if (debugMode) {
 
                         ArrayList<Coordinate> cs = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getCoordinates();

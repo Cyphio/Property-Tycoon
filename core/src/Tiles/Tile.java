@@ -10,10 +10,14 @@ public class Tile implements TileInterface {
     private String tileName;
     private int tilePosition;
     private boolean isBuyable = false;
-    private ArrayList<Player> tilePlayers = new ArrayList<>();
+    private Player[] tilePlayers = new Player[];
     private ArrayList<Coordinate> coordinates;
     private Coordinate centerLabelNode;
     private Coordinate playerPosNodes[];
+
+    private Integer[] playerPositions;
+
+
 
 
     /**
@@ -139,11 +143,13 @@ public class Tile implements TileInterface {
 
     public Coordinate getAvailableCoordinates(){
 
-        System.out.println(coordinates.get(0).getX());
+
+
 
 
 
         return coordinates.get(0);
+
 
 
     }
