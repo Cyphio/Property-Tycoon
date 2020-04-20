@@ -74,9 +74,10 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
                             List<String> houses = Arrays.asList("one-house", "two-house", "three-house", "four-house", "hotel");
 
-                            tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             tile = new Property();
+                            tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             tile.setBuyable(true);
+
 
                             ((Property) tile).setColour(tileElement.getElementsByTagName("colour").item(0).getTextContent());
 

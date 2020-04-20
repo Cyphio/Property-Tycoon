@@ -1,8 +1,11 @@
 package Screens;
 
+import Tiles.Property;
+import Tiles.Tile;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,10 +16,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -36,6 +36,9 @@ public class GameScreen implements Screen {
     private Skin gameScreenSkin;
     private TiledMapTileLayer layer;
     private GameController gameCon;
+    private Label tileNameLabel;
+    private Window tilePopUpMenu;
+
 
 
     TiledMap tiledMap;
@@ -53,6 +56,33 @@ public class GameScreen implements Screen {
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("Tile Layer 1");
 
         gameCon = new GameController(layer);
+
+        tileNameLabel = new Label("Name", gameScreenSkin);
+        tileNameLabel.setColor(Color.BLUE);
+
+        TextButton closePropMenu = new TextButton("Close", gameScreenSkin);
+
+
+        tilePopUpMenu = new Window("Property Name", gameScreenSkin);
+        tilePopUpMenu.add(tileNameLabel);
+        tilePopUpMenu.row();
+        tilePopUpMenu.add(closePropMenu);
+        tilePopUpMenu.pack();
+        float newWidth = 500, newHeight = 300;
+        tilePopUpMenu.setBounds((Gdx.graphics.getWidth() - newWidth ) / 2, (Gdx.graphics.getHeight() - newHeight ) / 2, newWidth , newHeight );
+        stage.addActor(tilePopUpMenu);
+        tilePopUpMenu.setVisible(false);
+
+        closePropMenu.addListener(new ClickListener(){
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                tilePopUpMenu.setVisible(false);
+            }
+        });
+
+
+
 
 
 //        Thread gameThread = new Thread((Runnable) gameCon);
@@ -76,6 +106,10 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w, h);
         camera.update();
+
+
+
+
 
 
         Button pause = new TextButton("Pause", gameScreenSkin);
@@ -114,8 +148,24 @@ public class GameScreen implements Screen {
                 try {
 
 
+                    if (gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))) instanceof Property){
+
+                        Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
+
+                        System.out.println(tile.getTileName());
+                        System.out.println(tile.getTileName());
+                        System.out.println(tile.getTileName());
+
+                        tilePopUpMenu.getTitleLabel().setText(tile.getTileName());
+                        tilePopUpMenu.getTitleLabel().setColor(Color.BLUE);
 
 
+                        tilePopUpMenu.setVisible(true);
+
+
+
+
+                    }
 
 
 
