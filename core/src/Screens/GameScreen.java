@@ -160,20 +160,6 @@ public class GameScreen implements Screen {
                     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     boolean debugMode = true;
                     if (debugMode) {
 

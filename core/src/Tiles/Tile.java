@@ -12,6 +12,8 @@ public class Tile implements TileInterface {
     private boolean isBuyable = false;
     private ArrayList<Player> tilePlayers = new ArrayList<>();
     private ArrayList<Coordinate> coordinates;
+    private Coordinate centerLabelNode;
+    private Coordinate playerPosNodes;
 
 
     /**
@@ -144,8 +146,22 @@ public class Tile implements TileInterface {
 
     }
 
+    public void setCenterLabelNode(Coordinate centerLabelNode){
+
+        this.centerLabelNode = centerLabelNode;
 
 
+    }
 
+    public Coordinate getCenterLabelNode() {
+        return centerLabelNode;
+    }
 
+    public Coordinate getPlayerPosNodes() {
+        return playerPosNodes;
+    }
+
+    public void setPlayerPosNodes(Coordinate playerPosNodes) {
+        this.playerPosNodes = playerPosNodes;
+    }
 }
