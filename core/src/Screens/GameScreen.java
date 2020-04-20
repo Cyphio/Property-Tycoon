@@ -5,10 +5,7 @@ import Tiles.Tile;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -42,6 +39,9 @@ public class GameScreen implements Screen {
     private Label tileNameLabel;
     private Window tilePopUpMenu;
     private SpriteBatch spriteBatch;
+    Stage overlay;
+
+    OrthographicCamera overlayCam;
 
 
 
@@ -51,6 +51,11 @@ public class GameScreen implements Screen {
     public GameScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
+
+
+
+
+
         Gdx.input.setInputProcessor(stage);
         this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
         this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
@@ -167,10 +172,10 @@ public class GameScreen implements Screen {
 
                 try {
 
+                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
 
-                    if (gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))) instanceof Property){
 
-                        Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
+                    if (tile instanceof Property){
 
                         tilePopUpMenu.getTitleLabel().setText(tile.getTileName());
                         tilePopUpMenu.getTitleLabel().setColor(Color.BLUE);
@@ -180,10 +185,15 @@ public class GameScreen implements Screen {
 
 
 
+                    }else{
+
+                        tilePopUpMenu.setVisible(false);
+
+
                     }
 
 
-                    boolean debugMode = true;
+                    boolean debugMode = false;
                     if (debugMode) {
 
                         ArrayList<Coordinate> cs = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getCoordinates();
@@ -221,12 +231,14 @@ public class GameScreen implements Screen {
         camera.update();
 
 
-//        camera.position.set(1120, 1120, 0);
-//        camera.zoom = (float) 2.5;
+        camera.position.set(1120, 1120, 0);
+        camera.zoom = (float) 2.5;
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
 
+
+        spriteBatch.setProjectionMatrix(camera.combined);
 
 
         spriteBatch.begin();

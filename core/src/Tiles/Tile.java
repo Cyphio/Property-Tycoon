@@ -13,7 +13,7 @@ public class Tile implements TileInterface {
     private ArrayList<Player> tilePlayers = new ArrayList<>();
     private ArrayList<Coordinate> coordinates;
     private Coordinate centerLabelNode;
-    private Coordinate playerPosNodes;
+    private Coordinate playerPosNodes[];
 
 
     /**
@@ -159,11 +159,17 @@ public class Tile implements TileInterface {
         return centerLabelNode;
     }
 
-    public Coordinate getPlayerPosNodes() {
+    public Coordinate[] getPlayerPosNodes() {
         return playerPosNodes;
     }
 
-    public void setPlayerPosNodes(Coordinate playerPosNodes) {
+    public void setPlayerPosNodes(Coordinate playerPosNodes[]) {
+
+
+
         this.playerPosNodes = playerPosNodes;
+
+
+
     }
 }
