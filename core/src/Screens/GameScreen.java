@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -22,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 import main.GameController;
+import main.Player;
 import misc.Coordinate;
 
 import java.util.ArrayList;
@@ -38,6 +41,7 @@ public class GameScreen implements Screen {
     private GameController gameCon;
     private Label tileNameLabel;
     private Window tilePopUpMenu;
+    private SpriteBatch spriteBatch;
 
 
 
@@ -51,6 +55,12 @@ public class GameScreen implements Screen {
         this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
         this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+
+        //TOKEN ADDED TO GO SCREEN
+        spriteBatch = new SpriteBatch();
+        for(Player p : game.players) {
+            p.getPlayerToken().setPosition(p.getCoordinates().getX(), p.getCoordinates().getY());
+        }
 
         //TILED MAP INITIALIZATION
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
@@ -202,6 +212,12 @@ public class GameScreen implements Screen {
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
+
+        spriteBatch.begin();
+        for(Player p : game.players) {
+            p.getPlayerToken().draw(spriteBatch);
+        }
+        spriteBatch.end();
 
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {

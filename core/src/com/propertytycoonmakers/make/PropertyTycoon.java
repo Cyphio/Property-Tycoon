@@ -8,10 +8,8 @@ import main.Player;
 
 public class PropertyTycoon extends Game {
 
-
 	public SpriteBatch batch;
 	public BitmapFont font;
-
 
 	private GameOptions options;
 	private GameScreen gameScreen;
@@ -19,9 +17,6 @@ public class PropertyTycoon extends Game {
 	public static Player[] players;
 
 	public final static int GAME = 0;
-
-
-
 
 	@Override
 	public void create () {
