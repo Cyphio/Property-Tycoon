@@ -25,8 +25,6 @@ public class Player implements PlayerInterface{
         this.name = name;
         this.gameToken = token;
 
-        currentCoordinates = new Coordinate(0,0);
-
         getOfJailCards = 0;
         balance = 1500;
 //        tilePosition = 0;
@@ -199,7 +197,7 @@ public class Player implements PlayerInterface{
         return currentCoordinates;
     }
 
-    public void setCurrentCoordinates(Coordinate currentCoordinates) {
-        this.currentCoordinates = currentCoordinates;
+    public void setCurrentCoordinates(Coordinate currentCoordinate) {
+        this.currentCoordinates = currentCoordinate;
     }
 }

@@ -5,6 +5,7 @@ import Tiles.Tile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import misc.Coordinate;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,15 +29,14 @@ public class GameController implements GameControllerInterface {
         board = new GameBoard();
         buildCellReference(layer);
 
-
         Tile tile = board.getTile(0);
 
         for (Player p : players) {
-            Coordinate coord = tile.getAvailableCoordinates();
+            Coordinate coord =  tile.getAvailableCoordinates();
             p.setCurrentCoordinates(coord);
-
-
         }
+
+
     }
 
 

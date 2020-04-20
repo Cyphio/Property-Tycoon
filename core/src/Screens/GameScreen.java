@@ -188,7 +188,7 @@ public class GameScreen implements Screen {
 
                     }else if (tile instanceof Jail){
 
-                        System.out.print(tile.getCoordinates().get(1).getX());
+                        System.out.print(tile.getAllCoordinates().get(1).getX());
 
 
                     }else{
@@ -199,18 +199,20 @@ public class GameScreen implements Screen {
                     }
 
 
-                    boolean debugMode = true;
-                    if (debugMode) {
 
-                        ArrayList<Coordinate> cs = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getCoordinates();
-                        System.out.println(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)).setTile(null));
+                    if (true) {
+
+                        ArrayList<Coordinate> cs = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getAllCoordinates();
+                        System.out.println(cs.size());
                         System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
-                        System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getAvailableCoordinates().getX());
-
 
                         for (Coordinate c : cs) {
 
-                            layer.getCell(c.getX(), c.getY()).setTile(null);
+                            layer.getCell(c.getX()/64, c.getY()/64).setTile(null);
+
+                            System.out.print("WHAT");
+
+
 
                         }
                     }

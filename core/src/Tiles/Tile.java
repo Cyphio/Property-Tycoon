@@ -4,21 +4,17 @@ import main.Player;
 import misc.Coordinate;
 
 import java.util.ArrayList;
+import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 public class Tile implements TileInterface {
 
     private String tileName;
     private int tilePosition;
     private boolean isBuyable = false;
-    private Player[] tilePlayers = new Player[];
-    private ArrayList<Coordinate> coordinates;
-    private Coordinate centerLabelNode;
-    private Coordinate playerPosNodes[];
-
-    private Integer[] playerPositions;
-
-
-
+    private ArrayList<Player> tilePlayers = new ArrayList<>();
+    private Coordinate centerLabelCoordinate;
+    private ArrayList<Coordinate> playerPosCoordinates;
+    private ArrayList<Coordinate> allCoordinates;
 
     /**
      * getBuyable returns true if property is buyable and false if it is not.
@@ -129,53 +125,44 @@ public class Tile implements TileInterface {
 
     public void setCoordinates(ArrayList<Coordinate> coordinates){
 
-        this.coordinates = coordinates;
+        playerPosCoordinates = new ArrayList<>();
 
+        for(int i =0 ; i < players.length;i++) {
+
+            playerPosCoordinates.add(coordinates.get(i));
+        }
+
+        allCoordinates = coordinates;
+
+        centerLabelCoordinate = coordinates.get(7);
 
     }
 
-    public ArrayList<Coordinate> getCoordinates(){
-
-        return coordinates;
-
-
-    }
 
     public Coordinate getAvailableCoordinates(){
 
 
-
-
-
-
-        return coordinates.get(0);
-
-
-
-    }
-
-    public void setCenterLabelNode(Coordinate centerLabelNode){
-
-        this.centerLabelNode = centerLabelNode;
-
-
-    }
-
-    public Coordinate getCenterLabelNode() {
-        return centerLabelNode;
-    }
-
-    public Coordinate[] getPlayerPosNodes() {
-        return playerPosNodes;
-    }
-
-    public void setPlayerPosNodes(Coordinate playerPosNodes[]) {
-
-
-
-        this.playerPosNodes = playerPosNodes;
+        Coordinate coordinate = playerPosCoordinates.remove(0);
+        playerPosCoordinates.add(coordinate);
+        return coordinate;
 
 
 
     }
+
+
+    public Coordinate getCenterLabelCoordinate() {
+        return centerLabelCoordinate;
+    }
+
+    public ArrayList<Coordinate> getAllPlayerCoordinates() {
+        return playerPosCoordinates;
+    }
+
+
+    public ArrayList<Coordinate> getAllCoordinates() {
+        return allCoordinates;
+    }
+
 }
+

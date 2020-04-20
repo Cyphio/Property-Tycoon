@@ -6,8 +6,8 @@ public class Coordinate {
 
 
     public Coordinate(int x, int y){
-        this.x = x;
-        this.y = y;
+        this.x = x*64;
+        this.y = y*64;
     }
 
     public int getX(){
