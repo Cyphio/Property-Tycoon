@@ -1,6 +1,7 @@
 package Tiles;
 
 import main.Player;
+import misc.Coordinate;
 
 import java.util.ArrayList;
 
@@ -10,6 +11,7 @@ public class Tile implements TileInterface {
     private int tilePosition;
     private boolean isBuyable = false;
     private ArrayList<Player> tilePlayers = new ArrayList<>();
+    private ArrayList<Coordinate> coordinates;
 
 
     /**
@@ -117,4 +119,33 @@ public class Tile implements TileInterface {
         tilePosition = position;
 
     }
+
+
+    public void setCoordinates(ArrayList<Coordinate> coordinates){
+
+        this.coordinates = coordinates;
+
+
+    }
+
+    public ArrayList<Coordinate> getCoordinates(){
+
+        return coordinates;
+
+
+    }
+
+    public Coordinate getAvailableCoordinates(){
+
+        System.out.println(coordinates.size());
+
+        return coordinates.get(tilePlayers.size());
+
+
+    }
+
+
+
+
+
 }

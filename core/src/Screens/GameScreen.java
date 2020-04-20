@@ -22,6 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 import main.GameController;
+import misc.Coordinate;
+
+import java.util.ArrayList;
 
 
 public class GameScreen implements Screen {
@@ -52,8 +55,6 @@ public class GameScreen implements Screen {
         gameCon = new GameController(layer);
 
 
-
-
 //        Thread gameThread = new Thread((Runnable) gameCon);
 //        gameThread.start();
 
@@ -75,9 +76,6 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w, h);
         camera.update();
-
-
-
 
 
         Button pause = new TextButton("Pause", gameScreenSkin);
@@ -114,9 +112,41 @@ public class GameScreen implements Screen {
                 System.out.println(mouse);
 
                 try {
-                    System.out.println(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)).setTile(null));
-                    System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    boolean debugMode = true;
+                    if (debugMode) {
+
+                        ArrayList<Coordinate> cs = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getCoordinates();
+                        System.out.println(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)).setTile(null));
+                        System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
+                        System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getAvailableCoordinates().getX());
+
+
+                        for (Coordinate c : cs) {
+
+                            layer.getCell(c.getX(), c.getY()).setTile(null);
+
+                        }
+                    }
 
 
                 } catch (Exception e) {
@@ -153,9 +183,9 @@ public class GameScreen implements Screen {
         }
 
 
-            stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-            stage.draw();
-        }
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+    }
 
     @Override
     public void resize(int width, int height) {
