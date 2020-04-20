@@ -51,18 +51,21 @@ public class GameScreen implements Screen {
         this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
         this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+
+        //TILED MAP INITIALIZATION
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("Tile Layer 1");
 
+
+        //GAME CONTROLLER
         gameCon = new GameController(layer);
 
+
+        // POP UP MENU FOR PROPERTIES
         tileNameLabel = new Label("Name", gameScreenSkin);
         tileNameLabel.setColor(Color.BLUE);
-
         TextButton closePropMenu = new TextButton("Close", gameScreenSkin);
-
-
         tilePopUpMenu = new Window("Property Name", gameScreenSkin);
         tilePopUpMenu.add(tileNameLabel);
         tilePopUpMenu.row();
@@ -70,8 +73,8 @@ public class GameScreen implements Screen {
         tilePopUpMenu.pack();
         float newWidth = 500, newHeight = 300;
         tilePopUpMenu.setBounds((Gdx.graphics.getWidth() - newWidth ) / 2, (Gdx.graphics.getHeight() - newHeight ) / 2, newWidth , newHeight );
-        stage.addActor(tilePopUpMenu);
         tilePopUpMenu.setVisible(false);
+        stage.addActor(tilePopUpMenu);
 
         closePropMenu.addListener(new ClickListener(){
 
@@ -101,16 +104,10 @@ public class GameScreen implements Screen {
         buttons.right();
         buttons.pad(0, 0, 0, 75);
 
-//        stage.clear();
         stage.addActor(buttons);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w, h);
         camera.update();
-
-
-
-
-
 
         Button pause = new TextButton("Pause", gameScreenSkin);
         Button rollDice = new TextButton("Roll Dice", gameScreenSkin);
@@ -152,13 +149,8 @@ public class GameScreen implements Screen {
 
                         Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
 
-                        System.out.println(tile.getTileName());
-                        System.out.println(tile.getTileName());
-                        System.out.println(tile.getTileName());
-
                         tilePopUpMenu.getTitleLabel().setText(tile.getTileName());
                         tilePopUpMenu.getTitleLabel().setColor(Color.BLUE);
-
 
                         tilePopUpMenu.setVisible(true);
 
@@ -236,6 +228,8 @@ public class GameScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
+
+
 
     @Override
     public void resize(int width, int height) {
