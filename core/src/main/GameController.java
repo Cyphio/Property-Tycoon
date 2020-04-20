@@ -14,7 +14,6 @@ import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 public class GameController implements GameControllerInterface {
 
-
     private int height;
     private int width;
     private boolean running;
@@ -22,31 +21,20 @@ public class GameController implements GameControllerInterface {
     private Player currentPlayer;
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
 
-
     public GameController(TiledMapTileLayer layer) {
-
         cellToTile = new HashMap<>();
         board = new GameBoard();
         buildCellReference(layer);
-
         Tile tile = board.getTile(0);
-
         for (Player p : players) {
             Coordinate coord =  tile.getAvailableCoordinates();
             p.setCurrentCoordinates(coord);
         }
-
-
     }
-
 
     public Tile retTile(TiledMapTileLayer.Cell cell) {
-
-
         return cellToTile.get(cell);
-
     }
-
 
     /**
      * getCurrentPlayer provides functionality to return the current player outside of this class
@@ -54,10 +42,22 @@ public class GameController implements GameControllerInterface {
      * @return returns the player who's turn it currently is
      */
     public Player getCurrentPlayer() {
-
         return this.currentPlayer;
     }
 
+    public Tile movePlayer(Player player) {
+        Tile oldTile = board.getTile(board.getPlayerPos(player));
+        oldTile.removePlayer(player);
+
+        Dice dice = new Dice();
+        //need to implement rolling dice multiple time + jail here
+        dice.rollDice();
+        board.movePlayer(player, dice.getValue());
+        dice.reset();
+
+        return board.getTile(board.getPlayerPos(player));
+
+    }
 
     // the most fucked code ever written (will rewrite this when we are in optimizing stage xoxoxoxoxo sorry boys was just a bit mad)
     public void buildCellReference(TiledMapTileLayer l) {

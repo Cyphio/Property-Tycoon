@@ -111,19 +111,19 @@ public class GameBoard implements GameBoardInterface{
      */
     @Override
     public void movePlayer(Player player, int moves) {
-        int position = getPlayerPos(currentPlayer);
+        int position = getPlayerPos(player);
         int moveTo = position + moves;
 
         if (moveTo > 39) {
             //change this based on go tile amount set (for now 200)
             player.payPlayer(200);
-            this.setPlayerPos(currentPlayer, moveTo - 40);
+            this.setPlayerPos(player, moveTo - 40);
             if (moveTo < 0) {
-                this.setPlayerPos(currentPlayer, moveTo + 40);
+                this.setPlayerPos(player, moveTo + 40);
             }
 
         } else {
-            this.setPlayerPos(currentPlayer, moveTo);
+            this.setPlayerPos(player, moveTo);
         }
     }
 

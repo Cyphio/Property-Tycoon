@@ -153,7 +153,11 @@ public class GameScreen implements Screen {
         rollDice.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //roll the dice
+                Player p = game.players[0];
+                Tile newTile = gameCon.movePlayer(p);
+                newTile.addPlayer(p);
+                Coordinate coordinate = newTile.getAvailableCoordinates();
+                p.getPlayerToken().setPosition(coordinate.getX(), coordinate.getY());
             }
         });
 
