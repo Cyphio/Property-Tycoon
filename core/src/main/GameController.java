@@ -12,7 +12,7 @@ import java.util.List;
 
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
-public class GameController implements GameControllerInterface {
+public class GameController implements Runnable{
 
     private int height;
     private int width;
@@ -20,6 +20,17 @@ public class GameController implements GameControllerInterface {
     private static GameBoard board;
     private Player currentPlayer;
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
+
+
+    @Override
+    public void run() {
+
+        running=true;
+
+        startGame();
+
+
+    }
 
     public GameController(TiledMapTileLayer layer) {
         cellToTile = new HashMap<>();
@@ -192,10 +203,23 @@ public class GameController implements GameControllerInterface {
     }
 
 
-    @Override
-    public void endGame() {
+    public void startGame(){
+
+        while(running){
+
+
+
+
+            System.out.println("yooooo");
+
+        }
 
     }
+
+
+
+
+
 }
 
 

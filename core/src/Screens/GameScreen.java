@@ -77,7 +77,8 @@ public class GameScreen implements Screen {
 
         //GAME CONTROLLER
         gameCon = new GameController(layer);
-
+        Thread controllerThread = new Thread(gameCon);
+        controllerThread.start();
 
 
         //TOKEN ADDED TO GO SCREEN
@@ -153,6 +154,10 @@ public class GameScreen implements Screen {
         rollDice.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+
+                //gamecon.playerTurn();
+
+                //move this into gamecon
                 Player p = game.players[0];
                 Tile newTile = gameCon.movePlayer(p);
                 newTile.addPlayer(p);
