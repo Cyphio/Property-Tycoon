@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
+import main.GameBoard;
 import main.GameController;
 import main.Player;
 import misc.Coordinate;
@@ -54,19 +55,10 @@ public class GameScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
 
-
-
-
-
         Gdx.input.setInputProcessor(stage);
         this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
         this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
-
-        System.out.print("HERE");
-
-
-
 
 
         //TILED MAP INITIALIZATION
@@ -77,8 +69,8 @@ public class GameScreen implements Screen {
 
         //GAME CONTROLLER
         gameCon = new GameController(layer);
-        Thread controllerThread = new Thread(gameCon);
-        controllerThread.start();
+//        Thread controllerThread = new Thread(gameCon);
+//        controllerThread.start();
 
 
         //TOKEN ADDED TO GO SCREEN
@@ -151,18 +143,16 @@ public class GameScreen implements Screen {
             }
         });
 
-        rollDice.addListener(new ChangeListener() {
+        rollDice.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public void clicked(InputEvent event, float x, float y) {
 
-                //gamecon.playerTurn();
 
-                //move this into gamecon
-                Player p = game.players[0];
-                Tile newTile = gameCon.movePlayer(p);
-                newTile.addPlayer(p);
-                Coordinate coordinate = newTile.getAvailableCoordinates();
-                p.getPlayerToken().setPosition(coordinate.getX(), coordinate.getY());
+                gameCon.playerTurn();
+                Player p = gameCon.getCurrentPlayer();
+                p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
+
+
             }
         });
 
@@ -219,7 +209,6 @@ public class GameScreen implements Screen {
 
                             layer.getCell(c.getX()/64, c.getY()/64).setTile(null);
 
-                            System.out.print("WHAT");
 
 
 
@@ -249,7 +238,7 @@ public class GameScreen implements Screen {
 
 
         camera.position.set(1120, 1120, 0);
-        camera.zoom = (float) 2.5;
+        camera.zoom = (float) 5;
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
@@ -261,8 +250,6 @@ public class GameScreen implements Screen {
         spriteBatch.begin();
         for(Player p : game.players) {
             p.getPlayerToken().draw(spriteBatch);
-
-
         }
         spriteBatch.end();
 

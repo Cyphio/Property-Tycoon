@@ -1,17 +1,13 @@
 package main;
 
-import Tiles.OpportunityKnocks;
-import Tiles.PotLuck;
-import Tiles.Property;
-import Tiles.Tile;
+import Tiles.*;
 import misc.Card;
-import misc.Coordinate;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import static com.propertytycoonmakers.make.PropertyTycoon.players;
+
 
 public class GameBoard implements GameBoardInterface{
 
@@ -26,7 +22,7 @@ public class GameBoard implements GameBoardInterface{
 
 
 
-    public GameBoard() {
+    public GameBoard(Player[] players) {
 
         playerPos = new HashMap<Player, Integer>();
 
@@ -73,10 +69,19 @@ public class GameBoard implements GameBoardInterface{
     // Logic behind rolling doubles and when to go to jail setup
     // Need the process of going to jail to be implemented
     @Override
-    public void playerTurn(Player player){
+    public Boolean playerTurn(Player player){
+
+        System.out.println("BOARD PLAYER TURN");
+
         currentPlayer = player;
+
+        dice.rollDice();
         movePlayer(player, dice.getValue());
-        checkBoardCircumstances();
+
+
+        System.out.println("finished");
+        return checkBoardCircumstances();
+
 
     }
 
@@ -99,7 +104,16 @@ public class GameBoard implements GameBoardInterface{
      */
     @Override
     public void setPlayerPos(Player player, int pos) {
+
+
+        board[playerPos.get(player)].removePlayer(player);
         playerPos.put(player, pos);
+        board[pos].addPlayer(player);
+        System.out.println("Setting Player coordinates");
+        player.setCurrentCoordinates(board[playerPos.get(player)].getAvailableCoordinates());
+
+
+
     }
 
 
@@ -111,6 +125,7 @@ public class GameBoard implements GameBoardInterface{
      */
     @Override
     public void movePlayer(Player player, int moves) {
+
         int position = getPlayerPos(player);
         int moveTo = position + moves;
 
@@ -125,23 +140,28 @@ public class GameBoard implements GameBoardInterface{
         } else {
             this.setPlayerPos(player, moveTo);
         }
+
     }
 
 
     public Tile getTile(int i){
+
         return board[i];
 
 
     }
 
 
+    public void sendToJail(){
+
+        setPlayerPos(currentPlayer,10);
 
 
-
+    }
 
     //check if the player has landed on another players properties etc
     @Override
-    public void checkBoardCircumstances() {
+    public Boolean checkBoardCircumstances() {
 
         Tile x = board[playerPos.get(currentPlayer)];
 
@@ -157,7 +177,30 @@ public class GameBoard implements GameBoardInterface{
             performCardAction(card);
             potluckCards.add(card);
 
+        } else if (x instanceof GoToJail) {
+
+            sendToJail();
+
         }
+
+
+        if(dice.jailCheck()){
+
+            sendToJail();
+
+        }else if (dice.wasItADouble()){
+
+
+            return true;
+
+
+        }
+
+
+
+        dice.reset();
+
+        return false;
 
 
     }

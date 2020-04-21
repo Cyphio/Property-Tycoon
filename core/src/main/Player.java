@@ -12,7 +12,7 @@ public class Player implements PlayerInterface{
     private ArrayList<Tile> morgagedProperties;
     private int balance;
 //    private Tile position;
-//    private int tilePosition;
+    private int tilePosition;
     private int getOfJailCards;
 
     private Sprite gameToken;
@@ -200,4 +200,14 @@ public class Player implements PlayerInterface{
     public void setCurrentCoordinates(Coordinate currentCoordinate) {
         this.currentCoordinates = currentCoordinate;
     }
+
+    public void setTilePosition(int i){
+        tilePosition = i;
+    }
+
+    public int getTilePosition(){
+        return tilePosition;
+    }
+
+
 }

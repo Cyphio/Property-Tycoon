@@ -141,9 +141,15 @@ public class Tile implements TileInterface {
 
     public Coordinate getAvailableCoordinates(){
 
-
+        System.out.println(playerPosCoordinates);
         Coordinate coordinate = playerPosCoordinates.remove(0);
         playerPosCoordinates.add(coordinate);
+
+        System.out.println(tileName);
+        System.out.println(playerPosCoordinates);
+        System.out.println("Pulled coordinate x is " + coordinate.getX());
+
+
         return coordinate;
 
 
