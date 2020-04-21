@@ -1,19 +1,15 @@
 package main;
 
-import Tiles.OpportunityKnocks;
-import Tiles.PotLuck;
-import Tiles.Property;
-import Tiles.Tile;
+import Tiles.*;
 import misc.Card;
-import misc.Coordinate;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
-public class GameBoard implements GameBoardInterface{
+
+public class GameBoard implements GameBoardInterface {
 
     private static Tile[] board;
 
@@ -23,10 +19,13 @@ public class GameBoard implements GameBoardInterface{
     private static Dice dice;
     private static Map<Player, Integer> playerPos;
     private static Player currentPlayer;
+    private int goPayoutAmount;
 
 
+    public GameBoard(Player[] players) {
 
-    public GameBoard() {
+
+        goPayoutAmount = 200;
 
         playerPos = new HashMap<Player, Integer>();
 
@@ -56,27 +55,35 @@ public class GameBoard implements GameBoardInterface{
         System.out.println(players[0].getName());
 
 
-
-
-
-
-
-
-
     }
-
-
-
 
 
     // Functional dice setup, logic should be working
     // Logic behind rolling doubles and when to go to jail setup
     // Need the process of going to jail to be implemented
     @Override
-    public void playerTurn(Player player){
+    public Boolean playerTurn(Player player) {
+
+        System.out.println("\nBOARD PLAYER TURN");
+
         currentPlayer = player;
-        movePlayer(player, dice.getValue());
-        checkBoardCircumstances();
+
+        dice.rollDice();
+        System.out.println("DOUBLE: " + dice.wasItADouble());
+        if(player.getIsInJail()) {
+            if(dice.wasItADouble() || player.getOutOfJailFree()) {
+                player.setInJail(false);
+                movePlayer(player, dice.getValue());
+            }
+        }
+        else {
+            movePlayer(player, dice.getValue());
+        }
+
+
+        System.out.println("finished");
+        return checkBoardCircumstances();
+
 
     }
 
@@ -99,7 +106,15 @@ public class GameBoard implements GameBoardInterface{
      */
     @Override
     public void setPlayerPos(Player player, int pos) {
+
+
+        board[playerPos.get(player)].removePlayer(player);
         playerPos.put(player, pos);
+        board[pos].addPlayer(player);
+        System.out.println("Setting Player coordinates");
+        player.setCurrentCoordinates(board[playerPos.get(player)].getAvailableCoordinates());
+
+
     }
 
 
@@ -111,12 +126,13 @@ public class GameBoard implements GameBoardInterface{
      */
     @Override
     public void movePlayer(Player player, int moves) {
+
         int position = getPlayerPos(player);
         int moveTo = position + moves;
 
         if (moveTo > 39) {
             //change this based on go tile amount set (for now 200)
-            player.payPlayer(200);
+            player.payPlayer(goPayoutAmount);
             this.setPlayerPos(player, moveTo - 40);
             if (moveTo < 0) {
                 this.setPlayerPos(player, moveTo + 40);
@@ -125,23 +141,26 @@ public class GameBoard implements GameBoardInterface{
         } else {
             this.setPlayerPos(player, moveTo);
         }
+
     }
 
 
-    public Tile getTile(int i){
+    public Tile getTile(int i) {
+
         return board[i];
 
 
     }
 
 
-
-
-
+    public void sendToJail() {
+        currentPlayer.setInJail(true);
+        setPlayerPos(currentPlayer, 10);
+    }
 
     //check if the player has landed on another players properties etc
     @Override
-    public void checkBoardCircumstances() {
+    public Boolean checkBoardCircumstances() {
 
         Tile x = board[playerPos.get(currentPlayer)];
 
@@ -157,7 +176,31 @@ public class GameBoard implements GameBoardInterface{
             performCardAction(card);
             potluckCards.add(card);
 
+        } else if (x instanceof GoToJail) {
+            sendToJail();
+
+        } else if (x instanceof Go) {
+
+            currentPlayer.payPlayer(goPayoutAmount);
         }
+
+
+        if (dice.jailCheck()) {
+
+            sendToJail();
+
+        } else if (dice.wasItADouble()) {
+
+
+            return true;
+
+
+        }
+
+
+        dice.reset();
+
+        return false;
 
 
     }
@@ -180,9 +223,9 @@ public class GameBoard implements GameBoardInterface{
     }
 
     @Override
-    public void purchaseProperty(Player player, Property prop){
-        if(player.getFirstLap() == false){
-            if(player.getMoney() >= prop.getCost()){
+    public void purchaseProperty(Player player, Property prop) {
+        if (player.getFirstLap() == false) {
+            if (player.getMoney() >= prop.getCost()) {
                 prop.buy();
                 player.makePurchase(prop.getCost());
                 player.addProperty(prop);

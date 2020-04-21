@@ -2,7 +2,7 @@ package main;
 
 public interface DiceInterface {
     void reset();
-    boolean rollDice();
+    void rollDice();
     boolean jailCheck();
     int getValue();
 }

@@ -141,9 +141,9 @@ public class Tile implements TileInterface {
 
     public Coordinate getAvailableCoordinates(){
 
-
         Coordinate coordinate = playerPosCoordinates.remove(0);
         playerPosCoordinates.add(coordinate);
+
         return coordinate;
 
 

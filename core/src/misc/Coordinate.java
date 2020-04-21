@@ -5,9 +5,9 @@ public class Coordinate {
     private int y;
 
 
-    public Coordinate(int x, int y){
-        this.x = x*64;
-        this.y = y*64;
+    public Coordinate(int CellX, int CellY){
+        this.x = CellX*64;
+        this.y = CellY*64;
     }
 
     public int getX(){
