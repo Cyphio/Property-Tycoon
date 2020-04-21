@@ -179,6 +179,7 @@ public class GameBoard implements GameBoardInterface{
 
         } else if (x instanceof GoToJail) {
 
+
             sendToJail();
 
         }

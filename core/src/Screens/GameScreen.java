@@ -149,7 +149,8 @@ public class GameScreen implements Screen {
 
 
                 gameCon.playerTurn();
-                Player p = gameCon.getCurrentPlayer();
+
+                Player p = gameCon.getUpdatedPlayer();
                 p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
 
 
@@ -238,7 +239,7 @@ public class GameScreen implements Screen {
 
 
         camera.position.set(1120, 1120, 0);
-        camera.zoom = (float) 5;
+        camera.zoom = (float) 2;
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();

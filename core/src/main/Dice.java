@@ -9,6 +9,14 @@ class Dice implements DiceInterface {
     private boolean wasDouble;
 
 
+    public Dice(){
+
+
+        counter=0;
+
+    }
+
+
     /**
      * reset sets all three variables to their initial state
      */
