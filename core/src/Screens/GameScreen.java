@@ -3,13 +3,12 @@ package Screens;
 import Tiles.Jail;
 import Tiles.Property;
 import Tiles.Tile;
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -23,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
-import main.GameBoard;
 import main.GameController;
 import main.Player;
 import misc.Coordinate;
@@ -44,6 +42,8 @@ public class GameScreen implements Screen {
     private Window tilePopUpMenu;
     private SpriteBatch spriteBatch;
 
+    private Sound rollDiceFX;
+
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
 
@@ -56,6 +56,7 @@ public class GameScreen implements Screen {
         this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
+        rollDiceFX = Gdx.audio.newSound(Gdx.files.internal("sound/dice_roll.mp3"));
 
         //TILED MAP INITIALIZATION
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
@@ -154,7 +155,9 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-
+                if(game.getPreferences().isFxEnabled()) {
+                    rollDiceFX.play(game.getPreferences().getFxVolume());
+                }
                 gameCon.playerTurn();
 
                 Player p = gameCon.getUpdatedPlayer();

@@ -3,6 +3,7 @@ package Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ai.btree.BehaviorTree;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,6 +23,7 @@ public class MainMenu implements Screen {
     private Skin mainMenuSkin;
     private Stage stage;
     private Viewport viewport;
+
     public MainMenu(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
