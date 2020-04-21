@@ -27,6 +27,7 @@ import main.Player;
 import misc.Coordinate;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 
 public class GameScreen implements Screen {
@@ -159,6 +160,12 @@ public class GameScreen implements Screen {
                     rollDiceFX.play(game.getPreferences().getFxVolume());
                 }
                 gameCon.playerTurn();
+
+                try {
+                    TimeUnit.SECONDS.sleep(3);
+                } catch(Exception e) {
+                    System.out.println(e.getMessage());
+                }
 
                 Player p = gameCon.getUpdatedPlayer();
                 p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
