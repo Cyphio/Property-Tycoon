@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -42,10 +43,6 @@ public class GameScreen implements Screen {
     private Label tileNameLabel;
     private Window tilePopUpMenu;
     private SpriteBatch spriteBatch;
-    Stage overlay;
-
-    OrthographicCamera overlayCam;
-
 
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
@@ -104,6 +101,7 @@ public class GameScreen implements Screen {
         });
 
 
+
     }
 
     @Override
@@ -125,6 +123,24 @@ public class GameScreen implements Screen {
 
         Button pause = new TextButton("Pause", gameScreenSkin);
         Button rollDice = new TextButton("Roll Dice", gameScreenSkin);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         pause.addListener(new ChangeListener() {
@@ -232,13 +248,27 @@ public class GameScreen implements Screen {
 
 
         spriteBatch.setProjectionMatrix(camera.combined);
-
-
         spriteBatch.begin();
         for (Player p : game.players) {
             p.getPlayerToken().draw(spriteBatch);
         }
         spriteBatch.end();
+
+
+        BitmapFont font = new BitmapFont();
+        spriteBatch.begin();
+        for(int i = 0 ; i<40; i++){
+            Tile tile = gameCon.getBoard().getTile(i);
+            Coordinate c = tile.getCenterLabelCoordinate();
+
+            font.setColor(Color.BLACK);
+            font.getData().setScale(2f);
+            System.out.println(c.getX());
+            System.out.println(c.getY());
+            font.draw(spriteBatch, tile.getTileName(), c.getX(), c.getY());
+        }
+        spriteBatch.end();
+
 
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -250,6 +280,14 @@ public class GameScreen implements Screen {
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
+
+
+
+
+
+
+
     }
 
 

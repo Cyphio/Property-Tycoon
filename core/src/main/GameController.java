@@ -81,6 +81,14 @@ public class GameController{
     public Player getUpdatedPlayer() {
         return previousPlayer;
     }
+
+    public GameBoard getBoard(){
+
+        return board;
+
+
+    }
+
 }
 
 

@@ -16,6 +16,14 @@ public class Tile implements TileInterface {
     private ArrayList<Coordinate> playerPosCoordinates;
     private ArrayList<Coordinate> allCoordinates;
 
+    public Tile(){
+
+        tileName = "default";
+
+    }
+
+
+
     /**
      * getBuyable returns true if property is buyable and false if it is not.
      *
