@@ -225,7 +225,7 @@ public class GameScreen implements Screen {
 
 
         camera.position.set(1120, 1120, 0);
-        camera.zoom = (float) 2;
+        camera.zoom = (float) 2.5;
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();

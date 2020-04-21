@@ -14,6 +14,7 @@ public class Player implements PlayerInterface{
 //    private Tile position;
     private int tilePosition;
     private int getOfJailCards;
+    private Boolean isInJail;
 
     private Sprite gameToken;
     private String name;
@@ -24,6 +25,7 @@ public class Player implements PlayerInterface{
 
         this.name = name;
         this.gameToken = token;
+        setInJail(false);
 
         getOfJailCards = 0;
         balance = 1500;
@@ -126,6 +128,14 @@ public class Player implements PlayerInterface{
         else{
             return false;
         }
+    }
+
+    public void setInJail(Boolean isInJail) {
+        this.isInJail = isInJail;
+    }
+
+    public Boolean getIsInJail() {
+        return isInJail;
     }
 
     public String getName(){

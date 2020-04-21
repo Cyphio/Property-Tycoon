@@ -64,12 +64,21 @@ public class GameBoard implements GameBoardInterface {
     @Override
     public Boolean playerTurn(Player player) {
 
-        System.out.println("BOARD PLAYER TURN");
+        System.out.println("\nBOARD PLAYER TURN");
 
         currentPlayer = player;
 
         dice.rollDice();
-        movePlayer(player, dice.getValue());
+        System.out.println("DOUBLE: " + dice.wasItADouble());
+        if(player.getIsInJail()) {
+            if(dice.wasItADouble() || player.getOutOfJailFree()) {
+                player.setInJail(false);
+                movePlayer(player, dice.getValue());
+            }
+        }
+        else {
+            movePlayer(player, dice.getValue());
+        }
 
 
         System.out.println("finished");
@@ -145,10 +154,8 @@ public class GameBoard implements GameBoardInterface {
 
 
     public void sendToJail() {
-
+        currentPlayer.setInJail(true);
         setPlayerPos(currentPlayer, 10);
-
-
     }
 
     //check if the player has landed on another players properties etc
@@ -170,8 +177,6 @@ public class GameBoard implements GameBoardInterface {
             potluckCards.add(card);
 
         } else if (x instanceof GoToJail) {
-
-
             sendToJail();
 
         } else if (x instanceof Go) {
