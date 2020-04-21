@@ -47,7 +47,6 @@ public class GameScreen implements Screen {
     OrthographicCamera overlayCam;
 
 
-
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
 
@@ -76,12 +75,10 @@ public class GameScreen implements Screen {
         //TOKEN ADDED TO GO SCREEN
         spriteBatch = new SpriteBatch();
 
-        for(Player p : game.players) {
+        for (Player p : game.players) {
 
             p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
         }
-
-
 
 
         // POP UP MENU FOR PROPERTIES
@@ -94,11 +91,11 @@ public class GameScreen implements Screen {
         tilePopUpMenu.add(closePropMenu);
         tilePopUpMenu.pack();
         float newWidth = 500, newHeight = 300;
-        tilePopUpMenu.setBounds((Gdx.graphics.getWidth() - newWidth ) / 2, (Gdx.graphics.getHeight() - newHeight ) / 2, newWidth , newHeight );
+        tilePopUpMenu.setBounds((Gdx.graphics.getWidth() - newWidth) / 2, (Gdx.graphics.getHeight() - newHeight) / 2, newWidth, newHeight);
         tilePopUpMenu.setVisible(false);
         stage.addActor(tilePopUpMenu);
 
-        closePropMenu.addListener(new ClickListener(){
+        closePropMenu.addListener(new ClickListener() {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -106,12 +103,6 @@ public class GameScreen implements Screen {
             }
         });
 
-
-
-
-
-//        Thread gameThread = new Thread((Runnable) gameCon);
-//        gameThread.start();
 
     }
 
@@ -177,27 +168,24 @@ public class GameScreen implements Screen {
                     Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
 
 
-                    if (tile instanceof Property){
+                    if (tile instanceof Property) {
 
                         tilePopUpMenu.getTitleLabel().setText(tile.getTileName());
                         tilePopUpMenu.getTitleLabel().setColor(Color.BLUE);
                         tilePopUpMenu.setVisible(true);
 
 
-
-
-                    }else if (tile instanceof Jail){
+                    } else if (tile instanceof Jail) {
 
                         System.out.print(tile.getAllCoordinates().get(1).getX());
 
 
-                    }else{
+                    } else {
 
                         tilePopUpMenu.setVisible(false);
 
 
                     }
-
 
 
                     if (true) {
@@ -208,9 +196,7 @@ public class GameScreen implements Screen {
 
                         for (Coordinate c : cs) {
 
-                            layer.getCell(c.getX()/64, c.getY()/64).setTile(null);
-
-
+                            layer.getCell(c.getX() / 64, c.getY() / 64).setTile(null);
 
 
                         }
@@ -249,7 +235,7 @@ public class GameScreen implements Screen {
 
 
         spriteBatch.begin();
-        for(Player p : game.players) {
+        for (Player p : game.players) {
             p.getPlayerToken().draw(spriteBatch);
         }
         spriteBatch.end();
@@ -265,7 +251,6 @@ public class GameScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
-
 
 
     @Override
