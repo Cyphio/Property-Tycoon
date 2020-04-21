@@ -68,6 +68,7 @@ public class GameBoard implements GameBoardInterface {
 
         currentPlayer = player;
 
+
         dice.rollDice();
         System.out.println("DOUBLE: " + dice.wasItADouble());
         if(player.getIsInJail()) {
