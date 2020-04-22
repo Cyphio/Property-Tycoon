@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Player implements PlayerInterface {
 
     private ArrayList<Tile> properties;
-    private ArrayList<Tile> morgagedProperties;
+    private ArrayList<Tile> mortgagedProperties;
     private int balance;
     private int tilePosition;
     private int getOfJailCards;
