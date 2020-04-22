@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *  The GameBoard class simulates the board and all the physical aspects of the board such as player position, cards and the dice.
+ */
 
 public class GameBoard implements GameBoardInterface {
 
@@ -21,9 +24,8 @@ public class GameBoard implements GameBoardInterface {
     private static Player currentPlayer;
     private int goPayoutAmount;
 
-
     /**
-     * The GameBoard class simulates the board and all the physical aspects of the board such as player position, cards and the dice.
+     * The GameBoard class constructor
      * @param players Holds each player object who is in the game
      */
 
@@ -151,7 +153,11 @@ public class GameBoard implements GameBoardInterface {
 
     }
 
-
+    /**
+     * gets the tile at int i
+     * @param i tile position
+     * @return tile at int i
+     */
     public Tile getTile(int i) {
 
         return board[i];
@@ -159,6 +165,9 @@ public class GameBoard implements GameBoardInterface {
 
     }
 
+    /**
+     * sends the current player to the jail tile and sets their inJail to true
+     */
 
     public void sendToJail() {
         currentPlayer.setInJail(true);
