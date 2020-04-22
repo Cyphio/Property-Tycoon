@@ -273,8 +273,8 @@ public class GameScreen implements Screen {
 
             font.setColor(Color.BLACK);
             font.getData().setScale(2f);
-            System.out.println(c.getX());
-            System.out.println(c.getY());
+            //System.out.println(c.getX());
+            //System.out.println(c.getY());
             font.draw(spriteBatch, tile.getTileName(), c.getX(), c.getY());
         }
         spriteBatch.end();

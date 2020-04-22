@@ -25,7 +25,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
-
+/**
+ * GameSetUpScreen is a GUI class that allows for the user to make choices regarding the number of players, their names
+ * and their game pieces. It is displayed before the game starts allowing for user customization.
+ */
 public class GameSetUpScreen implements Screen {
 
     private PropertyTycoon game;
@@ -74,10 +77,10 @@ public class GameSetUpScreen implements Screen {
     private TextButton startGame;
     private TextButton back;
 
-
-
-
-
+    /**
+     * The constructor for GameSetUpScreen
+     * @param game The PropertyTycoon parent class upon which the GUI is built
+     */
     public GameSetUpScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -241,9 +244,11 @@ public class GameSetUpScreen implements Screen {
 
         updateSB();
         setUIVisibility();
-
     }
 
+    /**
+     * show() defines the layout, elements and interactivity of the GUI
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -274,26 +279,10 @@ public class GameSetUpScreen implements Screen {
 
     }
 
-
-    public void setUIVisibility(Boolean selection3, Boolean selection4, Boolean selection5, Boolean selection6) {
-
-        player3Field.setVisible(selection3);
-        player4Field.setVisible(selection4);
-        player5Field.setVisible(selection5);
-        player6Field.setVisible(selection6);
-
-        token3SB.setVisible(selection3);
-        token4SB.setVisible(selection4);
-        token5SB.setVisible(selection5);
-        token6SB.setVisible(selection6);
-
-        token3Image.setVisible(selection3);
-        token4Image.setVisible(selection4);
-        token5Image.setVisible(selection5);
-        token6Image.setVisible(selection6);
-    }
-
-
+    /**
+     * render() is called when the Screen should render itself
+     * @param delta the time in seconds since the last render
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -310,12 +299,68 @@ public class GameSetUpScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * setUIVisibility() makes calls to setUI() according to how many players have been chosen via the drop down box
+     */
+    private void setUIVisibility(){
+        switch (numPlayersBox.getSelected()) {
+            case 2:
+                setUI(false, false, false, false);
+                break;
+            case 3:
+                setUI(true, false, false, false);
+                break;
+            case 4:
+                setUI(true, true, false, false);
+                break;
+            case 5:
+                setUI(true, true, true, false);
+                break;
+            case 6:
+                setUI(true, true, true, true);
+                break;
+        }
+    }
+
+    /**
+     * setUI() is used to define whether or not a player field (consisting of a name box and game piece
+     * selector) should be shown
+     * @param selection3 true if the third player field should be shown, false if not
+     * @param selection4 true if the fourth player field should be shown, false if not
+     * @param selection5 true if the fifth player field should be shown, false if not
+     * @param selection6 true if the sixth player field should be shown, false if not
+     */
+    private void setUI(Boolean selection3, Boolean selection4, Boolean selection5, Boolean selection6) {
+        player3Field.setVisible(selection3);
+        player4Field.setVisible(selection4);
+        player5Field.setVisible(selection5);
+        player6Field.setVisible(selection6);
+
+        token3SB.setVisible(selection3);
+        token4SB.setVisible(selection4);
+        token5SB.setVisible(selection5);
+        token6SB.setVisible(selection6);
+
+        token3Image.setVisible(selection3);
+        token4Image.setVisible(selection4);
+        token5Image.setVisible(selection5);
+        token6Image.setVisible(selection6);
+    }
+
+    /**
+     * getTokenDrawable() takes a Sprite object and returns the Drawable object associated with that sprite's texture
+     * @param sprite the sprite who's texture is to be returned as a Drawable object
+     * @return the required Drawable object
+     */
     private Drawable getTokenDrawable(Sprite sprite) {
         return new TextureRegionDrawable(new TextureRegion(sprite.getTexture()));
     }
 
-
-    // maybe make switch statement?
+    /**
+     * swapSprites() takes two Sprite objects and swaps their positions within the spriteList
+     * @param s1pos the first Sprite object
+     * @param s2str the second Sprite object
+     */
     private void swapSprites(int s1pos, String s2str) {
         if (s2str.equals("white")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite1));
@@ -330,11 +375,13 @@ public class GameSetUpScreen implements Screen {
         } else if (s2str.equals("rainbow")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite6));
         }
-
-
     }
 
-
+    /**
+     * getSpriteTitle() takes a Sprite object and returns a String that represents the title of the Sprite
+     * @param sprite the Sprite object who's title is to be returned
+     * @return a String that represents the title of a Sprite
+     */
     private String getSpriteTitle(Sprite sprite) {
         if (sprite == sprite1) {
             return "white";
@@ -352,55 +399,53 @@ public class GameSetUpScreen implements Screen {
         return "ERROR";
     }
 
+    /**
+     * updateSB() updates the selection boxs so to display the correct sprite title as the selected option
+     */
     private void updateSB() {
         for (int i = 0; i < spriteList.size(); i++) {
             tokenSBList[i].setSelected(getSpriteTitle(spriteList.get(i)));
         }
     }
 
-    public void setUIVisibility(){
-        switch (numPlayersBox.getSelected()) {
-            case 2:
-                setUIVisibility(false, false, false, false);
-                break;
-            case 3:
-                setUIVisibility(true, false, false, false);
-                break;
-            case 4:
-                setUIVisibility(true, true, false, false);
-                break;
-            case 5:
-                setUIVisibility(true, true, true, false);
-                break;
-            case 6:
-                setUIVisibility(true, true, true, true);
-                break;
-        }
-
-
-
-    }
-
-
-
+    /**
+     * updaateTokenImageList() updates the token images so to display the correct image with each player field
+     */
     private void updateTokenImageList() {
         for (int i = 0; i < spriteList.size(); i++) {
             tokenImageList[i].setDrawable(getTokenDrawable(spriteList.get(i)));
         }
     }
 
+    /**
+     * Called when GameSetUpScreen() should release all resources
+     */
     @Override
     public void dispose() { stage.dispose(); }
 
+    /**
+     * Called when the Application is resized. Will never be called before a call to create()
+     * @param width
+     * @param height
+     */
     @Override
     public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
 
+    /**
+     * Called when the Application is paused. An Application is paused before it is destroyed
+     */
     @Override
     public void pause() {}
 
+    /**
+     * Called when the Application is resumed from a paused state
+     */
     @Override
     public void resume() {}
 
+    /**
+     * Called when this GameSetUpScreen() is no longer the current screen for PropertyTycoon()
+     */
     @Override
     public void hide() {}
 }

@@ -16,6 +16,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
+/**
+ * MainMenu is a GUI class that allows the user to start/resume a game, access options and also exit the Application.
+ * It is displayed as the first Screen upon opening the game.
+ */
 public class MainMenu implements Screen {
 
     private PropertyTycoon game;
@@ -24,6 +28,10 @@ public class MainMenu implements Screen {
     private Stage stage;
     private Viewport viewport;
 
+    /**
+     * The constructor for MainMenu
+     * @param game The PropertyTycoon parent class upon which the GUI is built
+     */
     public MainMenu(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -31,6 +39,9 @@ public class MainMenu implements Screen {
         this.mainMenuSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
+    /**
+     * show() defines the layout, elements and interactivity of the GUI
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -45,11 +56,7 @@ public class MainMenu implements Screen {
         Button options = new TextButton("Options", mainMenuSkin);
         Button exit = new TextButton("Exit", mainMenuSkin);
 
-
         resumeButton.setVisible(game.isGameInProgress());
-
-
-
 
         newGameButton.addListener(new ChangeListener() {
             @Override
@@ -59,14 +66,12 @@ public class MainMenu implements Screen {
             }
         });
 
-
         resumeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.changeScreen(game.GAME);
             }
         });
-
 
         options.addListener(new ChangeListener() {
             @Override
@@ -92,6 +97,10 @@ public class MainMenu implements Screen {
         table.add(exit).fillX().uniformY();
     }
 
+    /**
+     * render() is called when the Screen should render itself
+     * @param delta the time in seconds since the last render
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -110,21 +119,35 @@ public class MainMenu implements Screen {
         stage.draw();
     }
 
+    /**
+     * Called when MainMenu() should release all resources
+     */
     @Override
-    public void dispose() {
-        stage.dispose();
-    }
+    public void dispose() { stage.dispose(); }
 
+    /**
+     * Called when the Application is resized. Will never be called before a call to create()
+     * @param width
+     * @param height
+     */
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
+    public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
 
+    /**
+     * Called when the Application is paused. An Application is paused before it is destroyed
+     */
     @Override
     public void pause() {}
 
+    /**
+     * Called when the Application is resumed from a paused state
+     */
     @Override
     public void resume() {}
+
+    /**
+     * Called when this MainMenu() is no longer the current screen for PropertyTycoon()
+     */
     @Override
     public void hide() {}
 }

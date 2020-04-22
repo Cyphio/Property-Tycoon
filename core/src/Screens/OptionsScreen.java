@@ -15,6 +15,10 @@ import com.propertytycoonmakers.make.PropertyTycoon;
 
 import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.actor;
 
+/**
+ * OptionsScreen is a GUI class that allows the user to interactively adjust Music/FX volume, toggle Music/FX on and
+ * off, toggle fullscreen mode and return to MainMenu. This Screen is accessed from MainMenu.
+ */
 public class OptionsScreen implements Screen {
 
     private PropertyTycoon game;
@@ -23,6 +27,10 @@ public class OptionsScreen implements Screen {
     private Stage stage;
     private Viewport viewport;
 
+    /**
+     * The constructor for OptionsScreen
+     * @param game The PropertyTycoon parent class upon which the GUI is built
+     */
     public OptionsScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -30,6 +38,9 @@ public class OptionsScreen implements Screen {
         this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
+    /**
+     * show() defines the layout, elements and interactivity of the GUI
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -95,7 +106,6 @@ public class OptionsScreen implements Screen {
             }
         });
 
-
         final CheckBox fxOnOff = new CheckBox(null, optionsScreenSkin);
         fxOnOff.setChecked(game.getPreferences().isFxEnabled());
         fxOnOff.addListener(new EventListener() {
@@ -135,6 +145,10 @@ public class OptionsScreen implements Screen {
         table.add(back).colspan(2);
     }
 
+    /**
+     * render() is called when the Screen should render itself
+     * @param delta the time in seconds since the last render
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -153,22 +167,35 @@ public class OptionsScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Called when OptionsScreen() should release all resources
+     */
     @Override
-    public void dispose() {
-        stage.dispose();
-    }
+    public void dispose() { stage.dispose(); }
 
+    /**
+     * Called when the Application is resized. Will never be called before a call to create()
+     * @param width
+     * @param height
+     */
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
+    public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
 
+    /**
+     * Called when the Application is paused. An Application is paused before it is destroyed
+     */
     @Override
     public void pause() {}
 
+    /**
+     * Called when the Application is resumed from a paused state
+     */
     @Override
     public void resume() {}
 
+    /**
+     * Called when this OptionsScreen() is no longer the current screen for PropertyTycoon()
+     */
     @Override
     public void hide() {}
 }
