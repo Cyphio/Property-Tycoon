@@ -61,8 +61,8 @@ public class GameController{
     }
 
     /**
-     *
-     * @return
+     * High level method call to execute players turns. Used by GameScreen to return the new tile the player should be displayed on.
+     * @return the tile the player has landed on
      */
     public Tile playerTurn(){
 
