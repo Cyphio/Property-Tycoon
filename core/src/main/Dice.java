@@ -8,7 +8,6 @@ class Dice implements DiceInterface {
     private int d2;
     private boolean wasDouble;
 
-
     /**
      * The dice class simulates a pair of two six sided dice to roll whenever a player moves
      */
@@ -19,7 +18,6 @@ class Dice implements DiceInterface {
         counter=0;
 
     }
-
 
     /**
      * reset sets all three variables to their initial state

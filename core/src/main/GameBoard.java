@@ -31,11 +31,9 @@ public class GameBoard implements GameBoardInterface {
 
     public GameBoard(Player[] players) {
 
-
         goPayoutAmount = 200;
 
         playerPos = new HashMap<Player, Integer>();
-
 
         // sets all players position to GO tile at 0
         for (Player player : players) {
@@ -51,19 +49,15 @@ public class GameBoard implements GameBoardInterface {
 
         dice = new Dice();
 
-
         potluckCards = builder.getPotluckChestCards();
         Collections.shuffle(potluckCards);
         oppourtunityKnocksCards = builder.getCommunityChestCards();
         Collections.shuffle(oppourtunityKnocksCards);
 
-
         System.out.println(players.length);
         System.out.println(players[0].getName());
 
-
     }
-
 
     /**
      * handles dice rolling and landing on tile functions.
@@ -77,7 +71,6 @@ public class GameBoard implements GameBoardInterface {
 
         currentPlayer = player;
 
-
         dice.rollDice();
         System.out.println("DOUBLE: " + dice.wasItADouble());
         if(player.getIsInJail()) {
@@ -90,10 +83,8 @@ public class GameBoard implements GameBoardInterface {
             movePlayer(player, dice.getValue());
         }
 
-
         System.out.println("finished");
         return checkBoardCircumstances();
-
 
     }
 
@@ -117,7 +108,6 @@ public class GameBoard implements GameBoardInterface {
     @Override
     public void setPlayerPos(Player player, int pos) {
 
-
         board[playerPos.get(player)].removePlayer(player);
         playerPos.put(player, pos);
         board[pos].addPlayer(player);
@@ -126,7 +116,6 @@ public class GameBoard implements GameBoardInterface {
 
 
     }
-
 
     /**
      * movePlayer uses context to tell how far a player should move, and what space to move them to
@@ -222,7 +211,6 @@ public class GameBoard implements GameBoardInterface {
 
         return false;
 
-
     }
 
     /**
@@ -241,9 +229,7 @@ public class GameBoard implements GameBoardInterface {
             default:
                 System.out.println("no action found");
 
-
         }
-
 
     }
 
