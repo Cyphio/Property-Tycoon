@@ -3,6 +3,7 @@ package main;
 import Tiles.Property;
 import Tiles.Tile;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import misc.Coordinate;
 
 import java.util.ArrayList;
 
@@ -11,17 +12,20 @@ public class Player implements PlayerInterface{
     private ArrayList<Tile> morgagedProperties;
     private int balance;
 //    private Tile position;
-//    private int tilePosition;
+    private int tilePosition;
     private int getOfJailCards;
+    private Boolean isInJail;
 
     private Sprite gameToken;
     private String name;
     private boolean firstLap;
+    private Coordinate currentCoordinates;
 
     public Player(String name, Sprite token){
 
         this.name = name;
         this.gameToken = token;
+        setInJail(false);
 
         getOfJailCards = 0;
         balance = 1500;
@@ -126,6 +130,14 @@ public class Player implements PlayerInterface{
         }
     }
 
+    public void setInJail(Boolean isInJail) {
+        this.isInJail = isInJail;
+    }
+
+    public Boolean getIsInJail() {
+        return isInJail;
+    }
+
     public String getName(){
 
         return this.name;
@@ -180,6 +192,8 @@ public class Player implements PlayerInterface{
 
     }
 
+
+
     @Override
     public void endFirstLap(){firstLap = false;}
 
@@ -188,4 +202,22 @@ public class Player implements PlayerInterface{
 
     @Override
     public void makePurchase(int cost){ balance -= cost; }
+
+    public Coordinate getCurrentCoordinates() {
+        return currentCoordinates;
+    }
+
+    public void setCurrentCoordinates(Coordinate currentCoordinate) {
+        this.currentCoordinates = currentCoordinate;
+    }
+
+    public void setTilePosition(int i){
+        tilePosition = i;
+    }
+
+    public int getTilePosition(){
+        return tilePosition;
+    }
+
+
 }
