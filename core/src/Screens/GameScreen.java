@@ -15,16 +15,20 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 import main.GameController;
 import main.Player;
 import misc.Coordinate;
+import misc.RotatableLabel;
 
 import java.util.ArrayList;
 
@@ -46,6 +50,10 @@ public class GameScreen implements Screen {
 
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
+
+    Viewport view;
+    Stage labelStage;
+
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
@@ -103,6 +111,8 @@ public class GameScreen implements Screen {
 
 
 
+
+
     }
 
     @Override
@@ -124,24 +134,6 @@ public class GameScreen implements Screen {
 
         Button pause = new TextButton("Pause", gameScreenSkin);
         Button rollDice = new TextButton("Roll Dice", gameScreenSkin);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         pause.addListener(new ChangeListener() {
@@ -230,6 +222,33 @@ public class GameScreen implements Screen {
             }
         });
 
+        view = new FitViewport(w,h,camera);
+        labelStage = new Stage(view);
+
+        camera.position.set(1120, 1120, 0);
+        camera.zoom = (float) 2;
+
+        int angle = 0;
+        for(int i = 0 ; i<40; i++) {
+
+            if(i == 1|| i==11|| i==21|| i==31){
+
+                angle-=90;
+
+            }
+
+            Tile tile = gameCon.getBoard().getTile(i);
+            System.out.println(tile.getAllCoordinates().get(0));
+            Coordinate c = tile.getCenterLabelCoordinate();
+
+            RotatableLabel label = new RotatableLabel(new Label("tile",gameScreenSkin),c.getX(),c.getY(),angle, 2);
+
+//            layer.getCell((c.getX() -32)/ 64, (c.getY()-32) / 64).setTile(null);
+
+            labelStage.addActor(label);
+
+
+        }
 
     }
 
@@ -242,35 +261,18 @@ public class GameScreen implements Screen {
 
         camera.update();
 
-
-        camera.position.set(1120, 1120, 0);
-        camera.zoom = (float) 2.5;
-
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
-
 
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
         for (Player p : game.players) {
             p.getPlayerToken().draw(spriteBatch);
+
+
         }
         spriteBatch.end();
 
-
-        BitmapFont font = new BitmapFont();
-        spriteBatch.begin();
-        for(int i = 0 ; i<40; i++){
-            Tile tile = gameCon.getBoard().getTile(i);
-            Coordinate c = tile.getCenterLabelCoordinate();
-
-            font.setColor(Color.BLACK);
-            font.getData().setScale(2f);
-            System.out.println(c.getX());
-            System.out.println(c.getY());
-            font.draw(spriteBatch, tile.getTileName(), c.getX(), c.getY());
-        }
-        spriteBatch.end();
 
 
 
@@ -280,6 +282,9 @@ public class GameScreen implements Screen {
             camera.update();
         }
 
+
+        labelStage.act(Math.min(Gdx.graphics.getDeltaTime(),1/30f));
+      labelStage.draw();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
