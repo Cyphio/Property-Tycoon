@@ -58,9 +58,11 @@ public class GameBoard implements GameBoardInterface {
     }
 
 
-    // Functional dice setup, logic should be working
-    // Logic behind rolling doubles and when to go to jail setup
-    // Need the process of going to jail to be implemented
+    /**
+     * handles dice rolling and landing on tile functions.
+     * @param player the player to take the turn
+     * @return returns checkBoardCircumstances()
+     */
     @Override
     public Boolean playerTurn(Player player) {
 
@@ -121,7 +123,6 @@ public class GameBoard implements GameBoardInterface {
 
     /**
      * movePlayer uses context to tell how far a player should move, and what space to move them to
-     *
      * @param player The player to move
      * @param moves  how many spaces to move the player
      */
@@ -159,7 +160,11 @@ public class GameBoard implements GameBoardInterface {
         setPlayerPos(currentPlayer, 10);
     }
 
-    //check if the player has landed on another players properties etc
+    /**
+     * Checks to see what tile the player is on and handles their functionality
+     * also checks if doubles are rolled to roll again.
+     * @return returns true if the last roll was a double
+     */
     @Override
     public Boolean checkBoardCircumstances() {
 
@@ -206,6 +211,11 @@ public class GameBoard implements GameBoardInterface {
 
     }
 
+    /**
+     * handles the action that each card should perform.
+     * @param card the card who's action is being performed
+     */
+
     @Override
     public void performCardAction(Card card) {
 
@@ -223,6 +233,11 @@ public class GameBoard implements GameBoardInterface {
 
     }
 
+    /**
+     * assigns a property to a player and makes them pay for it.
+     * @param player the player purchasing the property
+     * @param prop the property purchased
+     */
     @Override
     public void purchaseProperty(Player player, Property prop) {
         if (player.getFirstLap() == false) {
