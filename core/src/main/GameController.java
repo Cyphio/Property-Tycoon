@@ -6,12 +6,14 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import misc.CellToTileBuilder;
 import misc.Coordinate;
 
-import javax.swing.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
+
+/**
+ * GameController handles passing turns between players and playing out each turn.
+ *
+ */
 
 public class GameController{
 
@@ -58,6 +60,10 @@ public class GameController{
         return players[playerNum];
     }
 
+    /**
+     *
+     * @return
+     */
     public Tile playerTurn(){
 
         Boolean playAgain = board.playerTurn(getCurrentPlayer());

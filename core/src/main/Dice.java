@@ -9,6 +9,10 @@ class Dice implements DiceInterface {
     private boolean wasDouble;
 
 
+    /**
+     * The dice class simulates a pair of two six sided dice to roll whenever a player moves
+     */
+
     public Dice(){
 
 

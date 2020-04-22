@@ -22,6 +22,11 @@ public class GameBoard implements GameBoardInterface {
     private int goPayoutAmount;
 
 
+    /**
+     * The GameBoard class simulates the board and all the physical aspects of the board such as player position, cards and the dice.
+     * @param players Holds each player object who is in the game
+     */
+
     public GameBoard(Player[] players) {
 
 
