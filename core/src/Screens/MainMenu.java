@@ -2,6 +2,8 @@ package Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ai.btree.BehaviorTree;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,11 +18,12 @@ import com.propertytycoonmakers.make.PropertyTycoon;
 
 public class MainMenu implements Screen {
 
-    private final PropertyTycoon game;
+    private PropertyTycoon game;
     private Texture mainMenuTexture;
     private Skin mainMenuSkin;
     private Stage stage;
     private Viewport viewport;
+
     public MainMenu(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -37,21 +40,38 @@ public class MainMenu implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        Button newGame = new TextButton("New Game", mainMenuSkin);
+        TextButton resumeButton = new TextButton("resume",mainMenuSkin);
+        Button newGameButton = new TextButton("New Game", mainMenuSkin);
         Button options = new TextButton("Options", mainMenuSkin);
         Button exit = new TextButton("Exit", mainMenuSkin);
 
-        newGame.addListener(new ChangeListener() {
+
+        resumeButton.setVisible(game.isGameInProgress());
+
+
+
+
+        newGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.SETUP);
+                game.setScreen(new GameSetUpScreen(game));
+                game.newGame();
             }
         });
+
+
+        resumeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(game.GAME);
+            }
+        });
+
 
         options.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.OPTIONS);
+                game.setScreen(new OptionsScreen(game));
             }
         });
 
@@ -63,7 +83,9 @@ public class MainMenu implements Screen {
             }
         });
 
-        table.add(newGame).fillX().uniformY();
+        table.add(newGameButton).fillX().uniformY();
+        table.row();
+        table.add(resumeButton).fillX().uniformY();
         table.row().pad(10, 0, 10, 0);
         table.add(options).fillX().uniformY();
         table.row();
@@ -101,7 +123,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void resume() {}
-
     @Override
     public void hide() {}
 }

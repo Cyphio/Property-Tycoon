@@ -111,7 +111,8 @@ public class OptionsScreen implements Screen {
         back.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(game.MAINMENU);
+                //game.changeScreen(game.MAINMENU);
+                game.setScreen(new MainMenu(game));
             }
         });
 

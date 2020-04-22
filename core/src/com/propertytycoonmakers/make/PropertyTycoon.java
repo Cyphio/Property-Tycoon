@@ -2,41 +2,46 @@ package com.propertytycoonmakers.make;
 
 import Screens.*;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import main.Player;
 
 public class PropertyTycoon extends Game {
-
 
 	public SpriteBatch batch;
 	public BitmapFont font;
 
-
 	private GameOptions options;
-	private OptionsScreen optionsScreen;
-	private MainMenu mainMenu;
 	private GameScreen gameScreen;
-	private PauseScreen pauseScreen;
-	private GameSetUpScreen setupScreen;
 
+	private Sound gameMusic;
+	private long gameMusicID;
 
-	public final static int MAINMENU = 0;
-	public final static int OPTIONS = 1;
-	public final static int PAUSE = 2;
-	public final static int GAME = 3;
-	public final static int SETUP = 4;
+	public static Player[] players;
 
+	public final static int GAME = 0;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		options = new GameOptions();
-		this.setScreen(new LoadingScreen(this));
+		gameMusic = Gdx.audio.newSound(Gdx.files.internal("sound/game_music.mp3"));
+		gameMusicID = gameMusic.play(options.getMusicVolume());
+		this.setScreen(new MainMenu(this));
 	}
 
 	@Override
 	public void render () {
+		if(options.isMusicEnabled()) {
+			gameMusic.resume(gameMusicID);
+			gameMusic.setVolume(gameMusicID, options.getMusicVolume());
+		}
+		else {
+			gameMusic.pause(gameMusicID);
+		}
 		super.render();
 	}
 
@@ -52,28 +57,31 @@ public class PropertyTycoon extends Game {
 
 	public void changeScreen(int screen){
 		switch(screen){
-			case MAINMENU:
-				if(mainMenu == null) mainMenu = new MainMenu(this);
-				this.setScreen(mainMenu);
-				break;
-			case OPTIONS:
-				if(optionsScreen == null) optionsScreen = new OptionsScreen(this);
-				this.setScreen(optionsScreen);
-				break;
-			case PAUSE:
-				if(pauseScreen == null) pauseScreen = new PauseScreen(this);
-				this.setScreen(pauseScreen);
-				break;
 			case GAME:
 				if(gameScreen == null) gameScreen = new GameScreen(this);
 				this.setScreen(gameScreen);
 				break;
-			case SETUP:
-				if(setupScreen== null) setupScreen = new GameSetUpScreen(this);
-				this.setScreen(setupScreen);
-				break;
 		}
 	}
+
+	public void newGame(){
+		gameScreen = null;
+
+	}
+
+	public Boolean isGameInProgress(){
+
+		return gameScreen != null;
+
+	}
+
+	//public void updateGameMusic() {
+	//	if(options.isMusicEnabled()) {
+	//		gameMusic.setVolume(, options.getMusicVolume());
+	//	}
+	//}
+
+
 
 
 }

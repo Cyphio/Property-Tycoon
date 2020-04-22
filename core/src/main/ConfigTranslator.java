@@ -74,9 +74,10 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
                             List<String> houses = Arrays.asList("one-house", "two-house", "three-house", "four-house", "hotel");
 
-                            tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             tile = new Property();
+                            tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             tile.setBuyable(true);
+
 
                             ((Property) tile).setColour(tileElement.getElementsByTagName("colour").item(0).getTextContent());
 
@@ -123,11 +124,8 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             tile = new Utility();
                             break;
                     }
-
-
                     //ASK IF WATSON GAMES WANTS CHANGEABLE NAMES FOR JAIL FOR THEMABLE GAMES
                     //tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
-
 
                     tile.setTilePos(i);
                     tileList[i] = tile;
@@ -149,7 +147,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
      *
      * @param
      */
-
 
     @Override
     public void genCards() {

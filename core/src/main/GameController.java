@@ -3,117 +3,92 @@ package main;
 
 import Tiles.Tile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import misc.CellToTileBuilder;
+import misc.Coordinate;
 
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class GameController implements GameControllerInterface {
+import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
+public class GameController{
 
-    private int height;
-    private int width;
-    private boolean running;
     private static GameBoard board;
-    private Player currentPlayer;
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
+    private int playerNum;
+    private Player previousPlayer;
 
-    private Player p;
-    
-    
-    public GameController(TiledMapTileLayer layer){
+    public GameController(TiledMapTileLayer layer) {
 
+        playerNum = 0;
         cellToTile = new HashMap<>();
+        board = new GameBoard(players);
 
+        CellToTileBuilder builder = new CellToTileBuilder(layer,board);
+        cellToTile = builder.getReferenceList();
 
-
- //for testing purposes
-        p = new Player();
-
-        Player[] ps = new Player[1];
-
-        ps[0] = p;
-        board = new GameBoard(ps);
-        buildCellReference(layer);
-//=============================================
-
-
+        
+        Tile tile = board.getTile(0);
+        for (Player p : players) {
+            Coordinate coord =  tile.getAvailableCoordinates();
+            p.setCurrentCoordinates(coord);
         }
+    }
 
-
-        public Tile retTile(TiledMapTileLayer.Cell cell){
-
-
+    private void nextPlayer(){
+        if (playerNum < players.length - 1){
+            playerNum += 1;
+        }else{
+            playerNum = 0;
+        }
+        }
+    public Tile retTile(TiledMapTileLayer.Cell cell) {
         return cellToTile.get(cell);
-
-        }
-        
-        
-        
-        
-
-    
-    
-    
+    }
 
     /**
      * getCurrentPlayer provides functionality to return the current player outside of this class
+     *
      * @return returns the player who's turn it currently is
      */
-    public Player getCurrentPlayer(){
+    private Player getCurrentPlayer() {
 
-        return this.currentPlayer;
+        return players[playerNum];
     }
 
+    public Tile playerTurn(){
 
+        Boolean playAgain = board.playerTurn(getCurrentPlayer());
+        previousPlayer = getCurrentPlayer();
 
-    public void buildCellReference(TiledMapTileLayer l ) {
+        Tile tile = board.getTile(board.getPlayerPos(getCurrentPlayer()));
+        System.out.println("-------------------------");
+        System.out.println(board.getTile(board.getPlayerPos(getCurrentPlayer())));
+        System.out.println(board.getPlayerPos(getCurrentPlayer()));
+        System.out.println(getCurrentPlayer());
+        System.out.println("-------------------------");
 
-
-
-        int tileNUm = 0;
-
-        int cordY = 0;
-
-
-
-
-        for (int y = 0; y < 3; y++) {
-            for (int x = 0; x < 3; x++) {
-                cellToTile.put(l.getCell(x, y), board.getTile(tileNUm));
-            }
+        System.out.println(tile);
+        if (!playAgain){
+            System.out.println("new player");
+            nextPlayer();
         }
+        return tile;
+    }
 
-        tileNUm++;
+    public Player getUpdatedPlayer() {
+        return previousPlayer;
+    }
 
-        for (int y = 3; y < 21; y++) {
-            for (int x = 0; x < 3; x++) {
-                cellToTile.put(l.getCell(x, cordY + y), board.getTile(tileNUm));
-            }
-            if (y % 2 == 0) {
+    public GameBoard getBoard(){
 
-                tileNUm++;
-            }
-        }
+        return board;
 
-        for (int y = 21; y < 24; y++) {
-            for (int x = 0; x < 3; x++) {
-                cellToTile.put(l.getCell(x, cordY + y), board.getTile(tileNUm));
-            }
-        }
-        tileNUm++;
-
-
-        System.out.println("built");
-
-
-
-        }
-
-
-    @Override
-    public void endGame() {
 
     }
+
 }
 
 

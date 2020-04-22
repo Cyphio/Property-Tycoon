@@ -1,8 +1,10 @@
 package Tiles;
 
 import main.Player;
+import misc.Coordinate;
 
 import java.util.ArrayList;
+import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 public class Tile implements TileInterface {
 
@@ -10,6 +12,16 @@ public class Tile implements TileInterface {
     private int tilePosition;
     private boolean isBuyable = false;
     private ArrayList<Player> tilePlayers = new ArrayList<>();
+    private Coordinate centerLabelCoordinate;
+    private ArrayList<Coordinate> playerPosCoordinates;
+    private ArrayList<Coordinate> allCoordinates;
+
+    public Tile(){
+
+        tileName = "default";
+
+    }
+
 
 
     /**
@@ -117,4 +129,48 @@ public class Tile implements TileInterface {
         tilePosition = position;
 
     }
+
+
+    public void setCoordinates(ArrayList<Coordinate> coordinates){
+
+        playerPosCoordinates = new ArrayList<>();
+
+        for(int i =0 ; i < players.length;i++) {
+
+            playerPosCoordinates.add(coordinates.get(i));
+        }
+
+        allCoordinates = coordinates;
+
+        centerLabelCoordinate = coordinates.get(7);
+
+    }
+
+
+    public Coordinate getAvailableCoordinates(){
+
+        Coordinate coordinate = playerPosCoordinates.remove(0);
+        playerPosCoordinates.add(coordinate);
+
+        return coordinate;
+
+
+
+    }
+
+
+    public Coordinate getCenterLabelCoordinate() {
+        return centerLabelCoordinate;
+    }
+
+    public ArrayList<Coordinate> getAllPlayerCoordinates() {
+        return playerPosCoordinates;
+    }
+
+
+    public ArrayList<Coordinate> getAllCoordinates() {
+        return allCoordinates;
+    }
+
 }
+

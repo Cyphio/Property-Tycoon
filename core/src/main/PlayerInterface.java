@@ -16,7 +16,12 @@ public interface PlayerInterface {
     //boolean getIsBankrupt(); // return whether the player is bankrupt
     Sprite getPlayerToken(); // return a string representation of the player's token
 
+
     void setPlayerToken(Sprite token);
 
     void payPlayer(int amount);
+
+    void endFirstLap();
+    boolean getFirstLap();
+    void makePurchase(int cost);
 }

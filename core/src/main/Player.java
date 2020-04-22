@@ -3,22 +3,34 @@ package main;
 import Tiles.Property;
 import Tiles.Tile;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import misc.Coordinate;
 
 import java.util.ArrayList;
 
-public class Player extends Sprite implements PlayerInterface {
+public class Player implements PlayerInterface{
     private ArrayList<Tile> properties;
     private ArrayList<Tile> morgagedProperties;
     private int balance;
 //    private Tile position;
-//    private int tilePosition;
+    private int tilePosition;
     private int getOfJailCards;
-    private Sprite gameToken;
+    private Boolean isInJail;
 
-    public Player(){
+    private Sprite gameToken;
+    private String name;
+    private boolean firstLap;
+    private Coordinate currentCoordinates;
+
+    public Player(String name, Sprite token){
+
+        this.name = name;
+        this.gameToken = token;
+        setInJail(false);
+
         getOfJailCards = 0;
         balance = 1500;
 //        tilePosition = 0;
+        firstLap = true;
 }
 
     /**
@@ -118,6 +130,21 @@ public class Player extends Sprite implements PlayerInterface {
         }
     }
 
+    public void setInJail(Boolean isInJail) {
+        this.isInJail = isInJail;
+    }
+
+    public Boolean getIsInJail() {
+        return isInJail;
+    }
+
+    public String getName(){
+
+        return this.name;
+
+    }
+
+
     /*boolean getIsBankrupt(int cost){
         if (balance < cost){
             int subcost = 0;
@@ -133,7 +160,7 @@ public class Player extends Sprite implements PlayerInterface {
 
     /**
      * getPlayerToken will return the game piece that the player is using in the current game
-     * @return returns gameToken as a Sprite
+     * @return returns gameToken as a string
      */
     @Override
     public Sprite getPlayerToken(){
@@ -142,12 +169,15 @@ public class Player extends Sprite implements PlayerInterface {
     }
 
     /**
-     * stePlayerToken sets the players Token
+            * getProperties returns an array list with all the properties that the player owns
      * @return returns properties, ArrayList with all the properties player owns
      */
     @Override
     public void setPlayerToken(Sprite token){
+
         gameToken = token;
+
+
     }
 
     /**
@@ -156,9 +186,38 @@ public class Player extends Sprite implements PlayerInterface {
      */
     @Override
     public void payPlayer(int amount){
+
         balance += amount;
+
+
     }
 
+
+
+    @Override
+    public void endFirstLap(){firstLap = false;}
+
+    @Override
+    public boolean getFirstLap(){return firstLap;}
+
+    @Override
+    public void makePurchase(int cost){ balance -= cost; }
+
+    public Coordinate getCurrentCoordinates() {
+        return currentCoordinates;
+    }
+
+    public void setCurrentCoordinates(Coordinate currentCoordinate) {
+        this.currentCoordinates = currentCoordinate;
+    }
+
+    public void setTilePosition(int i){
+        tilePosition = i;
+    }
+
+    public int getTilePosition(){
+        return tilePosition;
+    }
 
 
 }

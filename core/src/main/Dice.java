@@ -6,6 +6,16 @@ class Dice implements DiceInterface {
     private int counter;
     private int d1;
     private int d2;
+    private boolean wasDouble;
+
+
+    public Dice(){
+
+
+        counter=0;
+
+    }
+
 
     /**
      * reset sets all three variables to their initial state
@@ -15,15 +25,15 @@ class Dice implements DiceInterface {
         counter = 0;
         d1 = 0;
         d2 = 0;
+        wasDouble = false;
     }
 
     /**
      * rollDice returns true if its a double (both rolls come out with the same number) and false otherwise.
      * With each roll counter is incremented by one
-     * @return returns true of false depending if the two rolls come out with the same number
      */
     @Override
-    public boolean rollDice(){
+    public void rollDice(){
         Random r = new Random();
 
         d1 = r.nextInt(5) + 1;
@@ -31,10 +41,10 @@ class Dice implements DiceInterface {
         counter++;
 
         if(d1 == d2){
-            return true;
+            wasDouble =true;
         }
         else{
-            return false;
+            wasDouble=false;
         }
     }
 
@@ -58,8 +68,18 @@ class Dice implements DiceInterface {
      */
     @Override
     public int getValue(){
+
+
         return d1+d2;
     }
+
+
+    public boolean wasItADouble(){
+
+        return wasDouble;
+
+    }
+
 }
 
 
