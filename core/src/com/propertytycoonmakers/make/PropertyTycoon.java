@@ -8,23 +8,28 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import main.Player;
 
+/**
+ * PropertyTycoon is the orchestrator of all GUI classes. It repeatedly makes calls to the render methods of the super
+ * classes along with storing game preferences and playing the game music.
+ */
 public class PropertyTycoon extends Game {
-
-	public SpriteBatch batch;
-	public BitmapFont font;
 
 	private GameOptions options;
 	private GameScreen gameScreen;
-
 	private Sound gameMusic;
 	private long gameMusicID;
 
+	public SpriteBatch batch;
+	public BitmapFont font;
 	public static Player[] players;
-
 	public final static int GAME = 0;
 
+	/**
+	 * create() acts as the constructor for PropertyTycoon. It initialises the key objects along with setting the first
+	 * Screen to be shown as MainMenu
+	 */
 	@Override
-	public void create () {
+	public void create() {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		options = new GameOptions();
@@ -33,8 +38,11 @@ public class PropertyTycoon extends Game {
 		this.setScreen(new MainMenu(this));
 	}
 
+	/**
+	 * render() makes calls to the render methods of the super classes along with constantly updating game music volume
+	 */
 	@Override
-	public void render () {
+	public void render() {
 		if(options.isMusicEnabled()) {
 			gameMusic.resume(gameMusicID);
 			gameMusic.setVolume(gameMusicID, options.getMusicVolume());
@@ -45,17 +53,20 @@ public class PropertyTycoon extends Game {
 		super.render();
 	}
 
-	@Override
-	public void dispose () {
-		batch.dispose();
-		font.dispose();
-	}
-
+	/**
+	 * getPreferences() returns the instance of GameOptions initialised in create() for use in super classes
+	 * @return a GameOptions object
+	 */
 	public GameOptions getPreferences() {
 		return options;
 	}
 
-	public void changeScreen(int screen){
+	/**
+	 * changeScreen() is used by super classes to switch the current Screen without creating a new instance of that
+	 * Screen. This is particularly useful for GameScreen as we only require one instance
+	 * @param screen
+	 */
+	public void changeScreen(int screen) {
 		switch(screen){
 			case GAME:
 				if(gameScreen == null) gameScreen = new GameScreen(this);
@@ -64,11 +75,28 @@ public class PropertyTycoon extends Game {
 		}
 	}
 
-	public void newGame(){
+	/**
+	 * newGame() allows for a new GameScreen to be initialised by first setting gameScreen as null
+	 */
+	public void newGame() {
 		gameScreen = null;
 	}
 
-	public Boolean isGameInProgress(){
+	/**
+	 * isGameInProgress() returns a Boolean judgement as to whether a game currently is in progress or not - aka, is
+	 * gameScreen null or not
+	 * @return true if a game is in progress, false otherwise
+	 */
+	public Boolean isGameInProgress() {
 		return gameScreen != null;
+	}
+
+	/**
+	 * Called when PropertyTycoon() should release all resources
+	 */
+	@Override
+	public void dispose() {
+		batch.dispose();
+		font.dispose();
 	}
 }

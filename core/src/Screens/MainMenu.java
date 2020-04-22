@@ -48,7 +48,7 @@ public class MainMenu implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        TextButton resumeButton = new TextButton("resume",mainMenuSkin);
+        TextButton resumeButton = new TextButton("Resume",mainMenuSkin);
         Button newGameButton = new TextButton("New Game", mainMenuSkin);
         Button options = new TextButton("Options", mainMenuSkin);
         Button exit = new TextButton("Exit", mainMenuSkin);
