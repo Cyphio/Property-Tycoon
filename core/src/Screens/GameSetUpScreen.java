@@ -23,7 +23,6 @@ import main.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 /**
  * GameSetUpScreen is a GUI class that allows for the user to make choices regarding the number of players, their names
@@ -87,7 +86,6 @@ public class GameSetUpScreen implements Screen {
         this.gameSetUpScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
         this.gameSetUpScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
-
         Texture texture1 = new Texture(Gdx.files.internal("tokens/token1.png"));
         Texture texture2 = new Texture(Gdx.files.internal("tokens/token2.png"));
         Texture texture3 = new Texture(Gdx.files.internal("tokens/token3.png"));
@@ -147,7 +145,6 @@ public class GameSetUpScreen implements Screen {
         startGame = new TextButton("Start", gameSetUpScreenSkin);
         playerNames = new TextField[]{player1Field, player2Field, player3Field, player4Field, player5Field, player6Field};
         back = new TextButton("Back", gameSetUpScreenSkin);
-
 
         numPlayersBox.addListener(new ChangeListener() {
             @Override
@@ -257,14 +254,13 @@ public class GameSetUpScreen implements Screen {
         stage.clear();
         stage.addActor(table);
 
-
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                players = null;
-                players = new Player[numPlayersBox.getSelected()];
+                game.players = null;
+                game.players = new Player[numPlayersBox.getSelected()];
                 for (int i = 0; i < numPlayersBox.getSelected(); i++) {
-                    players[i] = new Player(playerNames[i].getText(), spriteList.get(i));
+                    game.players[i] = new Player(playerNames[i].getText(), spriteList.get(i));
                 }
                 game.changeScreen(game.GAME);
             }
@@ -276,7 +272,6 @@ public class GameSetUpScreen implements Screen {
                 game.setScreen(new MainMenu(game));
             }
         });
-
     }
 
     /**

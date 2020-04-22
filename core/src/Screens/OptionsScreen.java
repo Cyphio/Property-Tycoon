@@ -13,8 +13,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
-import static com.badlogic.gdx.scenes.scene2d.ui.Table.Debug.actor;
-
 /**
  * OptionsScreen is a GUI class that allows the user to interactively adjust Music/FX volume, toggle Music/FX on and
  * off, toggle fullscreen mode and return to MainMenu. This Screen is accessed from MainMenu.
