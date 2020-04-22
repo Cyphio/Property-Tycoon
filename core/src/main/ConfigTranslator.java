@@ -14,7 +14,6 @@ import java.util.*;
  * Translates provided configuration file into game Tile and Card objects for the board.
  */
 
-
 public class ConfigTranslator implements ConfigTranslatorInterface {
 
     private Tile[] tileList = new Tile[40];
@@ -170,7 +169,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
                     Card card = new Card();
 
-
                     try {
 
                         card.setValue(Integer.parseInt(cardElement.getElementsByTagName("value").item(0).getTextContent()));
@@ -195,18 +193,15 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
         return cardDecks.get(0);
 
-
     }
 
     public ArrayList<Card> getPotluckChestCards() {
 
         return cardDecks.get(0);
 
-
     }
 
     public Tile[] getTiles() {
-
 
         return tileList;
 

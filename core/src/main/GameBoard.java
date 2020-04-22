@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *  The GameBoard class simulates the board and all the physical aspects of the board such as player position, cards and the dice.
+ */
 
 public class GameBoard implements GameBoardInterface {
 
@@ -21,19 +24,16 @@ public class GameBoard implements GameBoardInterface {
     private static Player currentPlayer;
     private int goPayoutAmount;
 
-
     /**
-     * The GameBoard class simulates the board and all the physical aspects of the board such as player position, cards and the dice.
+     * The GameBoard class constructor
      * @param players Holds each player object who is in the game
      */
 
     public GameBoard(Player[] players) {
 
-
         goPayoutAmount = 200;
 
         playerPos = new HashMap<Player, Integer>();
-
 
         // sets all players position to GO tile at 0
         for (Player player : players) {
@@ -49,19 +49,15 @@ public class GameBoard implements GameBoardInterface {
 
         dice = new Dice();
 
-
         potluckCards = builder.getPotluckChestCards();
         Collections.shuffle(potluckCards);
         oppourtunityKnocksCards = builder.getCommunityChestCards();
         Collections.shuffle(oppourtunityKnocksCards);
 
-
         System.out.println(players.length);
         System.out.println(players[0].getName());
 
-
     }
-
 
     /**
      * handles dice rolling and landing on tile functions.
@@ -75,7 +71,6 @@ public class GameBoard implements GameBoardInterface {
 
         currentPlayer = player;
 
-
         dice.rollDice();
         System.out.println("DOUBLE: " + dice.wasItADouble());
         if(player.getIsInJail()) {
@@ -88,10 +83,8 @@ public class GameBoard implements GameBoardInterface {
             movePlayer(player, dice.getValue());
         }
 
-
         System.out.println("finished");
         return checkBoardCircumstances();
-
 
     }
 
@@ -115,7 +108,6 @@ public class GameBoard implements GameBoardInterface {
     @Override
     public void setPlayerPos(Player player, int pos) {
 
-
         board[playerPos.get(player)].removePlayer(player);
         playerPos.put(player, pos);
         board[pos].addPlayer(player);
@@ -124,7 +116,6 @@ public class GameBoard implements GameBoardInterface {
 
 
     }
-
 
     /**
      * movePlayer uses context to tell how far a player should move, and what space to move them to
@@ -151,7 +142,11 @@ public class GameBoard implements GameBoardInterface {
 
     }
 
-
+    /**
+     * gets the tile at int i
+     * @param i tile position
+     * @return tile at int i
+     */
     public Tile getTile(int i) {
 
         return board[i];
@@ -159,6 +154,9 @@ public class GameBoard implements GameBoardInterface {
 
     }
 
+    /**
+     * sends the current player to the jail tile and sets their inJail to true
+     */
 
     public void sendToJail() {
         currentPlayer.setInJail(true);
@@ -213,7 +211,6 @@ public class GameBoard implements GameBoardInterface {
 
         return false;
 
-
     }
 
     /**
@@ -232,9 +229,7 @@ public class GameBoard implements GameBoardInterface {
             default:
                 System.out.println("no action found");
 
-
         }
-
 
     }
 
