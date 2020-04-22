@@ -66,22 +66,9 @@ public class PropertyTycoon extends Game {
 
 	public void newGame(){
 		gameScreen = null;
-
 	}
 
 	public Boolean isGameInProgress(){
-
 		return gameScreen != null;
-
 	}
-
-	//public void updateGameMusic() {
-	//	if(options.isMusicEnabled()) {
-	//		gameMusic.setVolume(, options.getMusicVolume());
-	//	}
-	//}
-
-
-
-
 }

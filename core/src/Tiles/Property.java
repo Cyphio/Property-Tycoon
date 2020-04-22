@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Property extends Tile implements PropertyInterface {
 
-
     private String colour;
     private int cost;
     private int rent;

@@ -1,9 +1,9 @@
 package misc;
 
 public class Coordinate {
+
     private int x;
     private int y;
-
 
     public Coordinate(int CellX, int CellY){
         this.x = CellX*64;
@@ -17,8 +17,4 @@ public class Coordinate {
     public int getY(){
         return y;
     }
-
-
-
-
 }

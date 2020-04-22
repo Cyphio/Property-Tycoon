@@ -25,7 +25,6 @@ public class GameOptions {
         getPrefs().flush();
     }
 
-
     public boolean isMusicEnabled() {
         return getPrefs().getBoolean(PREF_MUSIC_ENABLED, true);
     }

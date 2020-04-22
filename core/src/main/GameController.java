@@ -1,20 +1,15 @@
 package main;
 
-
 import Tiles.Tile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import misc.CellToTileBuilder;
 import misc.Coordinate;
-
 import java.util.HashMap;
-
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 /**
  * GameController handles passing turns between players and playing out each turn.
- *
  */
-
 public class GameController{
 
     private static GameBoard board;
@@ -23,7 +18,6 @@ public class GameController{
     private Player previousPlayer;
 
     public GameController(TiledMapTileLayer layer) {
-
         playerNum = 0;
         cellToTile = new HashMap<>();
         board = new GameBoard(players);
@@ -31,7 +25,6 @@ public class GameController{
         CellToTileBuilder builder = new CellToTileBuilder(layer,board);
         cellToTile = builder.getReferenceList();
 
-        
         Tile tile = board.getTile(0);
         for (Player p : players) {
             Coordinate coord =  tile.getAvailableCoordinates();
@@ -40,23 +33,23 @@ public class GameController{
     }
 
     private void nextPlayer(){
-        if (playerNum < players.length - 1){
+        if (playerNum < players.length - 1) {
             playerNum += 1;
-        }else{
+        }
+        else{
             playerNum = 0;
         }
-        }
+    }
+
     public Tile retTile(TiledMapTileLayer.Cell cell) {
         return cellToTile.get(cell);
     }
 
     /**
      * getCurrentPlayer provides functionality to return the current player outside of this class
-     *
      * @return returns the player who's turn it currently is
      */
     private Player getCurrentPlayer() {
-
         return players[playerNum];
     }
 
@@ -88,13 +81,9 @@ public class GameController{
         return previousPlayer;
     }
 
-    public GameBoard getBoard(){
-
+    public GameBoard getBoard() {
         return board;
-
-
     }
-
 }
 
 
