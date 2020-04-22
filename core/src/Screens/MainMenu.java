@@ -86,11 +86,13 @@ public class MainMenu implements Screen {
         });
 
         table.add(newGameButton).fillX().uniformY();
-        table.row();
-        table.add(resumeButton).fillX().uniformY();
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(10, 0, 0, 0);
+        if(resumeButton.isVisible()) {
+            table.add(resumeButton).fillX().uniformY();
+            table.row().pad(10, 0, 0, 0);
+        }
         table.add(options).fillX().uniformY();
-        table.row();
+        table.row().pad(10, 0, 0, 0);
         table.add(exit).fillX().uniformY();
     }
 
