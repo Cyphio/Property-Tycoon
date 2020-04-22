@@ -84,7 +84,6 @@ public class PauseScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
-
                 if (Gdx.graphics.isFullscreen()) {
                     Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
                     game.getPreferences().setPrefsFullscreen(fullscreenOnOff.isChecked());
@@ -92,7 +91,6 @@ public class PauseScreen implements Screen {
                 } else
                     Gdx.graphics.setFullscreenMode(currentMode);
                 game.getPreferences().setPrefsFullscreen(fullscreenOnOff.isChecked());
-
             }
         });
 

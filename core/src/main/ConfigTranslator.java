@@ -144,8 +144,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
     /**
      * Generates lists of set up Card objects for the community chest and potluck draws.
-     *
-     * @param
      */
 
     @Override
