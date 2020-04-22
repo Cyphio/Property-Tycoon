@@ -186,8 +186,8 @@ public class PauseScreen implements Screen {
 
     /**
      * Called when the Application is resized. Will never be called before a call to create()
-     * @param width
-     * @param height
+     * @param width the width of the screen
+     * @param height the height of the screen
      */
     @Override
     public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
