@@ -4,7 +4,6 @@ import Tiles.Jail;
 import Tiles.Property;
 import Tiles.Tile;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
@@ -25,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
+import javafx.scene.control.Tab;
 import main.GameController;
 import main.Player;
 import misc.Coordinate;
@@ -53,6 +53,8 @@ public class GameScreen implements Screen {
 
 
     private Sound rollDiceFX;
+    private  Table playerBalances;
+
 
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
@@ -69,6 +71,7 @@ public class GameScreen implements Screen {
         this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
         this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+        playerBalances = new Table();
 
         rollDiceFX = Gdx.audio.newSound(Gdx.files.internal("sound/dice_roll.mp3"));
 
@@ -89,8 +92,17 @@ public class GameScreen implements Screen {
 
         for (Player p : game.players) {
 
+            Label l = new Label(p.getName() + ":$"+p.getMoney(),gameScreenSkin);
+            l.setColor(Color.WHITE);
+
+            playerBalances.add(l);
+            playerBalances.row();
+
             p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
         }
+
+        playerBalances.setSize(300,300);
+
 
 
         // POP UP MENU FOR PROPERTIES
@@ -137,6 +149,14 @@ public class GameScreen implements Screen {
                 }
             }
         });
+
+        playerBalances.setFillParent(true);
+        playerBalances.left();
+        playerBalances.pad(0, 75, 0, 0);
+        playerBalances.setDebug(true
+        );
+        stage.addActor(playerBalances);
+
     }
     @Override
     public void show() {
@@ -326,11 +346,18 @@ public class GameScreen implements Screen {
 
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-        for (Player p : game.players) {
+
+        for (int i = 0 ; i<game.players.length;i++){
+
+            Player p = game.players[i];
+
+            Label l = (Label) playerBalances.getChild(i);
+            l.setText(p.getName() + ":$"+p.getMoney());
             p.getPlayerToken().draw(spriteBatch);
 
 
         }
+
         spriteBatch.end();
 
 
