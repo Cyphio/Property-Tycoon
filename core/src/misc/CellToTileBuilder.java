@@ -11,6 +11,13 @@ public class CellToTileBuilder {
 
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
 
+    /**
+     * This class takes a tilemap and the gameboard and assigns tile objects to each cell on the
+     * gameboard that requires a tile, this allows for board interactivity
+     * @param l the tilemap to use for the board
+     * @param board the gameboard to tile
+     */
+
     public CellToTileBuilder(TiledMapTileLayer l, GameBoard board){
 
         cellToTile = new HashMap<>();
@@ -151,6 +158,10 @@ public class CellToTileBuilder {
 
         System.out.println("built");
     }
+
+    /**
+     * @return returns the hashmap of what cells are assigned to what tiles
+     */
 
     public HashMap getReferenceList(){
         return cellToTile;
