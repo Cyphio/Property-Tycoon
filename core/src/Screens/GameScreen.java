@@ -30,6 +30,7 @@ import main.Player;
 import misc.Coordinate;
 import misc.RotatableLabel;
 
+import javax.swing.text.View;
 import java.util.ArrayList;
 
 
@@ -45,6 +46,11 @@ public class GameScreen implements Screen {
     private Label tileNameLabel;
     private Window tilePopUpMenu;
     private SpriteBatch spriteBatch;
+    private Property clickedProperty;
+    private TextButton buyPropertyButton;
+    private Label ownerLabel;
+    private Label propertyCost;
+
 
     private Sound rollDiceFX;
 
@@ -88,17 +94,26 @@ public class GameScreen implements Screen {
 
 
         // POP UP MENU FOR PROPERTIES
-        tileNameLabel = new Label("Name", gameScreenSkin);
-        tileNameLabel.setColor(Color.BLUE);
         TextButton closePropMenu = new TextButton("Close", gameScreenSkin);
+        buyPropertyButton = new TextButton("Buy", gameScreenSkin);
+        ownerLabel = new Label("FOR SALE", gameScreenSkin);
+        propertyCost = new Label("COST",gameScreenSkin);
+
+
         tilePopUpMenu = new Window("Property Name", gameScreenSkin);
-        tilePopUpMenu.add(tileNameLabel);
+        tilePopUpMenu.add(ownerLabel);
+        tilePopUpMenu.row();
+        tilePopUpMenu.add(propertyCost);
+        tilePopUpMenu.row();
+        tilePopUpMenu.add(buyPropertyButton);
         tilePopUpMenu.row();
         tilePopUpMenu.add(closePropMenu);
         tilePopUpMenu.pack();
-        float newWidth = 500, newHeight = 300;
+        float newWidth = 800, newHeight = 500;
         tilePopUpMenu.setBounds((Gdx.graphics.getWidth() - newWidth) / 2, (Gdx.graphics.getHeight() - newHeight) / 2, newWidth, newHeight);
         tilePopUpMenu.setVisible(false);
+
+
         stage.addActor(tilePopUpMenu);
 
         closePropMenu.addListener(new ClickListener() {
@@ -109,12 +124,20 @@ public class GameScreen implements Screen {
             }
         });
 
+        buyPropertyButton.addListener(new ClickListener() {
 
 
-
-
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try {
+                    if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                        clickedProperty.buyProperty(gameCon.getCurrentPlayer());
+                    }
+                } catch (Exception e) {
+                }
+            }
+        });
     }
-
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -133,7 +156,7 @@ public class GameScreen implements Screen {
         camera.update();
 
         Button pause = new TextButton("Pause", gameScreenSkin);
-        Button rollDice = new TextButton("Roll Dice", gameScreenSkin);
+        final TextButton rollDice = new TextButton("Roll Dice", gameScreenSkin);
 
 
         pause.addListener(new ChangeListener() {
@@ -147,13 +170,30 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                if(game.getPreferences().isFxEnabled()) {
+
+                if (game.getPreferences().isFxEnabled()) {
                     rollDiceFX.play(game.getPreferences().getFxVolume());
                 }
-                gameCon.playerTurn();
 
-                Player p = gameCon.getUpdatedPlayer();
-                p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
+                if (rollDice.getText().toString().equals("Roll Dice")) {
+
+                    gameCon.playerTurn();
+
+                    Player p = gameCon.getCurrentPlayer();
+                    p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
+
+
+                    if (!gameCon.getPlayAgain()) {
+
+                        rollDice.setText("End Turn");
+
+                    }
+                } else {
+                    gameCon.endTurn();
+                    rollDice.setText("Roll Dice");
+
+
+                }
 
 
             }
@@ -181,6 +221,24 @@ public class GameScreen implements Screen {
 
                     if (tile instanceof Property) {
 
+
+                        clickedProperty = (Property) tile;
+
+
+                        if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
+
+
+                            buyPropertyButton.setVisible(true);
+
+                        } else {
+
+                            buyPropertyButton.setVisible(false);
+
+                        }
+
+
+                        ownerLabel.setText("Owned by:        "+clickedProperty.getOwnerName());
+                        propertyCost.setText("Cost:      "+clickedProperty.getCost());
                         tilePopUpMenu.getTitleLabel().setText(tile.getTileName());
                         tilePopUpMenu.getTitleLabel().setColor(Color.BLUE);
                         tilePopUpMenu.setVisible(true);
@@ -199,7 +257,7 @@ public class GameScreen implements Screen {
                     }
 
 
-                    if (true) {
+                    if (false) {
 
                         ArrayList<Coordinate> cs = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getAllCoordinates();
                         System.out.println(cs.size());
@@ -222,26 +280,29 @@ public class GameScreen implements Screen {
             }
         });
 
-        view = new FitViewport(w,h,camera);
+        view = new FitViewport(w, h, camera);
         labelStage = new Stage(view);
 
+//        Viewport v = new ScreenViewport(camera);
+//        stage.setViewport(v);
+
+
         camera.position.set(1120, 1120, 0);
-        camera.zoom = (float) 2;
+        camera.zoom = (float) 1.5;
 
         int angle = 0;
-        for(int i = 0 ; i<40; i++) {
+        for (int i = 0; i < 40; i++) {
 
-            if(i == 1|| i==11|| i==21|| i==31){
+            if (i == 1 || i == 11 || i == 21 || i == 31) {
 
-                angle-=90;
+                angle -= 90;
 
             }
 
             Tile tile = gameCon.getBoard().getTile(i);
-            System.out.println(tile.getAllCoordinates().get(0));
             Coordinate c = tile.getCenterLabelCoordinate();
 
-            RotatableLabel label = new RotatableLabel(new Label("tile",gameScreenSkin),c.getX(),c.getY(),angle, 2);
+            RotatableLabel label = new RotatableLabel(new Label(tile.getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
 
 //            layer.getCell((c.getX() -32)/ 64, (c.getY()-32) / 64).setTile(null);
 
@@ -259,7 +320,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
@@ -274,26 +334,13 @@ public class GameScreen implements Screen {
         spriteBatch.end();
 
 
+        camera.update();
 
-
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-
-            camera.rotate(90);
-            camera.update();
-        }
-
-
-        labelStage.act(Math.min(Gdx.graphics.getDeltaTime(),1/30f));
-      labelStage.draw();
+        labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        labelStage.draw();
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-
-
-
-
-
-
 
 
     }

@@ -11,7 +11,7 @@ public class Tile implements TileInterface {
     private String tileName;
     private int tilePosition;
     private boolean isBuyable = false;
-    private ArrayList<Player> tilePlayers = new ArrayList<>();
+    ArrayList<Player> tilePlayers = new ArrayList<>();
     private Coordinate centerLabelCoordinate;
     private ArrayList<Coordinate> playerPosCoordinates;
     private ArrayList<Coordinate> allCoordinates;
@@ -179,6 +179,7 @@ public class Tile implements TileInterface {
     public ArrayList<Coordinate> getAllCoordinates() {
         return allCoordinates;
     }
+
 
 }
 
