@@ -78,6 +78,8 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             tile.setBuyable(true);
 
+                            ((Property) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
+
 
                             ((Property) tile).setColour(tileElement.getElementsByTagName("colour").item(0).getTextContent());
 

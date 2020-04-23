@@ -2,6 +2,8 @@ package com.propertytycoonmakers.make;
 
 import Screens.*;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import main.Player;
@@ -14,6 +16,9 @@ public class PropertyTycoon extends Game {
 	private GameOptions options;
 	private GameScreen gameScreen;
 
+	private Sound gameMusic;
+	private long gameMusicID;
+
 	public static Player[] players;
 
 	public final static int GAME = 0;
@@ -23,11 +28,20 @@ public class PropertyTycoon extends Game {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		options = new GameOptions();
+		gameMusic = Gdx.audio.newSound(Gdx.files.internal("sound/game_music.mp3"));
+		gameMusicID = gameMusic.play(options.getMusicVolume());
 		this.setScreen(new MainMenu(this));
 	}
 
 	@Override
 	public void render () {
+		if(options.isMusicEnabled()) {
+			gameMusic.resume(gameMusicID);
+			gameMusic.setVolume(gameMusicID, options.getMusicVolume());
+		}
+		else {
+			gameMusic.pause(gameMusicID);
+		}
 		super.render();
 	}
 
@@ -49,6 +63,7 @@ public class PropertyTycoon extends Game {
 				break;
 		}
 	}
+
 	public void newGame(){
 		gameScreen = null;
 
@@ -59,6 +74,12 @@ public class PropertyTycoon extends Game {
 		return gameScreen != null;
 
 	}
+
+	//public void updateGameMusic() {
+	//	if(options.isMusicEnabled()) {
+	//		gameMusic.setVolume(, options.getMusicVolume());
+	//	}
+	//}
 
 
 

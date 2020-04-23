@@ -11,14 +11,14 @@ public class Tile implements TileInterface {
     private String tileName;
     private int tilePosition;
     private boolean isBuyable = false;
-    private ArrayList<Player> tilePlayers = new ArrayList<>();
+    ArrayList<Player> tilePlayers = new ArrayList<>();
     private Coordinate centerLabelCoordinate;
     private ArrayList<Coordinate> playerPosCoordinates;
     private ArrayList<Coordinate> allCoordinates;
 
     public Tile(){
 
-        tileName = "default";
+        tileName = "";
 
     }
 
@@ -142,7 +142,14 @@ public class Tile implements TileInterface {
 
         allCoordinates = coordinates;
 
-        centerLabelCoordinate = coordinates.get(7);
+
+
+        Coordinate labelCoordinate = new Coordinate(0,0);
+        labelCoordinate.setCoordinate(coordinates.get(7).getX()+32,coordinates.get(7).getY()+32);
+
+        centerLabelCoordinate = labelCoordinate;
+
+
 
     }
 
@@ -158,10 +165,11 @@ public class Tile implements TileInterface {
 
     }
 
-
     public Coordinate getCenterLabelCoordinate() {
         return centerLabelCoordinate;
     }
+
+
 
     public ArrayList<Coordinate> getAllPlayerCoordinates() {
         return playerPosCoordinates;
@@ -171,6 +179,7 @@ public class Tile implements TileInterface {
     public ArrayList<Coordinate> getAllCoordinates() {
         return allCoordinates;
     }
+
 
 }
 

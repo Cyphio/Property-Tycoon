@@ -18,7 +18,7 @@ public class GameController{
     private static GameBoard board;
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
     private int playerNum;
-    private Player previousPlayer;
+    private Boolean playAgain;
 
     public GameController(TiledMapTileLayer layer) {
 
@@ -44,6 +44,7 @@ public class GameController{
             playerNum = 0;
         }
         }
+
     public Tile retTile(TiledMapTileLayer.Cell cell) {
         return cellToTile.get(cell);
     }
@@ -53,15 +54,15 @@ public class GameController{
      *
      * @return returns the player who's turn it currently is
      */
-    private Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
 
         return players[playerNum];
     }
 
     public Tile playerTurn(){
 
-        Boolean playAgain = board.playerTurn(getCurrentPlayer());
-        previousPlayer = getCurrentPlayer();
+        playAgain = board.playerTurn(getCurrentPlayer());
+
 
         Tile tile = board.getTile(board.getPlayerPos(getCurrentPlayer()));
         System.out.println("-------------------------");
@@ -71,16 +72,24 @@ public class GameController{
         System.out.println("-------------------------");
 
         System.out.println(tile);
+
+        return tile;
+    }
+
+    public boolean getPlayAgain(){
+
+        return playAgain;
+
+    }
+
+
+    public void endTurn(){
         if (!playAgain){
             System.out.println("new player");
             nextPlayer();
         }
-        return tile;
     }
 
-    public Player getUpdatedPlayer() {
-        return previousPlayer;
-    }
 
     public GameBoard getBoard(){
 

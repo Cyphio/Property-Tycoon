@@ -1,5 +1,7 @@
 package Tiles;
 
+import main.Player;
+
 import java.util.ArrayList;
 
 public class Property extends Tile implements PropertyInterface {
@@ -10,6 +12,16 @@ public class Property extends Tile implements PropertyInterface {
     private int rent;
     private ArrayList<Integer> housePrices = new ArrayList<>();
     private boolean owned;
+    private Player owner;
+    private int housesOwned;
+
+    public Property(){
+
+        housesOwned = 0;
+        owned = false;
+
+    }
+
 
     @Override
     public void setColour(String colour) {
@@ -49,4 +61,36 @@ public class Property extends Tile implements PropertyInterface {
      */
     @Override
     public boolean getOwned(){return owned;}
+
+    public void buyProperty(Player player) {
+
+        if (this.getBuyable() && this.getPlayers().contains(player) && !getOwned() && player.getMoney()>= this.cost){
+
+            player.makePurchase(this.cost);
+            owner = player;
+            setBuyable(false);
+
+        }
+
+    }
+
+
+
+    public Player getOwner() {
+        return owner;
+    }
+
+    public String getOwnerName(){
+
+        if (owner != null){
+
+            return owner.getName();
+
+        }
+
+        return "FOR SALE";
+
+
+    }
+
 }
