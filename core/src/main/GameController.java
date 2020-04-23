@@ -15,7 +15,7 @@ public class GameController{
     private static GameBoard board;
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
     private int playerNum;
-    private Player previousPlayer;
+    private Boolean playAgain;
 
     public GameController(TiledMapTileLayer layer) {
         playerNum = 0;
@@ -49,7 +49,7 @@ public class GameController{
      * getCurrentPlayer provides functionality to return the current player outside of this class
      * @return returns the player who's turn it currently is
      */
-    private Player getCurrentPlayer() {
+    public Player getCurrentPlayer() {
         return players[playerNum];
     }
 
@@ -58,9 +58,7 @@ public class GameController{
      * @return the tile the player has landed on
      */
     public Tile playerTurn(){
-
-        Boolean playAgain = board.playerTurn(getCurrentPlayer());
-        previousPlayer = getCurrentPlayer();
+        playAgain = board.playerTurn(getCurrentPlayer());
 
         Tile tile = board.getTile(board.getPlayerPos(getCurrentPlayer()));
         System.out.println("-------------------------");
@@ -70,23 +68,22 @@ public class GameController{
         System.out.println("-------------------------");
 
         System.out.println(tile);
+        return tile;
+    }
+
+    public boolean getPlayAgain(){
+        return playAgain;
+    }
+
+
+    public void endTurn(){
         if (!playAgain){
             System.out.println("new player");
             nextPlayer();
         }
-        return tile;
-    }
-
-    public Player getUpdatedPlayer() {
-        return previousPlayer;
     }
 
     public GameBoard getBoard() {
         return board;
     }
 }
-
-
-
-
-
