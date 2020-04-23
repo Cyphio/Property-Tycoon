@@ -170,37 +170,28 @@ public class GameScreen implements Screen {
         rollDice.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (game.getPreferences().isFxEnabled()) {
-                    rollDiceFX.play(game.getPreferences().getFxVolume());
-                }
-
-                try {
-                    TimeUnit.SECONDS.sleep(3);
-                } catch(Exception e) {
-                    e.getMessage();
-                }
-
                 if (rollDice.getText().toString().equals("Roll Dice")) {
+                    if (game.getPreferences().isFxEnabled()) {
+                        rollDiceFX.play(game.getPreferences().getFxVolume());
+                        try {
+                            TimeUnit.SECONDS.sleep(3);
+                        } catch(Exception e) {
+                            e.getMessage();
+                        }
+                    }
 
                     gameCon.playerTurn();
 
                     Player p = gameCon.getCurrentPlayer();
                     p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
 
-
                     if (!gameCon.getPlayAgain()) {
-
                         rollDice.setText("End Turn");
-
                     }
                 } else {
                     gameCon.endTurn();
                     rollDice.setText("Roll Dice");
-
-
                 }
-
-
             }
         });
 
