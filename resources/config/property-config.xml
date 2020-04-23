@@ -54,7 +54,7 @@
         <three-house>270</three-house>
         <four-house>400</four-house>
         <hotel>550</hotel>
-        <colour>blue</colour>
+        <colour>sky</colour>
     </tile>
     <tile>
         <type>opportunityknocks</type>
@@ -69,7 +69,7 @@
         <three-house>270</three-house>
         <four-house>400</four-house>
         <hotel>550</hotel>
-        <colour>blue</colour>
+        <colour>sky</colour>
     </tile>
     <tile>
         <name>Nardole Drive</name>
@@ -81,7 +81,7 @@
         <three-house>300</three-house>
         <four-house>450</four-house>
         <hotel>600</hotel>
-        <colour>blue</colour>
+        <colour>sky</colour>
     </tile>
     <tile>
         <type>jail</type>
@@ -320,7 +320,7 @@
         <three-house>1100</three-house>
         <four-house>1300</four-house>
         <hotel>1500</hotel>
-        <colour>deep blue</colour>
+        <colour>navy</colour>
     </tile>
     <tile>
         <type>tax</type>
@@ -337,7 +337,7 @@
         <three-house>1400</three-house>
         <four-house>1700</four-house>
         <hotel>2000</hotel>
-        <colour>deep blue</colour>
+        <colour>navy</colour>
     </tile>
 
     <!--POT LUCK CARDS-->

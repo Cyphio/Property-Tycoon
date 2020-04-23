@@ -2,14 +2,16 @@ package Tiles;
 
 import main.Player;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import com.badlogic.gdx.graphics.Color;
 
 public class Property extends Tile implements PropertyInterface {
 
     private String colour;
     private int cost;
     private int rent;
-    private ArrayList<Integer> housePrices = new ArrayList<>();
+    private ArrayList<Integer> developmentPrices = new ArrayList<>();
     private boolean owned;
     private Player owner;
     private int housesOwned;
@@ -27,9 +29,34 @@ public class Property extends Tile implements PropertyInterface {
         this.colour = colour;
     }
 
+    public Color getColor() {
+        try {
+            Field field = Class.forName("com.badlogic.gdx.graphics.Color").getField(colour);
+            return (Color)field.get(null);
+        } catch(Exception e) {
+            return Color.WHITE;
+        }
+    }
+
     @Override
     public void addHousePrice(int housePrice) {
-        housePrices.add(housePrice);
+        developmentPrices.add(housePrice);
+    }
+
+    public ArrayList<Integer> getHousePrice() {
+        return developmentPrices;
+    }
+
+    public void setRent(String rent) {
+         try {
+             this.rent = Integer.parseInt(rent);
+         } catch(Exception e) {
+             e.getMessage();
+         }
+    }
+
+    public int getRent() {
+        return rent;
     }
 
 
@@ -74,22 +101,15 @@ public class Property extends Tile implements PropertyInterface {
     }
 
 
-
     public Player getOwner() {
         return owner;
     }
 
     public String getOwnerName(){
-
         if (owner != null){
-
             return owner.getName();
-
         }
-
-        return "FOR SALE";
-
-
+        return "Nobody";
     }
 
 }

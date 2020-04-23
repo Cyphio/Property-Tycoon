@@ -18,7 +18,6 @@ public class PropertyTycoon extends Game {
 	private GameScreen gameScreen;
 	private Sound gameMusic;
 	private long gameMusicID;
-
 	public SpriteBatch batch;
 	public BitmapFont font;
 	public static Player[] players;
@@ -35,6 +34,7 @@ public class PropertyTycoon extends Game {
 		options = new GameOptions();
 		gameMusic = Gdx.audio.newSound(Gdx.files.internal("sound/game_music.mp3"));
 		gameMusicID = gameMusic.play(options.getMusicVolume());
+		gameMusic.setLooping(gameMusicID, true);
 		this.setScreen(new MainMenu(this));
 	}
 
