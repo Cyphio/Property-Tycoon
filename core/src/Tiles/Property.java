@@ -61,6 +61,10 @@ public class Property extends Tile implements PropertyInterface {
     @Override
     public boolean getOwned(){return owned;}
 
+    /**
+     * Checks if a property is owned, and if not, allows it to be assigned to a player
+     * @param player the player buying the property
+     */
     public void buyProperty(Player player) {
 
         if (this.getBuyable() && this.getPlayers().contains(player) && !getOwned() && player.getMoney()>= this.cost){
@@ -74,10 +78,17 @@ public class Property extends Tile implements PropertyInterface {
     }
 
 
+    /**
+     * @return returns the player object that is assigned to the property
+     */
 
     public Player getOwner() {
         return owner;
     }
+
+    /**
+     * @return returns the name assigned to the player object that owns the property
+     */
 
     public String getOwnerName(){
 
