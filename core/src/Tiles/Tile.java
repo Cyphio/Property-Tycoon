@@ -10,7 +10,6 @@ import static com.propertytycoonmakers.make.PropertyTycoon.players;
  * The tile class is the superclass for all further tiles, this allows all tiles to have in general the same
  * functionality
  */
-
 public class Tile implements TileInterface {
 
     private String tileName;
@@ -20,7 +19,6 @@ public class Tile implements TileInterface {
     private Coordinate centerLabelCoordinate;
     private ArrayList<Coordinate> playerPosCoordinates;
     private ArrayList<Coordinate> allCoordinates;
-
     public Tile(){
         tileName = "";
     }
@@ -34,7 +32,7 @@ public class Tile implements TileInterface {
         return isBuyable;
     }
 
-    /**2
+    /**
      * setBuyable sets isBuyable to true or false.
      * @param TrueOrFalse wether the property is buyable or not (true if yes, else false).
      */
@@ -49,7 +47,6 @@ public class Tile implements TileInterface {
      */
     @Override
     public ArrayList<Player> getPlayers() {
-
         return tilePlayers;
     }
 

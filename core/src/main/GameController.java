@@ -17,6 +17,10 @@ public class GameController{
     private int playerNum;
     private Boolean playAgain;
 
+    /**
+     * the constructor for GameController
+     * @param layer the TiledMapTileLayer used to create the cell to Tile mapping
+     */
     public GameController(TiledMapTileLayer layer) {
         playerNum = 0;
         cellToTile = new HashMap<>();
@@ -35,7 +39,6 @@ public class GameController{
     /**
      * Changes the current player to the next player in the list players
      */
-
     private void nextPlayer(){
         if (playerNum < players.length - 1) {
             playerNum += 1;
@@ -45,6 +48,11 @@ public class GameController{
         }
     }
 
+    /**
+     * retTile takes a cell that has been clicked on the TiledMapTileLayer and returns the associated Tile
+     * @param cell the cell clicked
+     * @return the Tile associated with the cell clicked
+     */
     public Tile retTile(TiledMapTileLayer.Cell cell) {
         return cellToTile.get(cell);
     }
@@ -58,7 +66,8 @@ public class GameController{
     }
 
     /**
-     * High level method call to execute players turns. Used by GameScreen to return the new tile the player should be displayed on.
+     * High level method call to execute players turns. Used by GameScreen to return the new tile the player should be
+     * displayed on.
      * @return the tile the player has landed on
      */
     public Tile playerTurn(){
@@ -76,6 +85,7 @@ public class GameController{
     }
 
     /**
+     * getPlayAgain returns a Boolean judgement as to whether a second turn needs to be executed
      * @return returns true when 1st or 2nd doubles rolled
      */
     public boolean getPlayAgain(){
@@ -83,9 +93,9 @@ public class GameController{
     }
 
     /**
-     * if there is no reason for the current player to continue their turn, the endTurn function moves to the next player
+     * if there is no reason for the current player to continue their turn, the endTurn function moves to the
+     * next player
      */
-
     public void endTurn(){
         if (!playAgain){
             System.out.println("new player");
@@ -94,9 +104,9 @@ public class GameController{
     }
 
     /**
+     * getBoard returns the current gameBoard object
      * @return returns the current GameBoard object
      */
-
     public GameBoard getBoard() {
         return board;
     }

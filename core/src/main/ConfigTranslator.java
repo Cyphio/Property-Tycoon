@@ -13,8 +13,6 @@ import java.util.*;
 /**
  * Translates provided configuration file into game Tile and Card objects for the board.
  */
-
-
 public class ConfigTranslator implements ConfigTranslatorInterface {
 
     private Tile[] tileList = new Tile[40];
@@ -28,7 +26,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
     /**
      * Initialises instance variables and builds node lists
      */
-
     public ConfigTranslator() {
 
         try {
@@ -151,7 +148,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
      *
      * @param
      */
-
     @Override
     public void genCards() {
 
@@ -198,24 +194,15 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
     }
 
     public ArrayList<Card> getCommunityChestCards() {
-
         return cardDecks.get(0);
-
-
     }
 
     public ArrayList<Card> getPotluckChestCards() {
-
         return cardDecks.get(0);
-
-
     }
 
     public Tile[] getTiles() {
-
-
         return tileList;
-
     }
 
 }

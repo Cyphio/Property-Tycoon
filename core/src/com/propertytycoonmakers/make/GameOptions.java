@@ -6,7 +6,6 @@ import com.badlogic.gdx.Preferences;
 /**
  * This class holds persistent options that are changed within the OptionsScreen and PauseScreen classes
  */
-
 public class GameOptions {
 
     private static final String PREF_MUSIC_VOLUME = "volume";
@@ -50,7 +49,6 @@ public class GameOptions {
      * changes the value of PREF_MUSIC_ENABLED to true or false
      * @param musicEnabled boolean on whether the music should be on or off, true = on
      */
-
     public void setMusicEnabled(boolean musicEnabled) {
         getPrefs().putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
         getPrefs().flush();
@@ -60,7 +58,6 @@ public class GameOptions {
      * changes the value of PREFS_FULLSCREEN, true = fullscreen
      * @param fullscreen boolean as to whether the window should be fullscreen or not
      */
-
     public void setPrefsFullscreen(boolean fullscreen){
         getPrefs().putBoolean(PREFS_FULLSCREEN, fullscreen);
         getPrefs().flush();
@@ -69,7 +66,6 @@ public class GameOptions {
     /**
      * @return returns the float value of PREF_FX_VOL
      */
-
     public float getFxVolume() {
         return getPrefs().getFloat(PREF_FX_VOL, 0.5f);
     }
@@ -78,7 +74,6 @@ public class GameOptions {
      * sets the value of PREF_FX_VOL to the desired float
      * @param volume the desired volume, given as a float between 0 and 1
      */
-
     public void setFxVolume(float volume) {
         getPrefs().putFloat(PREF_FX_VOL, volume);
         getPrefs().flush();
@@ -87,7 +82,6 @@ public class GameOptions {
     /**
      * @return boolean as to whether fx are enabled
      */
-
     public boolean isFxEnabled() {
         return getPrefs().getBoolean(PREF_FX_ENABLED, true);
     }
@@ -96,7 +90,6 @@ public class GameOptions {
      * sets the value of PREF_FX_ENABLED to true or false
      * @param fxEnabled boolean as to whether fx are enabled, true = on
      */
-
     public void setFxEnabled(boolean fxEnabled) {
         getPrefs().putBoolean(PREF_FX_ENABLED, fxEnabled);
         getPrefs().flush();

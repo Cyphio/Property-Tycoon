@@ -7,17 +7,19 @@ import main.GameBoard;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class builds the mapping between cells and Tile objetcs allowing for board interactivity
+ */
 public class CellToTileBuilder {
 
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
 
     /**
-     * This class takes a tilemap and the gameboard and assigns tile objects to each cell on the
-     * gameboard that requires a tile, this allows for board interactivity
+     * Constructor for CellToTileBuilder. Takes a tilemap and the gameboard and assigns Tile objects to each cell on the
+     * gameboard that requires a Tile
      * @param l the tilemap to use for the board
      * @param board the gameboard to tile
      */
-
     public CellToTileBuilder(TiledMapTileLayer l, GameBoard board){
 
         cellToTile = new HashMap<>();
