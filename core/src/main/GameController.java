@@ -32,6 +32,10 @@ public class GameController{
         }
     }
 
+    /**
+     * Changes the current player to the next player in the list players
+     */
+
     private void nextPlayer(){
         if (playerNum < players.length - 1) {
             playerNum += 1;
@@ -71,10 +75,16 @@ public class GameController{
         return tile;
     }
 
+    /**
+     * @return returns true when 1st or 2nd doubles rolled
+     */
     public boolean getPlayAgain(){
         return playAgain;
     }
 
+    /**
+     * if there is no reason for the current player to continue their turn, the endTurn function moves to the next player
+     */
 
     public void endTurn(){
         if (!playAgain){
@@ -82,6 +92,10 @@ public class GameController{
             nextPlayer();
         }
     }
+
+    /**
+     * @return returns the current GameBoard object
+     */
 
     public GameBoard getBoard() {
         return board;

@@ -1,14 +1,31 @@
 package misc;
 
+/**
+ * This class allows the CellToTileBuilder to work by assigning specific coordinates to each cell, allowing for
+ * mouse clicks to be tracked
+ */
+
 public class Coordinate {
 
     private int x;
     private int y;
 
+    /**
+     * initialises the ints for each coordinate
+     * @param CellX
+     * @param CellY
+     */
     public Coordinate(int CellX, int CellY){
         this.x = CellX*64;
         this.y = CellY*64;
     }
+
+
+    /**
+     * sets the x,y of the coordinate
+     * @param x x coord
+     * @param y y coord
+     */
 
     public void setCoordinate(int x, int y){
 
@@ -20,9 +37,18 @@ public class Coordinate {
 
     }
 
+
+    /**
+     * @return returns the x coord
+     */
+
     public int getX(){
         return x;
     }
+
+    /**
+     * @return returns the y coord
+     */
 
     public int getY(){
         return y;

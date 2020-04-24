@@ -6,6 +6,11 @@ import misc.Coordinate;
 import java.util.ArrayList;
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
+/**
+ * The tile class is the superclass for all further tiles, this allows all tiles to have in general the same
+ * functionality
+ */
+
 public class Tile implements TileInterface {
 
     private String tileName;
@@ -103,6 +108,11 @@ public class Tile implements TileInterface {
         tilePosition = position;
     }
 
+    /**
+     * sets the coordinates of tiles on the GameBoard, this allows for mouse interactivity
+     * @param coordinates the arraylist of coordinates for each tile
+     */
+
     public void setCoordinates(ArrayList<Coordinate> coordinates){
         playerPosCoordinates = new ArrayList<>();
         for(int i =0 ; i < players.length;i++) {
@@ -124,10 +134,16 @@ public class Tile implements TileInterface {
         return centerLabelCoordinate;
     }
 
+    /**
+     * @return returns the arraylist of all player coordinates
+     */
     public ArrayList<Coordinate> getAllPlayerCoordinates() {
         return playerPosCoordinates;
     }
 
+    /**
+     * @return returns the arraylist of all coordinates
+     */
     public ArrayList<Coordinate> getAllCoordinates() {
         return allCoordinates;
     }

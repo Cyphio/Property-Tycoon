@@ -17,12 +17,9 @@ public class Property extends Tile implements PropertyInterface {
     private int housesOwned;
 
     public Property(){
-
         housesOwned = 0;
         owned = false;
-
     }
-
 
     @Override
     public void setColour(String colour) {
@@ -59,7 +56,6 @@ public class Property extends Tile implements PropertyInterface {
         return rent;
     }
 
-
     /**
      * setCost will set the cost of a single property within game board
      * @param cost will be used to enter the cost of the property that player will need to pay
@@ -88,6 +84,10 @@ public class Property extends Tile implements PropertyInterface {
     @Override
     public boolean getOwned(){return owned;}
 
+    /**
+     * Checks if a property is owned, and if not, allows it to be assigned to a player
+     * @param player the player buying the property
+     */
     public void buyProperty(Player player) {
 
         if (this.getBuyable() && this.getPlayers().contains(player) && !getOwned() && player.getMoney()>= this.cost){
@@ -100,16 +100,20 @@ public class Property extends Tile implements PropertyInterface {
 
     }
 
-
+    /**
+     * @return returns the player object that is assigned to the property
+     */
     public Player getOwner() {
         return owner;
     }
 
+    /**
+     * @return returns the name assigned to the player object that owns the property
+     */
     public String getOwnerName(){
         if (owner != null){
             return owner.getName();
         }
         return "Nobody";
     }
-
 }
