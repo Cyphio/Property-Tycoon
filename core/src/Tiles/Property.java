@@ -16,6 +16,10 @@ public class Property extends Tile implements PropertyInterface {
     private int cost;
     private int rent;
     private ArrayList<Integer> developmentPrices = new ArrayList<>();
+    private int housePrice;
+    private int hotelPrice;
+    private int houseDevelopments;
+    private int hotelDevelopments;
     private boolean owned;
     private Player owner;
     private int housesOwned;
@@ -24,6 +28,8 @@ public class Property extends Tile implements PropertyInterface {
      * The constructor for Property
      */
     public Property(){
+        houseDevelopments = 0;
+        hotelDevelopments = 0;
         housesOwned = 0;
         owned = false;
     }
@@ -51,13 +57,40 @@ public class Property extends Tile implements PropertyInterface {
         }
     }
 
+    public void setHousePrice(int housePrice) {
+        this.housePrice = housePrice;
+    }
+
+    public int getHousePrice() {
+        return housePrice;
+    }
+
+    public void setHotelPrice(int hotelPrice) {
+        this.hotelPrice = hotelPrice;
+    }
+
+    public int getHotelPrice() {
+        return hotelPrice;
+    }
+
+    public void develop(Player player){
+        if(houseDevelopments == 4) {
+            player.makePurchase(hotelPrice);
+            hotelDevelopments = 1;
+        }
+        else if(hotelDevelopments != 1 && houseDevelopments <= 4) {
+            player.makePurchase(housePrice);
+            houseDevelopments += 1;
+        }
+    }
+
     /**
      * addHousePrice adds a house/hotel price to the ArrayList development prices
-     * @param housePrice the house/hotel price to be added
+     * @param devPrice the house/hotel price to be added
      */
     @Override
-    public void addHousePrice(int housePrice) {
-        developmentPrices.add(housePrice);
+    public void addDevPrice(int devPrice) {
+        developmentPrices.add(devPrice);
     }
 
     /**
@@ -66,7 +99,7 @@ public class Property extends Tile implements PropertyInterface {
      * a hotel
      * @return the ArrayList developmentPrices
      */
-    public ArrayList<Integer> getHousePrice() {
+    public ArrayList<Integer> getDevPrices() {
         return developmentPrices;
     }
 
@@ -106,24 +139,22 @@ public class Property extends Tile implements PropertyInterface {
     public int getCost(){ return cost; }
 
     /**
-     * buy will change the owned variable from false to true once a player buys a property
-     */
-    @Override
-    public void buy(){ owned = true; }
-
-    /**
      * getOwned will return a boolean value that will represent if the property is owned by any player or not
      * @return returns owned, boolean value that represent if property is owned
      */
     @Override
     public boolean getOwned(){ return owned; }
 
+    public void buy() {
+        owned = true;
+    }
+
     /**
      * Checks if a property is owned, and if not, allows it to be assigned to a player
      * @param player the player buying the property
      */
     public void buyProperty(Player player) {
-        if (this.getBuyable() && this.getPlayers().contains(player) && !getOwned() && player.getMoney()>= this.cost){
+        if (!getOwned() && player.getMoney()>= this.cost){
             player.makePurchase(this.cost);
             owner = player;
             setBuyable(false);
