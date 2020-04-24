@@ -82,8 +82,12 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
                             ((Property) tile).setRent(tileElement.getElementsByTagName("rent").item(0).getTextContent().toUpperCase());
 
+                            ((Property) tile).setHousePrice(Integer.parseInt(tileElement.getElementsByTagName("house-cost").item(0).getTextContent().toUpperCase()));
+
+                            ((Property) tile).setHotelPrice(Integer.parseInt(tileElement.getElementsByTagName("hotel-cost").item(0).getTextContent().toUpperCase()));
+
                             for (String house : houses) {
-                                ((Property) tile).addHousePrice(Integer.parseInt(tileElement.getElementsByTagName(house).item(0).getTextContent()));
+                                ((Property) tile).addDevPrice(Integer.parseInt(tileElement.getElementsByTagName(house).item(0).getTextContent()));
                             }
                             break;
 

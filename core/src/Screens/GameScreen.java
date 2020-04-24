@@ -277,12 +277,13 @@ public class GameScreen implements Screen {
                         propInfoBox.setBackground(getColouredBackground(clickedProperty.getColor()));
 
                         propRentLabel.setText(clickedProperty.getRent());
-
-                        for(int i=0; i<clickedProperty.getHousePrice().size(); i++) {
-                            developmentPrices.get(i).setText(clickedProperty.getHousePrice().get(i));
+                        for(int i=0; i<clickedProperty.getDevPrices().size(); i++) {
+                            developmentPrices.get(i).setText(clickedProperty.getDevPrices().get(i));
                         }
 
                         tilePopUpMenu.setVisible(true);
+                        propHouseCostLabel.setText(clickedProperty.getHousePrice());
+                        propHotelCostLabel.setText(clickedProperty.getHotelPrice());
 
                     } else if (tile instanceof Jail) {
 

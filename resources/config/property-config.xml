@@ -19,6 +19,8 @@
         <three-house>90</three-house>
         <four-house>160</four-house>
         <hotel>250</hotel>
+        <house-cost>50</house-cost>
+        <hotel-cost>50</hotel-cost>
         <colour>brown</colour>
     </tile>
     <tile>
@@ -34,6 +36,8 @@
         <three-house>180</three-house>
         <four-house>320</four-house>
         <hotel>450</hotel>
+        <house-cost>50</house-cost>
+        <hotel-cost>50</hotel-cost>
         <colour>brown</colour>
     </tile>
     <tile>
@@ -54,6 +58,8 @@
         <three-house>270</three-house>
         <four-house>400</four-house>
         <hotel>550</hotel>
+        <house-cost>50</house-cost>
+        <hotel-cost>50</hotel-cost>
         <colour>sky</colour>
     </tile>
     <tile>
@@ -69,6 +75,8 @@
         <three-house>270</three-house>
         <four-house>400</four-house>
         <hotel>550</hotel>
+        <house-cost>50</house-cost>
+        <hotel-cost>50</hotel-cost>
         <colour>sky</colour>
     </tile>
     <tile>
@@ -81,6 +89,8 @@
         <three-house>300</three-house>
         <four-house>450</four-house>
         <hotel>600</hotel>
+        <house-cost>50</house-cost>
+        <hotel-cost>50</hotel-cost>
         <colour>sky</colour>
     </tile>
     <tile>
@@ -96,6 +106,8 @@
         <three-house>450</three-house>
         <four-house>625</four-house>
         <hotel>750</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>purple</colour>
     </tile>
     <tile>
@@ -113,6 +125,8 @@
         <three-house>450</three-house>
         <four-house>625</four-house>
         <hotel>750</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>purple</colour>
     </tile>
     <tile>
@@ -125,6 +139,8 @@
         <three-house>500</three-house>
         <four-house>700</four-house>
         <hotel>900</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>purple</colour>
     </tile>
     <tile>
@@ -142,6 +158,8 @@
         <three-house>550</three-house>
         <four-house>750</four-house>
         <hotel>950</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>orange</colour>
     </tile>
     <tile>
@@ -157,6 +175,8 @@
         <three-house>550</three-house>
         <four-house>750</four-house>
         <hotel>950</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>orange</colour>
     </tile>
     <tile>
@@ -169,6 +189,8 @@
         <three-house>600</three-house>
         <four-house>800</four-house>
         <hotel>1000</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>orange</colour>
     </tile>
     <tile>
@@ -184,6 +206,8 @@
         <three-house>700</three-house>
         <four-house>875</four-house>
         <hotel>1050</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>red</colour>
     </tile>
     <tile>
@@ -199,6 +223,8 @@
         <three-house>700</three-house>
         <four-house>875</four-house>
         <hotel>1050</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>red</colour>
     </tile>
     <tile>
@@ -211,6 +237,8 @@
         <three-house>750</three-house>
         <four-house>925</four-house>
         <hotel>1100</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>red</colour>
     </tile>
     <tile>
@@ -228,6 +256,8 @@
         <three-house>800</three-house>
         <four-house>975</four-house>
         <hotel>1150</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>yellow</colour>
     </tile>
     <tile>
@@ -240,6 +270,8 @@
         <three-house>800</three-house>
         <four-house>975</four-house>
         <hotel>1150</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>yellow</colour>
     </tile>
     <tile>
@@ -257,6 +289,8 @@
         <three-house>850</three-house>
         <four-house>1025</four-house>
         <hotel>1200</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>yellow</colour>
     </tile>
     <tile>
@@ -272,6 +306,8 @@
         <three-house>900</three-house>
         <four-house>1100</four-house>
         <hotel>1275</hotel>
+        <house-cost>200</house-cost>
+        <hotel-cost>200</hotel-cost>
         <colour>green</colour>
     </tile>
     <tile>
@@ -284,6 +320,8 @@
         <three-house>900</three-house>
         <four-house>1100</four-house>
         <hotel>1275</hotel>
+        <house-cost>200</house-cost>
+        <hotel-cost>200</hotel-cost>
         <colour>green</colour>
     </tile>
     <tile>
@@ -300,6 +338,8 @@
         <three-house>1000</three-house>
         <four-house>1200</four-house>
         <hotel>1400</hotel>
+        <house-cost>200</house-cost>
+        <hotel-cost>200</hotel-cost>
         <colour>green</colour>
     </tile>
     <tile>
@@ -320,13 +360,14 @@
         <three-house>1100</three-house>
         <four-house>1300</four-house>
         <hotel>1500</hotel>
+        <house-cost>200</house-cost>
+        <hotel-cost>200</hotel-cost>
         <colour>navy</colour>
     </tile>
     <tile>
         <type>tax</type>
         <amount>200</amount>
     </tile>
-
     <tile>
         <name>Turing Heights</name>
         <type>property</type>
@@ -337,6 +378,8 @@
         <three-house>1400</three-house>
         <four-house>1700</four-house>
         <hotel>2000</hotel>
+        <house-cost>200</house-cost>
+        <hotel-cost>200</hotel-cost>
         <colour>navy</colour>
     </tile>
 
@@ -351,8 +394,6 @@
         <value>100</value>
     </potluckcard>
 
-
-
     <!--COMMUNITY CHEST CARDS-->
     <opportunityknockscard>
         <action>jail</action>
@@ -363,7 +404,5 @@
         <action>jail</action>
         <value>100</value>
     </opportunityknockscard>
-
-
 
 </config>
