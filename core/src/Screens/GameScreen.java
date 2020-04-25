@@ -150,8 +150,6 @@ public class GameScreen implements Screen {
 
                     openPopUpWindow(tile);
 
-                    //System.out.println("CURRENT TILE INSTANCE OF: " + tile.getClass());
-
                     if (!gameCon.getPlayAgain()) {
                         rollDice.setText("End Turn");
                     }
@@ -178,15 +176,10 @@ public class GameScreen implements Screen {
                 camera.unproject(mouse);
                 System.out.println(mouse);
 
-                //Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-                //openPopUpWindow(tile);
-
                 try {
                     Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
                     openPopUpWindow(tile);
                 } catch (Exception e) {
-                    //System.out.println("TRIED CLOSING");
-                    //tilePopUpMenu.setVisible(false);
                     e.getMessage();
                 }
             }
@@ -269,14 +262,14 @@ public class GameScreen implements Screen {
         propInfoBox = new Table();
 
         Label empty = new Label("", gameScreenSkin);
-        propNameLabel = new Label("", gameScreenSkin);
+        propNameLabel = new Label("", gameScreenSkin, "big");
         propOwnerLabel = new Label("", gameScreenSkin);
         propCostLabel = new Label("",gameScreenSkin);
 
-        propInfoBox.add(empty).colspan(2).width(200);
+        propInfoBox.add(empty).colspan(2).width(350);
         propInfoBox.row();
         propInfoBox.add(propNameLabel).colspan(2);
-        propInfoBox.row().pad(20, 0, 0, 0);
+        propInfoBox.row().pad(10, 0, 0, 0);
         propInfoBox.add(new Label("Owner:", gameScreenSkin)).left();
         propInfoBox.add(propOwnerLabel).right();
         propInfoBox.row().pad(5, 0, 0, 0);;
@@ -295,7 +288,7 @@ public class GameScreen implements Screen {
             developmentPrices.add(new Label("", gameScreenSkin));
         }
 
-        propInfoBox2.add(empty).colspan(2).width(380);
+        propInfoBox2.add(empty).colspan(2).width(370);
         propInfoBox2.row();
         propInfoBox2.add(new Label("Rent:", gameScreenSkin)).left();
         propInfoBox2.add(propRentLabel).right();
@@ -323,8 +316,6 @@ public class GameScreen implements Screen {
 
         propertyPopUpMenu = new Window("", gameScreenSkin);
 
-        //width(370).height(100)
-
         propertyPopUpMenu.add(propInfoBox).width(380).height(100).colspan(2);
         propertyPopUpMenu.row().pad(10, 0, 0, 0);
         propertyPopUpMenu.add(propInfoBox2).colspan(2);
@@ -338,8 +329,8 @@ public class GameScreen implements Screen {
         propertyPopUpMenu.add(closePropertyButton).colspan(2);
         propertyPopUpMenu.pack();
 
-        float newWidth = 400, newHeight = 600;
-        propertyPopUpMenu.setBounds((Gdx.graphics.getWidth() - newWidth) / 2, (Gdx.graphics.getHeight() - newHeight) / 2, newWidth, newHeight);
+        float width = 400, height = 600;
+        propertyPopUpMenu.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         propertyPopUpMenu.setVisible(false);
 
         stage.addActor(propertyPopUpMenu);
