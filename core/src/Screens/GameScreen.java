@@ -49,12 +49,15 @@ public class GameScreen implements Screen {
     private Viewport view;
     private Stage labelStage;
 
-    private Window tilePopUpMenu;
+    private Window propertyPopUpMenu;
     private Table propInfoBox;
     private Property clickedProperty;
     private TextButton buyPropertyButton;
+    private TextButton sellPropertyButton;
+    private TextButton mortgagePropertyButton;
+    private TextButton auctionPropertyButton;
     private Label propNameLabel;
-    private Label ownerLabel;
+    private Label propOwnerLabel;
     private Label propCostLabel;
     private Label propRentLabel;
     private Label propHouseCostLabel;
@@ -94,97 +97,8 @@ public class GameScreen implements Screen {
             p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
         }
 
-
         // POP UP MENU FOR PROPERTIES
-        buyPropertyButton = new TextButton("Buy", gameScreenSkin);
-
-        propInfoBox = new Table();
-
-        Label empty = new Label("", gameScreenSkin);
-        propNameLabel = new Label("", gameScreenSkin);
-        ownerLabel = new Label("", gameScreenSkin);
-        propCostLabel = new Label("",gameScreenSkin);
-
-        propInfoBox.add(empty).colspan(2).width(200);
-        propInfoBox.row();
-        propInfoBox.add(propNameLabel).colspan(2);
-        propInfoBox.row().pad(20, 0, 0, 0);
-        propInfoBox.add(new Label("Owner:", gameScreenSkin)).left();
-        propInfoBox.add(ownerLabel).right();
-        propInfoBox.row().pad(5, 0, 0, 0);;
-        propInfoBox.add(new Label("Cost:", gameScreenSkin)).left();
-        propInfoBox.add(propCostLabel).right();
-        propInfoBox.setBackground(getColouredBackground(Color.WHITE));
-
-        Table propInfoBox2 = new Table();
-
-        propRentLabel = new Label("", gameScreenSkin);
-        propHouseCostLabel = new Label("", gameScreenSkin);
-        propHotelCostLabel = new Label("", gameScreenSkin);
-
-        developmentPrices = new ArrayList<>();
-        for(int i=0; i<5; i++) {
-            developmentPrices.add(new Label("", gameScreenSkin));
-        }
-
-        propInfoBox2.add(empty).colspan(2).width(270);
-        propInfoBox2.row();
-        propInfoBox2.add(new Label("Rent:", gameScreenSkin)).left();
-        propInfoBox2.add(propRentLabel).right();
-        propInfoBox2.row().pad(20, 0, 0, 0);
-        propInfoBox2.add(new Label("Rent with 1 house:", gameScreenSkin)).left();
-        propInfoBox2.add(developmentPrices.get(0)).right();
-        propInfoBox2.row().pad(20, 0, 0, 0);
-        propInfoBox2.add(new Label("Rent with 2 houses:", gameScreenSkin)).left();
-        propInfoBox2.add(developmentPrices.get(1)).right();
-        propInfoBox2.row().pad(20, 0, 0, 0);
-        propInfoBox2.add(new Label("Rent with 3 houses:", gameScreenSkin)).left();
-        propInfoBox2.add(developmentPrices.get(2)).right();
-        propInfoBox2.row().pad(20, 0, 0, 0);
-        propInfoBox2.add(new Label("Rent with 4 houses:", gameScreenSkin)).left();
-        propInfoBox2.add(developmentPrices.get(3)).right();
-        propInfoBox2.row().pad(20, 0, 0, 0);
-        propInfoBox2.add(new Label("Rent with a hotel", gameScreenSkin)).left();
-        propInfoBox2.add(developmentPrices.get(4)).right();
-        propInfoBox2.row().pad(40, 0, 0, 0);
-        propInfoBox2.add(new Label("House cost:", gameScreenSkin)).left();
-        propInfoBox2.add(propHouseCostLabel).right();
-        propInfoBox2.row().pad(20, 0, 0, 0);
-        propInfoBox2.add(new Label("Hotel cost:", gameScreenSkin)).left();
-        propInfoBox2.add(propHotelCostLabel).right();
-
-
-
-        tilePopUpMenu = new Window("", gameScreenSkin);
-
-
-
-        tilePopUpMenu.add(propInfoBox).width(280).height(100).top();
-        tilePopUpMenu.row().pad(30, 0, 0, 0);
-        tilePopUpMenu.add(propInfoBox2).center();
-        tilePopUpMenu.row().pad(30, 0, 0, 0);
-        if(buyPropertyButton.isVisible()) {
-            tilePopUpMenu.add(buyPropertyButton);
-        }
-        tilePopUpMenu.pack();
-        float newWidth = 300, newHeight = 500;
-        tilePopUpMenu.setBounds((Gdx.graphics.getWidth() - newWidth) / 2, (Gdx.graphics.getHeight() - newHeight) / 2, newWidth, newHeight);
-        tilePopUpMenu.setVisible(false);
-
-        stage.addActor(tilePopUpMenu);
-
-        buyPropertyButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                try {
-                    if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                        clickedProperty.buyProperty(gameCon.getCurrentPlayer());
-                    }
-                } catch (Exception e) {
-                    e.getMessage();
-                }
-            }
-        });
+        propertyPopUpWindowSetUp();
     }
 
     @Override
@@ -229,15 +143,21 @@ public class GameScreen implements Screen {
                         }
                     }
 
-                    gameCon.playerTurn();
+                    Tile tile = gameCon.playerTurn();
 
                     Player p = gameCon.getCurrentPlayer();
                     p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
 
+                    openPopUpWindow(tile);
+
+                    //System.out.println("CURRENT TILE INSTANCE OF: " + tile.getClass());
+
                     if (!gameCon.getPlayAgain()) {
                         rollDice.setText("End Turn");
                     }
-                } else {
+                }
+                else if (rollDice.getText().toString().equals("End Turn")) {
+                    propertyPopUpMenu.setVisible(false);
                     gameCon.endTurn();
                     rollDice.setText("Roll Dice");
                 }
@@ -256,58 +176,18 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 camera.unproject(mouse);
-
                 System.out.println(mouse);
+
+                //Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
+                //openPopUpWindow(tile);
 
                 try {
                     Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-
-                    if (tile instanceof Property) {
-                        clickedProperty = (Property) tile;
-                        if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
-                            buyPropertyButton.setVisible(true);
-                        }
-                        else {
-                            buyPropertyButton.setVisible(false);
-                        }
-
-                        propNameLabel.setText(clickedProperty.getTileName());
-                        ownerLabel.setText(clickedProperty.getOwnerName());
-                        propCostLabel.setText(clickedProperty.getCost());
-                        propInfoBox.setBackground(getColouredBackground(clickedProperty.getColor()));
-
-                        propRentLabel.setText(clickedProperty.getRent());
-                        for(int i=0; i<clickedProperty.getDevPrices().size(); i++) {
-                            developmentPrices.get(i).setText(clickedProperty.getDevPrices().get(i));
-                        }
-
-                        tilePopUpMenu.setVisible(true);
-                        propHouseCostLabel.setText(clickedProperty.getHousePrice());
-                        propHotelCostLabel.setText(clickedProperty.getHotelPrice());
-
-                    } else if (tile instanceof Jail) {
-
-                        System.out.print(tile.getAllCoordinates().get(1).getX());
-                    } else {
-
-                        tilePopUpMenu.setVisible(false);
-                    }
-
-                    if (false) {
-
-                        ArrayList<Coordinate> cs = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getAllCoordinates();
-                        System.out.println(cs.size());
-                        System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
-
-                        for (Coordinate c : cs) {
-
-                            layer.getCell(c.getX() / 64, c.getY() / 64).setTile(null);
-
-                        }
-                    }
-
+                    openPopUpWindow(tile);
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    //System.out.println("TRIED CLOSING");
+                    //tilePopUpMenu.setVisible(false);
+                    e.getMessage();
                 }
             }
         });
@@ -323,11 +203,8 @@ public class GameScreen implements Screen {
 
         int angle = 0;
         for (int i = 0; i < 40; i++) {
-
             if (i == 1 || i == 11 || i == 21 || i == 31) {
-
                 angle -= 90;
-
             }
 
             Tile tile = gameCon.getBoard().getTile(i);
@@ -339,9 +216,7 @@ public class GameScreen implements Screen {
 
             labelStage.addActor(label);
 
-
         }
-
     }
 
 
@@ -365,7 +240,6 @@ public class GameScreen implements Screen {
         }
         spriteBatch.end();
 
-
         camera.update();
 
         labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -382,6 +256,186 @@ public class GameScreen implements Screen {
         pm.setColor(colour);
         pm.fill();
         return new TextureRegionDrawable(new TextureRegion(new Texture(pm)));
+    }
+
+    private void propertyPopUpWindowSetUp() {
+        buyPropertyButton = new TextButton("Buy", gameScreenSkin);
+        sellPropertyButton = new TextButton("Sell", gameScreenSkin);
+        mortgagePropertyButton = new TextButton("Mortgage", gameScreenSkin);
+        auctionPropertyButton = new TextButton("Auction", gameScreenSkin);
+
+        TextButton closePropertyButton = new TextButton("Close", gameScreenSkin);
+
+        propInfoBox = new Table();
+
+        Label empty = new Label("", gameScreenSkin);
+        propNameLabel = new Label("", gameScreenSkin);
+        propOwnerLabel = new Label("", gameScreenSkin);
+        propCostLabel = new Label("",gameScreenSkin);
+
+        propInfoBox.add(empty).colspan(2).width(200);
+        propInfoBox.row();
+        propInfoBox.add(propNameLabel).colspan(2);
+        propInfoBox.row().pad(20, 0, 0, 0);
+        propInfoBox.add(new Label("Owner:", gameScreenSkin)).left();
+        propInfoBox.add(propOwnerLabel).right();
+        propInfoBox.row().pad(5, 0, 0, 0);;
+        propInfoBox.add(new Label("Cost:", gameScreenSkin)).left();
+        propInfoBox.add(propCostLabel).right();
+        propInfoBox.setBackground(getColouredBackground(Color.WHITE));
+
+        Table propInfoBox2 = new Table();
+
+        propRentLabel = new Label("", gameScreenSkin);
+        propHouseCostLabel = new Label("", gameScreenSkin);
+        propHotelCostLabel = new Label("", gameScreenSkin);
+
+        developmentPrices = new ArrayList<>();
+        for(int i=0; i<5; i++) {
+            developmentPrices.add(new Label("", gameScreenSkin));
+        }
+
+        propInfoBox2.add(empty).colspan(2).width(380);
+        propInfoBox2.row();
+        propInfoBox2.add(new Label("Rent:", gameScreenSkin)).left();
+        propInfoBox2.add(propRentLabel).right();
+        propInfoBox2.row().pad(20, 0, 0, 0);
+        propInfoBox2.add(new Label("Rent with 1 house:", gameScreenSkin)).left();
+        propInfoBox2.add(developmentPrices.get(0)).right();
+        propInfoBox2.row().pad(20, 0, 0, 0);
+        propInfoBox2.add(new Label("Rent with 2 houses:", gameScreenSkin)).left();
+        propInfoBox2.add(developmentPrices.get(1)).right();
+        propInfoBox2.row().pad(20, 0, 0, 0);
+        propInfoBox2.add(new Label("Rent with 3 houses:", gameScreenSkin)).left();
+        propInfoBox2.add(developmentPrices.get(2)).right();
+        propInfoBox2.row().pad(20, 0, 0, 0);
+        propInfoBox2.add(new Label("Rent with 4 houses:", gameScreenSkin)).left();
+        propInfoBox2.add(developmentPrices.get(3)).right();
+        propInfoBox2.row().pad(20, 0, 0, 0);
+        propInfoBox2.add(new Label("Rent with a hotel", gameScreenSkin)).left();
+        propInfoBox2.add(developmentPrices.get(4)).right();
+        propInfoBox2.row().pad(40, 0, 0, 0);
+        propInfoBox2.add(new Label("House cost:", gameScreenSkin)).left();
+        propInfoBox2.add(propHouseCostLabel).right();
+        propInfoBox2.row().pad(40, 0, 0, 0);
+        propInfoBox2.add(new Label("Hotel cost:", gameScreenSkin)).left();
+        propInfoBox2.add(propHotelCostLabel).right();
+
+        propertyPopUpMenu = new Window("", gameScreenSkin);
+
+        //width(370).height(100)
+
+        propertyPopUpMenu.add(propInfoBox).width(380).height(100).colspan(2);
+        propertyPopUpMenu.row().pad(10, 0, 0, 0);
+        propertyPopUpMenu.add(propInfoBox2).colspan(2);
+        propertyPopUpMenu.row().pad(10, 0, 0, 0);
+        propertyPopUpMenu.add(buyPropertyButton).center();
+        propertyPopUpMenu.add(auctionPropertyButton).center();
+        propertyPopUpMenu.row().pad(10, 0, 0, 0);
+        propertyPopUpMenu.add(sellPropertyButton).center();
+        propertyPopUpMenu.add(mortgagePropertyButton).center();
+        propertyPopUpMenu.row().pad(10, 0, 0, 0);
+        propertyPopUpMenu.add(closePropertyButton).colspan(2);
+        propertyPopUpMenu.pack();
+
+        float newWidth = 400, newHeight = 600;
+        propertyPopUpMenu.setBounds((Gdx.graphics.getWidth() - newWidth) / 2, (Gdx.graphics.getHeight() - newHeight) / 2, newWidth, newHeight);
+        propertyPopUpMenu.setVisible(false);
+
+        stage.addActor(propertyPopUpMenu);
+
+        buyPropertyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try {
+                    if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                        clickedProperty.buyProperty(gameCon.getCurrentPlayer());
+                        openPopUpWindow(clickedProperty);
+                    }
+                } catch (Exception e) {
+                    e.getMessage();
+                }
+            }
+        });
+
+        auctionPropertyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            }
+        });
+
+        sellPropertyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            }
+        });
+
+        mortgagePropertyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            }
+        });
+
+        closePropertyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                propertyPopUpMenu.setVisible(false);
+            }
+        });
+    }
+
+    private void openPopUpWindow(Tile tile) {
+        if (tile instanceof Property) {
+            propertyPopUpMenu.setVisible(true);
+            clickedProperty = (Property) tile;
+
+            if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
+                buyPropertyButton.setVisible(true);
+                auctionPropertyButton.setVisible(true);
+            }
+            else {
+                buyPropertyButton.setVisible(false);
+                auctionPropertyButton.setVisible(false);
+            }
+
+            if(clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
+                sellPropertyButton.setVisible(true);
+                mortgagePropertyButton.setVisible(true);
+            }
+            else {
+                sellPropertyButton.setVisible(false);
+                mortgagePropertyButton.setVisible(false);
+            }
+
+            propNameLabel.setText(clickedProperty.getTileName());
+            propOwnerLabel.setText(clickedProperty.getOwnerName());
+            propCostLabel.setText(clickedProperty.getCost());
+            propInfoBox.setBackground(getColouredBackground(clickedProperty.getColor()));
+
+            propRentLabel.setText(clickedProperty.getRent());
+            for (int i = 0; i < clickedProperty.getDevPrices().size(); i++) {
+                developmentPrices.get(i).setText(clickedProperty.getDevPrices().get(i));
+            }
+            propHouseCostLabel.setText(clickedProperty.getHousePrice());
+            propHotelCostLabel.setText(clickedProperty.getHotelPrice());
+        }
+        else if (tile instanceof Jail) {
+            //Add functionality for jail pop up window
+            System.out.println("JAIL");
+            System.out.print(tile.getAllCoordinates().get(1).getX());
+        }
+        /**if (false) {
+
+         ArrayList<Coordinate> cs = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getAllCoordinates();
+         System.out.println(cs.size());
+         System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
+
+         for (Coordinate c : cs) {
+
+         layer.getCell(c.getX() / 64, c.getY() / 64).setTile(null);
+
+         }
+         }**/
     }
 
 
