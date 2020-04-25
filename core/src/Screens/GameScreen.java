@@ -320,11 +320,11 @@ public class GameScreen implements Screen {
         propertyPopUpMenu.row().pad(10, 0, 0, 0);
         propertyPopUpMenu.add(propInfoBox2).colspan(2);
         propertyPopUpMenu.row().pad(10, 0, 0, 0);
-        propertyPopUpMenu.add(buyPropertyButton).center();
-        propertyPopUpMenu.add(auctionPropertyButton).center();
+        propertyPopUpMenu.add(buyPropertyButton).left();
+        propertyPopUpMenu.add(auctionPropertyButton).right();
         propertyPopUpMenu.row().pad(10, 0, 0, 0);
-        propertyPopUpMenu.add(sellPropertyButton).center();
-        propertyPopUpMenu.add(mortgagePropertyButton).center();
+        propertyPopUpMenu.add(sellPropertyButton).left();
+        propertyPopUpMenu.add(mortgagePropertyButton).right();
         propertyPopUpMenu.row().pad(10, 0, 0, 0);
         propertyPopUpMenu.add(closePropertyButton).colspan(2);
         propertyPopUpMenu.pack();
