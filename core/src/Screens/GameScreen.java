@@ -394,6 +394,7 @@ public class GameScreen implements Screen {
                 try {
                     if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
                         clickedProperty.buyProperty(gameCon.getCurrentPlayer());
+                        closeAllWindows();
                         openPopUpWindow(clickedProperty);
                     }
                 } catch (Exception e) {
@@ -435,10 +436,11 @@ public class GameScreen implements Screen {
         auctionBid.setMessageText("Enter Bid");
         bidButton = new TextButton("Bid", gameScreenSkin);
         leaveButton = new TextButton("Leave", gameScreenSkin);
-        auctionPopUpWindow = new Window("Auction", gameScreenSkin);
 
-        float newWidth = 300, newHeight = 500;
-        auctionPopUpWindow.setBounds((Gdx.graphics.getWidth() - newWidth) / 2, (Gdx.graphics.getHeight() - newHeight) / 2, newWidth, newHeight);
+        auctionPopUpWindow = new Window("", gameScreenSkin);
+
+        float width = 300, height = 500;
+        auctionPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         auctionPopUpWindow.setVisible(false);
         stage.addActor(auctionPopUpWindow);
 
