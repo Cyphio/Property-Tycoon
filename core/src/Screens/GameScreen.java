@@ -44,7 +44,6 @@ public class GameScreen implements Screen {
     private Skin gameScreenSkin;
     private TiledMapTileLayer layer;
     private GameController gameCon;
-    private Label tileNameLabel;
     private SpriteBatch spriteBatch;
     private TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
@@ -52,17 +51,6 @@ public class GameScreen implements Screen {
     private Stage labelStage;
 
     private Window propertyPopUpWindow;
-    private Player auctionPlayer;
-    private int auctionPlayerNum;
-    private Player highestBidder;
-    private ArrayList<Player> auctionList;
-    private Table auctionInfoBox;
-    private TextButton auctionPropertyButton;
-    private TextButton bidButton;
-    private TextButton leaveButton;
-
-    private Window tilePopUpMenu;
-    private Window auctionMenu;
     private Table propInfoBox;
     private Property clickedProperty;
     private TextButton buyPropertyButton;
@@ -76,6 +64,13 @@ public class GameScreen implements Screen {
     private Label propHouseCostLabel;
     private Label propHotelCostLabel;
     private ArrayList<Label> developmentPrices;
+
+    private Window auctionPopUpWindow;
+    private Player auctionPlayer;
+    private Player highestBidder;
+    private ArrayList<Player> auctionList;
+    private TextButton bidButton;
+    private TextButton leaveButton;
 
     private Window jailPopUpWindow;
 
@@ -137,7 +132,6 @@ public class GameScreen implements Screen {
 
         Button pause = new TextButton("Pause", gameScreenSkin);
         final TextButton rollDice = new TextButton("Roll Dice", gameScreenSkin);
-
 
         pause.addListener(new ChangeListener() {
             @Override
@@ -310,6 +304,7 @@ public class GameScreen implements Screen {
 
     private void closeAllWindows() {
         propertyPopUpWindow.setVisible(false);
+        auctionPopUpWindow.setVisible(false);
         jailPopUpWindow.setVisible(false);
     }
 
@@ -410,6 +405,8 @@ public class GameScreen implements Screen {
         auctionPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                closeAllWindows();
+                auctionPopUpWindow.setVisible(true);
             }
         });
 
@@ -438,11 +435,12 @@ public class GameScreen implements Screen {
         auctionBid.setMessageText("Enter Bid");
         bidButton = new TextButton("Bid", gameScreenSkin);
         leaveButton = new TextButton("Leave", gameScreenSkin);
-        auctionMenu = new Window("Auction", gameScreenSkin);
+        auctionPopUpWindow = new Window("Auction", gameScreenSkin);
+
         float newWidth = 300, newHeight = 500;
-        auctionMenu.setBounds((Gdx.graphics.getWidth() - newWidth) / 2, (Gdx.graphics.getHeight() - newHeight) / 2, newWidth, newHeight);
-        auctionMenu.setVisible(false);
-        stage.addActor(auctionMenu);
+        auctionPopUpWindow.setBounds((Gdx.graphics.getWidth() - newWidth) / 2, (Gdx.graphics.getHeight() - newHeight) / 2, newWidth, newHeight);
+        auctionPopUpWindow.setVisible(false);
+        stage.addActor(auctionPopUpWindow);
 
         auctionBid.setTextFieldFilter(new TextField.TextFieldFilter() {
             @Override
@@ -461,7 +459,7 @@ public class GameScreen implements Screen {
                 auctionList = new ArrayList<>(Arrays.asList(game.players));
                 auctionList.remove(auctionPlayer);
                 auctionList.add(0, auctionPlayer);
-                auctionMenu.setVisible(true);
+                auctionPopUpWindow.setVisible(true);
             }
 
         });
@@ -495,7 +493,7 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 auctionList.remove(auctionPlayer);
                 if(auctionList.size() == 1){
-                    auctionMenu.setVisible(false);
+                    auctionPopUpWindow.setVisible(false);
                     highestBidder.addProperty(clickedProperty);
                     highestBidder.makePurchase(gameCon.getAuctionValue());
                     gameCon.setAuctionValue(0);
@@ -513,9 +511,9 @@ public class GameScreen implements Screen {
             }
         });
 
-        auctionMenu.add(auctionBid).row();
-        auctionMenu.add(bidButton);
-        auctionMenu.add(leaveButton);
+        auctionPopUpWindow.add(auctionBid).row();
+        auctionPopUpWindow.add(bidButton);
+        auctionPopUpWindow.add(leaveButton);
     }
 
     private void jailPopUpWindowSetUp() {
