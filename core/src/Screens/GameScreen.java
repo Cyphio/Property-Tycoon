@@ -33,7 +33,6 @@ import misc.RotatableLabel;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-
 public class GameScreen implements Screen {
 
     private final PropertyTycoon game;
@@ -69,7 +68,6 @@ public class GameScreen implements Screen {
 
     private Sound rollDiceFX;
 
-
     public GameScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -100,7 +98,7 @@ public class GameScreen implements Screen {
             p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
         }
 
-        // POP UP MENU SET UP
+        // POP UP WINDOW SET UP
         propertyPopUpWindowSetUp();
         jailPopUpWindowSetUp();
     }
@@ -125,7 +123,6 @@ public class GameScreen implements Screen {
 
         Button pause = new TextButton("Pause", gameScreenSkin);
         final TextButton rollDice = new TextButton("Roll Dice", gameScreenSkin);
-
 
         pause.addListener(new ChangeListener() {
             @Override
@@ -159,29 +156,23 @@ public class GameScreen implements Screen {
                     }
                 }
                 else if (rollDice.getText().toString().equals("End Turn")) {
-                    propertyPopUpWindow.setVisible(false);
-                    jailPopUpWindow.setVisible(false);
+                    closeAllWindows();
                     gameCon.endTurn();
                     rollDice.setText("Roll Dice");
                 }
-
             }
         });
-
 
         buttons.row().pad(10, 0, 0, 20);
         buttons.add(pause);
         buttons.row().pad(10, 0, 0, 20);
         buttons.add(rollDice);
 
-
         stage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 camera.unproject(mouse);
-                System.out.println(mouse);
-
                 try {
                     Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
                     if (!(tile instanceof Jail)) {
@@ -196,9 +187,6 @@ public class GameScreen implements Screen {
         view = new FitViewport(w, h, camera);
         labelStage = new Stage(view);
 
-//        Viewport v = new ScreenViewport(camera);
-//        stage.setViewport(v);
-
         camera.position.set(1120, 1120, 0);
         camera.zoom = (float) 1.5;
 
@@ -207,19 +195,14 @@ public class GameScreen implements Screen {
             if (i == 1 || i == 11 || i == 21 || i == 31) {
                 angle -= 90;
             }
-
             Tile tile = gameCon.getBoard().getTile(i);
             Coordinate c = tile.getCenterLabelCoordinate();
 
             RotatableLabel label = new RotatableLabel(new Label(tile.getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
 
-//            layer.getCell((c.getX() -32)/ 64, (c.getY()-32) / 64).setTile(null);
-
             labelStage.addActor(label);
-
         }
     }
-
 
     @Override
     public void render(float delta) {
@@ -236,8 +219,6 @@ public class GameScreen implements Screen {
         spriteBatch.begin();
         for (Player p : game.players) {
             p.getPlayerToken().draw(spriteBatch);
-
-
         }
         spriteBatch.end();
 
@@ -248,8 +229,6 @@ public class GameScreen implements Screen {
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-
-
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
@@ -293,9 +272,11 @@ public class GameScreen implements Screen {
             propHouseCostLabel.setText(clickedProperty.getHousePrice());
             propHotelCostLabel.setText(clickedProperty.getHotelPrice());
 
+            closeAllWindows();
             propertyPopUpWindow.setVisible(true);
         }
-        else if (tile instanceof Jail) {
+        else if (tile instanceof Jail && gameCon.getCurrentPlayer().getIsInJail()) {
+            closeAllWindows();
             jailPopUpWindow.setVisible(true);
         }
         /**if (false) {
@@ -310,6 +291,11 @@ public class GameScreen implements Screen {
 
          }
          }**/
+    }
+
+    private void closeAllWindows() {
+        propertyPopUpWindow.setVisible(false);
+        jailPopUpWindow.setVisible(false);
     }
 
     private void propertyPopUpWindowSetUp() {
@@ -347,7 +333,7 @@ public class GameScreen implements Screen {
             developmentPrices.add(new Label("", gameScreenSkin));
         }
 
-        propInfoBox2.add(new Label("Rent:", gameScreenSkin)).left().width(360);
+        propInfoBox2.add(new Label("Rent:", gameScreenSkin)).left().width(300);
         propInfoBox2.add(propRentLabel).right();
         propInfoBox2.row().pad(20, 0, 0, 0);
         propInfoBox2.add(new Label("Rent with 1 house:", gameScreenSkin)).left();
@@ -469,7 +455,6 @@ public class GameScreen implements Screen {
         });
     }
 
-
     @Override
     public void resize(int width, int height) {
 
@@ -494,9 +479,4 @@ public class GameScreen implements Screen {
     public void dispose() {
 
     }
-
-
 }
-
-
-
