@@ -108,8 +108,6 @@ public class MainMenu implements Screen {
         game.batch.begin();
 
         game.batch.draw(mainMenuTexture, 0, 0);
-        game.font.getData().setScale(2);
-        game.font.draw(game.batch, "Property Tycoon", 100, 100);
         game.batch.draw(mainMenuTexture, 0, 0, viewport.getWorldWidth(),viewport.getWorldHeight());
 
         game.batch.end();

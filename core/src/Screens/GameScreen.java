@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -49,7 +50,7 @@ public class GameScreen implements Screen {
     private Viewport view;
     private Stage labelStage;
 
-    private Window propertyPopUpMenu;
+    private Window propertyPopUpWindow;
     private Table propInfoBox;
     private Property clickedProperty;
     private TextButton buyPropertyButton;
@@ -63,6 +64,8 @@ public class GameScreen implements Screen {
     private Label propHouseCostLabel;
     private Label propHotelCostLabel;
     private ArrayList<Label> developmentPrices;
+
+    private Window jailPopUpWindow;
 
     private Sound rollDiceFX;
 
@@ -97,8 +100,9 @@ public class GameScreen implements Screen {
             p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
         }
 
-        // POP UP MENU FOR PROPERTIES
+        // POP UP MENU SET UP
         propertyPopUpWindowSetUp();
+        jailPopUpWindowSetUp();
     }
 
     @Override
@@ -155,10 +159,12 @@ public class GameScreen implements Screen {
                     }
                 }
                 else if (rollDice.getText().toString().equals("End Turn")) {
-                    propertyPopUpMenu.setVisible(false);
+                    propertyPopUpWindow.setVisible(false);
+                    jailPopUpWindow.setVisible(false);
                     gameCon.endTurn();
                     rollDice.setText("Roll Dice");
                 }
+
             }
         });
 
@@ -178,7 +184,9 @@ public class GameScreen implements Screen {
 
                 try {
                     Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-                    openPopUpWindow(tile);
+                    if (!(tile instanceof Jail)) {
+                        openPopUpWindow(tile);
+                    }
                 } catch (Exception e) {
                     e.getMessage();
                 }
@@ -251,6 +259,59 @@ public class GameScreen implements Screen {
         return new TextureRegionDrawable(new TextureRegion(new Texture(pm)));
     }
 
+    private void openPopUpWindow(Tile tile) {
+        if (tile instanceof Property) {
+            clickedProperty = (Property) tile;
+
+            if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
+                buyPropertyButton.setVisible(true);
+                auctionPropertyButton.setVisible(true);
+            }
+            else {
+                buyPropertyButton.setVisible(false);
+                auctionPropertyButton.setVisible(false);
+            }
+
+            if(clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
+                sellPropertyButton.setVisible(true);
+                mortgagePropertyButton.setVisible(true);
+            }
+            else {
+                sellPropertyButton.setVisible(false);
+                mortgagePropertyButton.setVisible(false);
+            }
+
+            propNameLabel.setText(clickedProperty.getTileName());
+            propOwnerLabel.setText(clickedProperty.getOwnerName());
+            propCostLabel.setText(clickedProperty.getCost());
+            propInfoBox.setBackground(getColouredBackground(clickedProperty.getColor()));
+
+            propRentLabel.setText(clickedProperty.getRent());
+            for (int i = 0; i < clickedProperty.getDevPrices().size(); i++) {
+                developmentPrices.get(i).setText(clickedProperty.getDevPrices().get(i));
+            }
+            propHouseCostLabel.setText(clickedProperty.getHousePrice());
+            propHotelCostLabel.setText(clickedProperty.getHotelPrice());
+
+            propertyPopUpWindow.setVisible(true);
+        }
+        else if (tile instanceof Jail) {
+            jailPopUpWindow.setVisible(true);
+        }
+        /**if (false) {
+
+         ArrayList<Coordinate> cs = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getAllCoordinates();
+         System.out.println(cs.size());
+         System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
+
+         for (Coordinate c : cs) {
+
+         layer.getCell(c.getX() / 64, c.getY() / 64).setTile(null);
+
+         }
+         }**/
+    }
+
     private void propertyPopUpWindowSetUp() {
         buyPropertyButton = new TextButton("Buy", gameScreenSkin);
         sellPropertyButton = new TextButton("Sell", gameScreenSkin);
@@ -261,14 +322,12 @@ public class GameScreen implements Screen {
 
         propInfoBox = new Table();
 
-        Label empty = new Label("", gameScreenSkin);
         propNameLabel = new Label("", gameScreenSkin, "big");
+        propNameLabel.setAlignment(Align.center);
         propOwnerLabel = new Label("", gameScreenSkin);
         propCostLabel = new Label("",gameScreenSkin);
 
-        propInfoBox.add(empty).colspan(2).width(350);
-        propInfoBox.row();
-        propInfoBox.add(propNameLabel).colspan(2);
+        propInfoBox.add(propNameLabel).colspan(2).width(350);
         propInfoBox.row().pad(10, 0, 0, 0);
         propInfoBox.add(new Label("Owner:", gameScreenSkin)).left();
         propInfoBox.add(propOwnerLabel).right();
@@ -288,9 +347,7 @@ public class GameScreen implements Screen {
             developmentPrices.add(new Label("", gameScreenSkin));
         }
 
-        propInfoBox2.add(empty).colspan(2).width(370);
-        propInfoBox2.row();
-        propInfoBox2.add(new Label("Rent:", gameScreenSkin)).left();
+        propInfoBox2.add(new Label("Rent:", gameScreenSkin)).left().width(360);
         propInfoBox2.add(propRentLabel).right();
         propInfoBox2.row().pad(20, 0, 0, 0);
         propInfoBox2.add(new Label("Rent with 1 house:", gameScreenSkin)).left();
@@ -310,30 +367,30 @@ public class GameScreen implements Screen {
         propInfoBox2.row().pad(40, 0, 0, 0);
         propInfoBox2.add(new Label("House cost:", gameScreenSkin)).left();
         propInfoBox2.add(propHouseCostLabel).right();
-        propInfoBox2.row().pad(40, 0, 0, 0);
+        propInfoBox2.row().pad(20, 0, 0, 0);
         propInfoBox2.add(new Label("Hotel cost:", gameScreenSkin)).left();
         propInfoBox2.add(propHotelCostLabel).right();
 
-        propertyPopUpMenu = new Window("", gameScreenSkin);
+        propertyPopUpWindow = new Window("", gameScreenSkin);
 
-        propertyPopUpMenu.add(propInfoBox).width(380).height(100).colspan(2);
-        propertyPopUpMenu.row().pad(10, 0, 0, 0);
-        propertyPopUpMenu.add(propInfoBox2).colspan(2);
-        propertyPopUpMenu.row().pad(10, 0, 0, 0);
-        propertyPopUpMenu.add(buyPropertyButton).left();
-        propertyPopUpMenu.add(auctionPropertyButton).right();
-        propertyPopUpMenu.row().pad(10, 0, 0, 0);
-        propertyPopUpMenu.add(sellPropertyButton).left();
-        propertyPopUpMenu.add(mortgagePropertyButton).right();
-        propertyPopUpMenu.row().pad(10, 0, 0, 0);
-        propertyPopUpMenu.add(closePropertyButton).colspan(2);
-        propertyPopUpMenu.pack();
+        propertyPopUpWindow.add(propInfoBox).width(380).height(100).colspan(2);
+        propertyPopUpWindow.row().pad(25, 0, 0, 0);
+        propertyPopUpWindow.add(propInfoBox2).colspan(2);
+        propertyPopUpWindow.row().pad(25, 0, 0, 0);
+        propertyPopUpWindow.add(buyPropertyButton).left();
+        propertyPopUpWindow.add(auctionPropertyButton).right();
+        propertyPopUpWindow.row().pad(10, 0, 0, 0);
+        propertyPopUpWindow.add(sellPropertyButton).left();
+        propertyPopUpWindow.add(mortgagePropertyButton).right();
+        propertyPopUpWindow.row().pad(10, 0, 0, 0);
+        propertyPopUpWindow.add(closePropertyButton).colspan(2);
+        propertyPopUpWindow.pack();
 
         float width = 400, height = 600;
-        propertyPopUpMenu.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
-        propertyPopUpMenu.setVisible(false);
+        propertyPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+        propertyPopUpWindow.setVisible(false);
 
-        stage.addActor(propertyPopUpMenu);
+        stage.addActor(propertyPopUpWindow);
 
         buyPropertyButton.addListener(new ClickListener() {
             @Override
@@ -370,63 +427,46 @@ public class GameScreen implements Screen {
         closePropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                propertyPopUpMenu.setVisible(false);
+                propertyPopUpWindow.setVisible(false);
             }
         });
     }
 
-    private void openPopUpWindow(Tile tile) {
-        if (tile instanceof Property) {
-            propertyPopUpMenu.setVisible(true);
-            clickedProperty = (Property) tile;
+    private void jailPopUpWindowSetUp() {
+        Label jailInfoLabel = new Label("Either buy your way out of Jail for $50 or roll a double on your next go!", gameScreenSkin, "title");
+        jailInfoLabel.setWrap(true);
+        jailInfoLabel.setWidth(875);
+        jailInfoLabel.setAlignment(Align.center);
+        TextButton buyOutOfJailButton = new TextButton("Buy way out of Jail", gameScreenSkin);
+        TextButton closeJailButton = new TextButton("Close", gameScreenSkin);
 
-            if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
-                buyPropertyButton.setVisible(true);
-                auctionPropertyButton.setVisible(true);
+        jailPopUpWindow = new Window("", gameScreenSkin);
+
+        jailPopUpWindow.add(jailInfoLabel).width(850);
+        jailPopUpWindow.row().pad(10, 0, 0, 0);
+        jailPopUpWindow.add(buyOutOfJailButton);
+        jailPopUpWindow.row().pad(10, 0, 0, 0);
+        jailPopUpWindow.add(closeJailButton);
+        jailPopUpWindow.pack();
+
+        float width = 875, height = 300;
+        jailPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+        jailPopUpWindow.setVisible(false);
+
+        stage.addActor(jailPopUpWindow);
+
+        buyOutOfJailButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
             }
-            else {
-                buyPropertyButton.setVisible(false);
-                auctionPropertyButton.setVisible(false);
+        });
+
+        closeJailButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                jailPopUpWindow.setVisible(false);
             }
-
-            if(clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
-                sellPropertyButton.setVisible(true);
-                mortgagePropertyButton.setVisible(true);
-            }
-            else {
-                sellPropertyButton.setVisible(false);
-                mortgagePropertyButton.setVisible(false);
-            }
-
-            propNameLabel.setText(clickedProperty.getTileName());
-            propOwnerLabel.setText(clickedProperty.getOwnerName());
-            propCostLabel.setText(clickedProperty.getCost());
-            propInfoBox.setBackground(getColouredBackground(clickedProperty.getColor()));
-
-            propRentLabel.setText(clickedProperty.getRent());
-            for (int i = 0; i < clickedProperty.getDevPrices().size(); i++) {
-                developmentPrices.get(i).setText(clickedProperty.getDevPrices().get(i));
-            }
-            propHouseCostLabel.setText(clickedProperty.getHousePrice());
-            propHotelCostLabel.setText(clickedProperty.getHotelPrice());
-        }
-        else if (tile instanceof Jail) {
-            //Add functionality for jail pop up window
-            System.out.println("JAIL");
-            System.out.print(tile.getAllCoordinates().get(1).getX());
-        }
-        /**if (false) {
-
-         ArrayList<Coordinate> cs = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getAllCoordinates();
-         System.out.println(cs.size());
-         System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
-
-         for (Coordinate c : cs) {
-
-         layer.getCell(c.getX() / 64, c.getY() / 64).setTile(null);
-
-         }
-         }**/
+        });
     }
 
 
