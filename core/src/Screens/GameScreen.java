@@ -31,7 +31,9 @@ import misc.Coordinate;
 import misc.RotatableLabel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+
 
 public class GameScreen implements Screen {
 
@@ -50,6 +52,17 @@ public class GameScreen implements Screen {
     private Stage labelStage;
 
     private Window propertyPopUpWindow;
+    private Player auctionPlayer;
+    private int auctionPlayerNum;
+    private Player highestBidder;
+    private ArrayList<Player> auctionList;
+    private Table auctionInfoBox;
+    private TextButton auctionPropertyButton;
+    private TextButton bidButton;
+    private TextButton leaveButton;
+
+    private Window tilePopUpMenu;
+    private Window auctionMenu;
     private Table propInfoBox;
     private Property clickedProperty;
     private TextButton buyPropertyButton;
@@ -101,6 +114,7 @@ public class GameScreen implements Screen {
         // POP UP WINDOW SET UP
         propertyPopUpWindowSetUp();
         jailPopUpWindowSetUp();
+        auctionPopUpWindowSetUp();
     }
 
     @Override
@@ -123,6 +137,7 @@ public class GameScreen implements Screen {
 
         Button pause = new TextButton("Pause", gameScreenSkin);
         final TextButton rollDice = new TextButton("Roll Dice", gameScreenSkin);
+
 
         pause.addListener(new ChangeListener() {
             @Override
@@ -416,6 +431,91 @@ public class GameScreen implements Screen {
                 propertyPopUpWindow.setVisible(false);
             }
         });
+    }
+
+    private void auctionPopUpWindowSetUp() {
+        final TextField auctionBid = new TextField("", gameScreenSkin);
+        auctionBid.setMessageText("Enter Bid");
+        bidButton = new TextButton("Bid", gameScreenSkin);
+        leaveButton = new TextButton("Leave", gameScreenSkin);
+        auctionMenu = new Window("Auction", gameScreenSkin);
+        float newWidth = 300, newHeight = 500;
+        auctionMenu.setBounds((Gdx.graphics.getWidth() - newWidth) / 2, (Gdx.graphics.getHeight() - newHeight) / 2, newWidth, newHeight);
+        auctionMenu.setVisible(false);
+        stage.addActor(auctionMenu);
+
+        auctionBid.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                if (Character.toString(c).matches("^[0-9]")) {
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        auctionPropertyButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                auctionPlayer = gameCon.getCurrentPlayer();
+                auctionList = new ArrayList<>(Arrays.asList(game.players));
+                auctionList.remove(auctionPlayer);
+                auctionList.add(0, auctionPlayer);
+                auctionMenu.setVisible(true);
+            }
+
+        });
+
+        bidButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (Integer.parseInt(auctionBid.getText()) > gameCon.getAuctionValue() && auctionPlayer.getMoney() > Integer.parseInt(auctionBid.getText())) {
+                    gameCon.setAuctionValue(Integer.parseInt(auctionBid.getText()));
+                    highestBidder = auctionPlayer;
+
+                    if(auctionList.indexOf(auctionPlayer) < auctionList.size() - 1 ){
+                        auctionPlayer = auctionList.get(auctionList.indexOf(auctionPlayer) + 1);
+                    }
+                    else
+                    {
+                        auctionPlayer = auctionList.get(0);
+                    }
+                }
+
+                else{
+                    System.out.println("not enough money");
+
+                }
+
+            }
+        });
+
+        leaveButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                auctionList.remove(auctionPlayer);
+                if(auctionList.size() == 1){
+                    auctionMenu.setVisible(false);
+                    highestBidder.addProperty(clickedProperty);
+                    highestBidder.makePurchase(gameCon.getAuctionValue());
+                    gameCon.setAuctionValue(0);
+
+
+                }
+
+                if (auctionList.indexOf(auctionPlayer) < auctionList.size() - 1){
+                    auctionPlayer = auctionList.get(auctionList.indexOf(auctionPlayer) + 1);
+                }
+                else {
+                    auctionPlayer = auctionList.get(0);
+                }
+
+            }
+        });
+
+        auctionMenu.add(auctionBid).row();
+        auctionMenu.add(bidButton);
+        auctionMenu.add(leaveButton);
     }
 
     private void jailPopUpWindowSetUp() {

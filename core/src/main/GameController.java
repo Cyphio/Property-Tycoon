@@ -16,6 +16,7 @@ public class GameController{
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
     private int playerNum;
     private Boolean playAgain;
+    private int currentAuction;
 
     /**
      * the constructor for GameController
@@ -84,6 +85,14 @@ public class GameController{
         return tile;
     }
 
+    public int getAuctionValue(){
+        return currentAuction;
+    }
+
+    public void setAuctionValue(int value){
+        currentAuction = value;
+    }
+
     /**
      * getPlayAgain returns a Boolean judgement as to whether a second turn needs to be executed
      * @return returns true when 1st or 2nd doubles rolled
@@ -109,5 +118,9 @@ public class GameController{
      */
     public GameBoard getBoard() {
         return board;
+    }
+
+    public int getPlayerNum(){
+        return playerNum;
     }
 }

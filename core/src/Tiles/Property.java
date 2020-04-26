@@ -161,6 +161,7 @@ public class Property extends Tile implements PropertyInterface {
         }
     }
 
+
     /**
      * @return returns the player object that is assigned to the property
      */
