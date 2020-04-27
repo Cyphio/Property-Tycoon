@@ -67,10 +67,11 @@ public class GameScreen implements Screen {
     private ArrayList<Label> developmentPrices;
 
     private Window auctionPopUpWindow;
-    private Player auctionPlayer;
+    private Player currBidder;
     private Player highestBidder;
-    private ArrayList<Player> auctionList;
-    private Label auctionPlayerLabel;
+    private ArrayList<Player> bidderList;
+    private Label currBidderLabel;
+    private Label highestBidderLabel;
 
     private Window jailPopUpWindow;
 
@@ -414,7 +415,7 @@ public class GameScreen implements Screen {
         auctionPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                auctionPlayerLabel.setText(gameCon.getCurrentPlayer().getName());
+                currBidderLabel.setText(gameCon.getCurrentPlayer().getName());
                 closeAllWindows();
                 auctionPopUpWindow.setVisible(true);
             }
@@ -442,7 +443,14 @@ public class GameScreen implements Screen {
 
     private void auctionPopUpWindowSetUp() {
         final TextField auctionBid = new TextField("", gameScreenSkin);
-        auctionPlayerLabel = new Label("", gameScreenSkin, "big");
+
+        final Label highestBidderTitle = new Label("Highest bidder: ", gameScreenSkin, "big");
+        highestBidderLabel = new Label("", gameScreenSkin, "big");
+
+        final Label currBidderTitle = new Label("Current bidder: ", gameScreenSkin, "big");
+        currBidderLabel = new Label("", gameScreenSkin, "big");
+
+
         auctionBid.setMessageText("Enter Bid");
         auctionBid.setAlignment(Align.center);
         TextButton bidButton = new TextButton("Bid", gameScreenSkin);
@@ -450,15 +458,19 @@ public class GameScreen implements Screen {
 
         auctionPopUpWindow = new Window("", gameScreenSkin);
 
-        auctionPopUpWindow.add(auctionPlayerLabel);
+        auctionPopUpWindow.add(highestBidderTitle);
+        auctionPopUpWindow.add(highestBidderLabel);
+        auctionPopUpWindow.row().pad(20, 0, 0, 0);
+        auctionPopUpWindow.add(currBidderTitle);
+        auctionPopUpWindow.add(currBidderLabel);
         auctionPopUpWindow.row().pad(10, 0, 0, 0);
-        auctionPopUpWindow.add(auctionBid);
+        auctionPopUpWindow.add(auctionBid).colspan(2);
         auctionPopUpWindow.row().pad(10, 0, 0, 0);
-        auctionPopUpWindow.add(bidButton);
+        auctionPopUpWindow.add(bidButton).colspan(2);
         auctionPopUpWindow.row().pad(10, 0, 0, 0);
-        auctionPopUpWindow.add(leaveButton);
+        auctionPopUpWindow.add(leaveButton).colspan(2);
 
-        float width = 300, height = 500;
+        float width = 400, height = 500;
         auctionPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         auctionPopUpWindow.setVisible(false);
 
@@ -477,10 +489,10 @@ public class GameScreen implements Screen {
         auctionPropertyButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                auctionPlayer = gameCon.getCurrentPlayer();
-                auctionList = new ArrayList<>(Arrays.asList(game.players));
-                auctionList.remove(auctionPlayer);
-                auctionList.add(0, auctionPlayer);
+                currBidder = gameCon.getCurrentPlayer();
+                bidderList = new ArrayList<>(Arrays.asList(game.players));
+                bidderList.remove(currBidder);
+                bidderList.add(0, currBidder);
                 auctionPopUpWindow.setVisible(true);
             }
 
@@ -489,18 +501,19 @@ public class GameScreen implements Screen {
         bidButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (Integer.parseInt(auctionBid.getText()) > gameCon.getAuctionValue() && auctionPlayer.getMoney() > Integer.parseInt(auctionBid.getText())) {
+                if (Integer.parseInt(auctionBid.getText()) > gameCon.getAuctionValue() && currBidder.getMoney() > Integer.parseInt(auctionBid.getText())) {
                     gameCon.setAuctionValue(Integer.parseInt(auctionBid.getText()));
-                    highestBidder = auctionPlayer;
+                    highestBidder = currBidder;
 
-                    if(auctionList.indexOf(auctionPlayer) < auctionList.size() - 1 ){
-                        auctionPlayer = auctionList.get(auctionList.indexOf(auctionPlayer) + 1);
+                    if(bidderList.indexOf(currBidder) < bidderList.size() - 1 ){
+                        currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
                     }
                     else
                     {
-                        auctionPlayer = auctionList.get(0);
+                        currBidder = bidderList.get(0);
                     }
-                    auctionPlayerLabel.setText(auctionPlayer.getName());
+                    highestBidderLabel.setText(highestBidder.getName());
+                    currBidderLabel.setText(currBidder.getName());
                 }
 
                 else{
@@ -514,8 +527,8 @@ public class GameScreen implements Screen {
         leaveButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                auctionList.remove(auctionPlayer);
-                if(auctionList.size() == 1 && highestBidder != null){
+                bidderList.remove(currBidder);
+                if(bidderList.size() == 1 && highestBidder != null){
                     auctionPopUpWindow.setVisible(false);
                     highestBidder.addProperty(clickedProperty);
                     clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
@@ -524,14 +537,14 @@ public class GameScreen implements Screen {
 
                 }
 
-                if (auctionList.indexOf(auctionPlayer) < auctionList.size() - 1){
-                    auctionPlayer = auctionList.get(auctionList.indexOf(auctionPlayer) + 1);
+                if (bidderList.indexOf(currBidder) < bidderList.size() - 1){
+                    currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
                 }
                 else {
-                    auctionPlayer = auctionList.get(0);
+                    currBidder = bidderList.get(0);
                 }
-                auctionPlayerLabel.setText(auctionPlayer.getName());
-
+                highestBidderLabel.setText(highestBidder.getName());
+                currBidderLabel.setText(currBidder.getName());
             }
         });
     }
