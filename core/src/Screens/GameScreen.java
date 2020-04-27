@@ -185,7 +185,7 @@ public class GameScreen implements Screen {
                 camera.unproject(mouse);
                 try {
                     Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-                    if (!(tile instanceof Jail)) {
+                    if(!(tile instanceof Jail)) {
                         openPopUpWindow(tile);
                     }
                 } catch (Exception e) {
@@ -270,6 +270,14 @@ public class GameScreen implements Screen {
                 mortgagePropertyButton.setVisible(false);
             }
 
+            if(clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                closePropertyButton.setVisible(false);
+            }
+
+            if(clickedProperty.getOwned()) {
+                closePropertyButton.setVisible(true);
+            }
+
             propNameLabel.setText(clickedProperty.getTileName());
             propOwnerLabel.setText(clickedProperty.getOwnerName());
             propCostLabel.setText(clickedProperty.getCost());
@@ -281,14 +289,6 @@ public class GameScreen implements Screen {
             }
             propHouseCostLabel.setText(clickedProperty.getHousePrice());
             propHotelCostLabel.setText(clickedProperty.getHotelPrice());
-
-            if(clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                closePropertyButton.setVisible(false);
-            }
-
-            if(clickedProperty.getOwned()) {
-                closePropertyButton.setVisible(true);
-            }
 
             closeAllWindows();
             propertyPopUpWindow.setVisible(true);
@@ -557,6 +557,7 @@ public class GameScreen implements Screen {
         TextButton buyOutOfJailButton = new TextButton("Buy way out of Jail", gameScreenSkin);
 
         jailPopUpWindow = new Window("", gameScreenSkin);
+        jailPopUpWindow.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
 
         jailPopUpWindow.add(jailInfoLabel).width(850);
         jailPopUpWindow.row().pad(10, 0, 0, 0);
