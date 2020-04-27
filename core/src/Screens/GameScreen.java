@@ -57,6 +57,7 @@ public class GameScreen implements Screen {
     private TextButton sellPropertyButton;
     private TextButton mortgagePropertyButton;
     private TextButton auctionPropertyButton;
+    private TextButton closePropertyButton;
     private Label propNameLabel;
     private Label propOwnerLabel;
     private Label propCostLabel;
@@ -69,8 +70,7 @@ public class GameScreen implements Screen {
     private Player auctionPlayer;
     private Player highestBidder;
     private ArrayList<Player> auctionList;
-    private TextButton bidButton;
-    private TextButton leaveButton;
+    private Label auctionPlayerLabel;
 
     private Window jailPopUpWindow;
 
@@ -281,6 +281,14 @@ public class GameScreen implements Screen {
             propHouseCostLabel.setText(clickedProperty.getHousePrice());
             propHotelCostLabel.setText(clickedProperty.getHotelPrice());
 
+            if(clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                closePropertyButton.setVisible(false);
+            }
+
+            if(clickedProperty.getOwned()) {
+                closePropertyButton.setVisible(true);
+            }
+
             closeAllWindows();
             propertyPopUpWindow.setVisible(true);
         }
@@ -314,7 +322,7 @@ public class GameScreen implements Screen {
         mortgagePropertyButton = new TextButton("Mortgage", gameScreenSkin);
         auctionPropertyButton = new TextButton("Auction", gameScreenSkin);
 
-        TextButton closePropertyButton = new TextButton("Close", gameScreenSkin);
+        closePropertyButton = new TextButton("Close", gameScreenSkin);
 
         propInfoBox = new Table();
 
@@ -327,7 +335,7 @@ public class GameScreen implements Screen {
         propInfoBox.row().pad(10, 0, 0, 0);
         propInfoBox.add(new Label("Owner:", gameScreenSkin)).left();
         propInfoBox.add(propOwnerLabel).right();
-        propInfoBox.row().pad(5, 0, 0, 0);;
+        propInfoBox.row().pad(5, 0, 0, 0);
         propInfoBox.add(new Label("Cost:", gameScreenSkin)).left();
         propInfoBox.add(propCostLabel).right();
         propInfoBox.setBackground(getColouredBackground(Color.WHITE));
@@ -393,7 +401,7 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                        clickedProperty.buyProperty(gameCon.getCurrentPlayer());
+                        clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                         closeAllWindows();
                         openPopUpWindow(clickedProperty);
                     }
@@ -406,6 +414,7 @@ public class GameScreen implements Screen {
         auctionPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                auctionPlayerLabel.setText(gameCon.getCurrentPlayer().getName());
                 closeAllWindows();
                 auctionPopUpWindow.setVisible(true);
             }
@@ -433,15 +442,26 @@ public class GameScreen implements Screen {
 
     private void auctionPopUpWindowSetUp() {
         final TextField auctionBid = new TextField("", gameScreenSkin);
+        auctionPlayerLabel = new Label("", gameScreenSkin, "big");
         auctionBid.setMessageText("Enter Bid");
-        bidButton = new TextButton("Bid", gameScreenSkin);
-        leaveButton = new TextButton("Leave", gameScreenSkin);
+        auctionBid.setAlignment(Align.center);
+        TextButton bidButton = new TextButton("Bid", gameScreenSkin);
+        TextButton leaveButton = new TextButton("Leave", gameScreenSkin);
 
         auctionPopUpWindow = new Window("", gameScreenSkin);
+
+        auctionPopUpWindow.add(auctionPlayerLabel);
+        auctionPopUpWindow.row().pad(10, 0, 0, 0);
+        auctionPopUpWindow.add(auctionBid);
+        auctionPopUpWindow.row().pad(10, 0, 0, 0);
+        auctionPopUpWindow.add(bidButton);
+        auctionPopUpWindow.row().pad(10, 0, 0, 0);
+        auctionPopUpWindow.add(leaveButton);
 
         float width = 300, height = 500;
         auctionPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         auctionPopUpWindow.setVisible(false);
+
         stage.addActor(auctionPopUpWindow);
 
         auctionBid.setTextFieldFilter(new TextField.TextFieldFilter() {
@@ -480,6 +500,7 @@ public class GameScreen implements Screen {
                     {
                         auctionPlayer = auctionList.get(0);
                     }
+                    auctionPlayerLabel.setText(auctionPlayer.getName());
                 }
 
                 else{
@@ -494,10 +515,10 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 auctionList.remove(auctionPlayer);
-                if(auctionList.size() == 1){
+                if(auctionList.size() == 1 && highestBidder != null){
                     auctionPopUpWindow.setVisible(false);
                     highestBidder.addProperty(clickedProperty);
-                    highestBidder.makePurchase(gameCon.getAuctionValue());
+                    clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
                     gameCon.setAuctionValue(0);
 
 
@@ -509,13 +530,10 @@ public class GameScreen implements Screen {
                 else {
                     auctionPlayer = auctionList.get(0);
                 }
+                auctionPlayerLabel.setText(auctionPlayer.getName());
 
             }
         });
-
-        auctionPopUpWindow.add(auctionBid).row();
-        auctionPopUpWindow.add(bidButton);
-        auctionPopUpWindow.add(leaveButton);
     }
 
     private void jailPopUpWindowSetUp() {
@@ -524,18 +542,15 @@ public class GameScreen implements Screen {
         jailInfoLabel.setWidth(875);
         jailInfoLabel.setAlignment(Align.center);
         TextButton buyOutOfJailButton = new TextButton("Buy way out of Jail", gameScreenSkin);
-        TextButton closeJailButton = new TextButton("Close", gameScreenSkin);
 
         jailPopUpWindow = new Window("", gameScreenSkin);
 
         jailPopUpWindow.add(jailInfoLabel).width(850);
         jailPopUpWindow.row().pad(10, 0, 0, 0);
         jailPopUpWindow.add(buyOutOfJailButton);
-        jailPopUpWindow.row().pad(10, 0, 0, 0);
-        jailPopUpWindow.add(closeJailButton);
         jailPopUpWindow.pack();
 
-        float width = 875, height = 300;
+        float width = 875, height = 220;
         jailPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         jailPopUpWindow.setVisible(false);
 
@@ -547,12 +562,6 @@ public class GameScreen implements Screen {
             }
         });
 
-        closeJailButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                jailPopUpWindow.setVisible(false);
-            }
-        });
     }
 
     @Override

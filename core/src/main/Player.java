@@ -33,6 +33,7 @@ public class Player implements PlayerInterface {
         this.name = name;
         this.gameToken = token;
         setInJail(false);
+        properties = new ArrayList<>();
 
         getOfJailCards = 0;
         balance = 1500;
@@ -96,6 +97,7 @@ public class Player implements PlayerInterface {
      */
     @Override
     public void addProperty(Property property) {
+        property.addPlayer(this);
         properties.add(property);
     }
 

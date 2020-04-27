@@ -153,9 +153,10 @@ public class Property extends Tile implements PropertyInterface {
      * Checks if a property is owned, and if not, allows it to be assigned to a player
      * @param player the player buying the property
      */
-    public void buyProperty(Player player) {
-        if (!getOwned() && player.getMoney()>= this.cost){
-            player.makePurchase(this.cost);
+    public void buyProperty(Player player, int cost) {
+        if (!getOwned() && player.getMoney()>= cost){
+            player.makePurchase(cost);
+            owned = true;
             owner = player;
             setBuyable(false);
         }

@@ -1,5 +1,6 @@
 package main;
 
+import Tiles.Property;
 import Tiles.Tile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import misc.CellToTileBuilder;
