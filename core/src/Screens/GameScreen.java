@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -70,8 +71,9 @@ public class GameScreen implements Screen {
     private Player currBidder;
     private Player highestBidder;
     private ArrayList<Player> bidderList;
-    private Label currBidderLabel;
-    private Label highestBidderLabel;
+    private Label highestBidderNameLabel;
+    private Label highestBid;
+    private Label currBidderNameLabel;
 
     private Table balances;
 
@@ -113,8 +115,8 @@ public class GameScreen implements Screen {
 
         // POP UP WINDOW SET UP
         propertyPopUpWindowSetUp();
-        jailPopUpWindowSetUp();
         auctionPopUpWindowSetUp();
+        jailPopUpWindowSetUp();
         balanceTableSetUp();
 
 
@@ -429,7 +431,8 @@ public class GameScreen implements Screen {
         auctionPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                currBidderLabel.setText(gameCon.getCurrentPlayer().getName());
+                auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
+                currBidderNameLabel.setText(gameCon.getCurrentPlayer().getName());
                 closeAllWindows();
                 auctionPopUpWindow.setVisible(true);
             }
@@ -456,14 +459,27 @@ public class GameScreen implements Screen {
     }
 
     private void auctionPopUpWindowSetUp() {
+        final Label highestBidderLabel = new Label("Highest bidder: ", gameScreenSkin, "big");
+        highestBidderNameLabel = new Label("", gameScreenSkin, "big");
+        Label atLabel = new Label(" at ", gameScreenSkin, "big");
+        highestBid = new Label("", gameScreenSkin, "big");
+
+        final Table highestBidderTable = new Table();
+        highestBidderTable.add(highestBidderLabel);
+        highestBidderTable.add(highestBidderNameLabel);
+        highestBidderTable.add(atLabel);
+        highestBidderTable.add(highestBid);
+
+        highestBidderTable.setVisible(false);
+
+        final Label currBidderLabel = new Label("Current bidder: ", gameScreenSkin, "big");
+        currBidderNameLabel = new Label("", gameScreenSkin, "big");
+
+        Table currBidderTable = new Table();
+        currBidderTable.add(currBidderLabel);
+        currBidderTable.add(currBidderNameLabel);
+
         final TextField auctionBid = new TextField("", gameScreenSkin);
-
-        final Label highestBidderTitle = new Label("Highest bidder: ", gameScreenSkin, "big");
-        highestBidderLabel = new Label("", gameScreenSkin, "big");
-
-        final Label currBidderTitle = new Label("Current bidder: ", gameScreenSkin, "big");
-        currBidderLabel = new Label("", gameScreenSkin, "big");
-
 
         auctionBid.setMessageText("Enter Bid");
         auctionBid.setAlignment(Align.center);
@@ -472,19 +488,22 @@ public class GameScreen implements Screen {
 
         auctionPopUpWindow = new Window("", gameScreenSkin);
 
-        auctionPopUpWindow.add(highestBidderTitle);
-        auctionPopUpWindow.add(highestBidderLabel);
+        if(clickedProperty != null) {
+            auctionPopUpWindow.setBackground(getColouredBackground(clickedProperty.getColor()));
+            auctionPopUpWindow.add(new Label(clickedProperty.getTileName(), gameScreenSkin, "big"));
+            auctionPopUpWindow.row().pad(40, 0, 0, 0);
+        }
+        auctionPopUpWindow.add(highestBidderTable);
+        auctionPopUpWindow.row().pad(40, 0, 0, 0);
+        auctionPopUpWindow.add(currBidderTable);
         auctionPopUpWindow.row().pad(20, 0, 0, 0);
-        auctionPopUpWindow.add(currBidderTitle);
-        auctionPopUpWindow.add(currBidderLabel);
-        auctionPopUpWindow.row().pad(10, 0, 0, 0);
         auctionPopUpWindow.add(auctionBid).colspan(2);
         auctionPopUpWindow.row().pad(10, 0, 0, 0);
         auctionPopUpWindow.add(bidButton).colspan(2);
         auctionPopUpWindow.row().pad(10, 0, 0, 0);
         auctionPopUpWindow.add(leaveButton).colspan(2);
 
-        float width = 400, height = 500;
+        float width = 600, height = 500;
         auctionPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         auctionPopUpWindow.setVisible(false);
 
@@ -493,10 +512,7 @@ public class GameScreen implements Screen {
         auctionBid.setTextFieldFilter(new TextField.TextFieldFilter() {
             @Override
             public boolean acceptChar(TextField textField, char c) {
-                if (Character.toString(c).matches("^[0-9]")) {
-                    return true;
-                }
-                return false;
+                return Character.toString(c).matches("^[0-9]");
             }
         });
 
@@ -518,6 +534,10 @@ public class GameScreen implements Screen {
                 if (Integer.parseInt(auctionBid.getText()) > gameCon.getAuctionValue() && currBidder.getMoney() > Integer.parseInt(auctionBid.getText())) {
                     gameCon.setAuctionValue(Integer.parseInt(auctionBid.getText()));
                     highestBidder = currBidder;
+                    highestBid.setText("$" + gameCon.getAuctionValue());
+                    highestBidderTable.setVisible(true);
+
+                    auctionBid.setText("");
 
                     if(bidderList.indexOf(currBidder) < bidderList.size() - 1 ){
                         currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
@@ -526,14 +546,33 @@ public class GameScreen implements Screen {
                     {
                         currBidder = bidderList.get(0);
                     }
-                    highestBidderLabel.setText(highestBidder.getName());
-                    currBidderLabel.setText(currBidder.getName());
+                    highestBidderNameLabel.setText(highestBidder.getName());
+                    GameScreen.this.currBidderNameLabel.setText(currBidder.getName());
                 }
 
-                else{
-                    System.out.println("not enough money");
-
+                else if (Integer.parseInt(auctionBid.getText()) <= gameCon.getAuctionValue()) {
+                    System.out.println("Hello");
+                    final Window notHighEnoughWindow = new Window("", gameScreenSkin);
+                    final Label notHighEnoughLabel = new Label("Bid not high enough", gameScreenSkin, "big");
+                    notHighEnoughWindow.add(notHighEnoughLabel);
+                    float width = 350, height = 100;
+                    notHighEnoughWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+                    stage.addActor(notHighEnoughWindow);
+                    notHighEnoughWindow.setVisible(true);
                 }
+
+                else if (currBidder.getMoney() < Integer.parseInt(auctionBid.getText())){
+                    Window notEnoughMoneyWindow = new Window("", gameScreenSkin);
+                    final Label notEnoughMoneyLabel = new Label("Not enough money", gameScreenSkin, "big");
+                    notEnoughMoneyWindow.add(notEnoughMoneyLabel);
+                    float width = 100, height = 100;
+                    notEnoughMoneyWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+                    stage.addActor(notEnoughMoneyLabel);
+                    notEnoughMoneyWindow.setVisible(true);
+                }
+
+                highestBidderNameLabel.setText(highestBidder.getName());
+                GameScreen.this.currBidderNameLabel.setText(currBidder.getName());
 
             }
         });
@@ -542,13 +581,15 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 bidderList.remove(currBidder);
+                if(bidderList.size() == 1 && highestBidder == null) {
+                    auctionPopUpWindow.setVisible(false);
+                    gameCon.setAuctionValue(0);
+                }
                 if(bidderList.size() == 1 && highestBidder != null){
                     auctionPopUpWindow.setVisible(false);
                     highestBidder.addProperty(clickedProperty);
                     clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
                     gameCon.setAuctionValue(0);
-
-
                 }
 
                 if (bidderList.indexOf(currBidder) < bidderList.size() - 1){
@@ -557,8 +598,6 @@ public class GameScreen implements Screen {
                 else {
                     currBidder = bidderList.get(0);
                 }
-                highestBidderLabel.setText(highestBidder.getName());
-                currBidderLabel.setText(currBidder.getName());
             }
         });
     }
