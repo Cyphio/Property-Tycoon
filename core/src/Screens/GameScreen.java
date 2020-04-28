@@ -505,8 +505,12 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 currBidder = gameCon.getCurrentPlayer();
                 bidderList = new ArrayList<>(Arrays.asList(game.players));
-                bidderList.remove(currBidder);
-                bidderList.add(0, currBidder);
+
+                for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
+                    bidderList.add(bidderList.get(i));
+                    bidderList.remove(i);
+                }
+
                 auctionPopUpWindow.setVisible(true);
             }
 
@@ -515,6 +519,7 @@ public class GameScreen implements Screen {
         bidButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if(!auctionBid.getText().equals("")){
                 if (Integer.parseInt(auctionBid.getText()) > gameCon.getAuctionValue() && currBidder.getMoney() > Integer.parseInt(auctionBid.getText())) {
                     gameCon.setAuctionValue(Integer.parseInt(auctionBid.getText()));
                     highestBidder = currBidder;
@@ -535,8 +540,7 @@ public class GameScreen implements Screen {
                     System.out.println("not enough money");
 
                 }
-                highestBidderLabel.setText(highestBidder.getName());
-                currBidderLabel.setText(currBidder.getName());
+                }
 
 
             }
@@ -550,12 +554,13 @@ public class GameScreen implements Screen {
                     auctionPopUpWindow.setVisible(false);
                     gameCon.setAuctionValue(0);
                 }
+
+
                 if(bidderList.size() == 1 && highestBidder != null){
                     auctionPopUpWindow.setVisible(false);
                     highestBidder.addProperty(clickedProperty);
                     clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
                     gameCon.setAuctionValue(0);
-
 
                 }
 
@@ -565,6 +570,7 @@ public class GameScreen implements Screen {
                 else {
                     currBidder = bidderList.get(0);
                 }
+                currBidderLabel.setText(currBidder.getName());
 
             }
         });
