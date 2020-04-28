@@ -559,16 +559,28 @@ public class GameScreen implements Screen {
                     notHighEnoughWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
                     stage.addActor(notHighEnoughWindow);
                     notHighEnoughWindow.setVisible(true);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            notHighEnoughWindow.setVisible(false);
+                        }
+                    }, 0.5f);
                 }
 
                 else if (currBidder.getMoney() < Integer.parseInt(auctionBid.getText())){
-                    Window notEnoughMoneyWindow = new Window("", gameScreenSkin);
+                    final Window notEnoughMoneyWindow = new Window("", gameScreenSkin);
                     final Label notEnoughMoneyLabel = new Label("Not enough money", gameScreenSkin, "big");
                     notEnoughMoneyWindow.add(notEnoughMoneyLabel);
-                    float width = 100, height = 100;
+                    float width = 350, height = 100;
                     notEnoughMoneyWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
                     stage.addActor(notEnoughMoneyLabel);
                     notEnoughMoneyWindow.setVisible(true);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            notEnoughMoneyWindow.setVisible(false);
+                        }
+                    }, 0.5f);
                 }
 
                 highestBidderNameLabel.setText(highestBidder.getName());
