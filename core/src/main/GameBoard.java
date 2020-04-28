@@ -109,7 +109,8 @@ public class GameBoard implements GameBoardInterface {
         }else{
 
         player.setCurrentCoordinates(tile.getAvailableCoordinates());
-    }}
+
+        }}
 
     /**
      * movePlayer uses context to tell how far a player should move, and what space to move them to
