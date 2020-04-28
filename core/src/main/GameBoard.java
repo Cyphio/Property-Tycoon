@@ -2,33 +2,31 @@ package main;
 
 import Tiles.*;
 import misc.Card;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ *  The GameBoard class simulates the board and all the physical aspects of the board such as player position, cards and the dice.
+ */
 public class GameBoard implements GameBoardInterface {
 
     private static Tile[] board;
-
     private static ArrayList<Card> potluckCards;
     private static ArrayList<Card> oppourtunityKnocksCards;
-
     private static Dice dice;
     private static Map<Player, Integer> playerPos;
     private static Player currentPlayer;
     private int goPayoutAmount;
 
-
+    /**
+     * The GameBoard class constructor
+     * @param players Holds each player object who is in the game
+     */
     public GameBoard(Player[] players) {
-
-
         goPayoutAmount = 200;
-
         playerPos = new HashMap<Player, Integer>();
-
 
         // sets all players position to GO tile at 0
         for (Player player : players) {
@@ -44,30 +42,25 @@ public class GameBoard implements GameBoardInterface {
 
         dice = new Dice();
 
-
         potluckCards = builder.getPotluckChestCards();
         Collections.shuffle(potluckCards);
         oppourtunityKnocksCards = builder.getCommunityChestCards();
         Collections.shuffle(oppourtunityKnocksCards);
 
-
         System.out.println(players.length);
         System.out.println(players[0].getName());
-
-
     }
 
-
-    // Functional dice setup, logic should be working
-    // Logic behind rolling doubles and when to go to jail setup
-    // Need the process of going to jail to be implemented
+    /**
+     * handles dice rolling and landing on tile functions.
+     * @param player the player to take the turn
+     * @return returns checkBoardCircumstances()
+     */
     @Override
     public Boolean playerTurn(Player player) {
-
         System.out.println("\nBOARD PLAYER TURN");
 
         currentPlayer = player;
-
 
         dice.rollDice();
         System.out.println("DOUBLE: " + dice.wasItADouble());
@@ -81,16 +74,12 @@ public class GameBoard implements GameBoardInterface {
             movePlayer(player, dice.getValue());
         }
 
-
         System.out.println("finished");
         return checkBoardCircumstances();
-
-
     }
 
     /**
      * getPlayerPos is used to return the current position of any given player
-     *
      * @param player the player who's position is being searched
      * @return the position of Player player
      */
@@ -101,33 +90,25 @@ public class GameBoard implements GameBoardInterface {
 
     /**
      * setPlayerPos is used to set a players position to a point given
-     *
      * @param player The player to move
      * @param pos    Where to move the player
      */
     @Override
     public void setPlayerPos(Player player, int pos) {
-
-
         board[playerPos.get(player)].removePlayer(player);
         playerPos.put(player, pos);
         board[pos].addPlayer(player);
         System.out.println("Setting Player coordinates");
         player.setCurrentCoordinates(board[playerPos.get(player)].getAvailableCoordinates());
-
-
     }
-
 
     /**
      * movePlayer uses context to tell how far a player should move, and what space to move them to
-     *
      * @param player The player to move
      * @param moves  how many spaces to move the player
      */
     @Override
     public void movePlayer(Player player, int moves) {
-
         int position = getPlayerPos(player);
         int moveTo = position + moves;
 
@@ -135,34 +116,40 @@ public class GameBoard implements GameBoardInterface {
             //change this based on go tile amount set (for now 200)
             player.payPlayer(goPayoutAmount);
             this.setPlayerPos(player, moveTo - 40);
+
             if (moveTo < 0) {
                 this.setPlayerPos(player, moveTo + 40);
             }
-
-        } else {
+        }
+        else {
             this.setPlayerPos(player, moveTo);
         }
-
     }
 
-
+    /**
+     * gets the tile at int i
+     * @param i tile position
+     * @return tile at int i
+     */
     public Tile getTile(int i) {
-
         return board[i];
-
-
     }
 
-
+    /**
+     * sends the current player to the jail tile and sets their inJail to true
+     */
     public void sendToJail() {
         currentPlayer.setInJail(true);
         setPlayerPos(currentPlayer, 10);
     }
 
-    //check if the player has landed on another players properties etc
+    /**
+     * Checks to see what tile the player is on and handles their functionality
+     * also checks if doubles are rolled to roll again.
+     * @return returns true if the last roll was a double
+     */
     @Override
     public Boolean checkBoardCircumstances() {
-
         Tile x = board[playerPos.get(currentPlayer)];
 
         if (x instanceof OpportunityKnocks) {
@@ -170,59 +157,49 @@ public class GameBoard implements GameBoardInterface {
             Card card = oppourtunityKnocksCards.remove(0);
             performCardAction(card);
             oppourtunityKnocksCards.add(card);
-
-
-        } else if (x instanceof PotLuck) {
+        }
+        else if (x instanceof PotLuck) {
             Card card = potluckCards.remove(0);
             performCardAction(card);
             potluckCards.add(card);
-
-        } else if (x instanceof GoToJail) {
+        }
+        else if (x instanceof GoToJail) {
             sendToJail();
-
-        } else if (x instanceof Go) {
-
+        }
+        else if (x instanceof Go) {
             currentPlayer.payPlayer(goPayoutAmount);
         }
-
-
         if (dice.jailCheck()) {
-
             sendToJail();
-
-        } else if (dice.wasItADouble()) {
-
-
+        }
+        else if (dice.wasItADouble()) {
             return true;
-
-
         }
 
-
         dice.reset();
-
         return false;
-
-
     }
 
+    /**
+     * handles the action that each card should perform.
+     * @param card the card who's action is being performed
+     */
     @Override
     public void performCardAction(Card card) {
-
         switch (card.getAction()) {
             case "pay":
                 currentPlayer.payPlayer(card.getValue());
                 break;
-
             default:
                 System.out.println("no action found");
-
-
         }
-
-
     }
 
+    /**
+     * assigns a property to a player and makes them pay for it.
+     * @param player the player purchasing the property
+     * @param prop the property purchased
+     */
     @Override
     public void purchaseProperty(Player player, Property prop) {
         if (player.getFirstLap() == false) {
@@ -233,6 +210,4 @@ public class GameBoard implements GameBoardInterface {
             }
         }
     }
-
-
 }

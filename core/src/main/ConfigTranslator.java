@@ -13,8 +13,6 @@ import java.util.*;
 /**
  * Translates provided configuration file into game Tile and Card objects for the board.
  */
-
-
 public class ConfigTranslator implements ConfigTranslatorInterface {
 
     private Tile[] tileList = new Tile[40];
@@ -28,7 +26,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
     /**
      * Initialises instance variables and builds node lists
      */
-
     public ConfigTranslator() {
 
         try {
@@ -81,10 +78,16 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             ((Property) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
 
 
-                            ((Property) tile).setColour(tileElement.getElementsByTagName("colour").item(0).getTextContent());
+                            ((Property) tile).setColour(tileElement.getElementsByTagName("colour").item(0).getTextContent().toUpperCase());
+
+                            ((Property) tile).setRent(tileElement.getElementsByTagName("rent").item(0).getTextContent().toUpperCase());
+
+                            ((Property) tile).setHousePrice(Integer.parseInt(tileElement.getElementsByTagName("house-cost").item(0).getTextContent().toUpperCase()));
+
+                            ((Property) tile).setHotelPrice(Integer.parseInt(tileElement.getElementsByTagName("hotel-cost").item(0).getTextContent().toUpperCase()));
 
                             for (String house : houses) {
-                                ((Property) tile).addHousePrice(Integer.parseInt(tileElement.getElementsByTagName(house).item(0).getTextContent()));
+                                ((Property) tile).addDevPrice(Integer.parseInt(tileElement.getElementsByTagName(house).item(0).getTextContent()));
                             }
                             break;
 
@@ -149,7 +152,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
      *
      * @param
      */
-
     @Override
     public void genCards() {
 
@@ -196,24 +198,15 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
     }
 
     public ArrayList<Card> getCommunityChestCards() {
-
         return cardDecks.get(0);
-
-
     }
 
     public ArrayList<Card> getPotluckChestCards() {
-
         return cardDecks.get(0);
-
-
     }
 
     public Tile[] getTiles() {
-
-
         return tileList;
-
     }
 
 }

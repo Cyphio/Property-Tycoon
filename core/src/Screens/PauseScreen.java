@@ -16,8 +16,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
-import javax.swing.text.View;
-
+/**
+ * PauseScreen is a GUI class that allows the user to interactively adjust Music/FX volume, toggle Music/FX on and
+ * off, toggle fullscreen mode, return to MainMenu and return to GameScreen. This Screen is accessed from GameScreen.
+ */
 public class PauseScreen implements Screen {
 
     private PropertyTycoon game;
@@ -26,6 +28,10 @@ public class PauseScreen implements Screen {
     private Stage stage;
     private Viewport viewport;
 
+    /**
+     * The constructor for PauseScreen
+     * @param game The PropertyTycoon parent class upon which the GUI is built
+     */
     public PauseScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -33,6 +39,9 @@ public class PauseScreen implements Screen {
         this.pauseScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
+    /**
+     * show() defines the layout, elements and interactivity of the GUI
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -75,7 +84,6 @@ public class PauseScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
-
                 if (Gdx.graphics.isFullscreen()) {
                     Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
                     game.getPreferences().setPrefsFullscreen(fullscreenOnOff.isChecked());
@@ -83,7 +91,6 @@ public class PauseScreen implements Screen {
                 } else
                     Gdx.graphics.setFullscreenMode(currentMode);
                 game.getPreferences().setPrefsFullscreen(fullscreenOnOff.isChecked());
-
             }
         });
 
@@ -147,6 +154,10 @@ public class PauseScreen implements Screen {
         table.add(backToMainMenu).colspan(2);
     }
 
+    /**
+     * render() is called when the Screen should render itself
+     * @param delta the time in seconds since the last render
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -165,22 +176,35 @@ public class PauseScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Called when PauseScreen() should release all resources
+     */
     @Override
-    public void dispose() {
-        stage.dispose();
-    }
+    public void dispose() { stage.dispose(); }
 
+    /**
+     * Called when the Application is resized. Will never be called before a call to create()
+     * @param width the width of the screen
+     * @param height the height of the screen
+     */
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
+    public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
 
+    /**
+     * Called when the Application is paused. An Application is paused before it is destroyed
+     */
     @Override
     public void pause() {}
 
+    /**
+     * Called when the Application is resumed from a paused state
+     */
     @Override
     public void resume() {}
 
+    /**
+     * Called when this PauseScreen() is no longer the current screen for PropertyTycoon()
+     */
     @Override
     public void hide() {}
 }

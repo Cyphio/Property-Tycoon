@@ -2,26 +2,28 @@ package main;
 
 import java.util.Random;
 
+/**
+ * The dice class simulates a pair of two six sided dice to roll whenever a player moves
+ */
 class Dice implements DiceInterface {
+
     private int counter;
     private int d1;
     private int d2;
     private boolean wasDouble;
 
-
-    public Dice(){
-
-
-        counter=0;
-
+    /**
+     * the constructor for Dice
+     */
+    public Dice() {
+        counter = 0;
     }
-
 
     /**
      * reset sets all three variables to their initial state
      */
     @Override
-    public void reset(){
+    public void reset() {
         counter = 0;
         d1 = 0;
         d2 = 0;
@@ -33,17 +35,15 @@ class Dice implements DiceInterface {
      * With each roll counter is incremented by one
      */
     @Override
-    public void rollDice(){
+    public void rollDice() {
         Random r = new Random();
-
         d1 = r.nextInt(5) + 1;
         d2 = r.nextInt(5) + 1;
         counter++;
-
-        if(d1 == d2){
+        if(d1 == d2) {
             wasDouble =true;
         }
-        else{
+        else {
             wasDouble=false;
         }
     }
@@ -53,11 +53,11 @@ class Dice implements DiceInterface {
      * @return returns true or false depending if player rolled three doubles or not
      */
     @Override
-    public boolean jailCheck(){
-        if((d1 == d2) && (counter == 3)){
+    public boolean jailCheck() {
+        if((d1 == d2) && (counter == 3)) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
@@ -67,26 +67,15 @@ class Dice implements DiceInterface {
      * @return returns the total value of the two dices
      */
     @Override
-    public int getValue(){
-
-
-        return d1+d2;
+    public int getValue() {
+        return d1 + d2;
     }
 
-
+    /**
+     * wasItADouble returns a Boolean judgement as to whether a the dice rolled a double
+     * @return true if the dice rolled a double, false otherwise
+     */
     public boolean wasItADouble(){
-
         return wasDouble;
-
     }
-
 }
-
-
-
-
-
-
-
-
-
