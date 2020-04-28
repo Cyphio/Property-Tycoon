@@ -17,8 +17,8 @@ public class Tile implements TileInterface {
     private boolean isBuyable = false;
     ArrayList<Player> tilePlayers = new ArrayList<>();
     private Coordinate centerLabelCoordinate;
-    private ArrayList<Coordinate> playerPosCoordinates;
-    private ArrayList<Coordinate> allCoordinates;
+    protected ArrayList<Coordinate> playerPosCoordinates;
+    protected ArrayList<Coordinate> allCoordinates;
     public Tile(){
         tileName = "";
     }
@@ -113,7 +113,9 @@ public class Tile implements TileInterface {
     public void setCoordinates(ArrayList<Coordinate> coordinates){
         playerPosCoordinates = new ArrayList<>();
         for(int i =0 ; i < players.length;i++) {
-            playerPosCoordinates.add(coordinates.get(i));
+            if (i != 3 && i != 7 && i != 11) {
+                playerPosCoordinates.add(coordinates.get(i));
+            }
         }
         allCoordinates = coordinates;
         Coordinate labelCoordinate = new Coordinate(0,0);

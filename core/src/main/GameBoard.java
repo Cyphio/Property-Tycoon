@@ -99,8 +99,17 @@ public class GameBoard implements GameBoardInterface {
         playerPos.put(player, pos);
         board[pos].addPlayer(player);
         System.out.println("Setting Player coordinates");
-        player.setCurrentCoordinates(board[playerPos.get(player)].getAvailableCoordinates());
-    }
+
+        Tile tile = board[playerPos.get(player)];
+
+        if(player.getIsInJail() && pos == 10 && tile instanceof Jail){
+
+            player.setCurrentCoordinates((((Jail) tile).getNextJailCoordinate()));
+
+        }else{
+
+        player.setCurrentCoordinates(tile.getAvailableCoordinates());
+    }}
 
     /**
      * movePlayer uses context to tell how far a player should move, and what space to move them to
@@ -140,6 +149,8 @@ public class GameBoard implements GameBoardInterface {
      */
     public void sendToJail() {
         currentPlayer.setInJail(true);
+
+
         setPlayerPos(currentPlayer, 10);
     }
 

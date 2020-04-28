@@ -213,12 +213,16 @@ public class GameScreen implements Screen {
             if (i == 1 || i == 11 || i == 21 || i == 31) {
                 angle -= 90;
             }
+
             Tile tile = gameCon.getBoard().getTile(i);
-            Coordinate c = tile.getCenterLabelCoordinate();
 
-            RotatableLabel label = new RotatableLabel(new Label(tile.getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
+            if(tile instanceof Property) {
+                Coordinate c = tile.getCenterLabelCoordinate();
 
-            labelStage.addActor(label);
+                RotatableLabel label = new RotatableLabel(new Label(tile.getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
+
+                labelStage.addActor(label);
+            }
         }
     }
 
@@ -593,8 +597,7 @@ public class GameScreen implements Screen {
         balances = new Table();
         playerBalanceLabels = new ArrayList<>();
         for (Player player: game.players) {
-
-
+            
             Label l = new Label(player.getName() + ": $"+ player.getMoney(), gameScreenSkin);
             playerBalanceLabels.add(l);
 
