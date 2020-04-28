@@ -518,6 +518,7 @@ public class GameScreen implements Screen {
                 if (Integer.parseInt(auctionBid.getText()) > gameCon.getAuctionValue() && currBidder.getMoney() > Integer.parseInt(auctionBid.getText())) {
                     gameCon.setAuctionValue(Integer.parseInt(auctionBid.getText()));
                     highestBidder = currBidder;
+                    auctionBid.setText("");
 
                     if(bidderList.indexOf(currBidder) < bidderList.size() - 1 ){
                         currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
@@ -534,6 +535,9 @@ public class GameScreen implements Screen {
                     System.out.println("not enough money");
 
                 }
+                highestBidderLabel.setText(highestBidder.getName());
+                currBidderLabel.setText(currBidder.getName());
+
 
             }
         });
@@ -542,6 +546,10 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 bidderList.remove(currBidder);
+                if(bidderList.size() == 1 && highestBidder == null){
+                    auctionPopUpWindow.setVisible(false);
+                    gameCon.setAuctionValue(0);
+                }
                 if(bidderList.size() == 1 && highestBidder != null){
                     auctionPopUpWindow.setVisible(false);
                     highestBidder.addProperty(clickedProperty);
@@ -557,8 +565,7 @@ public class GameScreen implements Screen {
                 else {
                     currBidder = bidderList.get(0);
                 }
-                highestBidderLabel.setText(highestBidder.getName());
-                currBidderLabel.setText(currBidder.getName());
+
             }
         });
     }
