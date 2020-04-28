@@ -73,9 +73,13 @@ public class GameScreen implements Screen {
     private Label currBidderLabel;
     private Label highestBidderLabel;
 
+    private Table balances;
+
     private Window jailPopUpWindow;
 
     private Sound rollDiceFX;
+    private ArrayList<Label> playerBalanceLabels;
+
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
@@ -111,6 +115,10 @@ public class GameScreen implements Screen {
         propertyPopUpWindowSetUp();
         jailPopUpWindowSetUp();
         auctionPopUpWindowSetUp();
+        balanceTableSetUp();
+
+
+
     }
 
     @Override
@@ -233,6 +241,8 @@ public class GameScreen implements Screen {
         spriteBatch.end();
 
         camera.update();
+
+        updateBalances();
 
         labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         labelStage.draw();
@@ -576,6 +586,37 @@ public class GameScreen implements Screen {
             }
         });
 
+    }
+
+
+    public void balanceTableSetUp(){
+        balances = new Table();
+        playerBalanceLabels = new ArrayList<>();
+        for (Player player: game.players) {
+
+
+            Label l = new Label(player.getName() + ": $"+ player.getMoney(), gameScreenSkin);
+            playerBalanceLabels.add(l);
+
+            balances.add(l);
+            balances.row();
+        }
+        balances.setSize(100,100);
+        balances.left();
+        balances.pad(10,10,10,10);
+        balances.setFillParent(true);
+        balances.setDebug(true);
+//        balances.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
+        stage.addActor(balances);
+    }
+
+
+    public void updateBalances(){
+        for (int i = 0 ; i < game.players.length; i++){
+
+            Player player = game.players[i];
+            playerBalanceLabels.get(i).setText(player.getName() + " : $"+ player.getMoney());
+        }
     }
 
     @Override
