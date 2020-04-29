@@ -115,8 +115,8 @@ public class GameScreen implements Screen {
 
         // POP UP WINDOW SET UP
         propertyPopUpWindowSetUp();
-        auctionPopUpWindowSetUp();
         jailPopUpWindowSetUp();
+        auctionPopUpWindowSetUp();
         balanceTableSetUp();
 
 
@@ -441,6 +441,8 @@ public class GameScreen implements Screen {
         sellPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                propertyPopUpWindow.setVisible(false);
             }
         });
 
@@ -521,8 +523,12 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 currBidder = gameCon.getCurrentPlayer();
                 bidderList = new ArrayList<>(Arrays.asList(game.players));
-                bidderList.remove(currBidder);
-                bidderList.add(0, currBidder);
+
+                for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
+                    bidderList.add(bidderList.get(i));
+                    bidderList.remove(i);
+                }
+
                 auctionPopUpWindow.setVisible(true);
             }
 
@@ -531,59 +537,58 @@ public class GameScreen implements Screen {
         bidButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (Integer.parseInt(auctionBid.getText()) > gameCon.getAuctionValue() && currBidder.getMoney() >= Integer.parseInt(auctionBid.getText())) {
-                    gameCon.setAuctionValue(Integer.parseInt(auctionBid.getText()));
-                    highestBidder = currBidder;
-                    highestBid.setText("$" + gameCon.getAuctionValue());
-                    highestBidderTable.setVisible(true);
+                if(!auctionBid.getText().equals("")){
+                    if (Integer.parseInt(auctionBid.getText()) > gameCon.getAuctionValue() && currBidder.getMoney() >= Integer.parseInt(auctionBid.getText())) {
+                        gameCon.setAuctionValue(Integer.parseInt(auctionBid.getText()));
+                        highestBidder = currBidder;
+                        highestBid.setText("$" + gameCon.getAuctionValue());
+                        highestBidderTable.setVisible(true);
 
-                    auctionBid.setText("");
+                        auctionBid.setText("");
 
-                    if(bidderList.indexOf(currBidder) < bidderList.size() - 1 ){
-                        currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
-                    }
-                    else
-                    {
-                        currBidder = bidderList.get(0);
-                    }
-                    highestBidderNameLabel.setText(highestBidder.getName());
-                    GameScreen.this.currBidderNameLabel.setText(currBidder.getName());
-                }
-
-                else if (Integer.parseInt(auctionBid.getText()) <= gameCon.getAuctionValue()) {
-                    final Window notHighEnoughWindow = new Window("", gameScreenSkin);
-                    final Label notHighEnoughLabel = new Label("Bid not high enough", gameScreenSkin, "big");
-                    notHighEnoughWindow.add(notHighEnoughLabel);
-                    float width = 350, height = 100;
-                    notHighEnoughWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
-                    stage.addActor(notHighEnoughWindow);
-                    notHighEnoughWindow.setVisible(true);
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            notHighEnoughWindow.setVisible(false);
+                        if(bidderList.indexOf(currBidder) < bidderList.size() - 1 ){
+                            currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
                         }
-                    }, 0.5f);
-                }
-
-                else if (currBidder.getMoney() < Integer.parseInt(auctionBid.getText())) {
-                    final Window notEnoughMoneyWindow = new Window("", gameScreenSkin);
-                    final Label notEnoughMoneyLabel = new Label("Not enough money", gameScreenSkin, "big");
-                    notEnoughMoneyWindow.add(notEnoughMoneyLabel);
-                    float width = 350, height = 100;
-                    notEnoughMoneyWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
-                    stage.addActor(notEnoughMoneyWindow);
-                    notEnoughMoneyWindow.setVisible(true);
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            notEnoughMoneyWindow.setVisible(false);
+                        else
+                        {
+                            currBidder = bidderList.get(0);
                         }
-                    }, 0.5f);
-                }
+                        highestBidderNameLabel.setText(highestBidder.getName());
+                        currBidderNameLabel.setText(currBidder.getName());
+                    }
+                    else if (Integer.parseInt(auctionBid.getText()) <= gameCon.getAuctionValue()) {
+                        final Window notHighEnoughWindow = new Window("", gameScreenSkin);
+                        final Label notHighEnoughLabel = new Label("Bid not high enough", gameScreenSkin, "big");
+                        notHighEnoughWindow.add(notHighEnoughLabel);
+                        float width = 350, height = 100;
+                        notHighEnoughWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+                        stage.addActor(notHighEnoughWindow);
+                        notHighEnoughWindow.setVisible(true);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                notHighEnoughWindow.setVisible(false);
+                            }
+                        }, 0.5f);
+                    }
+                    else if (currBidder.getMoney() < Integer.parseInt(auctionBid.getText())) {
+                        final Window notEnoughMoneyWindow = new Window("", gameScreenSkin);
+                        final Label notEnoughMoneyLabel = new Label("Not enough money", gameScreenSkin, "big");
+                        notEnoughMoneyWindow.add(notEnoughMoneyLabel);
+                        float width = 350, height = 100;
+                        notEnoughMoneyWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+                        stage.addActor(notEnoughMoneyWindow);
+                        notEnoughMoneyWindow.setVisible(true);
+                        Timer.schedule(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                notEnoughMoneyWindow.setVisible(false);
+                            }
+                        }, 0.5f);
+                        }
+                    }
 
-                GameScreen.this.currBidderNameLabel.setText(currBidder.getName());
-
+                currBidderNameLabel.setText(currBidder.getName());
             }
         });
 
@@ -595,6 +600,7 @@ public class GameScreen implements Screen {
                     auctionPopUpWindow.setVisible(false);
                     gameCon.setAuctionValue(0);
                 }
+
                 if(bidderList.size() == 1 && highestBidder != null){
                     auctionPopUpWindow.setVisible(false);
                     highestBidder.addProperty(clickedProperty);
@@ -608,6 +614,7 @@ public class GameScreen implements Screen {
                 else {
                     currBidder = bidderList.get(0);
                 }
+                currBidderLabel.setText(currBidder.getName());
             }
         });
     }
