@@ -1,6 +1,7 @@
 package main;
 
 import Tiles.*;
+import com.badlogic.gdx.graphics.Color;
 import misc.Card;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,12 +15,13 @@ public class GameBoard implements GameBoardInterface {
 
     private static Tile[] board;
     private static ArrayList<Card> potluckCards;
-    private static ArrayList<Card> oppourtunityKnocksCards;
+    private static ArrayList<Card> opportunityKnocksCards;
     private static Dice dice;
     private static Map<Player, Integer> playerPos;
     private static Player currentPlayer;
     private int goPayoutAmount;
     private Player[] players;
+    private Map<String, ArrayList<Property>> colPropMap;
 
     /**
      * The GameBoard class constructor
@@ -39,6 +41,21 @@ public class GameBoard implements GameBoardInterface {
 
         board = builder.getTiles();
 
+        System.out.println(builder.getAllColours());
+
+        System.out.println(board.length);
+
+        colPropMap = new HashMap<>();
+        for(String colour : builder.getAllColours()) {
+            ArrayList<Property> properties = new ArrayList<>();
+            for(Tile tile : board) {
+                if(tile instanceof Property && ((Property) tile).getColourAsString().equals(colour)) {
+                    properties.add((Property) tile);
+                }
+            }
+            colPropMap.put(colour, properties);
+        }
+
         ConfigValidator validator = new ConfigValidator(board);
         validator.validate(board);
 
@@ -46,11 +63,15 @@ public class GameBoard implements GameBoardInterface {
 
         potluckCards = builder.getPotluckChestCards();
         Collections.shuffle(potluckCards);
-        oppourtunityKnocksCards = builder.getCommunityChestCards();
-        Collections.shuffle(oppourtunityKnocksCards);
+        opportunityKnocksCards = builder.getCommunityChestCards();
+        Collections.shuffle(opportunityKnocksCards);
 
         System.out.println(players.length);
         System.out.println(players[0].getName());
+    }
+
+    public Map<String, ArrayList<Property>> getColPropMap() {
+        return colPropMap;
     }
 
     /**
@@ -168,9 +189,9 @@ public class GameBoard implements GameBoardInterface {
 
         if (x instanceof OpportunityKnocks) {
 
-            Card card = oppourtunityKnocksCards.remove(0);
+            Card card = opportunityKnocksCards.remove(0);
             performCardAction(card);
-            oppourtunityKnocksCards.add(card);
+            opportunityKnocksCards.add(card);
         }
         else if (x instanceof PotLuck) {
             Card card = potluckCards.remove(0);

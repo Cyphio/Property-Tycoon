@@ -17,6 +17,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
     private Tile[] tileList = new Tile[40];
     private ArrayList<ArrayList<Card>> cardDecks;
+    private ArrayList<String> allColours;
 
     private DocumentBuilderFactory docBuilderFactory;
     private DocumentBuilder docBuilder;
@@ -37,6 +38,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
             document = docBuilder.parse(file);
             document.getDocumentElement().normalize();
 
+            allColours = new ArrayList<>();
 
             genTiles();
             genCards();
@@ -78,7 +80,11 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             ((Property) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
 
 
-                            ((Property) tile).setColour(tileElement.getElementsByTagName("colour").item(0).getTextContent().toUpperCase());
+                            String colour = tileElement.getElementsByTagName("colour").item(0).getTextContent().toUpperCase();
+                            ((Property) tile).setColour(colour);
+                            if(!allColours.contains(colour)) {
+                                allColours.add(colour);
+                            }
 
                             ((Property) tile).setRent(tileElement.getElementsByTagName("rent").item(0).getTextContent().toUpperCase());
 
@@ -207,6 +213,10 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
     public Tile[] getTiles() {
         return tileList;
+    }
+
+    public ArrayList<String> getAllColours() {
+        return allColours;
     }
 
 }

@@ -6,10 +6,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import misc.CellToTileBuilder;
 import misc.Coordinate;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
+
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 /**
@@ -134,5 +132,15 @@ public class GameController{
 
         return playerOrders;
 
+    }
+
+    public boolean developProperty(Property prop, Player player) {
+        if(player.getProperties().containsAll(board.getColPropMap().get(prop.getColourAsString()))) {
+            prop.develop(player);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

@@ -12,8 +12,8 @@ import java.util.ArrayList;
  */
 public class Player implements PlayerInterface {
 
-    private ArrayList<Tile> properties;
-    private ArrayList<Tile> mortgagedProperties;
+    private ArrayList<Property> properties;
+    private ArrayList<Property> mortgagedProperties;
     private int balance;
     private int tilePosition;
     private int getOutJailCards;
@@ -106,7 +106,7 @@ public class Player implements PlayerInterface {
      * @return returns properties, ArrayList with all the properties player owns
      */
     @Override
-    public ArrayList<Tile> getProperties() {
+    public ArrayList<Property> getProperties() {
         return properties;
     }
 

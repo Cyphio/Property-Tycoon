@@ -43,6 +43,10 @@ public class Property extends Tile implements PropertyInterface {
         this.colour = colour;
     }
 
+    public String getColourAsString() {
+        return colour;
+    }
+
     /**
      * getColour returns the colour of the property as a Color object. This requires finding the Color object with the
      * associated String label in com.badlogic.gdx.graphics.Color
@@ -84,6 +88,10 @@ public class Property extends Tile implements PropertyInterface {
         }
     }
 
+    public int getCurrentRent() {
+        return developmentPrices.get(houseDevelopments+hotelDevelopments);
+    }
+
     /**
      * addHousePrice adds a house/hotel price to the ArrayList development prices
      * @param devPrice the house/hotel price to be added
@@ -119,7 +127,7 @@ public class Property extends Tile implements PropertyInterface {
      * getRent returns the rent of the property with 0 development
      * @return the rent of the property with 0 development
      */
-    public int getRent() {
+    public int getInitialRent() {
         return rent;
     }
 
@@ -156,6 +164,7 @@ public class Property extends Tile implements PropertyInterface {
     public void buyProperty(Player player, int cost) {
         if (!getOwned() && player.getMoney()>= cost){
             player.makePurchase(cost);
+            player.addProperty(this);
             owned = true;
             owner = player;
             setBuyable(false);

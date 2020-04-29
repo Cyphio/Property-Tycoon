@@ -15,6 +15,7 @@ public class DesktopLauncher {
 		Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		config.width = (int)dimension.getWidth();
 		config.height = (int)dimension.getHeight();
+		config.resizable = false;
 		new LwjglApplication(new PropertyTycoon(), config);
 	}
 }

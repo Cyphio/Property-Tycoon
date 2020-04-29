@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
+import com.sun.scenario.effect.Brightpass;
 import main.GameController;
 import main.Player;
 import misc.Coordinate;
@@ -58,6 +59,7 @@ public class GameScreen implements Screen {
     private TextButton sellPropertyButton;
     private TextButton mortgagePropertyButton;
     private TextButton auctionPropertyButton;
+    private TextButton developPropertyButton;
     private TextButton closePropertyButton;
     private Label propNameLabel;
     private Label propOwnerLabel;
@@ -223,35 +225,6 @@ public class GameScreen implements Screen {
         }
     }
 
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        camera.zoom = 2f;
-
-        tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render();
-
-        spriteBatch.setProjectionMatrix(camera.combined);
-        spriteBatch.begin();
-        for (Player p : game.players) {
-            p.getPlayerToken().draw(spriteBatch);
-        }
-        spriteBatch.end();
-
-        camera.update();
-
-        updateBalances();
-
-        labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        labelStage.draw();
-
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-    }
-
     private TextureRegionDrawable getColouredBackground(Color colour) {
         Pixmap pm = new Pixmap(1,1, Pixmap.Format.RGB565);
         pm.setColor(colour);
@@ -275,10 +248,12 @@ public class GameScreen implements Screen {
             if(clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
                 sellPropertyButton.setVisible(true);
                 mortgagePropertyButton.setVisible(true);
+                developPropertyButton.setVisible(true);
             }
             else {
                 sellPropertyButton.setVisible(false);
                 mortgagePropertyButton.setVisible(false);
+                developPropertyButton.setVisible(false);
             }
 
             if(clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
@@ -294,7 +269,7 @@ public class GameScreen implements Screen {
             propCostLabel.setText(clickedProperty.getCost());
             propInfoBox.setBackground(getColouredBackground(clickedProperty.getColor()));
 
-            propRentLabel.setText(clickedProperty.getRent());
+            propRentLabel.setText(clickedProperty.getInitialRent());
             for (int i = 0; i < clickedProperty.getDevPrices().size(); i++) {
                 developmentPrices.get(i).setText(clickedProperty.getDevPrices().get(i));
             }
@@ -331,9 +306,11 @@ public class GameScreen implements Screen {
     private void propertyPopUpWindowSetUp() {
         buyPropertyButton = new TextButton("Buy", gameScreenSkin);
         sellPropertyButton = new TextButton("Sell", gameScreenSkin);
+
         mortgagePropertyButton = new TextButton("Mortgage", gameScreenSkin);
         auctionPropertyButton = new TextButton("Auction", gameScreenSkin);
 
+        developPropertyButton = new TextButton("Develop", gameScreenSkin);
         closePropertyButton = new TextButton("Close", gameScreenSkin);
 
         propInfoBox = new Table();
@@ -363,7 +340,7 @@ public class GameScreen implements Screen {
             developmentPrices.add(new Label("", gameScreenSkin));
         }
 
-        propInfoBox2.add(new Label("Rent:", gameScreenSkin)).left().width(300);
+        propInfoBox2.add(new Label("Rent:", gameScreenSkin)).left().width(350);
         propInfoBox2.add(propRentLabel).right();
         propInfoBox2.row().pad(20, 0, 0, 0);
         propInfoBox2.add(new Label("Rent with 1 house:", gameScreenSkin)).left();
@@ -389,7 +366,7 @@ public class GameScreen implements Screen {
 
         propertyPopUpWindow = new Window("", gameScreenSkin);
 
-        propertyPopUpWindow.add(propInfoBox).width(380).height(100).colspan(2);
+        propertyPopUpWindow.add(propInfoBox).width(405).height(100).colspan(2);
         propertyPopUpWindow.row().pad(25, 0, 0, 0);
         propertyPopUpWindow.add(propInfoBox2).colspan(2);
         propertyPopUpWindow.row().pad(25, 0, 0, 0);
@@ -399,10 +376,11 @@ public class GameScreen implements Screen {
         propertyPopUpWindow.add(sellPropertyButton).left();
         propertyPopUpWindow.add(mortgagePropertyButton).right();
         propertyPopUpWindow.row().pad(10, 0, 0, 0);
-        propertyPopUpWindow.add(closePropertyButton).colspan(2);
+        propertyPopUpWindow.add(developPropertyButton).left();
+        propertyPopUpWindow.add(closePropertyButton).right();
         propertyPopUpWindow.pack();
 
-        float width = 400, height = 600;
+        float width = 425, height = 600;
         propertyPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         propertyPopUpWindow.setVisible(false);
 
@@ -444,6 +422,19 @@ public class GameScreen implements Screen {
         mortgagePropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+            }
+        });
+
+        developPropertyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Boolean ableToDevelop = gameCon.developProperty(clickedProperty, gameCon.getCurrentPlayer());
+                if(!ableToDevelop) {
+                    quickPopUpWindow("Not able to develop");
+                }
+                else {
+
+                }
             }
         });
 
@@ -551,34 +542,10 @@ public class GameScreen implements Screen {
                         currBidderNameLabel.setText(currBidder.getName());
                     }
                     else if (Integer.parseInt(auctionBid.getText()) <= gameCon.getAuctionValue()) {
-                        final Window notHighEnoughWindow = new Window("", gameScreenSkin);
-                        final Label notHighEnoughLabel = new Label("Bid not high enough", gameScreenSkin, "big");
-                        notHighEnoughWindow.add(notHighEnoughLabel);
-                        float width = 350, height = 100;
-                        notHighEnoughWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
-                        stage.addActor(notHighEnoughWindow);
-                        notHighEnoughWindow.setVisible(true);
-                        Timer.schedule(new Timer.Task() {
-                            @Override
-                            public void run() {
-                                notHighEnoughWindow.setVisible(false);
-                            }
-                        }, 0.5f);
+                        quickPopUpWindow("Bid not high enough");
                     }
                     else if (currBidder.getMoney() < Integer.parseInt(auctionBid.getText())) {
-                        final Window notEnoughMoneyWindow = new Window("", gameScreenSkin);
-                        final Label notEnoughMoneyLabel = new Label("Not enough money", gameScreenSkin, "big");
-                        notEnoughMoneyWindow.add(notEnoughMoneyLabel);
-                        float width = 350, height = 100;
-                        notEnoughMoneyWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
-                        stage.addActor(notEnoughMoneyWindow);
-                        notEnoughMoneyWindow.setVisible(true);
-                        Timer.schedule(new Timer.Task() {
-                            @Override
-                            public void run() {
-                                notEnoughMoneyWindow.setVisible(false);
-                            }
-                        }, 0.5f);
+                        quickPopUpWindow("Not enough money");
                     }
                 }
                 currBidderNameLabel.setText(currBidder.getName());
@@ -646,7 +613,7 @@ public class GameScreen implements Screen {
         playerBalanceLabels = new ArrayList<>();
         for (Player player: game.players) {
             
-            Label l = new Label(player.getName() + ": $"+ player.getMoney(), gameScreenSkin);
+            Label l = new Label(player.getName() + ": $"+ player.getMoney(), gameScreenSkin, "title");
             playerBalanceLabels.add(l);
 
             balances.add(l);
@@ -654,19 +621,63 @@ public class GameScreen implements Screen {
         }
         balances.setSize(100,100);
         balances.left();
-        balances.pad(10,10,10,10);
+        balances.pad(10,10,200,10);
         balances.setFillParent(true);
-        balances.setDebug(true);
-//        balances.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
+        //balances.setDebug(true);
+        //balances.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
         stage.addActor(balances);
+    }
+
+    private void quickPopUpWindow(String msg) {
+        final Window window = new Window("", gameScreenSkin);
+        final Label label = new Label(msg, gameScreenSkin, "big");
+        window.add(label);
+        float width = 350, height = 100;
+        window.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+        stage.addActor(window);
+        window.setVisible(true);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                window.setVisible(false);
+            }
+        }, 0.5f);
     }
 
     public void updateBalances(){
         for (int i = 0 ; i < game.players.length; i++){
-
             Player player = game.players[i];
             playerBalanceLabels.get(i).setText(player.getName() + " : $"+ player.getMoney());
         }
+    }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        camera.zoom = 2.5f;
+
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render();
+
+        spriteBatch.setProjectionMatrix(camera.combined);
+        spriteBatch.begin();
+        for (Player p : game.players) {
+            p.getPlayerToken().draw(spriteBatch);
+        }
+        spriteBatch.end();
+
+        camera.update();
+
+        updateBalances();
+
+        labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        labelStage.draw();
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
     }
 
     @Override
