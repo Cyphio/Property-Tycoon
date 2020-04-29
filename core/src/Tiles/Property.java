@@ -162,6 +162,15 @@ public class Property extends Tile implements PropertyInterface {
         }
     }
 
+    public void sellProperty(Player player, int cost){
+        if(getOwned()){
+            player.payPlayer(cost);
+            owned = false;
+            owner = null;
+            setBuyable(true);
+        }
+
+    }
 
     /**
      * @return returns the player object that is assigned to the property
