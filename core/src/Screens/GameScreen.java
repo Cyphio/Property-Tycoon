@@ -100,12 +100,10 @@ public class GameScreen implements Screen {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("Tile Layer 1");
 
-
         //GAME CONTROLLER
         gameCon = new GameController(layer);
         //Thread controllerThread = new Thread(gameCon);
         //controllerThread.start();
-
 
         //TOKEN ADDED TO GO SCREEN
         spriteBatch = new SpriteBatch();
@@ -118,9 +116,6 @@ public class GameScreen implements Screen {
         jailPopUpWindowSetUp();
         auctionPopUpWindowSetUp();
         balanceTableSetUp();
-
-
-
     }
 
     @Override
@@ -528,7 +523,6 @@ public class GameScreen implements Screen {
                     bidderList.add(bidderList.get(i));
                     bidderList.remove(i);
                 }
-
                 auctionPopUpWindow.setVisible(true);
             }
 
@@ -585,9 +579,8 @@ public class GameScreen implements Screen {
                                 notEnoughMoneyWindow.setVisible(false);
                             }
                         }, 0.5f);
-                        }
                     }
-
+                }
                 currBidderNameLabel.setText(currBidder.getName());
             }
         });
@@ -614,7 +607,7 @@ public class GameScreen implements Screen {
                 else {
                     currBidder = bidderList.get(0);
                 }
-                currBidderLabel.setText(currBidder.getName());
+                currBidderNameLabel.setText(currBidder.getName());
             }
         });
     }
@@ -648,7 +641,6 @@ public class GameScreen implements Screen {
 
     }
 
-
     public void balanceTableSetUp(){
         balances = new Table();
         playerBalanceLabels = new ArrayList<>();
@@ -668,7 +660,6 @@ public class GameScreen implements Screen {
 //        balances.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
         stage.addActor(balances);
     }
-
 
     public void updateBalances(){
         for (int i = 0 ; i < game.players.length; i++){
