@@ -19,6 +19,7 @@ public class GameBoard implements GameBoardInterface {
     private static Map<Player, Integer> playerPos;
     private static Player currentPlayer;
     private int goPayoutAmount;
+    private Player[] players;
 
     /**
      * The GameBoard class constructor
@@ -27,6 +28,7 @@ public class GameBoard implements GameBoardInterface {
     public GameBoard(Player[] players) {
         goPayoutAmount = 200;
         playerPos = new HashMap<Player, Integer>();
+        this.players = players;
 
         // sets all players position to GO tile at 0
         for (Player player : players) {
@@ -148,11 +150,11 @@ public class GameBoard implements GameBoardInterface {
     /**
      * sends the current player to the jail tile and sets their inJail to true
      */
-    public void sendToJail() {
-        currentPlayer.setInJail(true);
+    public void sendToJail(Player player) {
+        player.setInJail(true);
 
 
-        setPlayerPos(currentPlayer, 10);
+        setPlayerPos(player, 10);
     }
 
     /**
@@ -176,13 +178,13 @@ public class GameBoard implements GameBoardInterface {
             potluckCards.add(card);
         }
         else if (x instanceof GoToJail) {
-            sendToJail();
+            sendToJail(currentPlayer);
         }
         else if (x instanceof Go) {
             currentPlayer.payPlayer(goPayoutAmount);
         }
         if (dice.jailCheck()) {
-            sendToJail();
+            sendToJail(currentPlayer);
         }
         else if (dice.wasItADouble()) {
             return true;
@@ -199,9 +201,45 @@ public class GameBoard implements GameBoardInterface {
     @Override
     public void performCardAction(Card card) {
         switch (card.getAction()) {
-            case "pay":
+            case "pay": // Bank pays player
+            case "inherit" : // Bank pays player - Inherits
+            case "student loan": // Student loan - bank pays player
+            case "bank error": // Bank error - bank pays player
+            case "sale": // Sale - bank pays player
+            case "savings": // Savings - bank pays player
+
                 currentPlayer.payPlayer(card.getValue());
                 break;
+            case "go to": // Go back to Crapper Street
+                currentPlayer.setTilePosition(card.getValue());
+                break;
+            case "bill"://Player pays bill
+            case "late": // Player pays bank
+                currentPlayer.makePurchase(card.getValue());
+                break;
+            case "advance":
+                currentPlayer.setTilePosition(0);
+                break;
+            case "jail": // sends player to jail
+                sendToJail(currentPlayer);
+                break;
+            case "birthday":// Each player pays current player
+                for (Player player: players) {
+
+                    if(player != currentPlayer) {
+                        player.makePurchase(card.getValue());
+                        currentPlayer.payPlayer(card.getValue());
+                    }
+                }
+                break;
+            case "get out of jail free":
+                currentPlayer.addGetOutOfJailFreeCard();
+                break;
+            case "insurance":
+                currentPlayer.makePurchase(card.getValue());
+                ((FreeParking) board[20]).addToPot(card.getValue());
+                break;
+
             default:
                 System.out.println("no action found");
         }

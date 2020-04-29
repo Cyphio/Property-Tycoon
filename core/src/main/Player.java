@@ -16,7 +16,7 @@ public class Player implements PlayerInterface {
     private ArrayList<Tile> mortgagedProperties;
     private int balance;
     private int tilePosition;
-    private int getOfJailCards;
+    private int getOutJailCards;
     private Boolean isInJail;
 
     private Sprite gameToken;
@@ -35,10 +35,28 @@ public class Player implements PlayerInterface {
         setInJail(false);
         properties = new ArrayList<>();
 
-        getOfJailCards = 0;
+        getOutJailCards = 0;
         balance = 1500;
         firstLap = true;
     }
+
+    public void addGetOutOfJailFreeCard(){
+
+        getOutJailCards +=1;
+
+
+    }
+
+    public void removeGetOutOfJailFreeCard(){
+
+        if(getOutJailCards > 0) {
+
+            getOutJailCards -= 1;
+
+        }
+
+    }
+
 
     /**
      * getName returns the name of a player as a String
@@ -141,8 +159,8 @@ public class Player implements PlayerInterface {
      */
     @Override
     public boolean getOutOfJailFree() {
-        if(getOfJailCards > 0) {
-            getOfJailCards--;
+        if(getOutJailCards > 0) {
+            getOutJailCards--;
             return true;
         }
         else {

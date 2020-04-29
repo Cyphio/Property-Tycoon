@@ -5,6 +5,10 @@ import Tiles.Tile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import misc.CellToTileBuilder;
 import misc.Coordinate;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
@@ -15,39 +19,43 @@ public class GameController{
 
     private static GameBoard board;
     private HashMap<TiledMapTileLayer.Cell, Tile> cellToTile;
-    private int playerNum;
     private Boolean playAgain;
     private int currentAuction;
+    private ArrayList<Player> playerOrders;
+
 
     /**
      * the constructor for GameController
      * @param layer the TiledMapTileLayer used to create the cell to Tile mapping
      */
     public GameController(TiledMapTileLayer layer) {
-        playerNum = 0;
-        cellToTile = new HashMap<>();
-        board = new GameBoard(players);
 
-        CellToTileBuilder builder = new CellToTileBuilder(layer,board);
-        cellToTile = builder.getReferenceList();
+        playerOrders = new ArrayList<>();
 
-        Tile tile = board.getTile(0);
-        for (Player p : players) {
-            Coordinate coord =  tile.getAvailableCoordinates();
-            p.setCurrentCoordinates(coord);
-        }
+        playerOrders.addAll(Arrays.asList(players));
+
+    cellToTile = new HashMap<>();
+    board = new GameBoard(players);
+
+    CellToTileBuilder builder = new CellToTileBuilder(layer,board);
+    cellToTile = builder.getReferenceList();
+
+    Tile tile = board.getTile(0);
+
+    for (Player p : playerOrders) {
+        Coordinate coord =  tile.getAvailableCoordinates();
+        p.setCurrentCoordinates(coord);
     }
+}
 
     /**
      * Changes the current player to the next player in the list players
      */
     private void nextPlayer(){
-        if (playerNum < players.length - 1) {
-            playerNum += 1;
-        }
-        else{
-            playerNum = 0;
-        }
+
+        Player p = playerOrders.remove(0);
+        playerOrders.add(p);
+
     }
 
     /**
@@ -64,7 +72,7 @@ public class GameController{
      * @return returns the player who's turn it currently is
      */
     public Player getCurrentPlayer() {
-        return players[playerNum];
+        return playerOrders.get(0);
     }
 
     /**
@@ -121,7 +129,10 @@ public class GameController{
         return board;
     }
 
-    public int getPlayerNum(){
-        return playerNum;
+
+    public ArrayList<Player> getPlayerOrder(){
+
+        return playerOrders;
+
     }
 }
