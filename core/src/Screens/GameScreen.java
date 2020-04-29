@@ -202,7 +202,7 @@ public class GameScreen implements Screen {
         view = new FitViewport(w, h, camera);
         labelStage = new Stage(view);
 
-        camera.position.set(1120, 1120, 0);
+        camera.position.set(2880, 1760, 0);
         camera.zoom = (float) 1.5;
 
         int angle = 0;
@@ -229,7 +229,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.zoom = 2.5f;
+        camera.zoom = 2f;
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();

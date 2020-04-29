@@ -29,10 +29,16 @@ public class CellToTileBuilder {
         int tileNUm=0;
         int count=0;
 
+        int dynamicY= 10;
+        int dynamicX=27;
+
+        //x=27
+        //y = 10
+
         //go tile
         cellCoordinates=new ArrayList<>();
-        for(int y=0;y< 4;y++){
-            for(int x=0;x< 4;x++){
+        for(int y=dynamicY;y< 4+dynamicY;y++){
+            for(int x=dynamicX;x< 4+dynamicX;x++){
                 cellToTile.put(l.getCell(x,y),board.getTile(tileNUm));
                 coord=new Coordinate(x,y);
                 cellCoordinates.add(coord);
@@ -44,14 +50,14 @@ public class CellToTileBuilder {
 
         // vertical row 10
         cellCoordinates=new ArrayList<>();
-        for(int y=4;y< 31;y++){
+        for(int y=4+dynamicY;y< 31+dynamicY;y++){
             if(count==3){
                 board.getTile(tileNUm).setCoordinates(cellCoordinates);
                 cellCoordinates=new ArrayList<>();
                 count=0;
                 tileNUm++;
             }
-            for(int x=0;x< 4;x++){
+            for(int x=0+dynamicX;x< 4+dynamicX;x++){
                 cellToTile.put(l.getCell(x,y),board.getTile(tileNUm));
                 coord=new Coordinate(x,y);
                 cellCoordinates.add(coord);
@@ -64,8 +70,8 @@ public class CellToTileBuilder {
 
         //jail 1 (16)
         cellCoordinates=new ArrayList<>();
-        for(int y=31;y< 35;y++){
-            for(int x=0;x< 4;x++){
+        for(int y=31+dynamicY;y< 35+dynamicY;y++){
+            for(int x=0+dynamicX;x< 4+dynamicX;x++){
                 cellToTile.put(l.getCell(x,y),board.getTile(tileNUm));
                 coord=new Coordinate(x,y);
                 cellCoordinates.add(coord);
@@ -76,7 +82,7 @@ public class CellToTileBuilder {
         cellCoordinates=new ArrayList<>();
 
         //row horizontal
-        for(int x=4;x< 31;x++){
+        for(int x=4+dynamicX;x< 31+dynamicX;x++){
             if(count==3){
                 if(cellCoordinates.size()>0){
                     board.getTile(tileNUm).setCoordinates(cellCoordinates);
@@ -85,7 +91,7 @@ public class CellToTileBuilder {
                 count=0;
                 tileNUm++;
             }
-            for(int y=34;y>30;y--){
+            for(int y=34+dynamicY;y>30+dynamicY;y--){
                 cellToTile.put(l.getCell(x,y),board.getTile(tileNUm));
                 coord=new Coordinate(x,y);
                 cellCoordinates.add(coord);
@@ -97,8 +103,8 @@ public class CellToTileBuilder {
 
         //free parking
         cellCoordinates=new ArrayList<>();
-        for(int y=31;y< 35;y++){
-            for(int x=31;x< 35;x++){
+        for(int y=31+dynamicY;y< 35+dynamicY;y++){
+            for(int x=31+dynamicX;x< 35+dynamicX;x++){
                 cellToTile.put(l.getCell(x,y),board.getTile(tileNUm));
                 coord=new Coordinate(x,y);
                 cellCoordinates.add(coord);
@@ -108,7 +114,7 @@ public class CellToTileBuilder {
 
         //vertical row
         cellCoordinates=new ArrayList<>();
-        for(int y=30;y>3;y--){
+        for(int y=30+dynamicY;y>3+dynamicY;y--){
             if(count==3){
                 if(cellCoordinates.size()>0){
                     board.getTile(tileNUm).setCoordinates(cellCoordinates);
@@ -117,7 +123,7 @@ public class CellToTileBuilder {
                 count=0;
                 tileNUm++;
             }
-            for(int x=34;x>30;x--){
+            for(int x=34+dynamicX;x>30+dynamicX;x--){
                 cellToTile.put(l.getCell(x,y),board.getTile(tileNUm));
                 coord=new Coordinate(x,y);
                 cellCoordinates.add(coord);
@@ -129,8 +135,8 @@ public class CellToTileBuilder {
 
         //go to jail
         cellCoordinates=new ArrayList<>();
-        for(int y=0;y< 4;y++){
-            for(int x=31;x< 35;x++){
+        for(int y=0+dynamicY;y< 4+dynamicY;y++){
+            for(int x=31+dynamicX;x< 35+dynamicX;x++){
                 cellToTile.put(l.getCell(x,y),board.getTile(tileNUm));
                 coord=new Coordinate(x,y);
                 cellCoordinates.add(coord);
@@ -140,7 +146,7 @@ public class CellToTileBuilder {
 
         //horizontal final row
         cellCoordinates=new ArrayList<>();
-        for(int x=30;x>3;x--){
+        for(int x=30+dynamicX;x>3+dynamicX;x--){
             if(count==3){
                 if(cellCoordinates.size()>0){
                     board.getTile(tileNUm).setCoordinates(cellCoordinates);
@@ -149,7 +155,7 @@ public class CellToTileBuilder {
                 count=0;
                 tileNUm++;
             }
-            for(int y=0;y< 4;y++){
+            for(int y=0+dynamicY;y< 4+dynamicY;y++){
                 cellToTile.put(l.getCell(x,y),board.getTile(tileNUm));
                 coord=new Coordinate(x,y);
                 cellCoordinates.add(coord);
