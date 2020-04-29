@@ -118,6 +118,9 @@ public class GameScreen implements Screen {
         jailPopUpWindowSetUp();
         auctionPopUpWindowSetUp();
         balanceTableSetUp();
+
+
+
     }
 
     @Override
@@ -223,6 +226,8 @@ public class GameScreen implements Screen {
                 labelStage.addActor(label);
             }
         }
+
+        camera.zoom = (float) (((64*90)/h)/2);
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
@@ -657,7 +662,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.zoom = 2.5f;
+
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
