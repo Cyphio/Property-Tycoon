@@ -531,7 +531,7 @@ public class GameScreen implements Screen {
         bidButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (Integer.parseInt(auctionBid.getText()) > gameCon.getAuctionValue() && currBidder.getMoney() > Integer.parseInt(auctionBid.getText())) {
+                if (Integer.parseInt(auctionBid.getText()) > gameCon.getAuctionValue() && currBidder.getMoney() >= Integer.parseInt(auctionBid.getText())) {
                     gameCon.setAuctionValue(Integer.parseInt(auctionBid.getText()));
                     highestBidder = currBidder;
                     highestBid.setText("$" + gameCon.getAuctionValue());
@@ -551,7 +551,6 @@ public class GameScreen implements Screen {
                 }
 
                 else if (Integer.parseInt(auctionBid.getText()) <= gameCon.getAuctionValue()) {
-                    System.out.println("Hello");
                     final Window notHighEnoughWindow = new Window("", gameScreenSkin);
                     final Label notHighEnoughLabel = new Label("Bid not high enough", gameScreenSkin, "big");
                     notHighEnoughWindow.add(notHighEnoughLabel);
@@ -567,13 +566,13 @@ public class GameScreen implements Screen {
                     }, 0.5f);
                 }
 
-                else if (currBidder.getMoney() < Integer.parseInt(auctionBid.getText())){
+                else if (currBidder.getMoney() < Integer.parseInt(auctionBid.getText())) {
                     final Window notEnoughMoneyWindow = new Window("", gameScreenSkin);
                     final Label notEnoughMoneyLabel = new Label("Not enough money", gameScreenSkin, "big");
                     notEnoughMoneyWindow.add(notEnoughMoneyLabel);
                     float width = 350, height = 100;
                     notEnoughMoneyWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
-                    stage.addActor(notEnoughMoneyLabel);
+                    stage.addActor(notEnoughMoneyWindow);
                     notEnoughMoneyWindow.setVisible(true);
                     Timer.schedule(new Timer.Task() {
                         @Override
@@ -583,7 +582,6 @@ public class GameScreen implements Screen {
                     }, 0.5f);
                 }
 
-                highestBidderNameLabel.setText(highestBidder.getName());
                 GameScreen.this.currBidderNameLabel.setText(currBidder.getName());
 
             }
