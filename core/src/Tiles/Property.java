@@ -69,6 +69,7 @@ public class Property extends Tile implements PropertyInterface {
         return housePrice;
     }
 
+
     public void setHotelPrice(int hotelPrice) {
         this.hotelPrice = hotelPrice;
     }
@@ -174,6 +175,7 @@ public class Property extends Tile implements PropertyInterface {
     public void sellProperty(Player player, int cost){
         if(getOwned()){
             player.payPlayer(cost);
+            player.removeProperty(this);
             owned = false;
             owner = null;
             setBuyable(true);

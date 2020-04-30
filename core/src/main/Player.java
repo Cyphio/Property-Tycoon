@@ -119,6 +119,11 @@ public class Player implements PlayerInterface {
         properties.add(property);
     }
 
+    public void removeProperty(Property property) {
+        property.removePlayer(this);
+        properties.remove(property);
+    }
+
     /**
      * getMoney returns an integer that represents the current balance of the player (how much money they has)
      * @return returns balance as an integer

@@ -118,9 +118,6 @@ public class GameScreen implements Screen {
         jailPopUpWindowSetUp();
         auctionPopUpWindowSetUp();
         balanceTableSetUp();
-
-
-
     }
 
     @Override
@@ -271,10 +268,10 @@ public class GameScreen implements Screen {
 
             propNameLabel.setText(clickedProperty.getTileName());
             propOwnerLabel.setText(clickedProperty.getOwnerName());
-            propCostLabel.setText(clickedProperty.getCost());
+            propCostLabel.setText("$" + clickedProperty.getCost());
             propInfoBox.setBackground(getColouredBackground(clickedProperty.getColor()));
 
-            propRentLabel.setText(clickedProperty.getInitialRent());
+            propRentLabel.setText("$" + clickedProperty.getInitialRent());
             for (int i = 0; i < clickedProperty.getDevPrices().size(); i++) {
                 developmentPrices.get(i).setText(clickedProperty.getDevPrices().get(i));
             }
@@ -433,12 +430,11 @@ public class GameScreen implements Screen {
         developPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Boolean ableToDevelop = gameCon.developProperty(clickedProperty, gameCon.getCurrentPlayer());
-                if(!ableToDevelop) {
-                    quickPopUpWindow("Not able to develop");
+                if(gameCon.developProperty(clickedProperty, gameCon.getCurrentPlayer())) {
+                    quickPopUpWindow("Able to develop");
                 }
                 else {
-
+                    quickPopUpWindow("Not able to develop");
                 }
             }
         });
@@ -617,16 +613,15 @@ public class GameScreen implements Screen {
         balances = new Table();
         playerBalanceLabels = new ArrayList<>();
         for (Player player: game.players) {
-            
             Label l = new Label(player.getName() + ": $"+ player.getMoney(), gameScreenSkin, "title");
             playerBalanceLabels.add(l);
 
-            balances.add(l);
+            balances.add(l).left();
             balances.row();
         }
         balances.setSize(100,100);
         balances.left();
-        balances.pad(10,10,200,10);
+        balances.pad(0,10,0,0);
         balances.setFillParent(true);
         //balances.setDebug(true);
         //balances.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
@@ -652,7 +647,7 @@ public class GameScreen implements Screen {
     public void updateBalances(){
         for (int i = 0 ; i < game.players.length; i++){
             Player player = game.players[i];
-            playerBalanceLabels.get(i).setText(player.getName() + " : $"+ player.getMoney());
+            playerBalanceLabels.get(i).setText(player.getName() + ": $"+ player.getMoney());
         }
     }
 
@@ -661,7 +656,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
 
         tiledMapRenderer.setView(camera);
