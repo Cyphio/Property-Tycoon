@@ -23,6 +23,7 @@ public class Property extends Tile implements PropertyInterface {
     private boolean owned;
     private Player owner;
     private int housesOwned;
+    private boolean isMortgaged;
 
     /**
      * The constructor for Property
@@ -146,6 +147,7 @@ public class Property extends Tile implements PropertyInterface {
     @Override
     public int getCost(){ return cost; }
 
+
     /**
      * getOwned will return a boolean value that will represent if the property is owned by any player or not
      * @return returns owned, boolean value that represent if property is owned
@@ -170,6 +172,11 @@ public class Property extends Tile implements PropertyInterface {
             setBuyable(false);
         }
     }
+    /**
+     * Checks if a property is owned, and if so, allows it to be sold by the player
+     * @param player the player buying the property
+     * @param cost the price of the property
+     */
 
     public void sellProperty(Player player, int cost){
         if(getOwned()){
@@ -180,6 +187,30 @@ public class Property extends Tile implements PropertyInterface {
         }
 
     }
+
+    public void setMortgaged(Player player, int cost){
+        if((getOwned())){
+            isMortgaged = true;
+            player.payPlayer(cost/2);
+
+        }
+
+    }
+
+
+    public void unmortgage(Player player, int cost){
+        if(isMortgaged){
+            isMortgaged = false;
+            player.makePurchase(cost/2);
+
+        }
+
+    }
+
+    public boolean getMortgaged(){
+        return isMortgaged;
+    }
+
 
     /**
      * @return returns the player object that is assigned to the property

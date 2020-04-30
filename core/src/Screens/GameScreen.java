@@ -427,6 +427,7 @@ public class GameScreen implements Screen {
         mortgagePropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                clickedProperty.setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
             }
         });
 
