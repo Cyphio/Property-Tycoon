@@ -14,7 +14,7 @@ public class Property extends Tile implements PropertyInterface {
 
     private String colour;
     private int cost;
-    private int rent;
+    //private int rent;
     private ArrayList<Integer> developmentPrices = new ArrayList<>();
     private int housePrice;
     private int hotelPrice;
@@ -113,24 +113,24 @@ public class Property extends Tile implements PropertyInterface {
         return developmentPrices;
     }
 
-    /**
-     * setRent takes a rent value and sets the rent of the property (with 0 development) to be that value
-     * @param rent the rent of the property
-     */
-    public void setRent(String rent) {
-         try {
-             this.rent = Integer.parseInt(rent);
-         } catch(Exception e) {
-             e.getMessage();
-         }
-    }
+//    /**
+//     * setRent takes a rent value and sets the rent of the property (with 0 development) to be that value
+//     * @param rent the rent of the property
+//     */
+//    public void setRent(String rent) {
+//         try {
+//             this.rent = Integer.parseInt(rent);
+//         } catch(Exception e) {
+//             e.getMessage();
+//         }
+//    }
 
     /**
      * getRent returns the rent of the property with 0 development
      * @return the rent of the property with 0 development
      */
     public int getInitialRent() {
-        return rent;
+        return developmentPrices.get(0);
     }
 
     /**

@@ -1,8 +1,6 @@
 package Screens;
 
-import Tiles.Jail;
-import Tiles.Property;
-import Tiles.Tile;
+import Tiles.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
@@ -64,7 +62,6 @@ public class GameScreen implements Screen {
     private Label propNameLabel;
     private Label propOwnerLabel;
     private Label propCostLabel;
-    private Label propRentLabel;
     private Label propHouseCostLabel;
     private Label propHotelCostLabel;
     private ArrayList<Label> developmentPrices;
@@ -77,13 +74,17 @@ public class GameScreen implements Screen {
     private Label highestBid;
     private Label currBidderNameLabel;
 
-    private Table balances;
+    private Window stationPopUpWindow;
 
     private Window jailPopUpWindow;
 
-    private Sound rollDiceFX;
+    private Window OKPopUpWindow;
+    private Label OKInfoLabel;
+
+    private Table balances;
     private ArrayList<Label> playerBalanceLabels;
 
+    private Sound rollDiceFX;
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
@@ -118,6 +119,7 @@ public class GameScreen implements Screen {
         jailPopUpWindowSetUp();
         auctionPopUpWindowSetUp();
         balanceTableSetUp();
+        OKPopUpWindowSetUp();
     }
 
     @Override
@@ -192,9 +194,10 @@ public class GameScreen implements Screen {
                 camera.unproject(mouse);
                 try {
                     Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-                    if(!(tile instanceof Jail)) {
+                    /**if(tile instanceof Property || tile instanceof Station) {
                         openPopUpWindow(tile);
-                    }
+                    }**/
+                    openPopUpWindow(tile);
                 } catch (Exception e) {
                     e.getMessage();
                 }
@@ -271,12 +274,11 @@ public class GameScreen implements Screen {
             propCostLabel.setText("$" + clickedProperty.getCost());
             propInfoBox.setBackground(getColouredBackground(clickedProperty.getColor()));
 
-            propRentLabel.setText("$" + clickedProperty.getInitialRent());
             for (int i = 0; i < clickedProperty.getDevPrices().size(); i++) {
-                developmentPrices.get(i).setText(clickedProperty.getDevPrices().get(i));
+                developmentPrices.get(i).setText("$" + clickedProperty.getDevPrices().get(i));
             }
-            propHouseCostLabel.setText(clickedProperty.getHousePrice());
-            propHotelCostLabel.setText(clickedProperty.getHotelPrice());
+            propHouseCostLabel.setText("$" + clickedProperty.getHousePrice());
+            propHotelCostLabel.setText("$" + clickedProperty.getHotelPrice());
 
             closeAllWindows();
             propertyPopUpWindow.setVisible(true);
@@ -284,6 +286,11 @@ public class GameScreen implements Screen {
         else if (tile instanceof Jail && gameCon.getCurrentPlayer().getIsInJail()) {
             closeAllWindows();
             jailPopUpWindow.setVisible(true);
+        }
+        else if (tile instanceof OpportunityKnocks) {
+            closeAllWindows();
+            OKInfoLabel.setText("This is placeholder text but will eventually hold the info of the Opportunity knocks card");
+            OKPopUpWindow.setVisible(true);
         }
         /**if (false) {
 
@@ -333,32 +340,31 @@ public class GameScreen implements Screen {
 
         Table propInfoBox2 = new Table();
 
-        propRentLabel = new Label("", gameScreenSkin);
         propHouseCostLabel = new Label("", gameScreenSkin);
         propHotelCostLabel = new Label("", gameScreenSkin);
 
         developmentPrices = new ArrayList<>();
-        for(int i=0; i<5; i++) {
+        for(int i=0; i<6; i++) {
             developmentPrices.add(new Label("", gameScreenSkin));
         }
 
         propInfoBox2.add(new Label("Rent:", gameScreenSkin)).left().width(350);
-        propInfoBox2.add(propRentLabel).right();
-        propInfoBox2.row().pad(20, 0, 0, 0);
-        propInfoBox2.add(new Label("Rent with 1 house:", gameScreenSkin)).left();
         propInfoBox2.add(developmentPrices.get(0)).right();
         propInfoBox2.row().pad(20, 0, 0, 0);
-        propInfoBox2.add(new Label("Rent with 2 houses:", gameScreenSkin)).left();
+        propInfoBox2.add(new Label("Rent with 1 house:", gameScreenSkin)).left();
         propInfoBox2.add(developmentPrices.get(1)).right();
         propInfoBox2.row().pad(20, 0, 0, 0);
-        propInfoBox2.add(new Label("Rent with 3 houses:", gameScreenSkin)).left();
+        propInfoBox2.add(new Label("Rent with 2 houses:", gameScreenSkin)).left();
         propInfoBox2.add(developmentPrices.get(2)).right();
         propInfoBox2.row().pad(20, 0, 0, 0);
-        propInfoBox2.add(new Label("Rent with 4 houses:", gameScreenSkin)).left();
+        propInfoBox2.add(new Label("Rent with 3 houses:", gameScreenSkin)).left();
         propInfoBox2.add(developmentPrices.get(3)).right();
         propInfoBox2.row().pad(20, 0, 0, 0);
-        propInfoBox2.add(new Label("Rent with a hotel", gameScreenSkin)).left();
+        propInfoBox2.add(new Label("Rent with 4 houses:", gameScreenSkin)).left();
         propInfoBox2.add(developmentPrices.get(4)).right();
+        propInfoBox2.row().pad(20, 0, 0, 0);
+        propInfoBox2.add(new Label("Rent with a hotel", gameScreenSkin)).left();
+        propInfoBox2.add(developmentPrices.get(5)).right();
         propInfoBox2.row().pad(40, 0, 0, 0);
         propInfoBox2.add(new Label("House cost:", gameScreenSkin)).left();
         propInfoBox2.add(propHouseCostLabel).right();
@@ -432,10 +438,10 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(gameCon.developProperty(clickedProperty, gameCon.getCurrentPlayer())) {
-                    quickPopUpWindow("Able to develop");
+                    quickPopUpWindow("Able to develop", 0.5f);
                 }
                 else {
-                    quickPopUpWindow("Not able to develop");
+                    quickPopUpWindow("Not able to develop", 0.5f);
                 }
             }
         });
@@ -544,10 +550,10 @@ public class GameScreen implements Screen {
                         currBidderNameLabel.setText(currBidder.getName());
                     }
                     else if (Integer.parseInt(auctionBid.getText()) <= gameCon.getAuctionValue()) {
-                        quickPopUpWindow("Bid not high enough");
+                        quickPopUpWindow("Bid not high enough", 0.5f);
                     }
                     else if (currBidder.getMoney() < Integer.parseInt(auctionBid.getText())) {
-                        quickPopUpWindow("Not enough money");
+                        quickPopUpWindow("Not enough money", 0.5f);
                     }
                 }
                 currBidderNameLabel.setText(currBidder.getName());
@@ -581,6 +587,10 @@ public class GameScreen implements Screen {
         });
     }
 
+    private void stationPopUpWindowSetUp() {
+
+    }
+
     private void jailPopUpWindowSetUp() {
         Label jailInfoLabel = new Label("Either buy your way out of Jail for $50 or roll a double on your next go!", gameScreenSkin, "title");
         jailInfoLabel.setWrap(true);
@@ -607,7 +617,33 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
             }
         });
+    }
 
+    private void OKPopUpWindowSetUp() {
+        OKInfoLabel = new Label("", gameScreenSkin, "title");
+        OKInfoLabel.setWrap(true);
+        OKInfoLabel.setWidth(875);
+        OKInfoLabel.setAlignment(Align.center);
+        TextButton carryOutButton = new TextButton("Carry out action", gameScreenSkin);
+
+        OKPopUpWindow = new Window("", gameScreenSkin);
+
+        OKPopUpWindow.add(OKInfoLabel).width(850);
+        OKPopUpWindow.row().pad(10, 0, 0, 0);
+        OKPopUpWindow.add(carryOutButton);
+        OKPopUpWindow.pack();
+
+        float width = 700, height = 300;
+        OKPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+        OKPopUpWindow.setVisible(false);
+
+        stage.addActor(OKPopUpWindow);
+
+        carryOutButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            }
+        });
     }
 
     public void balanceTableSetUp(){
@@ -629,7 +665,7 @@ public class GameScreen implements Screen {
         stage.addActor(balances);
     }
 
-    private void quickPopUpWindow(String msg) {
+    private void quickPopUpWindow(String msg, float time) {
         final Window window = new Window("", gameScreenSkin);
         final Label label = new Label(msg, gameScreenSkin, "big");
         window.add(label);
@@ -642,7 +678,7 @@ public class GameScreen implements Screen {
             public void run() {
                 window.setVisible(false);
             }
-        }, 0.5f);
+        }, time);
     }
 
     public void updateBalances(){
