@@ -208,7 +208,7 @@ public class GameScreen implements Screen {
         labelStage = new Stage(view);
 
         camera.position.set(2880, 1760, 0);
-        camera.zoom = (float) 1.5;
+
 
         int angle = 0;
         for (int i = 0; i < 40; i++) {
@@ -228,6 +228,7 @@ public class GameScreen implements Screen {
         }
 
         camera.zoom = (float) (((64*90)/h)/2);
+
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
@@ -613,6 +614,28 @@ public class GameScreen implements Screen {
 
     }
 
+
+    private void quickPopUpWindow(String msg) {
+        final Window window = new Window("", gameScreenSkin);
+        final Label label = new Label(msg, gameScreenSkin, "big");
+        window.add(label);
+        float width = 350, height = 100;
+        window.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+        stage.addActor(window);
+        window.setVisible(true);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                window.setVisible(false);
+            }
+        }, 0.5f);
+    }
+
+
+
+    /**
+     * Sets up the Balance table with initial player balances. Call this in the constructor.
+     */
     public void balanceTableSetUp(){
         balances = new Table();
         playerBalanceLabels = new ArrayList<>();
@@ -633,22 +656,10 @@ public class GameScreen implements Screen {
         stage.addActor(balances);
     }
 
-    private void quickPopUpWindow(String msg) {
-        final Window window = new Window("", gameScreenSkin);
-        final Label label = new Label(msg, gameScreenSkin, "big");
-        window.add(label);
-        float width = 350, height = 100;
-        window.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
-        stage.addActor(window);
-        window.setVisible(true);
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                window.setVisible(false);
-            }
-        }, 0.5f);
-    }
 
+    /**
+     * Updates the balance values shown in the balanceTable. Call this in render for frequent updates.
+     */
     public void updateBalances(){
         for (int i = 0 ; i < game.players.length; i++){
             Player player = game.players[i];

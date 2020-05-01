@@ -63,7 +63,7 @@ public class GameBoard implements GameBoardInterface {
 
         potluckCards = builder.getPotluckChestCards();
         Collections.shuffle(potluckCards);
-        opportunityKnocksCards = builder.getCommunityChestCards();
+        opportunityKnocksCards = builder.getOpportunityCards();
         Collections.shuffle(opportunityKnocksCards);
 
         System.out.println(players.length);

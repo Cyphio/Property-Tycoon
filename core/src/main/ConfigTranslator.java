@@ -155,8 +155,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
     /**
      * Generates lists of set up Card objects for the community chest and potluck draws.
-     *
-     * @param
      */
     @Override
     public void genCards() {
@@ -165,7 +163,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
         cardDecks = new ArrayList<>();
 
         cardNodeLists.add(document.getElementsByTagName("potluckcard"));
-        cardNodeLists.add(document.getElementsByTagName("communitychestcard"));
+        cardNodeLists.add(document.getElementsByTagName("opportunityknockscard"));
 
 
         for (NodeList nodes : cardNodeLists) {
@@ -203,17 +201,33 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
         }
     }
 
-    public ArrayList<Card> getCommunityChestCards() {
-        return cardDecks.get(0);
+    /**
+     * Gets the list of set up opportunity knocks cards.
+     * @return ArrayList of cards.
+     */
+
+    public ArrayList<Card> getOpportunityCards() {
+        return cardDecks.get(1);
     }
+
+    /**
+     * Gets the list of set up potluck cards.
+     * @return ArrayList of cards.
+     */
 
     public ArrayList<Card> getPotluckChestCards() {
         return cardDecks.get(0);
     }
 
+    /**
+     * Gets the list of set up tiles.
+     * @return Array of tiles.
+     */
+
     public Tile[] getTiles() {
         return tileList;
     }
+
 
     public ArrayList<String> getAllColours() {
         return allColours;

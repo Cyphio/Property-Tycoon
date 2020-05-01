@@ -97,7 +97,7 @@ public class Tile implements TileInterface {
     }
 
     /**
-     * Sets the value of the position of the tile on the game board
+     * Sets the value of the position of the tile on the game board.
      * @param position The desired position.
      */
     @Override
@@ -106,8 +106,8 @@ public class Tile implements TileInterface {
     }
 
     /**
-     * sets the coordinates of tiles on the GameBoard, this allows for mouse interactivity
-     * @param coordinates the arraylist of coordinates for each tile
+     * sets the coordinates of tiles on the GameBoard, this allows for mouse interactivity.
+     * @param coordinates the arraylist of coordinates for each tile.
      */
 
     public void setCoordinates(ArrayList<Coordinate> coordinates){
@@ -123,11 +123,20 @@ public class Tile implements TileInterface {
         centerLabelCoordinate = labelCoordinate;
     }
 
+    /**
+     * Gets the next available coordinate a player can be positioned.
+     * @return the next available coordinate for a player to be positioned.
+     */
     public Coordinate getAvailableCoordinates(){
         Coordinate coordinate = playerPosCoordinates.remove(0);
         playerPosCoordinates.add(coordinate);
         return coordinate;
     }
+
+    /**
+     * Gets the label position coordinate used to display labels on the board properly.
+     * @return coordinate of label position.
+     */
 
     public Coordinate getCenterLabelCoordinate() {
         return centerLabelCoordinate;

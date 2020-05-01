@@ -11,7 +11,7 @@ import java.util.*;
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 /**
- * GameController handles passing turns between players and playing out each turn.
+ * Acts as a bridge between game logic and the render phase.
  */
 public class GameController{
 
@@ -126,13 +126,18 @@ public class GameController{
     public GameBoard getBoard() {
         return board;
     }
-
+    /**
+     * getBoard returns the current gameBoard object
+     * @return returns an ArrayList of players in their current play order (current player is at index 0, next player at index 1 etc.)
+     */
 
     public ArrayList<Player> getPlayerOrder(){
 
         return playerOrders;
 
     }
+
+
 
     public boolean developProperty(Property prop, Player player) {
         if(player.getProperties().containsAll(board.getColPropMap().get(prop.getColourAsString()))) {
