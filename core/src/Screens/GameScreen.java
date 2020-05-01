@@ -329,7 +329,7 @@ public class GameScreen implements Screen {
         }
         else if (tile instanceof OpportunityKnocks) {
             closeAllWindows();
-            quickPopUpWindow("This is placeholder text but will eventually hold the info of the Opportunity knocks card", 300, 800, 3);
+            quickPopUpWindow("This is placeholder text but will eventually hold the info of the Opportunity knocks card", 300, 800, 0.5f);
         }
         /**if (false) {
 
@@ -347,6 +347,7 @@ public class GameScreen implements Screen {
 
     private void closeAllWindows() {
         propertyPopUpWindow.setVisible(false);
+        stationPopUpWindow.setVisible(false);
         auctionPopUpWindow.setVisible(false);
         jailPopUpWindow.setVisible(false);
     }
@@ -452,6 +453,15 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
+
+                currBidder = gameCon.getCurrentPlayer();
+                bidderList = new ArrayList<>(Arrays.asList(game.players));
+
+                for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
+                    bidderList.add(bidderList.get(i));
+                    bidderList.remove(i);
+                }
+
                 currBidderNameLabel.setText(gameCon.getCurrentPlayer().getName());
                 closeAllWindows();
                 auctionPopUpWindow.setVisible(true);
@@ -524,13 +534,13 @@ public class GameScreen implements Screen {
         stationInfoBox2.add(new Label("Rent with one station owned:", gameScreenSkin)).left().width(350);
         stationInfoBox2.add(new Label("$50", gameScreenSkin)).right();
         stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.add(new Label("Rent with two station owned:", gameScreenSkin)).left();
+        stationInfoBox2.add(new Label("Rent with two stations owned:", gameScreenSkin)).left();
         stationInfoBox2.add(new Label("$100", gameScreenSkin)).right();
         stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.add(new Label("Rent with three station owned:", gameScreenSkin)).left();
+        stationInfoBox2.add(new Label("Rent with three stations owned:", gameScreenSkin)).left();
         stationInfoBox2.add(new Label("$150", gameScreenSkin)).right();
         stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.add(new Label("Rent with four station owned:", gameScreenSkin)).left();
+        stationInfoBox2.add(new Label("Rent with four stations owned:", gameScreenSkin)).left();
         stationInfoBox2.add(new Label("$200", gameScreenSkin)).right();
         stationInfoBox2.row().pad(20, 0, 0, 0);
 
@@ -576,6 +586,15 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
+
+                currBidder = gameCon.getCurrentPlayer();
+                bidderList = new ArrayList<>(Arrays.asList(game.players));
+
+                for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
+                    bidderList.add(bidderList.get(i));
+                    bidderList.remove(i);
+                }
+
                 currBidderNameLabel.setText(gameCon.getCurrentPlayer().getName());
                 closeAllWindows();
                 auctionPopUpWindow.setVisible(true);
@@ -661,21 +680,6 @@ public class GameScreen implements Screen {
             public boolean acceptChar(TextField textField, char c) {
                 return Character.toString(c).matches("^[0-9]");
             }
-        });
-
-        auctionPropertyButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                currBidder = gameCon.getCurrentPlayer();
-                bidderList = new ArrayList<>(Arrays.asList(game.players));
-
-                for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
-                    bidderList.add(bidderList.get(i));
-                    bidderList.remove(i);
-                }
-                auctionPopUpWindow.setVisible(true);
-            }
-
         });
 
         bidButton.addListener(new ClickListener(){
