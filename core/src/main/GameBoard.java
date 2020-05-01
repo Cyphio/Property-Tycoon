@@ -194,9 +194,23 @@ public class GameBoard implements GameBoardInterface {
             opportunityKnocksCards.add(card);
         }
         else if(x instanceof Property){
-            if(((Property) x).getOwned() && !((Property) x).getMortgaged()){
-                currentPlayer.makePurchase(((Property) x).getCurrentRent());
-                ((Property) x).getOwner().payPlayer(((Property) x).getCurrentRent());
+                if(((Property) x).getOwned() && !((Property) x).getMortgaged() && !((Property) x).getOwner().getIsInJail()){
+                    if(((Property) x).getColourAsString().equals("WHITE")){
+                        int i = 0;
+                        for(Property checkStation : ((Property) x).getOwner().getProperties()){
+                            if(checkStation.getColourAsString().equals("WHITE")){
+                                i++;
+                            }
+
+                        }
+                        currentPlayer.makePurchase(i*50);
+                        ((Property) x).getOwner().payPlayer(i*50);
+                    }
+
+                else{
+                    currentPlayer.makePurchase(((Property) x).getCurrentRent());
+                    ((Property) x).getOwner().payPlayer(((Property) x).getCurrentRent());
+                }
 
             }
         }
