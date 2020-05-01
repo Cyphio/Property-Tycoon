@@ -652,22 +652,25 @@ public class GameScreen implements Screen {
         TextButton bidButton = new TextButton("Bid", gameScreenSkin);
         TextButton leaveButton = new TextButton("Leave", gameScreenSkin);
 
-        auctionPopUpWindow = new Window("", gameScreenSkin);
+        Table auctionPopUpTable = new Table();
 
         if(clickedProperty != null) {
-            auctionPopUpWindow.setBackground(getColouredBackground(clickedProperty.getColor()));
-            auctionPopUpWindow.add(new Label(clickedProperty.getTileName(), gameScreenSkin, "big"));
-            auctionPopUpWindow.row().pad(40, 0, 0, 0);
+            auctionPopUpTable.setBackground(getColouredBackground(clickedProperty.getColor()));
+            auctionPopUpTable.add(new Label(clickedProperty.getTileName(), gameScreenSkin, "big"));
+            auctionPopUpTable.row().pad(40, 0, 0, 0);
         }
-        auctionPopUpWindow.add(highestBidderTable);
-        auctionPopUpWindow.row().pad(40, 0, 0, 0);
-        auctionPopUpWindow.add(currBidderTable);
-        auctionPopUpWindow.row().pad(20, 0, 0, 0);
-        auctionPopUpWindow.add(auctionBid).colspan(2);
-        auctionPopUpWindow.row().pad(10, 0, 0, 0);
-        auctionPopUpWindow.add(bidButton).colspan(2);
-        auctionPopUpWindow.row().pad(10, 0, 0, 0);
-        auctionPopUpWindow.add(leaveButton).colspan(2);
+        auctionPopUpTable.add(highestBidderTable);
+        auctionPopUpTable.row().pad(40, 0, 0, 0);
+        auctionPopUpTable.add(currBidderTable);
+        auctionPopUpTable.row().pad(20, 0, 0, 0);
+        auctionPopUpTable.add(auctionBid).colspan(2);
+        auctionPopUpTable.row().pad(10, 0, 0, 0);
+        auctionPopUpTable.add(bidButton).colspan(2);
+        auctionPopUpTable.row().pad(10, 0, 0, 0);
+        auctionPopUpTable.add(leaveButton).colspan(2);
+
+        auctionPopUpWindow = new Window("", gameScreenSkin);
+        auctionPopUpWindow.add(auctionPopUpTable).expand().fillX().fillY();
 
         float width = 600, height = 500;
         auctionPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
