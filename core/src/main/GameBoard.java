@@ -193,6 +193,13 @@ public class GameBoard implements GameBoardInterface {
             performCardAction(card);
             opportunityKnocksCards.add(card);
         }
+        else if(x instanceof Property){
+            if(((Property) x).getOwned() && !((Property) x).getMortgaged()){
+                currentPlayer.makePurchase(((Property) x).getCurrentRent());
+                ((Property) x).getOwner().payPlayer(((Property) x).getCurrentRent());
+
+            }
+        }
         else if (x instanceof PotLuck) {
             Card card = potluckCards.remove(0);
             performCardAction(card);
