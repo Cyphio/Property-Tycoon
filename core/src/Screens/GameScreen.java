@@ -414,7 +414,7 @@ public class GameScreen implements Screen {
 
         propertyPopUpWindow = new Window("", gameScreenSkin);
 
-        propertyPopUpWindow.add(propInfoBox).width(405).height(100).colspan(2);
+        propertyPopUpWindow.add(propInfoBox).colspan(2).expand().fill();
         propertyPopUpWindow.row().pad(25, 0, 0, 0);
         propertyPopUpWindow.add(propInfoBox2).colspan(2);
         propertyPopUpWindow.row().pad(25, 0, 0, 0);
@@ -426,9 +426,9 @@ public class GameScreen implements Screen {
         propertyPopUpWindow.row().pad(10, 0, 0, 0);
         propertyPopUpWindow.add(developPropertyButton).left();
         propertyPopUpWindow.add(closePropertyButton).right();
-        propertyPopUpWindow.pack();
 
         float width = 425, height = 600;
+
         propertyPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         propertyPopUpWindow.setVisible(false);
 
@@ -546,10 +546,10 @@ public class GameScreen implements Screen {
 
         stationPopUpWindow = new Window("", gameScreenSkin);
 
-        stationPopUpWindow.add(stationInfoBox).width(405).height(100).colspan(2);
-        stationPopUpWindow.row().pad(15, 0, 0, 0);
-        stationPopUpWindow.add(trainImg).colspan(2).width(180).height(150);
-        stationPopUpWindow.row().pad(20, 0, 0, 0);
+        stationPopUpWindow.add(stationInfoBox).colspan(2).expand().fill();
+        stationPopUpWindow.row().pad(30, 0, 0, 0);
+        stationPopUpWindow.add(trainImg).colspan(2).width(392.92f).height(100);
+        stationPopUpWindow.row().pad(50, 0, 0, 0);
         stationPopUpWindow.add(stationInfoBox2).colspan(2);
         stationPopUpWindow.row().pad(20, 0, 0, 0);
         stationPopUpWindow.add(buyStationButton).left();
@@ -670,7 +670,7 @@ public class GameScreen implements Screen {
         auctionPopUpTable.add(leaveButton).colspan(2);
 
         auctionPopUpWindow = new Window("", gameScreenSkin);
-        auctionPopUpWindow.add(auctionPopUpTable).expand().fillX().fillY();
+        auctionPopUpWindow.add(auctionPopUpTable).expand().fill();
 
         float width = 600, height = 500;
         auctionPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
