@@ -52,7 +52,7 @@ project(":desktop") {
 project(":tests") {
     apply plugin: "java"
 
-    sourceSets.test.java.srcDirs = ["tests/"]
+    sourceSets.test.java.srcDirs = ["src/"]
 
     dependencies {
 

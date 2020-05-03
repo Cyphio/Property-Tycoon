@@ -14,8 +14,6 @@
  * limitations under the License.
  ******************************************************************************/
 
-import static org.junit.*;
-
 public class GameBoardTest {
 
 	private GameBoard board;
