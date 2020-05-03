@@ -56,7 +56,7 @@ project(":tests") {
 
     dependencies {
 
-        compile project(":desktop")
+        //compile project(":desktop")
         compile project(":core")
 
         compile "junit:junit:4.+"
