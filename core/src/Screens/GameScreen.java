@@ -65,14 +65,6 @@ public class GameScreen implements Screen {
     private Label propHotelCostLabel;
     private ArrayList<Label> developmentPrices;
 
-    private Window auctionPopUpWindow;
-    private Player currBidder;
-    private Player highestBidder;
-    private ArrayList<Player> bidderList;
-    private Label highestBidderNameLabel;
-    private Label highestBid;
-    private Label currBidderNameLabel;
-
     private Window stationPopUpWindow;
     private TextButton buyStationButton;
     private TextButton sellStationButton;
@@ -83,7 +75,13 @@ public class GameScreen implements Screen {
     private Label stationOwnerLabel;
     private Label stationCostLabel;
 
-
+    private Window auctionPopUpWindow;
+    private Player currBidder;
+    private Player highestBidder;
+    private ArrayList<Player> bidderList;
+    private Label highestBidderNameLabel;
+    private Label highestBid;
+    private Label currBidderNameLabel;
 
     private Window jailPopUpWindow;
 
