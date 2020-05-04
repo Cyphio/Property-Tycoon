@@ -71,6 +71,14 @@ public class Dice implements DiceInterface {
         return d1 + d2;
     }
 
+    public int getD1() {
+        return d1;
+    }
+
+    public int getD2() {
+        return d2;
+    }
+
     /**
      * wasItADouble returns a Boolean judgement as to whether a the dice rolled a double
      * @return true if the dice rolled a double, false otherwise
