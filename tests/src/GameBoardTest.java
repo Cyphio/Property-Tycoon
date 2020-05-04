@@ -1,20 +1,10 @@
 
-import Tiles.Property;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-
 import main.GameBoard;
-import main.GameController;
-import org.junit.Before;
 import main.Player;
-import org.junit.Test;
-
+import org.junit.Before;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static junit.framework.TestCase.assertEquals;
-
 
 public class GameBoardTest {
     private Sprite sprite1;
@@ -25,16 +15,11 @@ public class GameBoardTest {
     private Sprite sprite6;
     private ArrayList<Sprite> spriteList;
 
-
     private GameBoard testBoard;
-    private GameController testController;
-
     private Player[] testPlayers;
-
 
     @Before
     public void setUp() {
-
 
         this.sprite1 = new Sprite();
         this.sprite2 = new Sprite();
@@ -45,20 +30,12 @@ public class GameBoardTest {
         this.spriteList = new ArrayList<>(Arrays.asList(sprite1, sprite2, sprite3, sprite4, sprite5, sprite6));
         this.testPlayers = new Player[6];
 
-
         int i = 0;
-
         for (Sprite x : this.spriteList) {
             testPlayers[i] = new Player("player " + i, x);
             i++;
         }
 
         testBoard = new GameBoard(testPlayers);
-
-
     }
 }
-
-
-
-

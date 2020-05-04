@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * The dice class simulates a pair of two six sided dice to roll whenever a player moves
  */
-class Dice implements DiceInterface {
+public class Dice implements DiceInterface {
 
     private int counter;
     private int d1;

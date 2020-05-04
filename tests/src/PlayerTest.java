@@ -1,9 +1,8 @@
-
 import Tiles.Property;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import main.Player;
 
 import org.junit.Before;
-import main.Player;
 import org.junit.Test;
 import static junit.framework.TestCase.assertEquals;
 
