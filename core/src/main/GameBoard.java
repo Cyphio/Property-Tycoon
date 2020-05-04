@@ -22,6 +22,9 @@ public class GameBoard implements GameBoardInterface {
     private int goPayoutAmount;
     private Player[] players;
     private Map<String, ArrayList<Property>> colPropMap;
+    private ArrayList<Property> developedProperties;
+
+
 
     /**
      * The GameBoard class constructor
@@ -68,6 +71,9 @@ public class GameBoard implements GameBoardInterface {
 
         System.out.println(players.length);
         System.out.println(players[0].getName());
+
+        developedProperties = new ArrayList<>();
+
     }
 
     public Map<String, ArrayList<Property>> getColPropMap() {
@@ -281,4 +287,27 @@ public class GameBoard implements GameBoardInterface {
             }
         }
     }
+
+
+    public void checkForDevelopedProperties(){
+
+        developedProperties.clear();
+
+        for (Tile tile : board){
+
+            if (tile instanceof Property) {
+                 if (((Property) tile).getHousesOwned() > 0){
+                     developedProperties.add((Property) tile);
+                 }
+            }
+        }
+    }
+
+    public ArrayList<Property> getDevelopedProperties(){
+
+        return developedProperties;
+
+    }
+
+
 }

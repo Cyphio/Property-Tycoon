@@ -5,6 +5,9 @@ import main.Player;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Color;
+import misc.Coordinate;
+
+import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 /**
  * the Property class implements functionality relating to a property in the game. It allows for the setting of rent,
@@ -18,18 +21,16 @@ public class Property extends Tile implements PropertyInterface {
     private ArrayList<Integer> developmentPrices = new ArrayList<>();
     private int housePrice;
     private int hotelPrice;
-    private int houseDevelopments;
-    private int hotelDevelopments;
     private boolean owned;
     private Player owner;
     private int housesOwned;
+    private Coordinate propertySpriteCoordinate;
+
 
     /**
      * The constructor for Property
      */
     public Property(){
-        houseDevelopments = 0;
-        hotelDevelopments = 0;
         housesOwned = 0;
         owned = false;
     }
@@ -77,19 +78,18 @@ public class Property extends Tile implements PropertyInterface {
         return hotelPrice;
     }
 
-    public void develop(Player player){
-        if(houseDevelopments == 4) {
-            player.makePurchase(hotelPrice);
-            hotelDevelopments = 1;
-        }
-        else if(hotelDevelopments != 1 && houseDevelopments <= 4) {
-            player.makePurchase(housePrice);
-            houseDevelopments += 1;
+    public void develop(){
+        if(housesOwned < 4){
+            housesOwned +=1;
+            owner.makePurchase(housePrice);
+        } else if(housesOwned == 4){
+            housesOwned += 1;
+            owner.makePurchase(hotelPrice);
         }
     }
 
     public int getCurrentRent() {
-        return developmentPrices.get(houseDevelopments+hotelDevelopments);
+        return developmentPrices.get(housesOwned);
     }
 
     /**
@@ -172,13 +172,58 @@ public class Property extends Tile implements PropertyInterface {
     }
 
     public void sellProperty(Player player, int cost){
-        if(getOwned()){
+        if(owner == player){
             player.payPlayer(cost);
             owned = false;
             owner = null;
             setBuyable(true);
         }
 
+    }
+
+    // basically undevelop
+    public void sellHouse(){
+
+        if(housesOwned <= 4 && housesOwned > 0){
+
+            owner.payPlayer(housePrice/2);
+            housesOwned -=1;
+
+        }else if(housesOwned == 5){
+
+            owner.payPlayer(hotelPrice/2);
+            housesOwned -=1;
+
+        }
+    }
+
+
+
+    /**
+     * sets the coordinates of tiles on the GameBoard, this allows for mouse interactivity.
+     * @param coordinates the arraylist of coordinates for each tile.
+     */
+    @Override
+    public void setCoordinates(ArrayList<Coordinate> coordinates){
+        playerPosCoordinates = new ArrayList<>();
+        for(int i =0 ; i < players.length;i++) {
+            if (i != 3 && i != 7 && i != 11) {
+                playerPosCoordinates.add(coordinates.get(i));
+            }
+        }
+
+        int tilePosition = 6; // used to determine which cell in a card is the label position one (makes it easier for us to change as we go)
+        int propertyPosition = 7;// where the property png is rendered
+
+        Coordinate labelCoordinate = new Coordinate(0,0);
+        Coordinate tempPropertyCoordinate = new Coordinate(0,0);
+
+        labelCoordinate.setCoordinate(coordinates.get(tilePosition).getX()+32,coordinates.get(tilePosition).getY()+32);
+        tempPropertyCoordinate.setCoordinate(coordinates.get(propertyPosition).getX()+32,coordinates.get(propertyPosition).getY()+32);
+
+        centerLabelCoordinate = labelCoordinate;
+        propertySpriteCoordinate = tempPropertyCoordinate;
+        allCoordinates = coordinates;
     }
 
     /**
@@ -197,4 +242,17 @@ public class Property extends Tile implements PropertyInterface {
         }
         return "Nobody";
     }
+
+    public int getHousesOwned(){
+
+        return housesOwned;
+
+    }
+
+    public Coordinate getPropertySpriteCoordinate(){
+        return propertySpriteCoordinate;
+
+    }
+
+
 }

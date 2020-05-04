@@ -16,7 +16,7 @@ public class Tile implements TileInterface {
     private int tilePosition;
     private boolean isBuyable = false;
     ArrayList<Player> tilePlayers = new ArrayList<>();
-    private Coordinate centerLabelCoordinate;
+    protected Coordinate centerLabelCoordinate;
     protected ArrayList<Coordinate> playerPosCoordinates;
     protected ArrayList<Coordinate> allCoordinates;
     public Tile(){

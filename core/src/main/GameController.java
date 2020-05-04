@@ -141,11 +141,27 @@ public class GameController{
 
     public boolean developProperty(Property prop, Player player) {
         if(player.getProperties().containsAll(board.getColPropMap().get(prop.getColourAsString()))) {
-            prop.develop(player);
+            prop.develop();
+            board.checkForDevelopedProperties();
             return true;
         }
         else {
             return false;
         }
     }
+
+
+    public ArrayList<Property> getDevelopedProperties(){
+
+        return board.getDevelopedProperties();
+
+
+    }
+
+
+
+
+
+
+
 }

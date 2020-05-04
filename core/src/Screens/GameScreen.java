@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -77,6 +78,21 @@ public class GameScreen implements Screen {
     private Label highestBid;
     private Label currBidderNameLabel;
 
+
+
+    private Texture oneHouseTexture ;
+    private Texture twoHouseTexture;
+    private Texture threeHouseTexture ;
+    private Texture fourHouseTexture ;
+    private Texture hotelTexture ;
+
+
+
+    ArrayList<Sprite> propertySprites;
+
+
+
+
     private Table balances;
 
     private Window jailPopUpWindow;
@@ -119,6 +135,15 @@ public class GameScreen implements Screen {
         auctionPopUpWindowSetUp();
         balanceTableSetUp();
 
+        oneHouseTexture = new Texture(Gdx.files.internal("property-icons/1-house.png"));
+        twoHouseTexture = new Texture(Gdx.files.internal("property-icons/2-house.png"));
+        threeHouseTexture = new Texture(Gdx.files.internal("property-icons/3-house.png"));
+        fourHouseTexture = new Texture(Gdx.files.internal("property-icons/4-house.png"));
+        hotelTexture = new Texture(Gdx.files.internal("property-icons/hotel.png"));
+
+
+        propertySprites = new ArrayList<>();
+        updatePropertySprites();
 
 
     }
@@ -440,7 +465,19 @@ public class GameScreen implements Screen {
                 }
                 else {
 
+                    updatePropertySprites();
+
                 }
+
+                updatePropertySprites();
+
+
+                System.out.println("---------------DEVELOPED PROPERTIES------------");
+
+                System.out.println(propertySprites);
+                System.out.println("---------------DEVELOPED end------------");
+
+
             }
         });
 
@@ -683,6 +720,10 @@ public class GameScreen implements Screen {
         for (Player p : game.players) {
             p.getPlayerToken().draw(spriteBatch);
         }
+        for (Sprite sprite: propertySprites) {
+            sprite.draw(spriteBatch);
+        }
+
         spriteBatch.end();
 
         camera.update();
@@ -720,4 +761,81 @@ public class GameScreen implements Screen {
     public void dispose() {
 
     }
+
+
+    public void updatePropertySprites(){
+
+        ArrayList<Property> developedProperties = gameCon.getDevelopedProperties();
+
+        propertySprites = new ArrayList<>();
+
+        for (Property prop: developedProperties) {
+
+            Sprite sprite = new Sprite();
+
+
+            switch (prop.getHousesOwned()){
+
+                case 1:
+                    sprite = new Sprite(oneHouseTexture);
+                    break;
+
+                case 2:
+                   sprite = new Sprite(twoHouseTexture);
+                    break;
+
+                case 3:
+                    sprite = new Sprite(threeHouseTexture);
+                    break;
+
+                case 4:
+                    sprite = new Sprite(fourHouseTexture);
+                    break;
+
+                case 5:
+                    sprite = new Sprite(hotelTexture);
+                    break;
+
+
+            }
+
+
+
+
+            sprite.setSize(192,64);
+            sprite.setOriginCenter();
+
+            if (prop.getTilePos() < 11){
+
+                sprite.rotate(-90);
+
+            }       else   if (prop.getTilePos() < 21){
+
+                sprite.rotate(-180);
+
+            }    else   if (prop.getTilePos() <31){
+
+                sprite.rotate(-270);
+
+            }
+
+
+            sprite.setPosition(prop.getPropertySpriteCoordinate().getX()-192/2,prop.getPropertySpriteCoordinate().getY()-64/2);
+
+
+
+
+            propertySprites.add(sprite);
+
+
+        }
+
+
+
+
+    }
+
+
+
+
 }

@@ -390,9 +390,65 @@
     </potluckcard>
 
     <potluckcard>
-        <action>eachplayerpays</action>
+    <action>eachplayerpays</action>
+    <value>100</value>
+</potluckcard>
+
+    <potluckcard>
+        <action>inherit</action>
         <value>100</value>
     </potluckcard>
+    <potluckcard>
+        <action>student loan</action>
+        <value>100</value>
+    </potluckcard>
+    <potluckcard>
+        <action>bank error</action>
+        <value>100</value>
+    </potluckcard>
+
+    <potluckcard>
+        <action>sale</action>
+        <value>100</value>
+    </potluckcard>
+
+    <potluckcard>
+        <action>savings</action>
+        <value>100</value>
+    </potluckcard>
+
+    <potluckcard>
+        <action>go to</action>
+        <value>100</value>
+    </potluckcard>
+
+    <potluckcard>
+        <action>bill</action>
+        <value>100</value>
+    </potluckcard>
+
+    <potluckcard>
+        <action>advance</action>
+        <value>100</value>
+    </potluckcard>
+    <potluckcard>
+        <action>jail</action>
+        <value>100</value>
+    </potluckcard>
+    <potluckcard>
+        <action>birthday</action>
+        <value>100</value>
+    </potluckcard>
+    <potluckcard>
+        <action>get out of jail free</action>
+        <value>100</value>
+    </potluckcard>
+
+    <potluckcard>
+        <action>insurance</action>
+        <value>100</value>
+    </potluckcard>
+
 
     <!--COMMUNITY CHEST CARDS-->
     <opportunityknockscard>
