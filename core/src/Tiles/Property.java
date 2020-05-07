@@ -17,7 +17,7 @@ public class Property extends Tile implements PropertyInterface {
 
     private String colour;
     private int cost;
-    private int rent;
+    //private int rent;
     private ArrayList<Integer> developmentPrices = new ArrayList<>();
     private int housePrice;
     private int hotelPrice;
@@ -26,6 +26,7 @@ public class Property extends Tile implements PropertyInterface {
     private int housesOwned;
     private Coordinate propertySpriteCoordinate;
 
+    private boolean isMortgaged;
 
     /**
      * The constructor for Property
@@ -70,6 +71,7 @@ public class Property extends Tile implements PropertyInterface {
         return housePrice;
     }
 
+
     public void setHotelPrice(int hotelPrice) {
         this.hotelPrice = hotelPrice;
     }
@@ -111,24 +113,24 @@ public class Property extends Tile implements PropertyInterface {
         return developmentPrices;
     }
 
-    /**
-     * setRent takes a rent value and sets the rent of the property (with 0 development) to be that value
-     * @param rent the rent of the property
-     */
-    public void setRent(String rent) {
-         try {
-             this.rent = Integer.parseInt(rent);
-         } catch(Exception e) {
-             e.getMessage();
-         }
-    }
+//    /**
+//     * setRent takes a rent value and sets the rent of the property (with 0 development) to be that value
+//     * @param rent the rent of the property
+//     */
+//    public void setRent(String rent) {
+//         try {
+//             this.rent = Integer.parseInt(rent);
+//         } catch(Exception e) {
+//             e.getMessage();
+//         }
+//    }
 
     /**
      * getRent returns the rent of the property with 0 development
      * @return the rent of the property with 0 development
      */
     public int getInitialRent() {
-        return rent;
+        return developmentPrices.get(0);
     }
 
     /**
@@ -145,6 +147,7 @@ public class Property extends Tile implements PropertyInterface {
      */
     @Override
     public int getCost(){ return cost; }
+
 
     /**
      * getOwned will return a boolean value that will represent if the property is owned by any player or not
@@ -170,16 +173,46 @@ public class Property extends Tile implements PropertyInterface {
             setBuyable(false);
         }
     }
+    /**
+     * Checks if a property is owned, and if so, allows it to be sold by the player
+     * @param player the player buying the property
+     * @param cost the price of the property
+     */
 
     public void sellProperty(Player player, int cost){
         if(owner == player){
             player.payPlayer(cost);
+            player.removeProperty(this);
             owned = false;
             owner = null;
             setBuyable(true);
         }
 
     }
+
+    public void setMortgaged(Player player, int cost){
+        if((getOwned())){
+            isMortgaged = true;
+            player.payPlayer(cost/2);
+
+        }
+
+    }
+
+
+    public void unmortgage(Player player, int cost){
+        if(isMortgaged){
+            isMortgaged = false;
+            player.makePurchase(cost/2);
+
+        }
+
+    }
+
+    public boolean getMortgaged(){
+        return isMortgaged;
+    }
+
 
     // basically undevelop
     public void sellHouse(){

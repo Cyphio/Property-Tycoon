@@ -15,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -71,7 +73,7 @@ public class GameSetUpScreen implements Screen {
     private Table table;
     private Label numPlayers;
 
-    private TextField[] playerNames;
+    private ArrayList<TextField> playerNamesList;
     private SelectBox<Integer> numPlayersBox;
     private TextButton startGame;
     private TextButton back;
@@ -103,11 +105,17 @@ public class GameSetUpScreen implements Screen {
         this.spriteList = new ArrayList<>(Arrays.asList(sprite1, sprite2, sprite3, sprite4, sprite5, sprite6));
 
         player1Field = new TextField("Player 1", gameSetUpScreenSkin);
+        player1Field.setMaxLength(14);
         player2Field = new TextField("Player 2", gameSetUpScreenSkin);
+        player2Field.setMaxLength(14);
         player3Field = new TextField("Player 3", gameSetUpScreenSkin);
+        player3Field.setMaxLength(14);
         player4Field = new TextField("Player 4", gameSetUpScreenSkin);
+        player4Field.setMaxLength(14);
         player5Field = new TextField("Player 5", gameSetUpScreenSkin);
+        player5Field.setMaxLength(14);
         player6Field = new TextField("Player 6", gameSetUpScreenSkin);
+        player6Field.setMaxLength(14);
 
         token1Image = new Image(getTokenDrawable(spriteList.get(0)));
         token2Image = new Image(getTokenDrawable(spriteList.get(1)));
@@ -143,7 +151,8 @@ public class GameSetUpScreen implements Screen {
         numPlayersBox.setItems(new Integer[]{2, 3, 4, 5, 6});
 
         startGame = new TextButton("Start", gameSetUpScreenSkin);
-        playerNames = new TextField[]{player1Field, player2Field, player3Field, player4Field, player5Field, player6Field};
+        playerNamesList = new ArrayList<TextField>();
+        playerNamesList.addAll(Arrays.asList(player1Field, player2Field, player3Field, player4Field, player5Field, player6Field));
         back = new TextButton("Back", gameSetUpScreenSkin);
 
         numPlayersBox.addListener(new ChangeListener() {
@@ -257,12 +266,34 @@ public class GameSetUpScreen implements Screen {
         startGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.players = null;
-                game.players = new Player[numPlayersBox.getSelected()];
-                for (int i = 0; i < numPlayersBox.getSelected(); i++) {
-                    game.players[i] = new Player(playerNames[i].getText(), spriteList.get(i));
+                Boolean isEmpty = false;
+                for(TextField tf : playerNamesList) {
+                    if (tf.getText().matches("^$|( )*")) {
+                        isEmpty = true;
+                    }
                 }
-                game.changeScreen(game.GAME);
+                if(!isEmpty) {
+                    game.players = null;
+                    game.players = new Player[numPlayersBox.getSelected()];
+                    for (int i = 0; i < numPlayersBox.getSelected(); i++) {
+                        game.players[i] = new Player(playerNamesList.get(i).getText(), spriteList.get(i));
+                    }
+                    game.changeScreen(game.GAME);
+                }
+                else {
+                    final Window window = new Window("", gameSetUpScreenSkin);
+                    final Label label = new Label("Name field left empty", gameSetUpScreenSkin, "big");
+                    window.add(label);
+                    window.setBounds((Gdx.graphics.getWidth() - 350) / 2, (Gdx.graphics.getHeight() - 100) / 2, 350, 100);
+                    stage.addActor(window);
+                    window.setVisible(true);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            window.setVisible(false);
+                        }
+                    }, 0.5f);
+                }
             }
         });
 

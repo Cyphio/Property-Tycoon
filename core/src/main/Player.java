@@ -17,7 +17,7 @@ public class Player implements PlayerInterface {
     private int balance;
     private int tilePosition;
     private int getOutJailCards;
-    private Boolean isInJail;
+    private boolean isInJail;
 
     private Sprite gameToken;
     private String name;
@@ -119,6 +119,11 @@ public class Player implements PlayerInterface {
         properties.add(property);
     }
 
+    public void removeProperty(Property property) {
+        property.removePlayer(this);
+        properties.remove(property);
+    }
+
     /**
      * getMoney returns an integer that represents the current balance of the player (how much money they has)
      * @return returns balance as an integer
@@ -172,7 +177,7 @@ public class Player implements PlayerInterface {
      * setInJail takes a Boolean parameter that defines whether or not a player is in jail
      * @param isInJail true if player is in jail, false otherwise
      */
-    public void setInJail(Boolean isInJail) {
+    public void setInJail(boolean isInJail) {
         this.isInJail = isInJail;
     }
 
@@ -180,7 +185,7 @@ public class Player implements PlayerInterface {
      * getIsInJail returns a Boolean judgement as to whether a player is in jail or not
      * @return true if player is in jail, false otherwise
      */
-    public Boolean getIsInJail() {
+    public boolean getIsInJail() {
         return isInJail;
     }
 

@@ -71,7 +71,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
                         case "property":
 
-                            List<String> houses = Arrays.asList("one-house", "two-house", "three-house", "four-house", "hotel");
+                            List<String> houses = Arrays.asList("rent", "one-house", "two-house", "three-house", "four-house", "hotel");
 
                             tile = new Property();
                             tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
@@ -86,7 +86,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                                 allColours.add(colour);
                             }
 
-                            ((Property) tile).setRent(tileElement.getElementsByTagName("rent").item(0).getTextContent().toUpperCase());
+                            //((Property) tile).setRent(tileElement.getElementsByTagName("rent").item(0).getTextContent().toUpperCase());
 
                             ((Property) tile).setHousePrice(Integer.parseInt(tileElement.getElementsByTagName("house-cost").item(0).getTextContent().toUpperCase()));
 
@@ -116,8 +116,19 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             break;
                         case "station":
 
-                            tile = new Station();
+                            tile = new Property();
+                            tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             tile.setBuyable(true);
+
+                            ((Property) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
+
+                            colour = tileElement.getElementsByTagName("colour").item(0).getTextContent().toUpperCase();
+                            ((Property) tile).setColour(colour);
+                            if(!allColours.contains(colour)) {
+                                allColours.add(colour);
+                            }
+
+
                             break;
                         case "parking":
 
