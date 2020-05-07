@@ -81,10 +81,10 @@ public class Property extends Tile implements PropertyInterface {
     }
 
     public void develop(){
-        if(housesOwned < 4){
+        if(housesOwned < 5){
             housesOwned +=1;
             owner.makePurchase(housePrice);
-        } else if(housesOwned == 4){
+        } else if(housesOwned == 5){
             housesOwned += 1;
             owner.makePurchase(hotelPrice);
         }
