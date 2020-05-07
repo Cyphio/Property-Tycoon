@@ -257,6 +257,12 @@ public class GameScreen implements Screen {
 
                 if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
                     sellPropertyButton.setVisible(true);
+                    if(clickedProperty.getMortgaged()){
+                        mortgagePropertyButton.setText("Unmortgage");
+                    }
+                    else{
+                        mortgagePropertyButton.setText("Mortgage");
+                    }
                     mortgagePropertyButton.setVisible(true);
                     developPropertyButton.setVisible(true);
                 } else {
@@ -298,6 +304,12 @@ public class GameScreen implements Screen {
 
                 if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
                     sellStationButton.setVisible(true);
+                    if(clickedProperty.getMortgaged()){
+                        mortgageStationButton.setText("Unmortgage");
+                    }
+                    else{
+                        mortgageStationButton.setText("Mortgage");
+                    }
                     mortgageStationButton.setVisible(true);
                 } else {
                     sellStationButton.setVisible(false);
@@ -477,7 +489,16 @@ public class GameScreen implements Screen {
         mortgagePropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                clickedProperty.setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                if(mortgagePropertyButton.getText().toString().equals("Mortgage")) {
+                    clickedProperty.setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    mortgagePropertyButton.setText("Unmortgage");
+                }
+                else{
+                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    mortgagePropertyButton.setText("Mortgage");
+                }
+
+
             }
         });
 
@@ -603,14 +624,21 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                propertyPopUpWindow.setVisible(false);
+                stationPopUpWindow.setVisible(false);
             }
         });
 
         mortgageStationButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                clickedProperty.setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                if(mortgageStationButton.getText().toString().equals("Mortgage")) {
+                    clickedProperty.setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    mortgageStationButton.setText("Unmortgage");
+                }
+                else{
+                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    mortgageStationButton.setText("Mortgage");
+                }
             }
         });
 
