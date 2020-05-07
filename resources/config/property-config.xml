@@ -19,6 +19,8 @@
         <three-house>90</three-house>
         <four-house>160</four-house>
         <hotel>250</hotel>
+        <house-cost>50</house-cost>
+        <hotel-cost>50</hotel-cost>
         <colour>brown</colour>
     </tile>
     <tile>
@@ -34,6 +36,8 @@
         <three-house>180</three-house>
         <four-house>320</four-house>
         <hotel>450</hotel>
+        <house-cost>50</house-cost>
+        <hotel-cost>50</hotel-cost>
         <colour>brown</colour>
     </tile>
     <tile>
@@ -42,8 +46,10 @@
     <tile>
         <type>station</type>
         <name>Brighton Station</name>
+        <colour>white</colour>
         <cost>200</cost>
     </tile>
+
     <tile>
         <name>Weeping Angel</name>
         <type>property</type>
@@ -54,7 +60,9 @@
         <three-house>270</three-house>
         <four-house>400</four-house>
         <hotel>550</hotel>
-        <colour>blue</colour>
+        <house-cost>50</house-cost>
+        <hotel-cost>50</hotel-cost>
+        <colour>sky</colour>
     </tile>
     <tile>
         <type>opportunityknocks</type>
@@ -69,7 +77,9 @@
         <three-house>270</three-house>
         <four-house>400</four-house>
         <hotel>550</hotel>
-        <colour>blue</colour>
+        <house-cost>50</house-cost>
+        <hotel-cost>50</hotel-cost>
+        <colour>sky</colour>
     </tile>
     <tile>
         <name>Nardole Drive</name>
@@ -81,7 +91,9 @@
         <three-house>300</three-house>
         <four-house>450</four-house>
         <hotel>600</hotel>
-        <colour>blue</colour>
+        <house-cost>50</house-cost>
+        <hotel-cost>50</hotel-cost>
+        <colour>sky</colour>
     </tile>
     <tile>
         <type>jail</type>
@@ -96,6 +108,8 @@
         <three-house>450</three-house>
         <four-house>625</four-house>
         <hotel>750</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>purple</colour>
     </tile>
     <tile>
@@ -113,6 +127,8 @@
         <three-house>450</three-house>
         <four-house>625</four-house>
         <hotel>750</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>purple</colour>
     </tile>
     <tile>
@@ -125,12 +141,15 @@
         <three-house>500</three-house>
         <four-house>700</four-house>
         <hotel>900</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>purple</colour>
     </tile>
     <tile>
         <name>Hove Station</name>
         <type>station</type>
         <cost>200</cost>
+        <colour>white</colour>
     </tile>
     <tile>
         <name>Cooper Drive</name>
@@ -142,6 +161,8 @@
         <three-house>550</three-house>
         <four-house>750</four-house>
         <hotel>950</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>orange</colour>
     </tile>
     <tile>
@@ -157,6 +178,8 @@
         <three-house>550</three-house>
         <four-house>750</four-house>
         <hotel>950</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>orange</colour>
     </tile>
     <tile>
@@ -169,6 +192,8 @@
         <three-house>600</three-house>
         <four-house>800</four-house>
         <hotel>1000</hotel>
+        <house-cost>100</house-cost>
+        <hotel-cost>100</hotel-cost>
         <colour>orange</colour>
     </tile>
     <tile>
@@ -184,6 +209,8 @@
         <three-house>700</three-house>
         <four-house>875</four-house>
         <hotel>1050</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>red</colour>
     </tile>
     <tile>
@@ -199,6 +226,8 @@
         <three-house>700</three-house>
         <four-house>875</four-house>
         <hotel>1050</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>red</colour>
     </tile>
     <tile>
@@ -211,12 +240,15 @@
         <three-house>750</three-house>
         <four-house>925</four-house>
         <hotel>1100</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>red</colour>
     </tile>
     <tile>
         <name>Falmer Station</name>
         <type>station</type>
         <cost>200</cost>
+        <colour>white</colour>
     </tile>
     <tile>
         <name>Kirk Close</name>
@@ -228,6 +260,8 @@
         <three-house>800</three-house>
         <four-house>975</four-house>
         <hotel>1150</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>yellow</colour>
     </tile>
     <tile>
@@ -240,6 +274,8 @@
         <three-house>800</three-house>
         <four-house>975</four-house>
         <hotel>1150</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>yellow</colour>
     </tile>
     <tile>
@@ -257,6 +293,8 @@
         <three-house>850</three-house>
         <four-house>1025</four-house>
         <hotel>1200</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
         <colour>yellow</colour>
     </tile>
     <tile>
@@ -272,6 +310,8 @@
         <three-house>900</three-house>
         <four-house>1100</four-house>
         <hotel>1275</hotel>
+        <house-cost>200</house-cost>
+        <hotel-cost>200</hotel-cost>
         <colour>green</colour>
     </tile>
     <tile>
@@ -284,6 +324,8 @@
         <three-house>900</three-house>
         <four-house>1100</four-house>
         <hotel>1275</hotel>
+        <house-cost>200</house-cost>
+        <hotel-cost>200</hotel-cost>
         <colour>green</colour>
     </tile>
     <tile>
@@ -300,13 +342,18 @@
         <three-house>1000</three-house>
         <four-house>1200</four-house>
         <hotel>1400</hotel>
+        <house-cost>200</house-cost>
+        <hotel-cost>200</hotel-cost>
         <colour>green</colour>
     </tile>
+
     <tile>
         <name>Lewes Station</name>
         <type>station</type>
         <cost>200</cost>
+        <colour>white</colour>
     </tile>
+
     <tile>
         <type>opportunityknocks</type>
     </tile>
@@ -320,13 +367,14 @@
         <three-house>1100</three-house>
         <four-house>1300</four-house>
         <hotel>1500</hotel>
-        <colour>deep blue</colour>
+        <house-cost>200</house-cost>
+        <hotel-cost>200</hotel-cost>
+        <colour>navy</colour>
     </tile>
     <tile>
         <type>tax</type>
         <amount>200</amount>
     </tile>
-
     <tile>
         <name>Turing Heights</name>
         <type>property</type>
@@ -337,7 +385,9 @@
         <three-house>1400</three-house>
         <four-house>1700</four-house>
         <hotel>2000</hotel>
-        <colour>deep blue</colour>
+        <house-cost>200</house-cost>
+        <hotel-cost>200</hotel-cost>
+        <colour>navy</colour>
     </tile>
 
     <!--POT LUCK CARDS-->
@@ -347,10 +397,64 @@
     </potluckcard>
 
     <potluckcard>
-        <action>eachplayerpays</action>
+    <action>eachplayerpays</action>
+    <value>100</value>
+</potluckcard>
+
+    <potluckcard>
+        <action>inherit</action>
+        <value>100</value>
+    </potluckcard>
+    <potluckcard>
+        <action>student loan</action>
+        <value>100</value>
+    </potluckcard>
+    <potluckcard>
+        <action>bank error</action>
         <value>100</value>
     </potluckcard>
 
+    <potluckcard>
+        <action>sale</action>
+        <value>100</value>
+    </potluckcard>
+
+    <potluckcard>
+        <action>savings</action>
+        <value>100</value>
+    </potluckcard>
+
+    <potluckcard>
+        <action>go to</action>
+        <value>100</value>
+    </potluckcard>
+
+    <potluckcard>
+        <action>bill</action>
+        <value>100</value>
+    </potluckcard>
+
+    <potluckcard>
+        <action>advance</action>
+        <value>100</value>
+    </potluckcard>
+    <potluckcard>
+        <action>jail</action>
+        <value>100</value>
+    </potluckcard>
+    <potluckcard>
+        <action>birthday</action>
+        <value>100</value>
+    </potluckcard>
+    <potluckcard>
+        <action>get out of jail free</action>
+        <value>100</value>
+    </potluckcard>
+
+    <potluckcard>
+        <action>insurance</action>
+        <value>100</value>
+    </potluckcard>
 
 
     <!--COMMUNITY CHEST CARDS-->
@@ -363,7 +467,5 @@
         <action>jail</action>
         <value>100</value>
     </opportunityknockscard>
-
-
 
 </config>

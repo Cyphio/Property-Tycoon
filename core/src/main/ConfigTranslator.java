@@ -13,12 +13,11 @@ import java.util.*;
 /**
  * Translates provided configuration file into game Tile and Card objects for the board.
  */
-
-
 public class ConfigTranslator implements ConfigTranslatorInterface {
 
     private Tile[] tileList = new Tile[40];
     private ArrayList<ArrayList<Card>> cardDecks;
+    private ArrayList<String> allColours;
 
     private DocumentBuilderFactory docBuilderFactory;
     private DocumentBuilder docBuilder;
@@ -28,7 +27,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
     /**
      * Initialises instance variables and builds node lists
      */
-
     public ConfigTranslator() {
 
         try {
@@ -40,6 +38,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
             document = docBuilder.parse(file);
             document.getDocumentElement().normalize();
 
+            allColours = new ArrayList<>();
 
             genTiles();
             genCards();
@@ -72,7 +71,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
                         case "property":
 
-                            List<String> houses = Arrays.asList("one-house", "two-house", "three-house", "four-house", "hotel");
+                            List<String> houses = Arrays.asList("rent", "one-house", "two-house", "three-house", "four-house", "hotel");
 
                             tile = new Property();
                             tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
@@ -81,10 +80,20 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             ((Property) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
 
 
-                            ((Property) tile).setColour(tileElement.getElementsByTagName("colour").item(0).getTextContent());
+                            String colour = tileElement.getElementsByTagName("colour").item(0).getTextContent().toUpperCase();
+                            ((Property) tile).setColour(colour);
+                            if(!allColours.contains(colour)) {
+                                allColours.add(colour);
+                            }
+
+                            //((Property) tile).setRent(tileElement.getElementsByTagName("rent").item(0).getTextContent().toUpperCase());
+
+                            ((Property) tile).setHousePrice(Integer.parseInt(tileElement.getElementsByTagName("house-cost").item(0).getTextContent().toUpperCase()));
+
+                            ((Property) tile).setHotelPrice(Integer.parseInt(tileElement.getElementsByTagName("hotel-cost").item(0).getTextContent().toUpperCase()));
 
                             for (String house : houses) {
-                                ((Property) tile).addHousePrice(Integer.parseInt(tileElement.getElementsByTagName(house).item(0).getTextContent()));
+                                ((Property) tile).addDevPrice(Integer.parseInt(tileElement.getElementsByTagName(house).item(0).getTextContent()));
                             }
                             break;
 
@@ -107,8 +116,19 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             break;
                         case "station":
 
-                            tile = new Station();
+                            tile = new Property();
+                            tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             tile.setBuyable(true);
+
+                            ((Property) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
+
+                            colour = tileElement.getElementsByTagName("colour").item(0).getTextContent().toUpperCase();
+                            ((Property) tile).setColour(colour);
+                            if(!allColours.contains(colour)) {
+                                allColours.add(colour);
+                            }
+
+
                             break;
                         case "parking":
 
@@ -146,10 +166,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
     /**
      * Generates lists of set up Card objects for the community chest and potluck draws.
-     *
-     * @param
      */
-
     @Override
     public void genCards() {
 
@@ -157,7 +174,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
         cardDecks = new ArrayList<>();
 
         cardNodeLists.add(document.getElementsByTagName("potluckcard"));
-        cardNodeLists.add(document.getElementsByTagName("communitychestcard"));
+        cardNodeLists.add(document.getElementsByTagName("opportunityknockscard"));
 
 
         for (NodeList nodes : cardNodeLists) {
@@ -195,25 +212,36 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
         }
     }
 
-    public ArrayList<Card> getCommunityChestCards() {
+    /**
+     * Gets the list of set up opportunity knocks cards.
+     * @return ArrayList of cards.
+     */
 
-        return cardDecks.get(0);
-
-
+    public ArrayList<Card> getOpportunityCards() {
+        return cardDecks.get(1);
     }
+
+    /**
+     * Gets the list of set up potluck cards.
+     * @return ArrayList of cards.
+     */
 
     public ArrayList<Card> getPotluckChestCards() {
-
         return cardDecks.get(0);
-
-
     }
 
+    /**
+     * Gets the list of set up tiles.
+     * @return Array of tiles.
+     */
+
     public Tile[] getTiles() {
-
-
         return tileList;
+    }
 
+
+    public ArrayList<String> getAllColours() {
+        return allColours;
     }
 
 }

@@ -2,9 +2,6 @@ package Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ai.btree.BehaviorTree;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -16,6 +13,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 
+/**
+ * MainMenu is a GUI class that allows the user to start/resume a game, access options and also exit the Application.
+ * It is displayed as the first Screen upon opening the game.
+ */
 public class MainMenu implements Screen {
 
     private PropertyTycoon game;
@@ -24,6 +25,10 @@ public class MainMenu implements Screen {
     private Stage stage;
     private Viewport viewport;
 
+    /**
+     * The constructor for MainMenu
+     * @param game The PropertyTycoon parent class upon which the GUI is built
+     */
     public MainMenu(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -31,6 +36,9 @@ public class MainMenu implements Screen {
         this.mainMenuSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
+    /**
+     * show() defines the layout, elements and interactivity of the GUI
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -40,16 +48,12 @@ public class MainMenu implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        TextButton resumeButton = new TextButton("resume",mainMenuSkin);
+        TextButton resumeButton = new TextButton("Resume",mainMenuSkin);
         Button newGameButton = new TextButton("New Game", mainMenuSkin);
         Button options = new TextButton("Options", mainMenuSkin);
         Button exit = new TextButton("Exit", mainMenuSkin);
 
-
         resumeButton.setVisible(game.isGameInProgress());
-
-
-
 
         newGameButton.addListener(new ChangeListener() {
             @Override
@@ -59,14 +63,12 @@ public class MainMenu implements Screen {
             }
         });
 
-
         resumeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.changeScreen(game.GAME);
             }
         });
-
 
         options.addListener(new ChangeListener() {
             @Override
@@ -84,14 +86,20 @@ public class MainMenu implements Screen {
         });
 
         table.add(newGameButton).fillX().uniformY();
-        table.row();
-        table.add(resumeButton).fillX().uniformY();
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(10, 0, 0, 0);
+        if(resumeButton.isVisible()) {
+            table.add(resumeButton).fillX().uniformY();
+            table.row().pad(10, 0, 0, 0);
+        }
         table.add(options).fillX().uniformY();
-        table.row();
+        table.row().pad(10, 0, 0, 0);
         table.add(exit).fillX().uniformY();
     }
 
+    /**
+     * render() is called when the Screen should render itself
+     * @param delta the time in seconds since the last render
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 0);
@@ -100,8 +108,6 @@ public class MainMenu implements Screen {
         game.batch.begin();
 
         game.batch.draw(mainMenuTexture, 0, 0);
-        game.font.getData().setScale(2);
-        game.font.draw(game.batch, "Property Tycoon", 100, 100);
         game.batch.draw(mainMenuTexture, 0, 0, viewport.getWorldWidth(),viewport.getWorldHeight());
 
         game.batch.end();
@@ -110,21 +116,35 @@ public class MainMenu implements Screen {
         stage.draw();
     }
 
+    /**
+     * Called when MainMenu() should release all resources
+     */
     @Override
-    public void dispose() {
-        stage.dispose();
-    }
+    public void dispose() { stage.dispose(); }
 
+    /**
+     * Called when the Application is resized. Will never be called before a call to create()
+     * @param width the width of the screen
+     * @param height the height of the screen
+     */
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
+    public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
 
+    /**
+     * Called when the Application is paused. An Application is paused before it is destroyed
+     */
     @Override
     public void pause() {}
 
+    /**
+     * Called when the Application is resumed from a paused state
+     */
     @Override
     public void resume() {}
+
+    /**
+     * Called when this MainMenu() is no longer the current screen for PropertyTycoon()
+     */
     @Override
     public void hide() {}
 }
