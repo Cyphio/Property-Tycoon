@@ -720,25 +720,27 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 bidderList.remove(currBidder);
-                if(bidderList.size() == 1 && highestBidder == null) {
+                if (bidderList.size() == 0 && highestBidder == null) {
                     auctionPopUpWindow.setVisible(false);
                     gameCon.setAuctionValue(0);
                 }
 
-                if(bidderList.size() == 1 && highestBidder != null){
+                if (bidderList.size() == 0 && highestBidder != null) {
                     auctionPopUpWindow.setVisible(false);
                     highestBidder.addProperty(clickedProperty);
                     clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
                     gameCon.setAuctionValue(0);
                 }
 
-                if (bidderList.indexOf(currBidder) < bidderList.size() - 1){
-                    currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
+
+                if (bidderList.size() != 0) {
+                    if (bidderList.indexOf(currBidder) < bidderList.size() - 1) {
+                        currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
+                    } else {
+                        currBidder = bidderList.get(0);
+                    }
+                    currBidderNameLabel.setText(currBidder.getName());
                 }
-                else {
-                    currBidder = bidderList.get(0);
-                }
-                currBidderNameLabel.setText(currBidder.getName());
             }
         });
     }
