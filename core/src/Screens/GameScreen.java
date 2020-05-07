@@ -711,6 +711,9 @@ public class GameScreen implements Screen {
                     else if (currBidder.getMoney() < Integer.parseInt(auctionBid.getText())) {
                         quickPopUpWindow("Not enough money", 100, 350,0.5f);
                     }
+                    if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
+                        leaveButton.setText("Buy");
+                    }
                 }
                 currBidderNameLabel.setText(currBidder.getName());
             }
@@ -732,7 +735,6 @@ public class GameScreen implements Screen {
                     gameCon.setAuctionValue(0);
                 }
 
-
                 if (bidderList.size() != 0) {
                     if (bidderList.indexOf(currBidder) < bidderList.size() - 1) {
                         currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
@@ -740,6 +742,10 @@ public class GameScreen implements Screen {
                         currBidder = bidderList.get(0);
                     }
                     currBidderNameLabel.setText(currBidder.getName());
+                }
+
+                if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
+                    leaveButton.setText("Buy");
                 }
             }
         });
