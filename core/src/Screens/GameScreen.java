@@ -107,6 +107,7 @@ public class GameScreen implements Screen {
 
     private Sound rollDiceFX;
     private ArrayList<Label> playerBalanceLabels;
+    private ArrayList<Sprite> ownedProperties;
 
 
     public GameScreen(PropertyTycoon game) {
@@ -149,7 +150,7 @@ public class GameScreen implements Screen {
         threeHouseTexture = new Texture(Gdx.files.internal("property-icons/3-house.png"));
         fourHouseTexture = new Texture(Gdx.files.internal("property-icons/4-house.png"));
         hotelTexture = new Texture(Gdx.files.internal("property-icons/hotel.png"));
-
+        ownedProperties = new ArrayList<>();
 
         propertySprites = new ArrayList<>();
         updatePropertySprites();
@@ -479,6 +480,7 @@ public class GameScreen implements Screen {
                 try {
                     if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
                         clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                        updatePropertyOwnerIcons();
                         closeAllWindows();
                         openPopUpWindow(clickedProperty);
                     }
@@ -494,7 +496,7 @@ public class GameScreen implements Screen {
                 auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
 
                 currBidder = gameCon.getCurrentPlayer();
-                bidderList = new ArrayList<>(Arrays.asList(game.players));
+                bidderList = new ArrayList<>(game.players);
 
                 for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
                     bidderList.add(bidderList.get(i));
@@ -511,6 +513,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                updatePropertyOwnerIcons();
                 propertyPopUpWindow.setVisible(false);
             }
         });
@@ -626,6 +629,7 @@ public class GameScreen implements Screen {
                 try {
                     if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
                         clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                        updatePropertyOwnerIcons();
                         closeAllWindows();
                         openPopUpWindow(clickedProperty);
                     }
@@ -641,7 +645,7 @@ public class GameScreen implements Screen {
                 auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
 
                 currBidder = gameCon.getCurrentPlayer();
-                bidderList = new ArrayList<>(Arrays.asList(game.players));
+                bidderList = new ArrayList<>(game.players);
 
                 for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
                     bidderList.add(bidderList.get(i));
@@ -658,6 +662,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                updatePropertyOwnerIcons();
                 stationPopUpWindow.setVisible(false);
             }
         });
@@ -794,6 +799,7 @@ public class GameScreen implements Screen {
                     auctionPopUpWindow.setVisible(false);
                     highestBidder.addProperty(clickedProperty);
                     clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
+                    updatePropertyOwnerIcons();
                     gameCon.setAuctionValue(0);
                 }
 
@@ -901,15 +907,6 @@ public class GameScreen implements Screen {
         }, time);
     }
 
-    /**
-     * Updates the balance values shown in the balanceTable. Call this in render for frequent updates.
-     */
-    public void updateBalances(){
-        for (int i = 0 ; i < game.players.length; i++){
-            Player player = game.players[i];
-            playerBalanceLabels.get(i).setText(player.getName() + ": $"+ player.getMoney());
-        }
-    }
 
     @Override
     public void render(float delta) {
@@ -930,11 +927,14 @@ public class GameScreen implements Screen {
             sprite.draw(spriteBatch);
         }
 
+        for (Sprite sprite: ownedProperties) {
+            sprite.draw(spriteBatch);
+        }
+
+
         spriteBatch.end();
 
         camera.update();
-
-        updateBalances();
 
         labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         labelStage.draw();
@@ -1005,9 +1005,6 @@ public class GameScreen implements Screen {
 
             }
 
-
-
-
             sprite.setSize(192,64);
             sprite.setOriginCenter();
 
@@ -1024,12 +1021,7 @@ public class GameScreen implements Screen {
                 sprite.rotate(-270);
 
             }
-
-
             sprite.setPosition(prop.getPropertySpriteCoordinate().getX()-192/2,prop.getPropertySpriteCoordinate().getY()-64/2);
-
-
-
 
             propertySprites.add(sprite);
 
@@ -1040,6 +1032,49 @@ public class GameScreen implements Screen {
 
 
     }
+
+    private void updatePropertyOwnerIcons(){
+        ownedProperties.clear();
+
+        for(Player p: game.players){
+
+            ArrayList<Property> props = p.getProperties(); // gets all the players owned properties
+
+            for (Property property: props) {
+
+                Sprite s = new Sprite(p.getPlayerToken().getTexture());
+                s.setAlpha(0.5f);
+                s.setOriginCenter();
+                if (property.getTilePos() < 11){
+                    s.setPosition(property.getPropertySpriteCoordinate().getX()+32,property.getPropertySpriteCoordinate().getY()-32);
+                    s.rotate(-90);
+                }   else   if (property.getTilePos() < 21){
+                    s.setPosition(property.getPropertySpriteCoordinate().getX()-32,property.getPropertySpriteCoordinate().getY()-96);
+                    s.rotate(-180);
+                }   else   if (property.getTilePos() <31){
+                    s.setPosition(property.getPropertySpriteCoordinate().getX()-96,property.getPropertySpriteCoordinate().getY()-32);
+                    s.rotate(-270);
+                }else{
+                    s.setPosition(property.getPropertySpriteCoordinate().getX()-32,property.getPropertySpriteCoordinate().getY()+32);
+                }
+
+                ownedProperties.add(s);
+
+            }
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 
