@@ -496,7 +496,7 @@ public class GameScreen implements Screen {
                 auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
 
                 currBidder = gameCon.getCurrentPlayer();
-                bidderList = new ArrayList<>(Arrays.asList(game.players));
+                bidderList = new ArrayList<>(game.players);
 
                 for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
                     bidderList.add(bidderList.get(i));
@@ -645,7 +645,7 @@ public class GameScreen implements Screen {
                 auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
 
                 currBidder = gameCon.getCurrentPlayer();
-                bidderList = new ArrayList<>(Arrays.asList(game.players));
+                bidderList = new ArrayList<>(game.players);
 
                 for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
                     bidderList.add(bidderList.get(i));
@@ -907,15 +907,6 @@ public class GameScreen implements Screen {
         }, time);
     }
 
-    /**
-     * Updates the balance values shown in the balanceTable. Call this in render for frequent updates.
-     */
-    public void updateBalances(){
-        for (int i = 0 ; i < game.players.length; i++){
-            Player player = game.players[i];
-            playerBalanceLabels.get(i).setText(player.getName() + ": $"+ player.getMoney());
-        }
-    }
 
     @Override
     public void render(float delta) {
@@ -944,8 +935,6 @@ public class GameScreen implements Screen {
         spriteBatch.end();
 
         camera.update();
-
-        updateBalances();
 
         labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         labelStage.draw();

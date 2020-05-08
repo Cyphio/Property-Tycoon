@@ -28,9 +28,8 @@ public class GameController{
      */
     public GameController(TiledMapTileLayer layer) {
 
-        playerOrders = new ArrayList<>();
+        playerOrders = new ArrayList<>(players);
 
-        playerOrders.addAll(Arrays.asList(players));
 
     cellToTile = new HashMap<>();
     board = new GameBoard(players);

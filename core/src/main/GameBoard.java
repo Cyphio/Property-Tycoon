@@ -20,7 +20,7 @@ public class GameBoard implements GameBoardInterface {
     private static Map<Player, Integer> playerPos;
     private static Player currentPlayer;
     private int goPayoutAmount;
-    private Player[] players;
+    private ArrayList<Player> players;
     private Map<String, ArrayList<Property>> colPropMap;
     private ArrayList<Property> developedProperties;
 
@@ -30,7 +30,7 @@ public class GameBoard implements GameBoardInterface {
      * The GameBoard class constructor
      * @param players Holds each player object who is in the game
      */
-    public GameBoard(Player[] players) {
+    public GameBoard(ArrayList<Player> players) {
         goPayoutAmount = 200;
         playerPos = new HashMap<Player, Integer>();
         this.players = players;
@@ -69,8 +69,7 @@ public class GameBoard implements GameBoardInterface {
         opportunityKnocksCards = builder.getOpportunityCards();
         Collections.shuffle(opportunityKnocksCards);
 
-        System.out.println(players.length);
-        System.out.println(players[0].getName());
+        System.out.println(players.size());
 
         developedProperties = new ArrayList<>();
 
