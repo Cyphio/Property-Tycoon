@@ -186,18 +186,22 @@ public class GameScreen implements Screen {
             playerInfoTable.add(playerBalanceLabel).right().width(130);
         }
 
+        TextButton pauseButton = new TextButton("Pause", gameScreenSkin);
+
         Table gameInfoTable = new Table();
 
         TextButton rollDice = new TextButton("Roll dice", gameScreenSkin);
 
         gameInfoTable.row().pad(10, 0, 0, 0);
-        gameInfoTable.add(currPlayerTable);
+        gameInfoTable.add(currPlayerTable).left();
         gameInfoTable.row().pad(10, 0, 0, 0);
-        gameInfoTable.add(diceTable);
+        gameInfoTable.add(diceTable).left();
         gameInfoTable.row();
-        gameInfoTable.add(playerInfoTable);
+        gameInfoTable.add(playerInfoTable).left();
         gameInfoTable.row().pad(10, 0, 0, 0);
-        gameInfoTable.add(rollDice);
+        gameInfoTable.add(rollDice).left();
+        gameInfoTable.row().pad(10, 0, 0, 0);
+        gameInfoTable.add(pauseButton).left();
 
         gameInfoTable.setFillParent(true);
         gameInfoTable.left();
@@ -252,15 +256,6 @@ public class GameScreen implements Screen {
                 }
             }
         });
-
-        Table buttonTable = new Table();
-        TextButton pauseButton = new TextButton("Pause", gameScreenSkin);
-        buttonTable.add(pauseButton);
-        buttonTable.setFillParent(true);
-        buttonTable.right();
-        buttonTable.padRight(10);
-
-        stage.addActor(buttonTable);
 
         pauseButton.addListener(new ClickListener() {
                 @Override
