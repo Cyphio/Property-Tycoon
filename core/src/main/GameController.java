@@ -137,6 +137,8 @@ public class GameController{
 
     }
 
+    public Dice getDice() { return board.getDice();  }
+
 
 
     public boolean developProperty(Property prop, Player player) {
@@ -148,6 +150,14 @@ public class GameController{
         else {
             return false;
         }
+    }
+
+    public int getLastD1() {
+        return board.getLastD1();
+    }
+
+    public int getLastD2() {
+        return board.getLastD2();
     }
 
 

@@ -9,19 +9,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 import main.Player;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -105,17 +102,17 @@ public class GameSetUpScreen implements Screen {
         this.spriteList = new ArrayList<>(Arrays.asList(sprite1, sprite2, sprite3, sprite4, sprite5, sprite6));
 
         player1Field = new TextField("Player 1", gameSetUpScreenSkin);
-        player1Field.setMaxLength(14);
+        player1Field.setMaxLength(8);
         player2Field = new TextField("Player 2", gameSetUpScreenSkin);
-        player2Field.setMaxLength(14);
+        player2Field.setMaxLength(8);
         player3Field = new TextField("Player 3", gameSetUpScreenSkin);
-        player3Field.setMaxLength(14);
+        player3Field.setMaxLength(8);
         player4Field = new TextField("Player 4", gameSetUpScreenSkin);
-        player4Field.setMaxLength(14);
+        player4Field.setMaxLength(8);
         player5Field = new TextField("Player 5", gameSetUpScreenSkin);
-        player5Field.setMaxLength(14);
+        player5Field.setMaxLength(8);
         player6Field = new TextField("Player 6", gameSetUpScreenSkin);
-        player6Field.setMaxLength(14);
+        player6Field.setMaxLength(8);
 
         token1Image = new Image(getTokenDrawable(spriteList.get(0)));
         token2Image = new Image(getTokenDrawable(spriteList.get(1)));

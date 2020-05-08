@@ -1,6 +1,9 @@
 package Screens;
 
-import Tiles.*;
+import Tiles.Jail;
+import Tiles.OpportunityKnocks;
+import Tiles.Property;
+import Tiles.Tile;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
@@ -14,10 +17,11 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
@@ -25,7 +29,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
-import com.sun.scenario.effect.Brightpass;
 import main.GameController;
 import main.Player;
 import misc.Coordinate;
@@ -34,7 +37,6 @@ import misc.RotatableLabel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
-
 
 public class GameScreen implements Screen {
 
@@ -63,7 +65,6 @@ public class GameScreen implements Screen {
     private Label propNameLabel;
     private Label propOwnerLabel;
     private Label propCostLabel;
-    private Label propRentLabel;
     private Label propHouseCostLabel;
     private Label propHotelCostLabel;
     private ArrayList<Label> developmentPrices;
@@ -86,7 +87,11 @@ public class GameScreen implements Screen {
     private Label highestBid;
     private Label currBidderNameLabel;
 
+    private Window jailPopUpWindow;
 
+    private ArrayList<Label> playerBalanceLabels;
+    private Image die1;
+    private Image die2;
 
     private Texture oneHouseTexture ;
     private Texture twoHouseTexture;
@@ -94,20 +99,9 @@ public class GameScreen implements Screen {
     private Texture fourHouseTexture ;
     private Texture hotelTexture ;
 
-
-
     ArrayList<Sprite> propertySprites;
 
-
-
-
-    private Window jailPopUpWindow;
-
-    private Table balances;
-
     private Sound rollDiceFX;
-    private ArrayList<Label> playerBalanceLabels;
-
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
@@ -142,7 +136,6 @@ public class GameScreen implements Screen {
         stationPopUpWindowSetUp();
         jailPopUpWindowSetUp();
         auctionPopUpWindowSetUp();
-        balanceTableSetUp();
 
         oneHouseTexture = new Texture(Gdx.files.internal("property-icons/1-house.png"));
         twoHouseTexture = new Texture(Gdx.files.internal("property-icons/2-house.png"));
@@ -150,11 +143,8 @@ public class GameScreen implements Screen {
         fourHouseTexture = new Texture(Gdx.files.internal("property-icons/4-house.png"));
         hotelTexture = new Texture(Gdx.files.internal("property-icons/hotel.png"));
 
-
         propertySprites = new ArrayList<>();
         updatePropertySprites();
-
-
     }
 
     @Override
@@ -165,74 +155,132 @@ public class GameScreen implements Screen {
 
         //stage.setDebugAll(true);
 
-        Table buttons = new Table();
-        buttons.setFillParent(true);
-        buttons.right();
-        buttons.pad(0, 0, 0, 75);
-
-        stage.addActor(buttons);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w, h);
         camera.update();
 
-        Button pause = new TextButton("Pause", gameScreenSkin);
-        final TextButton rollDice = new TextButton("Roll Dice", gameScreenSkin);
+        Table currPlayerTable = new Table();
 
-        pause.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new PauseScreen(game));
-            }
-        });
+        Label currPlayerTitle = new Label("Current player: ", gameScreenSkin, "title");
+        Label currPlayerLabel = new Label(gameCon.getCurrentPlayer().getName(), gameScreenSkin, "title");
+
+        currPlayerTable.add(currPlayerTitle).left().width(320);
+        currPlayerTable.add(currPlayerLabel).right().width(170);
+
+        Table diceTable = new Table();
+
+        die1 = new Image();
+        die2 = new Image();
+
+        diceTable.add(die1).height(100).width(100).padRight(10);
+        diceTable.add(die2).height(100).width(100);
+
+        Table playerInfoTable = new Table();
+        playerBalanceLabels = new ArrayList<>();
+        for (Player player: game.players) {
+            Label playerNameLabel = new Label(player.getName() + ": ", gameScreenSkin, "title");
+            Label playerBalanceLabel = new Label("$"+ player.getMoney(), gameScreenSkin, "title");
+            playerBalanceLabels.add(playerBalanceLabel);
+            playerInfoTable.row().pad(10, 0, 0, 0);
+            playerInfoTable.add(playerNameLabel).left().width(180);
+            playerInfoTable.add(playerBalanceLabel).right().width(130);
+        }
+
+        Table gameInfoTable = new Table();
+
+        TextButton rollDice = new TextButton("Roll dice", gameScreenSkin);
+
+        gameInfoTable.row().pad(10, 0, 0, 0);
+        gameInfoTable.add(currPlayerTable);
+        gameInfoTable.row().pad(10, 0, 0, 0);
+        gameInfoTable.add(diceTable);
+        gameInfoTable.row();
+        gameInfoTable.add(playerInfoTable);
+        gameInfoTable.row().pad(10, 0, 0, 0);
+        gameInfoTable.add(rollDice);
+
+        gameInfoTable.setFillParent(true);
+        gameInfoTable.left();
+        gameInfoTable.padLeft(10);
+
+        stage.addActor(gameInfoTable);
 
         rollDice.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (rollDice.getText().toString().equals("Roll Dice")) {
+                if (rollDice.getText().toString().equals("Roll dice")) {
                     if (game.getPreferences().isFxEnabled()) {
                         rollDiceFX.play(game.getPreferences().getFxVolume());
                         try {
-                            TimeUnit.SECONDS.sleep(3);
+                            TimeUnit.MILLISECONDS.sleep(1750);
                         } catch(Exception e) {
                             e.getMessage();
                         }
                     }
+                    System.out.println("clicked");
 
                     Tile tile = gameCon.playerTurn();
 
                     Player p = gameCon.getCurrentPlayer();
                     p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
 
+//                    for(int i=0; i<10; i++) {
+//                        System.out.println("hello");
+//                        Random random = new Random();
+//                        int rand1 = random.nextInt(6)+1;
+//                        int rand2 = random.nextInt(6)+1;
+//                        die1.setDrawable(getDiceImage(rand1));
+//                        die2.setDrawable(getDiceImage(rand2));
+//                    }
+
+                    die1.setDrawable(getDiceImage(gameCon.getLastD1()));
+                    die2.setDrawable(getDiceImage(gameCon.getLastD2()));
+
                     openPopUpWindow(tile);
 
                     if (!gameCon.getPlayAgain()) {
-                        rollDice.setText("End Turn");
+                        rollDice.setText("End turn");
                     }
                 }
-                else if (rollDice.getText().toString().equals("End Turn")) {
+                else if (rollDice.getText().toString().equals("End turn")) {
                     closeAllWindows();
                     gameCon.endTurn();
-                    rollDice.setText("Roll Dice");
+                    die1.setDrawable(null);
+                    die2.setDrawable(null);
+                    currPlayerLabel.setText(gameCon.getCurrentPlayer().getName());
+                    rollDice.setText("Roll dice");
                 }
             }
         });
 
-        buttons.row().pad(10, 0, 0, 20);
-        buttons.add(pause);
-        buttons.row().pad(10, 0, 0, 20);
-        buttons.add(rollDice);
+        Table buttonTable = new Table();
+        TextButton pauseButton = new TextButton("Pause", gameScreenSkin);
+        buttonTable.add(pauseButton);
+        buttonTable.setFillParent(true);
+        buttonTable.right();
+        buttonTable.padRight(10);
+
+        stage.addActor(buttonTable);
+
+        pauseButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    game.setScreen(new PauseScreen(game));
+                }
+            });
 
         stage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 camera.unproject(mouse);
-                try {   Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-                    if((tile instanceof Property|| tile instanceof Station)) {
+                try {
+                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
+                    //if((tile instanceof Property|| tile instanceof Station)) {
                         openPopUpWindow(tile);
-                    }
-                } catch (Exception e) {
-
+                    //}
+                }
+                catch (Exception e) {
                     e.getMessage();
                 }
             }
@@ -243,20 +291,15 @@ public class GameScreen implements Screen {
 
         camera.position.set(2880, 1760, 0);
 
-
         int angle = 0;
         for (int i = 0; i < 40; i++) {
             if (i == 1 || i == 11 || i == 21 || i == 31) {
                 angle -= 90;
             }
-
             Tile tile = gameCon.getBoard().getTile(i);
-
             if(tile instanceof Property) {
                 Coordinate c = tile.getCenterLabelCoordinate();
-
                 RotatableLabel label = new RotatableLabel(new Label(tile.getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
-
                 labelStage.addActor(label);
             }
         }
@@ -304,6 +347,9 @@ public class GameScreen implements Screen {
                 if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
                     closePropertyButton.setVisible(false);
                 }
+                else {
+                    closePropertyButton.setVisible(true);
+                }
 
                 if (clickedProperty.getOwned()) {
                     closePropertyButton.setVisible(true);
@@ -349,6 +395,9 @@ public class GameScreen implements Screen {
                 if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
                     closeStationButton.setVisible(false);
                 }
+                else {
+                    closeStationButton.setVisible(true);
+                }
 
                 if (clickedProperty.getOwned()) {
                     closeStationButton.setVisible(true);
@@ -371,22 +420,11 @@ public class GameScreen implements Screen {
             closeAllWindows();
             quickPopUpWindow("This is placeholder text but will eventually hold the info of the Opportunity knocks card", 300, 800, 0.5f);
         }
-        /**if (false) {
-
-         ArrayList<Coordinate> cs = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))).getAllCoordinates();
-         System.out.println(cs.size());
-         System.out.println(gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64))));
-
-         for (Coordinate c : cs) {
-
-         layer.getCell(c.getX() / 64, c.getY() / 64).setTile(null);
-
-         }
-         }**/
     }
 
     private void closeAllWindows() {
         propertyPopUpWindow.setVisible(false);
+        stationPopUpWindow.setVisible(false);
         auctionPopUpWindow.setVisible(false);
         jailPopUpWindow.setVisible(false);
     }
@@ -460,11 +498,12 @@ public class GameScreen implements Screen {
         propertyPopUpWindow.add(buyPropertyButton).left();
         propertyPopUpWindow.add(auctionPropertyButton).right();
         propertyPopUpWindow.row().pad(10, 0, 0, 0);
-        propertyPopUpWindow.add(sellPropertyButton).left();
-        propertyPopUpWindow.add(mortgagePropertyButton).right();
+        propertyPopUpWindow.add(sellPropertyButton).left().width(120);
+        propertyPopUpWindow.add(mortgagePropertyButton).right().width(230);
         propertyPopUpWindow.row().pad(10, 0, 0, 0);
         propertyPopUpWindow.add(developPropertyButton).left();
         propertyPopUpWindow.add(closePropertyButton).right();
+        propertyPopUpWindow.pack();
 
 
         float width = 425, height = 600;
@@ -541,10 +580,6 @@ public class GameScreen implements Screen {
                 else {
                     quickPopUpWindow("Not able to develop", 100, 350, 0.5f);
                 }
-
-
-
-
             }
         });
 
@@ -608,8 +643,8 @@ public class GameScreen implements Screen {
         stationPopUpWindow.add(buyStationButton).left();
         stationPopUpWindow.add(auctionStationButton).right();
         stationPopUpWindow.row().pad(10, 0, 0, 0);
-        stationPopUpWindow.add(sellStationButton).left();
-        stationPopUpWindow.add(mortgageStationButton).right();
+        stationPopUpWindow.add(sellStationButton).left().width(120);
+        stationPopUpWindow.add(mortgageStationButton).right().width(230);
         stationPopUpWindow.row().pad(10, 0, 0, 0);
         stationPopUpWindow.add(closeStationButton).colspan(2);
         stationPopUpWindow.pack();
@@ -732,7 +767,7 @@ public class GameScreen implements Screen {
         auctionPopUpWindow = new Window("", gameScreenSkin);
         auctionPopUpWindow.add(auctionPopUpTable).expand().fill();
 
-        float width = 600, height = 500;
+        float width = 610, height = 500;
         auctionPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         auctionPopUpWindow.setVisible(false);
 
@@ -774,6 +809,7 @@ public class GameScreen implements Screen {
                         quickPopUpWindow("Not enough money", 100, 350,0.5f);
                     }
                     if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
+                        bidButton.setVisible(false);
                         leaveButton.setText("Buy");
                     }
                 }
@@ -807,6 +843,7 @@ public class GameScreen implements Screen {
                 }
 
                 if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
+                    bidButton.setVisible(false);
                     leaveButton.setText("Buy");
                 }
             }
@@ -839,49 +876,40 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
             }
         });
-
     }
-
-
-    private void quickPopUpWindow(String msg) {
-        final Window window = new Window("", gameScreenSkin);
-        final Label label = new Label(msg, gameScreenSkin, "big");
-        window.add(label);
-        float width = 350, height = 100;
-        window.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
-        stage.addActor(window);
-        window.setVisible(true);
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                window.setVisible(false);
-            }
-        }, 0.5f);
-    }
-
-
 
     /**
-     * Sets up the Balance table with initial player balances. Call this in the constructor.
+     * Updates the balance values shown in the balanceTable. Call this in render for frequent updates.
      */
-    public void balanceTableSetUp(){
-        balances = new Table();
-        playerBalanceLabels = new ArrayList<>();
-        for (Player player: game.players) {
-            
-            Label l = new Label(player.getName() + ": $"+ player.getMoney(), gameScreenSkin, "title");
-            playerBalanceLabels.add(l);
-
-            balances.add(l).left();
-            balances.row();
+    private void updateBalances(){
+        for (int i = 0 ; i < game.players.length; i++){
+            Player player = game.players[i];
+            playerBalanceLabels.get(i).setText("$" + player.getMoney());
         }
-        balances.setSize(100,100);
-        balances.left();
-        balances.pad(0,10,0,0);
-        balances.setFillParent(true);
-        //balances.setDebug(true);
-        //balances.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
-        stage.addActor(balances);
+    }
+
+    private Drawable getDiceImage(int num) {
+        Texture oneDie = new Texture(Gdx.files.internal("dice/oneDie.png"));
+        Texture twoDie = new Texture(Gdx.files.internal("dice/twoDie.png"));
+        Texture threeDie = new Texture(Gdx.files.internal("dice/threeDie.png"));
+        Texture fourDie = new Texture(Gdx.files.internal("dice/fourDie.png"));
+        Texture fiveDie = new Texture(Gdx.files.internal("dice/fiveDie.png"));
+        Texture sixDie = new Texture(Gdx.files.internal("dice/sixDie.png"));
+        switch (num) {
+            case 1:
+                return new TextureRegionDrawable(oneDie);
+            case 2:
+                return new TextureRegionDrawable(twoDie);
+            case 3:
+                return new TextureRegionDrawable(threeDie);
+            case 4:
+                return new TextureRegionDrawable(fourDie);
+            case 5:
+                return new TextureRegionDrawable(fiveDie);
+            case 6:
+                return new TextureRegionDrawable(sixDie);
+        }
+        return null;
     }
 
     private void quickPopUpWindow(String msg, float height, float width, float time) {
@@ -899,16 +927,6 @@ public class GameScreen implements Screen {
                 window.setVisible(false);
             }
         }, time);
-    }
-
-    /**
-     * Updates the balance values shown in the balanceTable. Call this in render for frequent updates.
-     */
-    public void updateBalances(){
-        for (int i = 0 ; i < game.players.length; i++){
-            Player player = game.players[i];
-            playerBalanceLabels.get(i).setText(player.getName() + ": $"+ player.getMoney());
-        }
     }
 
     @Override
@@ -943,6 +961,44 @@ public class GameScreen implements Screen {
         stage.draw();
     }
 
+    public void updatePropertySprites(){
+        ArrayList<Property> developedProperties = gameCon.getDevelopedProperties();
+        propertySprites = new ArrayList<>();
+        for (Property prop: developedProperties) {
+            Sprite sprite = new Sprite();
+            switch (prop.getHousesOwned()){
+                case 1:
+                    sprite = new Sprite(oneHouseTexture);
+                    break;
+                case 2:
+                    sprite = new Sprite(twoHouseTexture);
+                    break;
+                case 3:
+                    sprite = new Sprite(threeHouseTexture);
+                    break;
+                case 4:
+                    sprite = new Sprite(fourHouseTexture);
+                    break;
+                case 5:
+                    sprite = new Sprite(hotelTexture);
+                    break;
+            }
+            sprite.setSize(192,64);
+            sprite.setOriginCenter();
+            if (prop.getTilePos() < 11){
+                sprite.rotate(-90);
+            }
+            else   if (prop.getTilePos() < 21){
+                sprite.rotate(-180);
+            }
+            else   if (prop.getTilePos() <31){
+                sprite.rotate(-270);
+            }
+            sprite.setPosition(prop.getPropertySpriteCoordinate().getX()-192/2,prop.getPropertySpriteCoordinate().getY()-64/2);
+            propertySprites.add(sprite);
+        }
+    }
+
     @Override
     public void resize(int width, int height) {
 
@@ -967,81 +1023,6 @@ public class GameScreen implements Screen {
     public void dispose() {
 
     }
-
-
-    public void updatePropertySprites(){
-
-        ArrayList<Property> developedProperties = gameCon.getDevelopedProperties();
-
-        propertySprites = new ArrayList<>();
-
-        for (Property prop: developedProperties) {
-
-            Sprite sprite = new Sprite();
-
-
-            switch (prop.getHousesOwned()){
-
-                case 1:
-                    sprite = new Sprite(oneHouseTexture);
-                    break;
-
-                case 2:
-                   sprite = new Sprite(twoHouseTexture);
-                    break;
-
-                case 3:
-                    sprite = new Sprite(threeHouseTexture);
-                    break;
-
-                case 4:
-                    sprite = new Sprite(fourHouseTexture);
-                    break;
-
-                case 5:
-                    sprite = new Sprite(hotelTexture);
-                    break;
-
-
-            }
-
-
-
-
-            sprite.setSize(192,64);
-            sprite.setOriginCenter();
-
-            if (prop.getTilePos() < 11){
-
-                sprite.rotate(-90);
-
-            }       else   if (prop.getTilePos() < 21){
-
-                sprite.rotate(-180);
-
-            }    else   if (prop.getTilePos() <31){
-
-                sprite.rotate(-270);
-
-            }
-
-
-            sprite.setPosition(prop.getPropertySpriteCoordinate().getX()-192/2,prop.getPropertySpriteCoordinate().getY()-64/2);
-
-
-
-
-            propertySprites.add(sprite);
-
-
-        }
-
-
-
-
-    }
-
-
 
 
 }

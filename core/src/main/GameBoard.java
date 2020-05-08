@@ -1,8 +1,8 @@
 package main;
 
 import Tiles.*;
-import com.badlogic.gdx.graphics.Color;
 import misc.Card;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,8 +23,8 @@ public class GameBoard implements GameBoardInterface {
     private Player[] players;
     private Map<String, ArrayList<Property>> colPropMap;
     private ArrayList<Property> developedProperties;
-
-
+    private int lastD1Rolled;
+    private int lastD2Rolled;
 
     /**
      * The GameBoard class constructor
@@ -104,7 +104,17 @@ public class GameBoard implements GameBoardInterface {
         }
 
         System.out.println("finished");
+        lastD1Rolled = dice.getD1();
+        lastD2Rolled = dice.getD2();
         return checkBoardCircumstances();
+    }
+
+    public int getLastD1() {
+        return lastD1Rolled;
+    }
+
+    public int getLastD2() {
+        return lastD2Rolled;
     }
 
     /**
@@ -329,6 +339,8 @@ public class GameBoard implements GameBoardInterface {
         return developedProperties;
 
     }
+
+    public Dice getDice() { return dice; }
 
 
 }
