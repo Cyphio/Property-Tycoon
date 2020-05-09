@@ -918,7 +918,7 @@ public class GameScreen implements Screen {
     }
 
     private void jailPopUpWindowSetUp() {
-        Label jailInfoLabel = new Label("Either buy your way out of Jail for $50 or roll a double on your next go!", gameScreenSkin, "title");
+        Label jailInfoLabel = new Label("Either buy your way out of Jail for $50, use a get out of jail free card or roll a double on your next go!", gameScreenSkin, "title");
         jailInfoLabel.setWrap(true);
         jailInfoLabel.setWidth(875);
         jailInfoLabel.setAlignment(Align.center);
