@@ -943,11 +943,9 @@ public class GameScreen implements Screen {
      * Updates the balance values shown in the gameInfoTable. Call this in render for frequent updates.
      */
     private void updateBalances(){
-        else {
-            for (int i = 0; i < game.players.size(); i++) {
-                Player player = game.players.get(i);
-                playerBalanceLabels.get(i).setText("$" + player.getMoney());
-            }
+        for (int i = 0; i < game.players.size(); i++) {
+            Player player = game.players.get(i);
+            playerBalanceLabels.get(i).setText("$" + player.getMoney());
         }
     }
 
