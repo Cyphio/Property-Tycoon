@@ -256,6 +256,20 @@ public class GameScreen implements Screen {
                 }
                 else if (rollDice.getText().toString().equals("End turn")) {
                     closeAllWindows();
+                    if(gameCon.getCurrentPlayer().getMoney() < 0){
+                        playerBalanceLabels.get(game.players.indexOf(gameCon.getCurrentPlayer())).setText("Bankrupt!");
+                        game.players.remove(gameCon.getCurrentPlayer());
+                        gameCon.getPlayerOrder().remove(0);
+                        if(game.players.size() == 1){
+                            quickPopUpWindow("congratulations to the winner " + gameCon.getCurrentPlayer().getName(), 200, 400, 5);
+                            try{TimeUnit.SECONDS.sleep(10);}
+                            catch (Exception e){
+                                e.getMessage();
+                            }
+                            game.setScreen(new MainMenu(game));
+                        }
+
+                    }
                     gameCon.endTurn();
                     die1.setDrawable(null);
                     die2.setDrawable(null);
