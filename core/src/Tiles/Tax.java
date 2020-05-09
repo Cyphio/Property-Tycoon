@@ -5,7 +5,6 @@ public class Tax extends Tile implements TaxInterface {
 
     public Tax(){
         this.taxAmount = taxAmount;
-
     }
 
     public int getTaxAmount(){
@@ -16,5 +15,4 @@ public class Tax extends Tile implements TaxInterface {
 
        this.taxAmount = tax;
     }
-
 }

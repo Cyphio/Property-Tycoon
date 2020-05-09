@@ -109,6 +109,8 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                         case "tax":
 
                             tile = new Tax();
+                            ((Tax) tile).setTaxAmount(Integer.parseInt(tileElement.getElementsByTagName("amount").item(0).getTextContent()));
+
                             break;
                         case "opportunityknocks":
 

@@ -42,6 +42,7 @@
     </tile>
     <tile>
         <type>tax</type>
+        <amount>200</amount>
     </tile>
     <tile>
         <type>station</type>
@@ -373,7 +374,7 @@
     </tile>
     <tile>
         <type>tax</type>
-        <amount>200</amount>
+        <amount>100</amount>
     </tile>
     <tile>
         <name>Turing Heights</name>

@@ -1,9 +1,6 @@
 package Screens;
 
-import Tiles.Jail;
-import Tiles.OpportunityKnocks;
-import Tiles.Property;
-import Tiles.Tile;
+import Tiles.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
@@ -148,6 +145,7 @@ public class GameScreen implements Screen {
 
         propertySprites = new ArrayList<>();
         updatePropertySprites();
+
     }
 
     @Override
@@ -294,8 +292,30 @@ public class GameScreen implements Screen {
         }
         else if (tile instanceof OpportunityKnocks) {
             closeAllWindows();
-            quickPopUpWindow("This is placeholder text but will eventually hold the info of the Opportunity knocks card", 300, 800, 0.5f);
+            quickPopUpWindow("Opportunity knocks", 100, 200, 1);
         }
+        else if (tile instanceof PotLuck) {
+            closeAllWindows();
+            quickPopUpWindow("Pot luck", 100, 200, 1);
+        }
+        else if (tile instanceof Tax) {
+            closeAllWindows();
+            quickPopUpWindow("Tax", 100, 200, 1);
+        }
+        else if (tile instanceof FreeParking) {
+            closeAllWindows();
+            quickPopUpWindow("Free parking", 100, 200, 1);
+        }
+        else if (tile instanceof Utility) {
+            closeAllWindows();
+            quickPopUpWindow("Utility", 100, 200, 1);
+        }
+        else if (tile instanceof GoToJail) {
+            closeAllWindows();
+            quickPopUpWindow("Go to jail", 100, 200, 1);
+        }
+
+
     }
 
     private void closeAllWindows() {
@@ -436,12 +456,12 @@ public class GameScreen implements Screen {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
-
                 }
-                else{
-                clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                updatePropertyOwnerIcons();
-                closeAllWindows();}
+                else {
+                    clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    updatePropertyOwnerIcons();
+                    closeAllWindows();
+                }
             }
         });
 
@@ -588,9 +608,17 @@ public class GameScreen implements Screen {
         sellStationButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                updatePropertyOwnerIcons();
-                closeAllWindows();
+                if(clickedProperty.getMortgaged()){
+                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), 0);
+                    clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
+                    updatePropertyOwnerIcons();
+                    closeAllWindows();
+                }
+                else {
+                    clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    updatePropertyOwnerIcons();
+                    closeAllWindows();
+                }
             }
         });
 
