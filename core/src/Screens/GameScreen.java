@@ -251,11 +251,11 @@ public class GameScreen implements Screen {
                 }
                 else if (rollDice.getText().toString().equals("End turn")) {
                     closeAllWindows();
-                    if(gameCon.getCurrentPlayer().getMoney() < 0){
-                        playerBalanceLabels.get(game.players.indexOf(gameCon.getCurrentPlayer())).setText("Bankrupt!");
-                        game.players.remove(gameCon.getCurrentPlayer());
+                    gameCon.endTurn();
+                    game.players.remove(gameCon.getCurrentPlayer());
+                    if(gameCon.getCurrentPlayer().getMoney() < 0) { //need to add a check to see if their cumulative property worth also results in < $0
                         gameCon.getPlayerOrder().remove(0);
-                        if(game.players.size() == 1){
+                        if (game.players.size() == 1) {
                             quickPopUpWindow("Congratulations to the winner " + gameCon.getCurrentPlayer().getName(), 200, 400, 5);
                             Timer.schedule(new Timer.Task() {
                                 @Override
@@ -265,7 +265,7 @@ public class GameScreen implements Screen {
                             }, 5);
                         }
                     }
-                    gameCon.endTurn();
+
                     die1.setDrawable(null);
                     die2.setDrawable(null);
                     currPlayerLabel.setText(gameCon.getCurrentPlayer().getName());
@@ -943,9 +943,11 @@ public class GameScreen implements Screen {
      * Updates the balance values shown in the gameInfoTable. Call this in render for frequent updates.
      */
     private void updateBalances(){
-        for (int i = 0 ; i < game.players.size(); i++){
-            Player player = game.players.get(i);
-            playerBalanceLabels.get(i).setText("$" + player.getMoney());
+        else {
+            for (int i = 0; i < game.players.size(); i++) {
+                Player player = game.players.get(i);
+                playerBalanceLabels.get(i).setText("$" + player.getMoney());
+            }
         }
     }
 
