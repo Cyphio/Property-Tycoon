@@ -251,7 +251,6 @@ public class GameScreen implements Screen {
                 }
                 else if (rollDice.getText().toString().equals("End turn")) {
                     closeAllWindows();
-                    gameCon.endTurn();
                     game.players.remove(gameCon.getCurrentPlayer());
                     if(gameCon.getCurrentPlayer().getMoney() < 0) { //need to add a check to see if their cumulative property worth also results in < $0
                         gameCon.getPlayerOrder().remove(0);
@@ -265,7 +264,7 @@ public class GameScreen implements Screen {
                             }, 5);
                         }
                     }
-
+                    gameCon.endTurn();
                     die1.setDrawable(null);
                     die2.setDrawable(null);
                     currPlayerLabel.setText(gameCon.getCurrentPlayer().getName());
