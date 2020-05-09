@@ -103,8 +103,6 @@ public class GameScreen implements Screen {
 
     private Sound rollDiceFX;
 
-    private float timeBetween;
-
     public GameScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -150,8 +148,6 @@ public class GameScreen implements Screen {
 
         propertySprites = new ArrayList<>();
         updatePropertySprites();
-
-        timeBetween = 0;
     }
 
     @Override
@@ -1069,11 +1065,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        timeBetween += delta;
-        if(timeBetween > 0.25f) {
-            updateBalances();
-            timeBetween = 0;
-        }
+        updateBalances();
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
