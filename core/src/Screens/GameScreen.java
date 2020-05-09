@@ -103,6 +103,8 @@ public class GameScreen implements Screen {
 
     private Sound rollDiceFX;
 
+    private float timeBetween;
+
     public GameScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -147,6 +149,8 @@ public class GameScreen implements Screen {
 
         propertySprites = new ArrayList<>();
         updatePropertySprites();
+
+        timeBetween = 0;
     }
 
     @Override
@@ -230,15 +234,6 @@ public class GameScreen implements Screen {
                     Player p = gameCon.getCurrentPlayer();
                     p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
 
-//                    for(int i=0; i<10; i++) {
-//                        System.out.println("hello");
-//                        Random random = new Random();
-//                        int rand1 = random.nextInt(6)+1;
-//                        int rand2 = random.nextInt(6)+1;
-//                        die1.setDrawable(getDiceImage(rand1));
-//                        die2.setDrawable(getDiceImage(rand2));
-//                    }
-
                     die1.setDrawable(getDiceImage(gameCon.getLastD1()));
                     die2.setDrawable(getDiceImage(gameCon.getLastD2()));
 
@@ -261,14 +256,14 @@ public class GameScreen implements Screen {
                         game.players.remove(gameCon.getCurrentPlayer());
                         gameCon.getPlayerOrder().remove(0);
                         if(game.players.size() == 1){
-                            quickPopUpWindow("congratulations to the winner " + gameCon.getCurrentPlayer().getName(), 200, 400, 5);
-                            try{TimeUnit.SECONDS.sleep(10);}
-                            catch (Exception e){
-                                e.getMessage();
-                            }
-                            game.setScreen(new MainMenu(game));
+                            quickPopUpWindow("Congratulations to the winner " + gameCon.getCurrentPlayer().getName(), 200, 400, 5);
+                            Timer.schedule(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    game.setScreen(new MainMenu(game));
+                                }
+                            }, 5);
                         }
-
                     }
                     gameCon.endTurn();
                     die1.setDrawable(null);
@@ -533,12 +528,16 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                        clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                        updatePropertyOwnerIcons();
-                        closeAllWindows();
-                        openPopUpWindow(clickedProperty);
-                        rollDice.setVisible(true);
-
+                        if(gameCon.getCurrentPlayer().getMoney() >= clickedProperty.getCost()) {
+                            clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                            updatePropertyOwnerIcons();
+                            closeAllWindows();
+                            openPopUpWindow(clickedProperty);
+                            rollDice.setVisible(true);
+                        }
+                        else {
+                            quickPopUpWindow("Not enough money", 100, 350,0.5f);
+                        }
                     }
                 } catch (Exception e) {
                     e.getMessage();
@@ -585,8 +584,6 @@ public class GameScreen implements Screen {
                     clickedProperty.unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgagePropertyButton.setText("Mortgage");
                 }
-
-
             }
         });
 
@@ -680,11 +677,16 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 try {
                     if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                        clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                        updatePropertyOwnerIcons();
-                        closeAllWindows();
-                        openPopUpWindow(clickedProperty);
-                        rollDice.setVisible(true);
+                        if(gameCon.getCurrentPlayer().getMoney() >= clickedProperty.getCost()) {
+                            clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                            updatePropertyOwnerIcons();
+                            closeAllWindows();
+                            openPopUpWindow(clickedProperty);
+                            rollDice.setVisible(true);
+                        }
+                        else {
+                            quickPopUpWindow("Not enough money", 100, 350,0.5f);
+                        }
                     }
                 } catch (Exception e) {
                     e.getMessage();
@@ -1065,6 +1067,11 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        timeBetween += delta;
+        if(timeBetween > 0.25f) {
+            updateBalances();
+            timeBetween = 0;
+        }
 
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
@@ -1084,9 +1091,8 @@ public class GameScreen implements Screen {
 
         spriteBatch.end();
 
-        camera.update();
 
-        updateBalances();
+        camera.update();
 
         labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         labelStage.draw();
