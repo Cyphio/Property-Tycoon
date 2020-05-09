@@ -110,6 +110,14 @@ public class Player implements PlayerInterface {
         return properties;
     }
 
+    public int getTotalPropertyValue() {
+        int sum = 0;
+        for(Property p: getProperties()) {
+            sum += p.getCost();
+        }
+        return sum;
+    }
+
     /**
      * addProperties adds a Property object to the array list of Property Tile objects
      */

@@ -136,6 +136,7 @@ public class GameScreen implements Screen {
         // POP UP WINDOW SET UP
         propertyPopUpWindowSetUp();
         stationPopUpWindowSetUp();
+        gameInfoTableSetUp();
         jailPopUpWindowSetUp();
         auctionPopUpWindowSetUp();
 
@@ -164,138 +165,6 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, w, h);
         camera.update();
-
-        Table currPlayerTable = new Table();
-
-        Label currPlayerTitle = new Label("Current player: ", gameScreenSkin, "title");
-        Label currPlayerLabel = new Label(gameCon.getCurrentPlayer().getName(), gameScreenSkin, "title");
-
-        currPlayerTable.add(currPlayerTitle).left().width(320);
-        currPlayerTable.add(currPlayerLabel).right().width(170);
-
-        Table diceTable = new Table();
-
-        Image die1 = new Image();
-        Image die2 = new Image();
-
-        diceTable.add(die1).height(100).width(100).padRight(10);
-        diceTable.add(die2).height(100).width(100);
-
-        Table playerInfoTable = new Table();
-        playerBalanceLabels = new ArrayList<>();
-        for (Player player: game.players) {
-            Label playerNameLabel = new Label(player.getName() + ": ", gameScreenSkin, "title");
-            Label playerBalanceLabel = new Label("$"+ player.getMoney(), gameScreenSkin, "title");
-            playerBalanceLabels.add(playerBalanceLabel);
-            playerInfoTable.row().pad(10, 0, 0, 0);
-            playerInfoTable.add(playerNameLabel).left().width(180);
-            playerInfoTable.add(playerBalanceLabel).right().width(130);
-        }
-
-        TextButton pauseButton = new TextButton("Pause", gameScreenSkin);
-
-        Table gameInfoTable = new Table();
-
-        rollDice = new TextButton("Roll dice", gameScreenSkin);
-
-        gameInfoTable.row().pad(10, 0, 0, 0);
-        gameInfoTable.add(currPlayerTable).left();
-        gameInfoTable.row().pad(10, 0, 0, 0);
-        gameInfoTable.add(diceTable).left();
-        gameInfoTable.row();
-        gameInfoTable.add(playerInfoTable).left();
-        gameInfoTable.row().pad(10, 0, 0, 0);
-        gameInfoTable.add(rollDice).left();
-        gameInfoTable.row().pad(10, 0, 0, 0);
-        gameInfoTable.add(pauseButton).left();
-
-        gameInfoTable.setFillParent(true);
-        gameInfoTable.left();
-        gameInfoTable.padLeft(10);
-
-        stage.addActor(gameInfoTable);
-
-        rollDice.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (rollDice.getText().toString().equals("Roll dice")) {
-                    if (game.getPreferences().isFxEnabled()) {
-                        rollDiceFX.play(game.getPreferences().getFxVolume());
-                        try {
-                            TimeUnit.MILLISECONDS.sleep(1750);
-                        } catch(Exception e) {
-                            e.getMessage();
-                        }
-                    }
-                    System.out.println("clicked");
-
-                    Tile tile = gameCon.playerTurn();
-
-                    Player p = gameCon.getCurrentPlayer();
-                    p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
-
-                    die1.setDrawable(getDiceImage(gameCon.getLastD1()));
-                    die2.setDrawable(getDiceImage(gameCon.getLastD2()));
-
-                    openPopUpWindow(tile);
-
-                    if(tile instanceof Property){
-                        if(!((Property) tile).getOwned()) {
-                            rollDice.setVisible(false);
-                        }
-                    }
-
-                    if (!gameCon.getPlayAgain()) {
-                        rollDice.setText("End turn");
-                    }
-                }
-                else if (rollDice.getText().toString().equals("End turn")) {
-                    closeAllWindows();
-                    game.players.remove(gameCon.getCurrentPlayer());
-                    if(gameCon.getCurrentPlayer().getMoney() < 0) { //need to add a check to see if their cumulative property worth also results in < $0
-                        gameCon.getPlayerOrder().remove(0);
-                        if (game.players.size() == 1) {
-                            quickPopUpWindow("Congratulations to the winner " + gameCon.getCurrentPlayer().getName(), 200, 400, 5);
-                            Timer.schedule(new Timer.Task() {
-                                @Override
-                                public void run() {
-                                    game.setScreen(new MainMenu(game));
-                                }
-                            }, 5);
-                        }
-                    }
-                    gameCon.endTurn();
-                    die1.setDrawable(null);
-                    die2.setDrawable(null);
-                    currPlayerLabel.setText(gameCon.getCurrentPlayer().getName());
-                    rollDice.setText("Roll dice");
-                }
-            }
-        });
-
-        pauseButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    game.setScreen(new PauseScreen(game));
-                }
-            });
-
-        stage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                camera.unproject(mouse);
-                try {
-                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-                    //if((tile instanceof Property|| tile instanceof Station)) {
-                        openPopUpWindow(tile);
-                    //}
-                }
-                catch (Exception e) {
-                    e.getMessage();
-                }
-            }
-        });
 
         view = new FitViewport(w, h, camera);
         labelStage = new Stage(view);
@@ -872,6 +741,140 @@ public class GameScreen implements Screen {
                 if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
                     bidButton.setVisible(false);
                     leaveButton.setText("Buy");
+                }
+            }
+        });
+    }
+
+    private void gameInfoTableSetUp() {
+        Table currPlayerTable = new Table();
+
+        Label currPlayerTitle = new Label("Current player: ", gameScreenSkin, "title");
+        Label currPlayerLabel = new Label(gameCon.getCurrentPlayer().getName(), gameScreenSkin, "title");
+
+        currPlayerTable.add(currPlayerTitle).left().width(320);
+        currPlayerTable.add(currPlayerLabel).right().width(170);
+
+        Table diceTable = new Table();
+
+        Image die1 = new Image();
+        Image die2 = new Image();
+
+        diceTable.add(die1).height(100).width(100).padRight(10);
+        diceTable.add(die2).height(100).width(100);
+
+        Table playerInfoTable = new Table();
+        playerBalanceLabels = new ArrayList<>();
+        for (Player player: game.players) {
+            Label playerNameLabel = new Label(player.getName() + ": ", gameScreenSkin, "title");
+            Label playerBalanceLabel = new Label("$"+ player.getMoney(), gameScreenSkin, "title");
+            playerBalanceLabels.add(playerBalanceLabel);
+            playerInfoTable.row().pad(10, 0, 0, 0);
+            playerInfoTable.add(playerNameLabel).left().width(180);
+            playerInfoTable.add(playerBalanceLabel).right().width(130);
+        }
+
+        TextButton pauseButton = new TextButton("Pause", gameScreenSkin);
+
+        Table gameInfoTable = new Table();
+
+        rollDice = new TextButton("Roll dice", gameScreenSkin);
+
+        gameInfoTable.row().pad(10, 0, 0, 0);
+        gameInfoTable.add(currPlayerTable).left();
+        gameInfoTable.row().pad(10, 0, 0, 0);
+        gameInfoTable.add(diceTable).left();
+        gameInfoTable.row();
+        gameInfoTable.add(playerInfoTable).left();
+        gameInfoTable.row().pad(10, 0, 0, 0);
+        gameInfoTable.add(rollDice).left();
+        gameInfoTable.row().pad(10, 0, 0, 0);
+        gameInfoTable.add(pauseButton).left();
+
+        gameInfoTable.setFillParent(true);
+        gameInfoTable.left();
+        gameInfoTable.padLeft(10);
+
+        stage.addActor(gameInfoTable);
+
+        rollDice.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (rollDice.getText().toString().equals("Roll dice")) {
+                    if (game.getPreferences().isFxEnabled()) {
+                        rollDiceFX.play(game.getPreferences().getFxVolume());
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(1750);
+                        } catch(Exception e) {
+                            e.getMessage();
+                        }
+                    }
+                    System.out.println("clicked");
+
+                    Tile tile = gameCon.playerTurn();
+
+                    Player p = gameCon.getCurrentPlayer();
+                    p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
+
+                    die1.setDrawable(getDiceImage(gameCon.getLastD1()));
+                    die2.setDrawable(getDiceImage(gameCon.getLastD2()));
+
+                    openPopUpWindow(tile);
+
+                    if(tile instanceof Property){
+                        if(!((Property) tile).getOwned()) {
+                            rollDice.setVisible(false);
+                        }
+                    }
+
+                    if (!gameCon.getPlayAgain()) {
+                        rollDice.setText("End turn");
+                    }
+                }
+                else if (rollDice.getText().toString().equals("End turn")) {
+                    closeAllWindows();
+                    if(gameCon.getCurrentPlayer().getMoney() + gameCon.getCurrentPlayer().getTotalPropertyValue() <= 0) { //need to add a check to see if their cumulative property worth also results in < $0
+                        game.players.remove(gameCon.getCurrentPlayer());
+                        gameCon.getPlayerOrder().remove(0);
+                        if (game.players.size() == 1) {
+                            quickPopUpWindow("Congratulations to the winner " + gameCon.getCurrentPlayer().getName(), 200, 400, 5);
+                            Timer.schedule(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    game.setScreen(new MainMenu(game));
+                                }
+                            }, 5);
+                        }
+                    }
+                    gameCon.endTurn();
+                    die1.setDrawable(null);
+                    die2.setDrawable(null);
+                    currPlayerLabel.setText(gameCon.getCurrentPlayer().getName());
+                    rollDice.setText("Roll dice");
+                }
+            }
+        });
+
+        pauseButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new PauseScreen(game));
+            }
+        });
+
+        stage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(mouse);
+                try {
+                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
+                    //if((tile instanceof Property|| tile instanceof Station)) {
+                    openPopUpWindow(tile);
+                    //}
+                }
+                catch (Exception e) {
+                    e.getMessage();
                 }
             }
         });
