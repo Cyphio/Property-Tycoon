@@ -112,7 +112,7 @@ public class Tile implements TileInterface {
 
     public void setCoordinates(ArrayList<Coordinate> coordinates){
         playerPosCoordinates = new ArrayList<>();
-        for(int i =0 ; i < players.length;i++) {
+        for(int i =0 ; i < players.size();i++) {
             if (i != 3 && i != 7 && i != 11) {
                 playerPosCoordinates.add(coordinates.get(i));
             }

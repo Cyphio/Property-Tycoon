@@ -271,9 +271,9 @@ public class GameSetUpScreen implements Screen {
                 }
                 if(!isEmpty) {
                     game.players = null;
-                    game.players = new Player[numPlayersBox.getSelected()];
+                    game.players = new ArrayList<>();
                     for (int i = 0; i < numPlayersBox.getSelected(); i++) {
-                        game.players[i] = new Player(playerNamesList.get(i).getText(), spriteList.get(i));
+                        game.players.add(new Player(playerNamesList.get(i).getText(), spriteList.get(i)));
                     }
                     game.changeScreen(game.GAME);
                 }

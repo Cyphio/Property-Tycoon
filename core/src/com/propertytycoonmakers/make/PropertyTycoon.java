@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import main.Player;
 
+import java.util.ArrayList;
+
 /**
  * PropertyTycoon is the orchestrator of all GUI classes. It repeatedly makes calls to the render methods of the super
  * classes along with storing game preferences and playing the game music.
@@ -20,7 +22,7 @@ public class PropertyTycoon extends Game {
 	private long gameMusicID;
 	public SpriteBatch batch;
 	public BitmapFont font;
-	public static Player[] players;
+	public static ArrayList<Player> players;
 	public final static int GAME = 0;
 
 	/**

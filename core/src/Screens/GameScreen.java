@@ -1,9 +1,6 @@
 package Screens;
 
-import Tiles.Jail;
-import Tiles.OpportunityKnocks;
-import Tiles.Property;
-import Tiles.Tile;
+import Tiles.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
@@ -17,8 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -100,6 +96,7 @@ public class GameScreen implements Screen {
     private Texture hotelTexture ;
 
     ArrayList<Sprite> propertySprites;
+    private ArrayList<Sprite> ownedProperties;
 
     private Sound rollDiceFX;
 
@@ -142,6 +139,8 @@ public class GameScreen implements Screen {
         threeHouseTexture = new Texture(Gdx.files.internal("property-icons/3-house.png"));
         fourHouseTexture = new Texture(Gdx.files.internal("property-icons/4-house.png"));
         hotelTexture = new Texture(Gdx.files.internal("property-icons/hotel.png"));
+
+        ownedProperties = new ArrayList<>();
 
         propertySprites = new ArrayList<>();
         updatePropertySprites();
@@ -512,6 +511,7 @@ public class GameScreen implements Screen {
                 try {
                     if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
                         clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                        updatePropertyOwnerIcons();
                         closeAllWindows();
                         openPopUpWindow(clickedProperty);
                     }
@@ -527,7 +527,7 @@ public class GameScreen implements Screen {
                 auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
 
                 currBidder = gameCon.getCurrentPlayer();
-                bidderList = new ArrayList<>(Arrays.asList(game.players));
+                bidderList = new ArrayList<>(game.players);
 
                 for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
                     bidderList.add(bidderList.get(i));
@@ -544,6 +544,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                updatePropertyOwnerIcons();
                 propertyPopUpWindow.setVisible(false);
             }
         });
@@ -655,6 +656,7 @@ public class GameScreen implements Screen {
                 try {
                     if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
                         clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                        updatePropertyOwnerIcons();
                         closeAllWindows();
                         openPopUpWindow(clickedProperty);
                     }
@@ -670,7 +672,7 @@ public class GameScreen implements Screen {
                 auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
 
                 currBidder = gameCon.getCurrentPlayer();
-                bidderList = new ArrayList<>(Arrays.asList(game.players));
+                bidderList = new ArrayList<>(game.players);
 
                 for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
                     bidderList.add(bidderList.get(i));
@@ -687,6 +689,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                updatePropertyOwnerIcons();
                 stationPopUpWindow.setVisible(false);
             }
         });
@@ -824,6 +827,7 @@ public class GameScreen implements Screen {
                     auctionPopUpWindow.setVisible(false);
                     highestBidder.addProperty(clickedProperty);
                     clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
+                    updatePropertyOwnerIcons();
                     gameCon.setAuctionValue(0);
                 }
 
@@ -958,6 +962,10 @@ public class GameScreen implements Screen {
             sprite.draw(spriteBatch);
         }
 
+        for (Sprite sprite: ownedProperties) {
+            sprite.draw(spriteBatch);
+        }
+
         spriteBatch.end();
 
         camera.update();
@@ -1026,13 +1034,38 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
+    }
+    private void updatePropertyOwnerIcons(){
+        ownedProperties.clear();
 
+        for(Player p: game.players){
+
+            ArrayList<Property> props = p.getProperties(); // gets all the players owned properties
+
+            for (Property property: props) {
+
+                Sprite s = new Sprite(p.getPlayerToken().getTexture());
+                s.setAlpha(0.5f);
+                s.setOriginCenter();
+                if (property.getTilePos() < 11){
+                    s.setPosition(property.getPropertySpriteCoordinate().getX()+32,property.getPropertySpriteCoordinate().getY()-32);
+                    s.rotate(-90);
+                }   else   if (property.getTilePos() < 21){
+                    s.setPosition(property.getPropertySpriteCoordinate().getX()-32,property.getPropertySpriteCoordinate().getY()-96);
+                    s.rotate(-180);
+                }   else   if (property.getTilePos() <31){
+                    s.setPosition(property.getPropertySpriteCoordinate().getX()-96,property.getPropertySpriteCoordinate().getY()-32);
+                    s.rotate(-270);
+                }else{
+                    s.setPosition(property.getPropertySpriteCoordinate().getX()-32,property.getPropertySpriteCoordinate().getY()+32);
+                }
+                ownedProperties.add(s);
+            }
+        }
     }
 
     @Override
     public void dispose() {
 
     }
-
-
 }
