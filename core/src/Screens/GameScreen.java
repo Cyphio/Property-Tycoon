@@ -500,7 +500,6 @@ public class GameScreen implements Screen {
         propertyPopUpWindow.add(closePropertyButton).right();
         propertyPopUpWindow.pack();
 
-
         float width = 425, height = 600;
         propertyPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         propertyPopUpWindow.setVisible(false);
@@ -851,22 +850,38 @@ public class GameScreen implements Screen {
         jailInfoLabel.setWidth(875);
         jailInfoLabel.setAlignment(Align.center);
         TextButton buyOutOfJailButton = new TextButton("Buy way out of Jail", gameScreenSkin);
+        TextButton useJailFreeButton = new TextButton("Use get out of jail free card", gameScreenSkin);
+
+        Table jailPopUpTable = new Table();
+
+        float width = 800, height = 350;
+
+        jailPopUpTable.add(jailInfoLabel).width(width-50);
+        jailPopUpTable.row().pad(10, 0, 0, 0);
+        jailPopUpTable.add(buyOutOfJailButton);
+        jailPopUpTable.row().pad(10, 0, 0, 0);
+        jailPopUpTable.add(useJailFreeButton);
+        jailPopUpTable.pack();
+
+        jailPopUpTable.setBackground(getColouredBackground(Color.PINK));
 
         jailPopUpWindow = new Window("", gameScreenSkin);
-        jailPopUpWindow.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
+        //jailPopUpWindow.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
 
-        jailPopUpWindow.add(jailInfoLabel).width(850);
-        jailPopUpWindow.row().pad(10, 0, 0, 0);
-        jailPopUpWindow.add(buyOutOfJailButton);
-        jailPopUpWindow.pack();
+        jailPopUpWindow.add(jailPopUpTable).expand().fill();
 
-        float width = 875, height = 220;
         jailPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         jailPopUpWindow.setVisible(false);
 
         stage.addActor(jailPopUpWindow);
 
         buyOutOfJailButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            }
+        });
+
+        useJailFreeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
             }
