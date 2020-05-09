@@ -431,9 +431,17 @@ public class GameScreen implements Screen {
         sellPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if(clickedProperty.getMortgaged()){
+                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), 0);
+                    clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
+                    updatePropertyOwnerIcons();
+                    closeAllWindows();
+
+                }
+                else{
                 clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                 updatePropertyOwnerIcons();
-                closeAllWindows();
+                closeAllWindows();}
             }
         });
 
