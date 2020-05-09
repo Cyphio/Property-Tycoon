@@ -25,6 +25,7 @@ public class GameBoard implements GameBoardInterface {
     private ArrayList<Property> developedProperties;
     private int lastD1Rolled;
     private int lastD2Rolled;
+    private int freeParkingMoney;
 
     /**
      * The GameBoard class constructor
@@ -34,6 +35,7 @@ public class GameBoard implements GameBoardInterface {
         goPayoutAmount = 200;
         playerPos = new HashMap<Player, Integer>();
         this.players = players;
+        this.freeParkingMoney = freeParkingMoney;
 
         // sets all players position to GO tile at 0
         for (Player player : players) {
@@ -234,6 +236,12 @@ public class GameBoard implements GameBoardInterface {
             performCardAction(card);
             potluckCards.add(card);
         }
+        else if (x instanceof FreeParking) {
+            currentPlayer.payPlayer(freeParkingMoney);
+            setFreeParkingMoney(0);
+        }
+
+
         else if (x instanceof GoToJail) {
             sendToJail(currentPlayer);
         }
@@ -340,6 +348,21 @@ public class GameBoard implements GameBoardInterface {
     }
 
     public Dice getDice() { return dice; }
+
+    public int getFreeParkingMoney(){
+
+        return freeParkingMoney;
+    }
+
+    public void addFreeParkingMoney(int cash){
+        freeParkingMoney = freeParkingMoney + cash;
+
+    }
+
+    public void setFreeParkingMoney(int cash){
+
+        freeParkingMoney = cash;
+    }
 
 
 }
