@@ -298,13 +298,18 @@ public class GameScreen implements Screen {
             closeAllWindows();
             quickPopUpWindow("Pot luck", 100, 200, 1);
         }
-        else if (tile instanceof Tax) {
+        else if (tile instanceof Tax && tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
             closeAllWindows();
-            quickPopUpWindow("Tax", 100, 200, 1);
+            quickPopUpWindow("You paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
         }
         else if (tile instanceof FreeParking) {
             closeAllWindows();
-            quickPopUpWindow("Free parking", 100, 200, 1);
+            if(tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                quickPopUpWindow("You picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
+            }
+            else {
+                quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
+            }
         }
         else if (tile instanceof Utility) {
             closeAllWindows();

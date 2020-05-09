@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 
-
 <!--GAME TILES-->
 <!--DO NOT EDIT: COLOUR OR TYPE-->
 
@@ -50,7 +49,6 @@
         <colour>white</colour>
         <cost>200</cost>
     </tile>
-
     <tile>
         <name>Weeping Angel</name>
         <type>property</type>
@@ -332,7 +330,6 @@
     <tile>
         <type>potluck</type>
     </tile>
-
     <tile>
         <name>Ibis Close</name>
         <type>property</type>
@@ -347,7 +344,6 @@
         <hotel-cost>200</hotel-cost>
         <colour>green</colour>
     </tile>
-
     <tile>
         <name>Lewes Station</name>
         <type>station</type>
@@ -370,7 +366,7 @@
         <hotel>1500</hotel>
         <house-cost>200</house-cost>
         <hotel-cost>200</hotel-cost>
-        <colour>navy</colour>
+        <colour>blue</colour>
     </tile>
     <tile>
         <type>tax</type>
@@ -388,7 +384,7 @@
         <hotel>2000</hotel>
         <house-cost>200</house-cost>
         <hotel-cost>200</hotel-cost>
-        <colour>navy</colour>
+        <colour>blue</colour>
     </tile>
 
     <!--POT LUCK CARDS-->
@@ -396,12 +392,10 @@
         <action>pay</action>
         <value>100</value>
     </potluckcard>
-
     <potluckcard>
-    <action>eachplayerpays</action>
-    <value>100</value>
-</potluckcard>
-
+        <action>eachplayerpays</action>
+        <value>100</value>
+    </potluckcard>
     <potluckcard>
         <action>inherit</action>
         <value>100</value>
@@ -414,27 +408,22 @@
         <action>bank error</action>
         <value>100</value>
     </potluckcard>
-
     <potluckcard>
         <action>sale</action>
         <value>100</value>
     </potluckcard>
-
     <potluckcard>
         <action>savings</action>
         <value>100</value>
     </potluckcard>
-
     <potluckcard>
         <action>go to</action>
         <value>100</value>
     </potluckcard>
-
     <potluckcard>
         <action>bill</action>
         <value>100</value>
     </potluckcard>
-
     <potluckcard>
         <action>advance</action>
         <value>100</value>
@@ -451,19 +440,16 @@
         <action>get out of jail free</action>
         <value>100</value>
     </potluckcard>
-
     <potluckcard>
         <action>insurance</action>
         <value>100</value>
     </potluckcard>
-
 
     <!--COMMUNITY CHEST CARDS-->
     <opportunityknockscard>
         <action>jail</action>
         <value>100</value>
     </opportunityknockscard>
-
     <opportunityknockscard>
         <action>jail</action>
         <value>100</value>
