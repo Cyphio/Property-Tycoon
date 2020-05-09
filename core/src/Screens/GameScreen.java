@@ -89,8 +89,6 @@ public class GameScreen implements Screen {
     private Window jailPopUpWindow;
 
     private ArrayList<Label> playerBalanceLabels;
-    private Image die1;
-    private Image die2;
 
     private Texture oneHouseTexture ;
     private Texture twoHouseTexture;
@@ -171,8 +169,8 @@ public class GameScreen implements Screen {
 
         Table diceTable = new Table();
 
-        die1 = new Image();
-        die2 = new Image();
+        Image die1 = new Image();
+        Image die2 = new Image();
 
         diceTable.add(die1).height(100).width(100).padRight(10);
         diceTable.add(die2).height(100).width(100);
@@ -548,7 +546,7 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                 updatePropertyOwnerIcons();
-                propertyPopUpWindow.setVisible(false);
+                closeAllWindows();
             }
         });
 
@@ -693,7 +691,7 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                 updatePropertyOwnerIcons();
-                stationPopUpWindow.setVisible(false);
+                closeAllWindows();
             }
         });
 
