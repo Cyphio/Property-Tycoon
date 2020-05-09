@@ -1,6 +1,9 @@
 package Screens;
 
-import Tiles.*;
+import Tiles.Jail;
+import Tiles.OpportunityKnocks;
+import Tiles.Property;
+import Tiles.Tile;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
@@ -14,7 +17,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -31,7 +35,6 @@ import misc.Coordinate;
 import misc.RotatableLabel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class GameScreen implements Screen {
@@ -896,8 +899,8 @@ public class GameScreen implements Screen {
      * Updates the balance values shown in the balanceTable. Call this in render for frequent updates.
      */
     private void updateBalances(){
-        for (int i = 0 ; i < game.players.length; i++){
-            Player player = game.players[i];
+        for (int i = 0 ; i < game.players.size(); i++){
+            Player player = game.players.get(i);
             playerBalanceLabels.get(i).setText("$" + player.getMoney());
         }
     }
@@ -943,42 +946,6 @@ public class GameScreen implements Screen {
         }, time);
     }
 
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
-        tiledMapRenderer.setView(camera);
-        tiledMapRenderer.render();
-
-        spriteBatch.setProjectionMatrix(camera.combined);
-        spriteBatch.begin();
-        for (Player p : game.players) {
-            p.getPlayerToken().draw(spriteBatch);
-        }
-        for (Sprite sprite: propertySprites) {
-            sprite.draw(spriteBatch);
-        }
-
-        for (Sprite sprite: ownedProperties) {
-            sprite.draw(spriteBatch);
-        }
-
-        spriteBatch.end();
-
-        camera.update();
-
-        updateBalances();
-
-        labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        labelStage.draw();
-
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-    }
-
     public void updatePropertySprites(){
         ArrayList<Property> developedProperties = gameCon.getDevelopedProperties();
         propertySprites = new ArrayList<>();
@@ -1017,24 +984,6 @@ public class GameScreen implements Screen {
         }
     }
 
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-    }
     private void updatePropertyOwnerIcons(){
         ownedProperties.clear();
 
@@ -1064,8 +1013,75 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * render() is called when the Screen should render itself
+     * @param delta the time in seconds since the last render
+     */
     @Override
-    public void dispose() {
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render();
+
+        spriteBatch.setProjectionMatrix(camera.combined);
+        spriteBatch.begin();
+        for (Player p : game.players) {
+            p.getPlayerToken().draw(spriteBatch);
+        }
+        for (Sprite sprite: propertySprites) {
+            sprite.draw(spriteBatch);
+        }
+
+        for (Sprite sprite: ownedProperties) {
+            sprite.draw(spriteBatch);
+        }
+
+        spriteBatch.end();
+
+        camera.update();
+
+        updateBalances();
+
+        labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        labelStage.draw();
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
     }
+
+    /**
+     * Called when OptionsScreen() should release all resources
+     */
+    @Override
+    public void dispose() { stage.dispose(); }
+
+    /**
+     * Called when the Application is resized. Will never be called before a call to create()
+     * @param width the width of the screen
+     * @param height the height of the screen
+     */
+    @Override
+    public void resize(int width, int height) { stage.getViewport().update(width, height, true); }
+
+    /**
+     * Called when the Application is paused. An Application is paused before it is destroyed
+     */
+    @Override
+    public void pause() {}
+
+    /**
+     * Called when the Application is resumed from a paused state
+     */
+    @Override
+    public void resume() {}
+
+    /**
+     * Called when this OptionsScreen() is no longer the current screen for PropertyTycoon()
+     */
+    @Override
+    public void hide() {}
 }
