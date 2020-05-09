@@ -93,7 +93,7 @@ public class GameBoard implements GameBoardInterface {
         dice.rollDice();
         System.out.println("DOUBLE: " + dice.wasItADouble());
         if(player.getIsInJail()) {
-            if(dice.wasItADouble() || player.getOutOfJailFree()) {
+            if(dice.wasItADouble() || player.hasGetOutOfJailFree()) {
                 player.setInJail(false);
                 movePlayer(player, dice.getValue());
             }

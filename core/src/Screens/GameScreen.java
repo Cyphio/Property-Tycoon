@@ -883,18 +883,35 @@ public class GameScreen implements Screen {
         buyOutOfJailButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                closeAllWindows();
+                Player p = gameCon.getCurrentPlayer();
+                p.makePurchase(50);
+                p.setInJail(false);
+                // NEED TO MOVE PLAYER TOKEN TO JUST VISITING
+                //p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
             }
         });
 
         useJailFreeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Player p = gameCon.getCurrentPlayer();
+                if(p.hasGetOutOfJailFree()) {
+                    closeAllWindows();
+                    p.removeGetOutOfJailFreeCard();
+                    p.setInJail(false);
+                    // NEED TO MOVE PLAYER TOKEN TO JUST VISITING
+                    //p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
+                }
+                else {
+                    quickPopUpWindow("You do not have a get out of jail free card!", 150, 300, 1);
+                }
             }
         });
     }
 
     /**
-     * Updates the balance values shown in the balanceTable. Call this in render for frequent updates.
+     * Updates the balance values shown in the gameInfoTable. Call this in render for frequent updates.
      */
     private void updateBalances(){
         for (int i = 0 ; i < game.players.size(); i++){
