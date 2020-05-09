@@ -52,6 +52,8 @@ public class GameScreen implements Screen {
     private Viewport view;
     private Stage labelStage;
 
+    private TextButton rollDice;
+
     private Window propertyPopUpWindow;
     private Table propInfoBox;
     private Property clickedProperty;
@@ -190,7 +192,7 @@ public class GameScreen implements Screen {
 
         Table gameInfoTable = new Table();
 
-        TextButton rollDice = new TextButton("Roll dice", gameScreenSkin);
+        rollDice = new TextButton("Roll dice", gameScreenSkin);
 
         gameInfoTable.row().pad(10, 0, 0, 0);
         gameInfoTable.add(currPlayerTable).left();
@@ -241,6 +243,12 @@ public class GameScreen implements Screen {
                     die2.setDrawable(getDiceImage(gameCon.getLastD2()));
 
                     openPopUpWindow(tile);
+
+                    if(tile instanceof Property){
+                        if(!((Property) tile).getOwned()) {
+                            rollDice.setVisible(false);
+                        }
+                    }
 
                     if (!gameCon.getPlayAgain()) {
                         rollDice.setText("End turn");
@@ -515,6 +523,8 @@ public class GameScreen implements Screen {
                         updatePropertyOwnerIcons();
                         closeAllWindows();
                         openPopUpWindow(clickedProperty);
+                        rollDice.setVisible(true);
+
                     }
                 } catch (Exception e) {
                     e.getMessage();
@@ -660,6 +670,7 @@ public class GameScreen implements Screen {
                         updatePropertyOwnerIcons();
                         closeAllWindows();
                         openPopUpWindow(clickedProperty);
+                        rollDice.setVisible(true);
                     }
                 } catch (Exception e) {
                     e.getMessage();
@@ -822,6 +833,7 @@ public class GameScreen implements Screen {
                 if (bidderList.size() == 0 && highestBidder == null) {
                     auctionPopUpWindow.setVisible(false);
                     gameCon.setAuctionValue(0);
+                    rollDice.setVisible(true);
                 }
 
                 if (bidderList.size() == 0 && highestBidder != null) {
@@ -830,6 +842,7 @@ public class GameScreen implements Screen {
                     clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
                     updatePropertyOwnerIcons();
                     gameCon.setAuctionValue(0);
+                    rollDice.setVisible(true);
                 }
 
                 if (bidderList.size() != 0) {
