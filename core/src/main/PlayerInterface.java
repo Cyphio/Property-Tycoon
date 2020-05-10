@@ -12,7 +12,7 @@ public interface PlayerInterface {
     int getMoney(); // return how much money the player has
     void setMoney(int value);
 
-    boolean getOutOfJailFree(); // return whether the player has GOJF card
+    boolean hasGetOutOfJailFree(); // return whether the player has GOJF card
     //boolean getIsBankrupt(); // return whether the player is bankrupt
     Sprite getPlayerToken(); // return a string representation of the player's token
 

@@ -1,9 +1,9 @@
 package main;
 
 import Tiles.Property;
-import Tiles.Tile;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import misc.Coordinate;
+
 import java.util.ArrayList;
 
 /**
@@ -110,6 +110,14 @@ public class Player implements PlayerInterface {
         return properties;
     }
 
+    public int getTotalPropertyValue() {
+        int sum = 0;
+        for(Property p: getProperties()) {
+            sum += p.getCost();
+        }
+        return sum;
+    }
+
     /**
      * addProperties adds a Property object to the array list of Property Tile objects
      */
@@ -163,7 +171,7 @@ public class Player implements PlayerInterface {
      * @return returns true or false depending if "get out of jail" card is present or not
      */
     @Override
-    public boolean getOutOfJailFree() {
+    public boolean hasGetOutOfJailFree() {
         if(getOutJailCards > 0) {
             getOutJailCards--;
             return true;

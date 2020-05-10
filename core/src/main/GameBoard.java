@@ -1,8 +1,8 @@
 package main;
 
 import Tiles.*;
-import com.badlogic.gdx.graphics.Color;
 import misc.Card;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,8 +23,8 @@ public class GameBoard implements GameBoardInterface {
     private ArrayList<Player> players;
     private Map<String, ArrayList<Property>> colPropMap;
     private ArrayList<Property> developedProperties;
-
-
+    private int lastD1Rolled;
+    private int lastD2Rolled;
 
     /**
      * The GameBoard class constructor
@@ -93,7 +93,7 @@ public class GameBoard implements GameBoardInterface {
         dice.rollDice();
         System.out.println("DOUBLE: " + dice.wasItADouble());
         if(player.getIsInJail()) {
-            if(dice.wasItADouble() || player.getOutOfJailFree()) {
+            if(dice.wasItADouble() || player.hasGetOutOfJailFree()) {
                 player.setInJail(false);
                 movePlayer(player, dice.getValue());
             }
@@ -103,7 +103,17 @@ public class GameBoard implements GameBoardInterface {
         }
 
         System.out.println("finished");
+        lastD1Rolled = dice.getD1();
+        lastD2Rolled = dice.getD2();
         return checkBoardCircumstances();
+    }
+
+    public int getLastD1() {
+        return lastD1Rolled;
+    }
+
+    public int getLastD2() {
+        return lastD2Rolled;
     }
 
     /**
@@ -224,6 +234,16 @@ public class GameBoard implements GameBoardInterface {
             performCardAction(card);
             potluckCards.add(card);
         }
+        else if (x instanceof FreeParking) {
+            currentPlayer.payPlayer(((FreeParking) board[20]).getCurrentValue());
+            ((FreeParking) board[20]).setCurrentValue(0);
+        }
+        else if (x instanceof Tax) {
+            currentPlayer.makePurchase(((Tax) x).getTaxAmount());
+            ((FreeParking) board[20]).addToPot(((Tax) x).getTaxAmount());
+        }
+
+
         else if (x instanceof GoToJail) {
             sendToJail(currentPlayer);
         }
@@ -249,28 +269,30 @@ public class GameBoard implements GameBoardInterface {
     public void performCardAction(Card card) {
         switch (card.getAction()) {
             case "pay": // Bank pays player
-            case "inherit" : // Bank pays player - Inherits
-            case "student loan": // Student loan - bank pays player
-            case "bank error": // Bank error - bank pays player
-            case "sale": // Sale - bank pays player
-            case "savings": // Savings - bank pays player
+            case "You have won 2nd prize in a beauty contest, collect":
+            case "You inherit" : // Bank pays player - Inherits
+            case "Student loan refund. Collect ": // Student loan - bank pays player
+            case "Bank error in your favour. Collect": // Bank error - bank pays player
+            case "From sale of Bitcoin you get": // Sale - bank pays player
+            case "Savings bond matures, collect": // Savings - bank pays player
+            case "Received interest on shares of":
 
                 currentPlayer.payPlayer(card.getValue());
                 break;
-            case "go to": // Go back to Crapper Street
+            case "Go back to": // Go back to Crapper Street
                 currentPlayer.setTilePosition(card.getValue());
                 break;
-            case "bill"://Player pays bill
-            case "late": // Player pays bank
+            case "Pay bill for text books of"://Player pays bill
+            case "Mega late night taxi bill pay": // Player pays bank
                 currentPlayer.makePurchase(card.getValue());
                 break;
-            case "advance":
+            case "Advance to go": // go to Go tile
                 currentPlayer.setTilePosition(0);
                 break;
-            case "jail": // sends player to jail
+            case "Go to jail. Do not pass GO, do not collect": // sends player to jail
                 sendToJail(currentPlayer);
                 break;
-            case "birthday":// Each player pays current player
+            case "It's your birthday. Each player pays you":// Each player pays current player
                 for (Player player: players) {
 
                     if(player != currentPlayer) {
@@ -279,10 +301,10 @@ public class GameBoard implements GameBoardInterface {
                     }
                 }
                 break;
-            case "get out of jail free":
+            case "Get out of jail free":
                 currentPlayer.addGetOutOfJailFreeCard();
                 break;
-            case "insurance":
+            case "Pay insurance fee of":
                 currentPlayer.makePurchase(card.getValue());
                 ((FreeParking) board[20]).addToPot(card.getValue());
                 break;
@@ -328,6 +350,9 @@ public class GameBoard implements GameBoardInterface {
         return developedProperties;
 
     }
+
+    public Dice getDice() { return dice; }
+
 
 
 }

@@ -65,7 +65,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                 Element tileElement = (Element) aNode;
                 Tile tile = new Tile();
 
-
                 try {
                     switch (tileElement.getElementsByTagName("type").item(0).getTextContent()) {
 
@@ -85,8 +84,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             if(!allColours.contains(colour)) {
                                 allColours.add(colour);
                             }
-
-                            //((Property) tile).setRent(tileElement.getElementsByTagName("rent").item(0).getTextContent().toUpperCase());
 
                             ((Property) tile).setHousePrice(Integer.parseInt(tileElement.getElementsByTagName("house-cost").item(0).getTextContent().toUpperCase()));
 
@@ -109,6 +106,8 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                         case "tax":
 
                             tile = new Tax();
+                            ((Tax) tile).setTaxAmount(Integer.parseInt(tileElement.getElementsByTagName("amount").item(0).getTextContent()));
+
                             break;
                         case "opportunityknocks":
 

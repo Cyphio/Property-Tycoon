@@ -1,5 +1,6 @@
 package main;
 
+import Tiles.Jail;
 import Tiles.Property;
 import Tiles.Tile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -125,18 +126,16 @@ public class GameController{
     public GameBoard getBoard() {
         return board;
     }
+
     /**
-     * getBoard returns the current gameBoard object
+     * getPlayerOrder returns playerOrders
      * @return returns an ArrayList of players in their current play order (current player is at index 0, next player at index 1 etc.)
      */
-
     public ArrayList<Player> getPlayerOrder(){
 
         return playerOrders;
 
     }
-
-
 
     public boolean developProperty(Property prop, Player player) {
         if(player.getProperties().containsAll(board.getColPropMap().get(prop.getColourAsString())) && prop.getOwner() == player) {
@@ -149,15 +148,25 @@ public class GameController{
         }
     }
 
+    public int getLastD1() {
+        return board.getLastD1();
+    }
+
+    public int getLastD2() {
+        return board.getLastD2();
+    }
+
 
     public ArrayList<Property> getDevelopedProperties(){
-
         return board.getDevelopedProperties();
 
+    }
 
+public Coordinate freePlayerFromJail(Player player){
+        player.makePurchase(((Jail) board.getTile(10)).getBailPrice());
+        player.setInJail(false);
+        return board.getTile(10).getAvailableCoordinates();
     }
 
 
-
-    }
-
+}
