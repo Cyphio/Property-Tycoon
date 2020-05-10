@@ -180,12 +180,16 @@ public class Property extends Tile implements PropertyInterface {
      */
 
     public void sellProperty(Player player, int cost){
-        if(owner == player){
+        if(owner == player && housesOwned == 0){
             player.payPlayer(cost);
             player.removeProperty(this);
             owned = false;
             owner = null;
             setBuyable(true);
+        }else if(owner == player && housesOwned >0){
+
+            sellHouse();
+
         }
 
     }

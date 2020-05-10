@@ -1,5 +1,6 @@
 package main;
 
+import Tiles.Jail;
 import Tiles.Property;
 import Tiles.Tile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -160,4 +161,12 @@ public class GameController{
         return board.getDevelopedProperties();
 
     }
+
+public Coordinate freePlayerFromJail(Player player){
+        player.makePurchase(((Jail) board.getTile(10)).getBailPrice());
+        player.setInJail(false);
+        return board.getTile(10).getAvailableCoordinates();
+    }
+
+
 }

@@ -171,7 +171,7 @@ public class GameScreen implements Screen {
                 angle -= 90;
             }
             Tile tile = gameCon.getBoard().getTile(i);
-            if(tile instanceof Property) {
+            if(!(tile instanceof Jail) && !(tile instanceof Go) && !(tile instanceof FreeParking) && !(tile instanceof GoToJail)) {
                 Coordinate c = tile.getCenterLabelCoordinate();
                 RotatableLabel label = new RotatableLabel(new Label(tile.getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
                 labelStage.addActor(label);
@@ -674,7 +674,7 @@ public class GameScreen implements Screen {
 
         auctionBid.setMessageText("Enter Bid");
         auctionBid.setAlignment(Align.center);
-        TextButton bidButton = new TextButton("Bid", gameScreenSkin);
+        final TextButton bidButton = new TextButton("Bid", gameScreenSkin);
         final TextButton leaveButton = new TextButton("Leave", gameScreenSkin);
 
         Table auctionPopUpTable = new Table();
@@ -787,15 +787,15 @@ public class GameScreen implements Screen {
         Table currPlayerTable = new Table();
 
         Label currPlayerTitle = new Label("Current player: ", gameScreenSkin, "title");
-        Label currPlayerLabel = new Label(gameCon.getCurrentPlayer().getName(), gameScreenSkin, "title");
+        final Label currPlayerLabel = new Label(gameCon.getCurrentPlayer().getName(), gameScreenSkin, "title");
 
         currPlayerTable.add(currPlayerTitle).left().width(320);
         currPlayerTable.add(currPlayerLabel).right().width(170);
 
         Table diceTable = new Table();
 
-        Image die1 = new Image();
-        Image die2 = new Image();
+        final Image die1 = new Image();
+        final Image die2 = new Image();
 
         diceTable.add(die1).height(100).width(100).padRight(10);
         diceTable.add(die2).height(100).width(100);
@@ -953,10 +953,8 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 closeAllWindows();
                 Player p = gameCon.getCurrentPlayer();
-                p.makePurchase(50);
-                p.setInJail(false);
-                // NEED TO MOVE PLAYER TOKEN TO JUST VISITING
-                //p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
+                Coordinate visitingCoordinate = gameCon.freePlayerFromJail(p);
+                p.getPlayerToken().setPosition(visitingCoordinate.getX(), visitingCoordinate.getY());
             }
         });
 
