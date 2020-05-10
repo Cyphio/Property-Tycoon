@@ -9,6 +9,7 @@ import static com.propertytycoonmakers.make.PropertyTycoon.players;
 public class Jail extends Tile {
 
     ArrayList<Coordinate> jailCoordinates;
+    private int bailPrice = 50;
 
     @Override
     public void setCoordinates(ArrayList<Coordinate> coordinates){
@@ -40,5 +41,11 @@ public class Jail extends Tile {
     }
 
 
+    public int getBailPrice() {
+        return bailPrice;
+    }
 
+    public void setBailPrice(int bailPrice) {
+        this.bailPrice = bailPrice;
+    }
 }
