@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class OpportunityKnocks extends Tile implements TileInterface {
 
     private Sprite icon;
-    private
 
     public OpportunityKnocks(){
 
@@ -15,6 +14,7 @@ public class OpportunityKnocks extends Tile implements TileInterface {
         icon = new Sprite(texture);
         icon.setOriginCenter();
         setTileName("Opportunity Knocks");
+
     }
     public Sprite getIcon(){return icon;}
 

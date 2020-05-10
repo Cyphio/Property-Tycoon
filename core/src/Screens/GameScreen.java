@@ -98,6 +98,9 @@ public class GameScreen implements Screen {
     ArrayList<Sprite> propertySprites;
     private ArrayList<Sprite> ownedProperties;
 
+    ArrayList<Sprite> propertyIcons;
+
+
     private Sound rollDiceFX;
 
     public GameScreen(PropertyTycoon game) {
@@ -142,6 +145,7 @@ public class GameScreen implements Screen {
         hotelTexture = new Texture(Gdx.files.internal("property-icons/hotel.png"));
 
         ownedProperties = new ArrayList<>();
+        propertyIcons = new ArrayList<>();
 
         propertySprites = new ArrayList<>();
         updatePropertySprites();
@@ -176,6 +180,14 @@ public class GameScreen implements Screen {
                 RotatableLabel label = new RotatableLabel(new Label(tile.getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
                 labelStage.addActor(label);
             }
+
+            if(tile instanceof Station){
+
+                propertyIcons.add(((Station) tile).getIcon());
+
+            }
+
+
         }
 
         camera.zoom = (float) (((64*90)/h)/2);
@@ -1119,6 +1131,9 @@ public class GameScreen implements Screen {
         }
 
         for (Sprite sprite: ownedProperties) {
+            sprite.draw(spriteBatch);
+        }
+        for (Sprite sprite: propertyIcons){
             sprite.draw(spriteBatch);
         }
 
