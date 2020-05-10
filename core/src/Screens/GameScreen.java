@@ -171,7 +171,7 @@ public class GameScreen implements Screen {
                 angle -= 90;
             }
             Tile tile = gameCon.getBoard().getTile(i);
-            if(tile instanceof Property) {
+            if(!(tile instanceof Jail) && !(tile instanceof Go) && !(tile instanceof FreeParking) && !(tile instanceof GoToJail)) {
                 Coordinate c = tile.getCenterLabelCoordinate();
                 RotatableLabel label = new RotatableLabel(new Label(tile.getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
                 labelStage.addActor(label);

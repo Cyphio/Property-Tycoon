@@ -4,6 +4,8 @@ public class Tax extends Tile implements TaxInterface {
     int taxAmount;
 
     public Tax(){
+
+        setTileName("Tax");
         this.taxAmount = taxAmount;
     }
 
