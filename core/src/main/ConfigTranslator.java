@@ -115,7 +115,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             break;
                         case "station":
 
-                            tile = new Property();
+                            tile = new Station();
                             tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             tile.setBuyable(true);
 
@@ -126,7 +126,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             if(!allColours.contains(colour)) {
                                 allColours.add(colour);
                             }
-
 
                             break;
                         case "parking":
