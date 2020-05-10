@@ -24,7 +24,7 @@ public class Property extends Tile implements PropertyInterface {
     private boolean owned;
     private Player owner;
     private int housesOwned;
-    private Coordinate propertySpriteCoordinate;
+    protected Coordinate propertySpriteCoordinate;
 
     private boolean isMortgaged;
 
