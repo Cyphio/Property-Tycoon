@@ -269,28 +269,30 @@ public class GameBoard implements GameBoardInterface {
     public void performCardAction(Card card) {
         switch (card.getAction()) {
             case "pay": // Bank pays player
-            case "inherit" : // Bank pays player - Inherits
-            case "student loan": // Student loan - bank pays player
-            case "bank error": // Bank error - bank pays player
-            case "sale": // Sale - bank pays player
-            case "savings": // Savings - bank pays player
+            case "You have won 2nd prize in a beauty contest, collect":
+            case "You inherit" : // Bank pays player - Inherits
+            case "Student loan refund. Collect ": // Student loan - bank pays player
+            case "Bank error in your favour. Collect": // Bank error - bank pays player
+            case "From sale of Bitcoin you get": // Sale - bank pays player
+            case "Savings bond matures, collect": // Savings - bank pays player
+            case "Received interest on shares of":
 
                 currentPlayer.payPlayer(card.getValue());
                 break;
-            case "go to": // Go back to Crapper Street
+            case "Go back to": // Go back to Crapper Street
                 currentPlayer.setTilePosition(card.getValue());
                 break;
-            case "bill"://Player pays bill
-            case "late": // Player pays bank
+            case "Pay bill for text books of"://Player pays bill
+            case "Mega late night taxi bill pay": // Player pays bank
                 currentPlayer.makePurchase(card.getValue());
                 break;
-            case "advance":
+            case "Advance to go": // go to Go tile
                 currentPlayer.setTilePosition(0);
                 break;
-            case "jail": // sends player to jail
+            case "Go to jail. Do not pass GO, do not collect": // sends player to jail
                 sendToJail(currentPlayer);
                 break;
-            case "birthday":// Each player pays current player
+            case "It's your birthday. Each player pays you":// Each player pays current player
                 for (Player player: players) {
 
                     if(player != currentPlayer) {
@@ -299,10 +301,10 @@ public class GameBoard implements GameBoardInterface {
                     }
                 }
                 break;
-            case "get out of jail free":
+            case "Get out of jail free":
                 currentPlayer.addGetOutOfJailFreeCard();
                 break;
-            case "insurance":
+            case "Pay insurance fee of":
                 currentPlayer.makePurchase(card.getValue());
                 ((FreeParking) board[20]).addToPot(card.getValue());
                 break;
