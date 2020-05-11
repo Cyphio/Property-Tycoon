@@ -127,7 +127,9 @@ public class Property extends Ownable implements PropertyInterface {
     public void sellProperty(Player player, int cost){
         if(owner == player && housesOwned == 0){
             player.payPlayer(cost);
-            player.removeProperty(this);
+            if (player.getProperties().contains(this)) {
+                player.removeProperty(this);
+            }
             owned = false;
             owner = null;
             setBuyable(true);

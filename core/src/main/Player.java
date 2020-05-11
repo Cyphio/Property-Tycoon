@@ -125,12 +125,17 @@ public class Player implements PlayerInterface {
      */
     @Override
     public void addProperty(Ownable property) {
-        property.addPlayer(this);
-        properties.add(property);
+
+        if(!properties.contains(property)) {
+            property.addPlayer(this);
+            properties.add(property);
+        }
     }
 
     public void removeProperty(Ownable property) {
-        property.removePlayer(this);
+        if(property.getOwner() != null) {
+            property.removePlayer(this);
+        }
         properties.remove(property);
     }
 

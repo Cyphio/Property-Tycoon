@@ -878,8 +878,8 @@ public class GameScreen implements Screen {
 
                 if (bidderList.size() == 0 && highestBidder != null) {
                     auctionPopUpWindow.setVisible(false);
-                    highestBidder.addProperty(clickedProperty);
                     clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
+                    highestBidder = null;
                     updatePropertyOwnerIcons();
                     gameCon.setAuctionValue(0);
                     rollDice.setVisible(true);
@@ -1185,6 +1185,10 @@ public class GameScreen implements Screen {
         for(Player p: game.players){
 
             ArrayList<Ownable> props = p.getProperties(); // gets all the players owned properties
+
+            System.out.println("OWNS");
+            System.out.println(props);
+            System.out.println("--------");
 
             for (Ownable property: props) {
 
