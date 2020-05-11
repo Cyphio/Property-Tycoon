@@ -72,7 +72,8 @@ public class GameSetUpScreen implements Screen {
 
     private ArrayList<TextField> playerNamesList;
     private SelectBox<Integer> numPlayersBox;
-    private TextButton startGame;
+    private TextButton startFullGame;
+    private TextButton startAbridgedGame;
     private TextButton back;
 
     /**
@@ -147,7 +148,8 @@ public class GameSetUpScreen implements Screen {
         numPlayersBox = new SelectBox(gameSetUpScreenSkin);
         numPlayersBox.setItems(new Integer[]{2, 3, 4, 5, 6});
 
-        startGame = new TextButton("Start", gameSetUpScreenSkin);
+        startFullGame = new TextButton("Start full game", gameSetUpScreenSkin);
+        startAbridgedGame = new TextButton("Start abridged game", gameSetUpScreenSkin);
         playerNamesList = new ArrayList<TextField>();
         playerNamesList.addAll(Arrays.asList(player1Field, player2Field, player3Field, player4Field, player5Field, player6Field));
         back = new TextButton("Back", gameSetUpScreenSkin);
@@ -241,7 +243,9 @@ public class GameSetUpScreen implements Screen {
         table.add(token6SB);
         table.add(token6Image);
         table.row().pad(10, 0, 0, 20);
-        table.add(startGame).colspan(3);
+        table.add(startFullGame).colspan(3);
+        table.row().pad(10, 0, 0, 20);
+        table.add(startAbridgedGame).colspan(3);
         table.row().pad(10, 0, 0, 20);
         table.add(back).colspan(3);
 
@@ -260,9 +264,44 @@ public class GameSetUpScreen implements Screen {
         stage.clear();
         stage.addActor(table);
 
-        startGame.addListener(new ChangeListener() {
+        startFullGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Boolean isEmpty = false;
+                for(TextField tf : playerNamesList) {
+                    if (tf.getText().matches("^$|( )*")) {
+                        isEmpty = true;
+                    }
+                }
+                if(!isEmpty) {
+                    game.players = null;
+                    game.players = new ArrayList<>();
+                    for (int i = 0; i < numPlayersBox.getSelected(); i++) {
+                        game.players.add(new Player(playerNamesList.get(i).getText(), spriteList.get(i)));
+                    }
+                    game.changeScreen(game.GAME);
+                }
+                else {
+                    final Window window = new Window("", gameSetUpScreenSkin);
+                    final Label label = new Label("Name field left empty", gameSetUpScreenSkin, "big");
+                    window.add(label);
+                    window.setBounds((Gdx.graphics.getWidth() - 350) / 2, (Gdx.graphics.getHeight() - 100) / 2, 350, 100);
+                    stage.addActor(window);
+                    window.setVisible(true);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            window.setVisible(false);
+                        }
+                    }, 0.5f);
+                }
+            }
+        });
+
+        startAbridgedGame.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Abridged");
                 Boolean isEmpty = false;
                 for(TextField tf : playerNamesList) {
                     if (tf.getText().matches("^$|( )*")) {
