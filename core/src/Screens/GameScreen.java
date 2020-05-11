@@ -1154,12 +1154,6 @@ public class GameScreen implements Screen {
             stage.addListener(clickListener);
         }
 
-//        propertyPopUpWindowSetUp();
-//        stationPopUpWindowSetUp();
-//        gameInfoTableSetUp();
-//        jailPopUpWindowSetUp();
-//        auctionPopUpWindowSetUp();
-
         updateBalances();
 
         tiledMapRenderer.setView(camera);
