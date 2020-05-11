@@ -17,7 +17,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
     private Tile[] tileList = new Tile[40];
     private ArrayList<ArrayList<Card>> cardDecks;
-    private ArrayList<String> allColours;
+    private ArrayList<String> tileIdentities;
 
     private DocumentBuilderFactory docBuilderFactory;
     private DocumentBuilder docBuilder;
@@ -38,7 +38,15 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
             document = docBuilder.parse(file);
             document.getDocumentElement().normalize();
 
-            allColours = new ArrayList<>();
+
+
+
+            tileIdentities = new ArrayList<>();
+
+
+
+
+
 
             genTiles();
             genCards();
@@ -73,16 +81,16 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             List<String> houses = Arrays.asList("rent", "one-house", "two-house", "three-house", "four-house", "hotel");
 
                             tile = new Property();
-                            tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
-                            tile.setBuyable(true);
+                            ((Property) tile).setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
+                            ((Property) tile).setBuyable(true);
 
                             ((Property) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
 
 
                             String colour = tileElement.getElementsByTagName("colour").item(0).getTextContent().toUpperCase();
                             ((Property) tile).setColour(colour);
-                            if(!allColours.contains(colour)) {
-                                allColours.add(colour);
+                            if(!tileIdentities.contains(colour)) {
+                                tileIdentities.add(colour);
                             }
 
                             ((Property) tile).setHousePrice(Integer.parseInt(tileElement.getElementsByTagName("house-cost").item(0).getTextContent().toUpperCase()));
@@ -116,10 +124,14 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                         case "station":
 
                             tile = new Station();
-                            tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
-                            tile.setBuyable(true);
+                            ((Station)tile).setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
+                            ((Station)tile).setBuyable(true);
+                            ((Station) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
 
-                            ((Property) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
+
+                            if(!tileIdentities.contains("STATION")) {
+                                tileIdentities.add("STATION");
+                            }
 
 
 
@@ -138,6 +150,11 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             break;
                         case "utility":
                             tile = new Utility();
+
+                            if(!tileIdentities.contains("UTILITY")) {
+                                tileIdentities.add("UTILITY");
+                            }
+
                             break;
                     }
                     //ASK IF WATSON GAMES WANTS CHANGEABLE NAMES FOR JAIL FOR THEMABLE GAMES
@@ -234,8 +251,8 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
     }
 
 
-    public ArrayList<String> getAllColours() {
-        return allColours;
+    public ArrayList<String> getTileIdentities() {
+        return tileIdentities;
     }
 
 }

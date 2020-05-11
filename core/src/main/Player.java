@@ -1,5 +1,6 @@
 package main;
 
+import Tiles.Ownable;
 import Tiles.Property;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import misc.Coordinate;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Player implements PlayerInterface {
 
-    private ArrayList<Property> properties;
+    private ArrayList<Ownable> properties;
     private ArrayList<Property> mortgagedProperties;
     private int balance;
     private int tilePosition;
@@ -33,7 +34,7 @@ public class Player implements PlayerInterface {
         this.name = name;
         this.gameToken = token;
         setInJail(false);
-        properties = new ArrayList<>();
+        properties = new ArrayList<Ownable>();
 
         getOutJailCards = 0;
         balance = 1500;
@@ -106,13 +107,13 @@ public class Player implements PlayerInterface {
      * @return returns properties, ArrayList with all the properties player owns
      */
     @Override
-    public ArrayList<Property> getProperties() {
+    public ArrayList<Ownable> getProperties() {
         return properties;
     }
 
     public int getTotalPropertyValue() {
         int sum = 0;
-        for(Property p: getProperties()) {
+        for(Ownable p: getProperties()) {
             sum += p.getCost();
         }
         return sum;
@@ -120,9 +121,10 @@ public class Player implements PlayerInterface {
 
     /**
      * addProperties adds a Property object to the array list of Property Tile objects
+     * @param property
      */
     @Override
-    public void addProperty(Property property) {
+    public void addProperty(Ownable property) {
         property.addPlayer(this);
         properties.add(property);
     }

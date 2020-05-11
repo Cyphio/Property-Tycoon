@@ -53,7 +53,7 @@ public class GameScreen implements Screen {
 
     private Window propertyPopUpWindow;
     private Table propInfoBox;
-    private Property clickedProperty;
+    private Ownable clickedProperty;
     private TextButton buyPropertyButton;
     private TextButton sellPropertyButton;
     private TextButton mortgagePropertyButton;
@@ -89,11 +89,11 @@ public class GameScreen implements Screen {
 
     private ArrayList<Label> playerBalanceLabels;
 
-    private Texture oneHouseTexture ;
+    private Texture oneHouseTexture;
     private Texture twoHouseTexture;
-    private Texture threeHouseTexture ;
-    private Texture fourHouseTexture ;
-    private Texture hotelTexture ;
+    private Texture threeHouseTexture;
+    private Texture fourHouseTexture;
+    private Texture hotelTexture;
 
     ArrayList<Sprite> propertySprites;
     private ArrayList<Sprite> ownedProperties;
@@ -175,13 +175,14 @@ public class GameScreen implements Screen {
                 angle -= 90;
             }
             Tile tile = gameCon.getBoard().getTile(i);
-            if(!(tile instanceof Jail) && !(tile instanceof Go) && !(tile instanceof FreeParking) && !(tile instanceof GoToJail)) {
+            if (tile instanceof SmallTile) {
+
                 Coordinate c = tile.getCenterLabelCoordinate();
-                RotatableLabel label = new RotatableLabel(new Label(tile.getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
+                RotatableLabel label = new RotatableLabel(new Label(((SmallTile) tile).getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
                 labelStage.addActor(label);
             }
 
-            if(tile instanceof Station){
+            if (tile instanceof Station) {
 
                 propertyIcons.add(((Station) tile).getIcon());
 
@@ -208,14 +209,13 @@ public class GameScreen implements Screen {
             }
 
 
-
         }
 
-        camera.zoom = (float) (((64*90)/h)/2);
+        camera.zoom = (float) (((64 * 90) / h) / 2);
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
-        Pixmap pm = new Pixmap(1,1, Pixmap.Format.RGB565);
+        Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
         pm.setColor(colour);
         pm.fill();
         return new TextureRegionDrawable(new TextureRegion(new Texture(pm)));
@@ -225,136 +225,150 @@ public class GameScreen implements Screen {
         if (tile instanceof Property) {
             clickedProperty = (Property) tile;
 
-            if(!clickedProperty.getColourAsString().equals("WHITE")) {
-
-                if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
-                    buyPropertyButton.setVisible(true);
-                    auctionPropertyButton.setVisible(true);
-                } else {
-                    buyPropertyButton.setVisible(false);
-                    auctionPropertyButton.setVisible(false);
-                }
-
-                if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
-                    sellPropertyButton.setVisible(true);
-                    if(clickedProperty.getMortgaged()){
-                        mortgagePropertyButton.setText("Unmortgage");
-                    }
-                    else{
-                        mortgagePropertyButton.setText("Mortgage");
-                    }
-                    mortgagePropertyButton.setVisible(true);
-                    developPropertyButton.setVisible(true);
-                } else {
-                    sellPropertyButton.setVisible(false);
-                    mortgagePropertyButton.setVisible(false);
-                    developPropertyButton.setVisible(false);
-                }
-
-                if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                    closePropertyButton.setVisible(false);
-                }
-                else {
-                    closePropertyButton.setVisible(true);
-                }
-
-                if (clickedProperty.getOwned()) {
-                    closePropertyButton.setVisible(true);
-                }
-
-                propNameLabel.setText(clickedProperty.getTileName());
-                propOwnerLabel.setText(clickedProperty.getOwnerName());
-                propCostLabel.setText("$" + clickedProperty.getCost());
-                propInfoBox.setBackground(getColouredBackground(clickedProperty.getColor()));
-
-                for (int i = 0; i < clickedProperty.getDevPrices().size(); i++) {
-                    developmentPrices.get(i).setText("$" + clickedProperty.getDevPrices().get(i));
-                }
-                propHouseCostLabel.setText("$" + clickedProperty.getHousePrice());
-                propHotelCostLabel.setText("$" + clickedProperty.getHotelPrice());
-
-                closeAllWindows();
-                propertyPopUpWindow.setVisible(true);
-            }
-            else {
-                if (clickedProperty instanceof Station && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
-                    buyStationButton.setVisible(true);
-                    auctionStationButton.setVisible(true);
-                } else {
-                    buyStationButton.setVisible(false);
-                    auctionStationButton.setVisible(false);
-                }
-
-                if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
-                    sellStationButton.setVisible(true);
-                    if(clickedProperty.getMortgaged()){
-                        mortgageStationButton.setText("Unmortgage");
-                    }
-                    else{
-                        mortgageStationButton.setText("Mortgage");
-                    }
-                    mortgageStationButton.setVisible(true);
-                } else {
-                    sellStationButton.setVisible(false);
-                    mortgageStationButton.setVisible(false);
-                }
-
-                if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                    closeStationButton.setVisible(false);
-                }
-                else {
-                    closeStationButton.setVisible(true);
-                }
-
-                if (clickedProperty.getOwned()) {
-                    closeStationButton.setVisible(true);
-                }
-
-                stationNameLabel.setText(clickedProperty.getTileName());
-                stationOwnerLabel.setText(clickedProperty.getOwnerName());
-                stationCostLabel.setText("$" + clickedProperty.getCost());
-
-                closeAllWindows();
-                stationPopUpWindow.setVisible(true);
+            if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
+                buyPropertyButton.setVisible(true);
+                auctionPropertyButton.setVisible(true);
+            } else {
+                buyPropertyButton.setVisible(false);
+                auctionPropertyButton.setVisible(false);
             }
 
-        }
-        else if (tile instanceof Jail && gameCon.getCurrentPlayer().getIsInJail()) {
-            closeAllWindows();
-            jailPopUpWindow.setVisible(true);
-        }
-        else if (tile instanceof OpportunityKnocks) {
-            closeAllWindows();
-            quickPopUpWindow("Opportunity knocks", 100, 200, 1);
-        }
-        else if (tile instanceof PotLuck) {
-            closeAllWindows();
-            quickPopUpWindow("Pot luck", 100, 200, 1);
-        }
-        else if (tile instanceof Tax && tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
-            closeAllWindows();
-            quickPopUpWindow("You paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
-        }
-        else if (tile instanceof FreeParking) {
-            closeAllWindows();
-            if(tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                quickPopUpWindow("You picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
+            if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
+                sellPropertyButton.setVisible(true);
+                if (((Property) clickedProperty).getMortgaged()) {
+                    mortgagePropertyButton.setText("Unmortgage");
+                } else {
+                    mortgagePropertyButton.setText("Mortgage");
+                }
+                mortgagePropertyButton.setVisible(true);
+                developPropertyButton.setVisible(true);
+            } else {
+                sellPropertyButton.setVisible(false);
+                mortgagePropertyButton.setVisible(false);
+                developPropertyButton.setVisible(false);
             }
-            else {
-                quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
+
+            if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                closePropertyButton.setVisible(false);
+            } else {
+                closePropertyButton.setVisible(true);
             }
-        }
-        else if (tile instanceof Utility) {
+
+            if (clickedProperty.getOwned()) {
+                closePropertyButton.setVisible(true);
+            }
+
+            propNameLabel.setText(clickedProperty.getTileName());
+            propOwnerLabel.setText(clickedProperty.getOwnerName());
+            propCostLabel.setText("$" + clickedProperty.getCost());
+            propInfoBox.setBackground(getColouredBackground(((Property)clickedProperty).getColor()));
+
+            for (int i = 0; i < ((Property)clickedProperty).getDevPrices().size(); i++) {
+                developmentPrices.get(i).setText("$" + ((Property)clickedProperty).getDevPrices().get(i));
+            }
+            propHouseCostLabel.setText("$" + ((Property)clickedProperty).getHousePrice());
+            propHotelCostLabel.setText("$" + ((Property)clickedProperty).getHotelPrice());
+
             closeAllWindows();
-            quickPopUpWindow("Utility", 100, 200, 1);
-        }
-        else if (tile instanceof GoToJail) {
+            propertyPopUpWindow.setVisible(true);
+        } else if (tile instanceof Station) {
+
+            clickedProperty = (Station) tile;
+            if (clickedProperty instanceof Station && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
+                buyStationButton.setVisible(true);
+                auctionStationButton.setVisible(true);
+            } else {
+                buyStationButton.setVisible(false);
+                auctionStationButton.setVisible(false);
+            }
+
+            if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
+                sellStationButton.setVisible(true);
+                if (((Property)clickedProperty).getMortgaged()) {
+                    mortgageStationButton.setText("Unmortgage");
+                } else {
+                    mortgageStationButton.setText("Mortgage");
+                }
+                mortgageStationButton.setVisible(true);
+            } else {
+                sellStationButton.setVisible(false);
+                mortgageStationButton.setVisible(false);
+            }
+
+            if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                closeStationButton.setVisible(false);
+            } else {
+                closeStationButton.setVisible(true);
+            }
+
+            if (clickedProperty.getOwned()) {
+                closeStationButton.setVisible(true);
+            }
+
+            stationNameLabel.setText(clickedProperty.getTileName());
+            stationOwnerLabel.setText(clickedProperty.getOwnerName());
+            stationCostLabel.setText("$" + clickedProperty.getCost());
+
             closeAllWindows();
-            quickPopUpWindow("Go to jail", 100, 200, 1);
+            stationPopUpWindow.setVisible(true);
         }
 
 
+        else if(tile instanceof Jail &&gameCon.getCurrentPlayer().
+
+    getIsInJail())
+
+    {
+        closeAllWindows();
+        jailPopUpWindow.setVisible(true);
     }
+        else if(tile instanceof OpportunityKnocks)
+
+    {
+        closeAllWindows();
+        quickPopUpWindow("Opportunity knocks", 100, 200, 1);
+    }
+        else if(tile instanceof PotLuck)
+
+    {
+        closeAllWindows();
+        quickPopUpWindow("Pot luck", 100, 200, 1);
+    }
+        else if(tile instanceof Tax &&tile.getPlayers().
+
+    contains(gameCon.getCurrentPlayer()))
+
+    {
+        closeAllWindows();
+        quickPopUpWindow("You paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
+    }
+        else if(tile instanceof FreeParking)
+
+    {
+        closeAllWindows();
+        if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
+            quickPopUpWindow("You picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
+        } else {
+            quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
+        }
+    }
+        else if(tile instanceof Utility)
+
+    {
+        closeAllWindows();
+        quickPopUpWindow("Utility", 100, 200, 1);
+    }
+        else if(tile instanceof GoToJail)
+
+    {
+        closeAllWindows();
+        quickPopUpWindow("Go to jail", 100, 200, 1);
+    }
+
+}
+
+
+
 
     private void closeAllWindows() {
         propertyPopUpWindow.setVisible(false);
@@ -489,8 +503,8 @@ public class GameScreen implements Screen {
         sellPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(clickedProperty.getMortgaged()){
-                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), 0);
+                if(((Property)clickedProperty).getMortgaged()){
+                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
@@ -507,11 +521,11 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(mortgagePropertyButton.getText().toString().equals("Mortgage")) {
-                    clickedProperty.setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    ((Property)clickedProperty).setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgagePropertyButton.setText("Unmortgage");
                 }
                 else{
-                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgagePropertyButton.setText("Mortgage");
                 }
             }
@@ -520,7 +534,7 @@ public class GameScreen implements Screen {
         developPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(gameCon.developProperty(clickedProperty, gameCon.getCurrentPlayer())) {
+                if(gameCon.developProperty(((Property)clickedProperty), gameCon.getCurrentPlayer())) {
                     quickPopUpWindow("Able to develop", 100, 350, 0.5f);
                     updatePropertySprites();
                 }
@@ -646,8 +660,8 @@ public class GameScreen implements Screen {
         sellStationButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(clickedProperty.getMortgaged()){
-                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), 0);
+                if(((Property)clickedProperty).getMortgaged()){
+                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
@@ -664,11 +678,11 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(mortgageStationButton.getText().toString().equals("Mortgage")) {
-                    clickedProperty.setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    ((Property)clickedProperty).setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgageStationButton.setText("Unmortgage");
                 }
                 else{
-                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgageStationButton.setText("Mortgage");
                 }
             }
@@ -713,7 +727,9 @@ public class GameScreen implements Screen {
         Table auctionPopUpTable = new Table();
 
         if(clickedProperty != null) {
-            auctionPopUpTable.setBackground(getColouredBackground(clickedProperty.getColor()));
+            if (clickedProperty instanceof Property) {
+                auctionPopUpTable.setBackground(getColouredBackground(((Property) clickedProperty).getColor()));
+            }
             auctionPopUpTable.add(new Label(clickedProperty.getTileName(), gameScreenSkin, "big"));
             auctionPopUpTable.row().pad(40, 0, 0, 0);
         }
@@ -1103,9 +1119,9 @@ public class GameScreen implements Screen {
 
         for(Player p: game.players){
 
-            ArrayList<Property> props = p.getProperties(); // gets all the players owned properties
+            ArrayList<Ownable> props = p.getProperties(); // gets all the players owned properties
 
-            for (Property property: props) {
+            for (Ownable property: props) {
 
                 Sprite s = new Sprite(p.getPlayerToken().getTexture());
                 s.setAlpha(0.5f);
@@ -1144,9 +1160,7 @@ public class GameScreen implements Screen {
 
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-        for (Player p : game.players) {
-            p.getPlayerToken().draw(spriteBatch);
-        }
+
         for (Sprite sprite: propertySprites) {
             sprite.draw(spriteBatch);
         }
@@ -1156,6 +1170,9 @@ public class GameScreen implements Screen {
         }
         for (Sprite sprite: propertyIcons){
             sprite.draw(spriteBatch);
+        }
+        for (Player p : game.players) {
+            p.getPlayerToken().draw(spriteBatch);
         }
 
         spriteBatch.end();

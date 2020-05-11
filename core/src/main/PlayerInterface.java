@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.ArrayList;
 
 public interface PlayerInterface {
-    ArrayList<Property> getProperties(); // return properties the player owns
+    ArrayList<Ownable> getProperties(); // return properties the player owns
 
-    void addProperty(Property property);
+    void addProperty(Ownable property);
 
     int getMoney(); // return how much money the player has
     void setMoney(int value);

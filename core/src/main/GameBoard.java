@@ -21,7 +21,7 @@ public class GameBoard implements GameBoardInterface {
     private static Player currentPlayer;
     private int goPayoutAmount;
     private ArrayList<Player> players;
-    private Map<String, ArrayList<Property>> colPropMap;
+    private Map<String, ArrayList<Ownable>> identityPropMap;
     private ArrayList<Property> developedProperties;
     private int lastD1Rolled;
     private int lastD2Rolled;
@@ -45,19 +45,26 @@ public class GameBoard implements GameBoardInterface {
 
         board = builder.getTiles();
 
-        System.out.println(builder.getAllColours());
+        System.out.println(builder.getTileIdentities());
 
         System.out.println(board.length);
 
-        colPropMap = new HashMap<>();
-        for(String colour : builder.getAllColours()) {
-            ArrayList<Property> properties = new ArrayList<>();
+        identityPropMap = new HashMap<>();
+        for(String identity : builder.getTileIdentities()) {
+            ArrayList<Ownable> properties = new ArrayList<>();
+            
+            
+            
             for(Tile tile : board) {
-                if(tile instanceof Property && ((Property) tile).getColourAsString().equals(colour)) {
-                    properties.add((Property) tile);
+                if(tile instanceof Property && ((Property) tile).getColourAsString().equals(identity)) {
+                    properties.add((Ownable) tile);
+                }else if(tile instanceof Station && identity == "STATION"){
+                    properties.add((Ownable) tile);
+                }else if(tile instanceof Utility && identity == "UTILITY"){
+                    properties.add((Ownable) tile);
                 }
             }
-            colPropMap.put(colour, properties);
+            identityPropMap.put(identity, properties);
         }
 
         ConfigValidator validator = new ConfigValidator(board);
@@ -76,8 +83,8 @@ public class GameBoard implements GameBoardInterface {
 
     }
 
-    public Map<String, ArrayList<Property>> getColPropMap() {
-        return colPropMap;
+    public Map<String, ArrayList<Ownable>> getIdentityPropMap() {
+        return identityPropMap;
     }
 
     /**
@@ -211,23 +218,25 @@ public class GameBoard implements GameBoardInterface {
         }
         else if(x instanceof Property){
                 if(((Property) x).getOwned() && !((Property) x).getMortgaged() && !((Property) x).getOwner().getIsInJail()){
-                    if(((Property) x).getColourAsString().equals("WHITE")){
-                        int i = 0;
-                        for(Property checkStation : ((Property) x).getOwner().getProperties()){
-                            if(checkStation.getColourAsString().equals("WHITE")){
-                                i++;
-                            }
-
-                        }
-                        currentPlayer.makePurchase(i*50);
-                        ((Property) x).getOwner().payPlayer(i*50);
-                    }
-
-                else{
                     currentPlayer.makePurchase(((Property) x).getCurrentRent());
                     ((Property) x).getOwner().payPlayer(((Property) x).getCurrentRent());
+            }
+        }else if(x instanceof GovProperties) {
+            if (((Ownable) x).getOwned() && !((Ownable) x).getOwner().getIsInJail()) {
+                String type = "UTILITY";
+                if (x instanceof Station) {
+                    type = "STATION";
                 }
 
+                int rentMultiplier = howManyStationUtilityDoesPlayerOwn(((Ownable) x).getOwner(), type);
+
+                if (rentMultiplier > 0) {
+                    currentPlayer.makePurchase(50 * rentMultiplier);
+                    ((Ownable) x).getOwner().payPlayer(50 * rentMultiplier);
+                } else {
+                    currentPlayer.makePurchase(50);
+                    ((Ownable) x).getOwner().payPlayer(50);
+                }
             }
         }
         else if (x instanceof PotLuck) {
@@ -243,14 +252,14 @@ public class GameBoard implements GameBoardInterface {
             currentPlayer.makePurchase(((Tax) x).getTaxAmount());
             ((FreeParking) board[20]).addToPot(((Tax) x).getTaxAmount());
         }
-
-
         else if (x instanceof GoToJail) {
             sendToJail(currentPlayer);
         }
         else if (x instanceof Go) {
             currentPlayer.payPlayer(goPayoutAmount);
         }
+
+
         if (dice.jailCheck()) {
             sendToJail(currentPlayer);
         }
@@ -353,6 +362,33 @@ public class GameBoard implements GameBoardInterface {
     }
 
     public Dice getDice() { return dice; }
+
+
+    public boolean doesPlayerOwnAllOfIdentity(Player player , String identity){
+        if(identityPropMap.containsKey(identity)){
+            for (Ownable ownable : identityPropMap.get(identity)) {
+                if (ownable.getOwner() != player) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public int howManyStationUtilityDoesPlayerOwn(Player playerOwner , String identity){
+        int i = 0;
+
+        if(identityPropMap.containsKey(identity)){
+            for (Ownable ownable : identityPropMap.get(identity)) {
+                if (ownable.getOwner() == playerOwner) {
+                    i++;
+                }
+            }
+        }
+        return i;
+    }
+
+
 
 
 

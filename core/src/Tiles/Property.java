@@ -13,19 +13,13 @@ import static com.propertytycoonmakers.make.PropertyTycoon.players;
  * the Property class implements functionality relating to a property in the game. It allows for the setting of rent,
  * cost and colour amongst functionality for buying and getting the owner.
  */
-public class Property extends Tile implements PropertyInterface {
+public class Property extends Ownable implements PropertyInterface {
 
     private String colour;
-    private int cost;
-    //private int rent;
     private ArrayList<Integer> developmentPrices = new ArrayList<>();
     private int housePrice;
     private int hotelPrice;
-    private boolean owned;
-    private Player owner;
     private int housesOwned;
-    protected Coordinate propertySpriteCoordinate;
-
     private boolean isMortgaged;
 
     /**
@@ -33,7 +27,6 @@ public class Property extends Tile implements PropertyInterface {
      */
     public Property(){
         housesOwned = 0;
-        owned = false;
         colour = "white";
     }
 
@@ -114,17 +107,6 @@ public class Property extends Tile implements PropertyInterface {
         return developmentPrices;
     }
 
-//    /**
-//     * setRent takes a rent value and sets the rent of the property (with 0 development) to be that value
-//     * @param rent the rent of the property
-//     */
-//    public void setRent(String rent) {
-//         try {
-//             this.rent = Integer.parseInt(rent);
-//         } catch(Exception e) {
-//             e.getMessage();
-//         }
-//    }
 
     /**
      * getRent returns the rent of the property with 0 development
@@ -134,52 +116,14 @@ public class Property extends Tile implements PropertyInterface {
         return developmentPrices.get(0);
     }
 
-    /**
-     * setCost will set the cost of a single property within game board
-     * @param cost will be used to enter the cost of the property that player will need to pay
-     *             in order to own the property
-     */
-    @Override
-    public void setCost(int cost){ this.cost = cost; }
 
-    /**
-     * getCost will return an integer that will represent a cost of the property
-     * @return returns cost, integer that represents the cost of property
-     */
-    @Override
-    public int getCost(){ return cost; }
-
-
-    /**
-     * getOwned will return a boolean value that will represent if the property is owned by any player or not
-     * @return returns owned, boolean value that represent if property is owned
-     */
-    @Override
-    public boolean getOwned(){ return owned; }
-
-    public void buy() {
-        owned = true;
-    }
-
-    /**
-     * Checks if a property is owned, and if not, allows it to be assigned to a player
-     * @param player the player buying the property
-     */
-    public void buyProperty(Player player, int cost) {
-        if (!getOwned() && player.getMoney()>= cost){
-            player.makePurchase(cost);
-            player.addProperty(this);
-            owned = true;
-            owner = player;
-            setBuyable(false);
-        }
-    }
     /**
      * Checks if a property is owned, and if so, allows it to be sold by the player
      * @param player the player buying the property
      * @param cost the price of the property
      */
 
+    @Override
     public void sellProperty(Player player, int cost){
         if(owner == player && housesOwned == 0){
             player.payPlayer(cost);
@@ -264,22 +208,7 @@ public class Property extends Tile implements PropertyInterface {
         allCoordinates = coordinates;
     }
 
-    /**
-     * @return returns the player object that is assigned to the property
-     */
-    public Player getOwner() {
-        return owner;
-    }
 
-    /**
-     * @return returns the name assigned to the player object that owns the property
-     */
-    public String getOwnerName(){
-        if (owner != null){
-            return owner.getName();
-        }
-        return "Nobody";
-    }
 
     public int getHousesOwned(){
 
@@ -287,10 +216,6 @@ public class Property extends Tile implements PropertyInterface {
 
     }
 
-    public Coordinate getPropertySpriteCoordinate(){
-        return propertySpriteCoordinate;
-
-    }
 
 
 }

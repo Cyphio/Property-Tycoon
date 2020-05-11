@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
-public class Jail extends Tile {
+public class Jail extends BigTiles {
 
     ArrayList<Coordinate> jailCoordinates;
     private int bailPrice = 50;
