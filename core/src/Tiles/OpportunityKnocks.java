@@ -14,7 +14,7 @@ public class OpportunityKnocks extends Chests {
         icon = new Sprite(texture);
         icon.setOriginCenter();
         setTileName("Opportunity Knocks");
-        icon.setAlpha(0.7f);
+        icon.setAlpha(1f);
 
     }
 

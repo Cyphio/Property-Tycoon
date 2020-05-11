@@ -29,6 +29,7 @@ import misc.Coordinate;
 import misc.RotatableLabel;
 import misc.ScrollableStage;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -101,6 +102,7 @@ public class GameScreen implements Screen {
     private Sound rollDiceFX;
 
     private ClickListener clickListener;
+    private TextField auctionBid;
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
@@ -551,7 +553,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
-
+                auctionBid.setVisible(true);
                 currBidder = gameCon.getCurrentPlayer();
                 bidderList = new ArrayList<>(game.players);
 
@@ -572,11 +574,13 @@ public class GameScreen implements Screen {
                 if(((Property)clickedProperty).getMortgaged()){
                     ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
+                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
@@ -783,7 +787,7 @@ public class GameScreen implements Screen {
         currBidderTable.add(currBidderLabel);
         currBidderTable.add(currBidderNameLabel);
 
-        final TextField auctionBid = new TextField("", gameScreenSkin);
+        auctionBid = new TextField("", gameScreenSkin);
 
         auctionBid.setMessageText("Enter Bid");
         auctionBid.setAlignment(Align.center);
@@ -892,6 +896,7 @@ public class GameScreen implements Screen {
 
                 if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
                     bidButton.setVisible(false);
+                    auctionBid.setVisible(false);
                     leaveButton.setText("Buy");
                 }
             }

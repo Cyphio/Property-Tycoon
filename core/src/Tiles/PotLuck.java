@@ -19,7 +19,7 @@ public class PotLuck extends Chests {
             icon = new Sprite(texture);
             icon.setOriginCenter();
             setTileName("Potluck");
-        icon.setAlpha(0.8f);
+        icon.setAlpha(1f);
 
         }
 
