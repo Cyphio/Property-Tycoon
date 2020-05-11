@@ -165,31 +165,48 @@ public class GameScreen implements Screen {
             }
             Tile tile = gameCon.getBoard().getTile(i);
             if (tile instanceof SmallTile) {
-                Coordinate c = ((SmallTile)tile).getCenterLabelCoordinate();
+                Coordinate c = ((SmallTile) tile).getCenterLabelCoordinate();
                 RotatableLabel label = new RotatableLabel(new Label(((SmallTile) tile).getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
                 labelStage.addActor(label);
             }
             if (tile instanceof GovProperties) {
                 propertyIcons.add(((GovProperties) tile).getIcon());
             }
-            if(tile instanceof Tax){
+            if (tile instanceof Tax) {
                 propertyIcons.add(((Tax) tile).getIcon());
             }
-            if(tile instanceof PotLuck){
+            if (tile instanceof PotLuck) {
                 propertyIcons.add(((PotLuck) tile).getIcon());
             }
-            if(tile instanceof OpportunityKnocks){
+            if (tile instanceof OpportunityKnocks) {
                 propertyIcons.add(((OpportunityKnocks) tile).getIcon());
             }
         }
+
+        stage.addListener(clickListener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(mouse);
+                try {
+                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
+                    //if((tile instanceof Property|| tile instanceof Station)) {
+                    openPopUpWindow(tile);
+                    //}
+                }
+                catch (Exception e) {
+                    e.getMessage();
+                }
+            }
+        });
 
         setTileCellColors();
 
     }
 
-    public void setTileCellColors(){
+    public void setTileCellColors() {
         TiledMapTileSet set = tiledMap.getTileSets().getTileSet(0);
-        for (int i = 0; i <40; i++) {
+        for (int i = 0; i < 40; i++) {
 
             GameBoard board = gameCon.getBoard();
             Tile t = board.getTile(i);
@@ -229,31 +246,13 @@ public class GameScreen implements Screen {
                     default:
                         id = 1;
                         break;
-                }
 
+                }
                 layer.getCell(coords.get(3).getX() / 64, coords.get(3).getY() / 64).setTile(set.getTile(id));
                 layer.getCell(coords.get(7).getX() / 64, coords.get(7).getY() / 64).setTile(set.getTile(id));
                 layer.getCell(coords.get(11).getX() / 64, coords.get(11).getY() / 64).setTile(set.getTile(id));
-
             }
         }
-
-        stage.addListener(clickListener = new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                camera.unproject(mouse);
-                try {
-                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-                    //if((tile instanceof Property|| tile instanceof Station)) {
-                    openPopUpWindow(tile);
-                    //}
-                }
-                catch (Exception e) {
-                    e.getMessage();
-                }
-            }
-        });
     }
 
     @Override
@@ -554,13 +553,11 @@ public class GameScreen implements Screen {
                 if(((Property)clickedProperty).getMortgaged()){
                     ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
-                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
@@ -713,13 +710,11 @@ public class GameScreen implements Screen {
                 if(((Property)clickedProperty).getMortgaged()){
                     ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
-                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
