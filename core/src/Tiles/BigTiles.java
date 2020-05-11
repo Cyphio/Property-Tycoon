@@ -13,7 +13,6 @@ public class BigTiles extends Tile{
         for(int i =0 ; i < players.size();i++) {
 
                 playerPosCoordinates.add(coordinates.get(i));
-            }
         }
         allCoordinates = coordinates;
     }
