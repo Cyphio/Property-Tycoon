@@ -185,8 +185,6 @@ public class GameScreen implements Screen {
 
         setTileCellColors();
 
-
-
     }
 
     public void setTileCellColors(){
@@ -205,42 +203,32 @@ public class GameScreen implements Screen {
 
                 switch (((Property) t).getColourAsString().toUpperCase()) {
                     case "BLUE":
-                        id = 14;
-                        System.out.println("blue");
+                        id = 15;
                         break;
                     case "SKY":
-                        id = 15;
-                        System.out.println("sky");
-                        break;
-                    case "YELLOW":
-                        System.out.println("yellow");
                         id = 16;
                         break;
-                    case "GREEN":
-                        System.out.println("green");
+                    case "YELLOW":
                         id = 17;
                         break;
-                    case "ORANGE":
-                        System.out.println("orange");
+                    case "GREEN":
                         id = 18;
                         break;
-                    case "BROWN":
-                        System.out.println("brown");
+                    case "ORANGE":
                         id = 19;
                         break;
-                    case "PURPLE":
-                        System.out.println("purple");
+                    case "BROWN":
                         id = 20;
                         break;
-                    case "RED":
-                        System.out.println("red");
+                    case "PURPLE":
                         id = 21;
                         break;
-                    default:
-                        System.out.println("default");
-                        id =1;
+                    case "RED":
+                        id = 22;
                         break;
-
+                    default:
+                        id = 1;
+                        break;
                 }
 
                 layer.getCell(coords.get(3).getX() / 64, coords.get(3).getY() / 64).setTile(set.getTile(id));
@@ -566,11 +554,13 @@ public class GameScreen implements Screen {
                 if(((Property)clickedProperty).getMortgaged()){
                     ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
+                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
@@ -723,11 +713,13 @@ public class GameScreen implements Screen {
                 if(((Property)clickedProperty).getMortgaged()){
                     ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
+                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }

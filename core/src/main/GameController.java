@@ -159,7 +159,6 @@ public class GameController{
 
     public ArrayList<Property> getDevelopedProperties(){
         return board.getDevelopedProperties();
-
     }
 
 public Coordinate freePlayerFromJail(Player player){
@@ -167,6 +166,4 @@ public Coordinate freePlayerFromJail(Player player){
         player.setInJail(false);
         return board.getTile(10).getAvailableCoordinates();
     }
-
-
 }
