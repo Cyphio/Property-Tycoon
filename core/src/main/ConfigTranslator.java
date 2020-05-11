@@ -114,6 +114,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                         case "tax":
 
                             tile = new Tax();
+                            ((Tax) tile).setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             ((Tax) tile).setTaxAmount(Integer.parseInt(tileElement.getElementsByTagName("amount").item(0).getTextContent()));
 
                             break;
@@ -133,8 +134,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                                 tileIdentities.add("STATION");
                             }
 
-
-
                             break;
                         case "parking":
 
@@ -151,14 +150,18 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                         case "utility":
                             tile = new Utility();
 
+                            ((Utility) tile).setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
+                            ((Utility) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
+                            ((Utility)tile).setBuyable(true);
+
                             if(!tileIdentities.contains("UTILITY")) {
                                 tileIdentities.add("UTILITY");
                             }
 
+
+
                             break;
                     }
-                    //ASK IF WATSON GAMES WANTS CHANGEABLE NAMES FOR JAIL FOR THEMABLE GAMES
-                    //tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
 
                     tile.setTilePos(i);
                     tileList[i] = tile;

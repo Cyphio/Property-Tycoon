@@ -194,21 +194,17 @@ public class GameScreen implements Screen {
             Tile tile = gameCon.getBoard().getTile(i);
             if (tile instanceof SmallTile) {
 
-                Coordinate c = tile.getCenterLabelCoordinate();
+                Coordinate c = ((SmallTile)tile).getCenterLabelCoordinate();
                 RotatableLabel label = new RotatableLabel(new Label(((SmallTile) tile).getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
                 labelStage.addActor(label);
             }
 
-            if (tile instanceof Station) {
+            if (tile instanceof GovProperties) {
 
-                propertyIcons.add(((Station) tile).getIcon());
-
-            }
-            if(tile instanceof Utility){
-
-                propertyIcons.add(((Utility) tile).getIcon());
+                propertyIcons.add(((GovProperties) tile).getIcon());
 
             }
+
             if(tile instanceof Tax){
 
                 propertyIcons.add(((Tax) tile).getIcon());

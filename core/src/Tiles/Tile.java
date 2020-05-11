@@ -14,7 +14,7 @@ public class Tile {
 
     private int tilePosition;
     ArrayList<Player> tilePlayers = new ArrayList<>();
-    protected Coordinate centerLabelCoordinate;
+
     protected ArrayList<Coordinate> playerPosCoordinates;
     protected ArrayList<Coordinate> allCoordinates;
 
@@ -84,14 +84,6 @@ public class Tile {
         return coordinate;
     }
 
-    /**
-     * Gets the label position coordinate used to display labels on the board properly.
-     * @return coordinate of label position.
-     */
-
-    public Coordinate getCenterLabelCoordinate() {
-        return centerLabelCoordinate;
-    }
 
     /**
      * @return returns the arraylist of all player coordinates

@@ -19,7 +19,7 @@ public class GovProperties extends Ownable {
             }
         }
 
-        int tilePosition = 6; // used to determine which cell in a card is the label position one (makes it easier for us to change as we go)
+        int tilePosition = 7; // used to determine which cell in a card is the label position one (makes it easier for us to change as we go)
         int propertyPosition = 7;// where the tile icon is placed
         int iconPosition = 5;
 
@@ -34,7 +34,6 @@ public class GovProperties extends Ownable {
 
 
         centerLabelCoordinate = labelCoordinate;
-
         propertySpriteCoordinate = tempPropertyCoordinate;
         allCoordinates = coordinates;
 

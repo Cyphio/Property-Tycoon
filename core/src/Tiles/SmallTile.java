@@ -1,10 +1,10 @@
 package Tiles;
-
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import misc.Coordinate;
 
 public class SmallTile extends Tile{
     protected String tileName;
-    protected Sprite icon;
+
+    protected Coordinate centerLabelCoordinate;
 
 
     public SmallTile(){
@@ -12,6 +12,16 @@ public class SmallTile extends Tile{
         tileName = "";
 
     }
+
+    /**
+     * Gets the label position coordinate used to display labels on the board properly.
+     * @return coordinate of label position.
+     */
+
+    public Coordinate getCenterLabelCoordinate() {
+        return centerLabelCoordinate;
+    }
+
 
     /**
      * Returns the tile name.
@@ -30,4 +40,8 @@ public class SmallTile extends Tile{
     public void setTileName(String name) {
         tileName = name;
     }
+
+
+
+
 }
