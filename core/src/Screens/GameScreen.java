@@ -195,13 +195,13 @@ public class GameScreen implements Screen {
                     //if((tile instanceof Property|| tile instanceof Station)) {
                     openPopUpWindow(tile);
                     //}
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.getMessage();
+
+
                 }
             }
         });
-
     }
 
     public void setTileCellColors(){
