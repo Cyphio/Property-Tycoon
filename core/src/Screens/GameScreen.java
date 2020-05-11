@@ -182,6 +182,22 @@ public class GameScreen implements Screen {
                 propertyIcons.add(((OpportunityKnocks) tile).getIcon());
             }
         }
+        stage.addListener(clickListener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(mouse);
+                try {
+                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
+                    //if((tile instanceof Property|| tile instanceof Station)) {
+                    openPopUpWindow(tile);
+                    //}
+                }
+                catch (Exception e) {
+                    e.getMessage();
+                }
+            }
+        });
 
         setTileCellColors();
 
@@ -261,22 +277,7 @@ public class GameScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
         //stage.setDebugAll(true);
-        stage.addListener(clickListener = new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                camera.unproject(mouse);
-                try {
-                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-                    //if((tile instanceof Property|| tile instanceof Station)) {
-                    openPopUpWindow(tile);
-                    //}
-                }
-                catch (Exception e) {
-                    e.getMessage();
-                }
-            }
-        });
+
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
@@ -1223,11 +1224,6 @@ public class GameScreen implements Screen {
             stage.addListener(clickListener);
         }
 
-//        propertyPopUpWindowSetUp();
-//        stationPopUpWindowSetUp();
-//        gameInfoTableSetUp();
-//        jailPopUpWindowSetUp();
-//        auctionPopUpWindowSetUp();
 
         updateBalances();
 
