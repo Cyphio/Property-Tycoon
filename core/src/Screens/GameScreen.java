@@ -23,13 +23,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 import main.GameController;
 import main.Player;
 import misc.Coordinate;
 import misc.RotatableLabel;
+import misc.ScrollableStage;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +38,7 @@ public class GameScreen implements Screen {
 
     private final PropertyTycoon game;
     private OrthographicCamera camera;
-    private Stage stage;
+    private ScrollableStage stage;
     private Texture gameScreenTexture;
     private Skin gameScreenSkin;
     private TiledMapTileLayer layer;
@@ -100,17 +100,17 @@ public class GameScreen implements Screen {
 
     ArrayList<Sprite> propertyIcons;
 
-
     private Sound rollDiceFX;
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
-        this.stage = new Stage(new ScreenViewport());
+        stage = new ScrollableStage(this);
 
         Gdx.input.setInputProcessor(stage);
-        this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
-        this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
-        this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+
+        gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
+        gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
+        gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
         //SOUNDS
         rollDiceFX = Gdx.audio.newSound(Gdx.files.internal("sound/dice_roll.mp3"));
@@ -168,6 +168,23 @@ public class GameScreen implements Screen {
         labelStage = new Stage(view);
 
         camera.position.set(2880, 1760, 0);
+
+        stage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(mouse);
+                try {
+                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
+                    //if((tile instanceof Property|| tile instanceof Station)) {
+                    openPopUpWindow(tile);
+                    //}
+                }
+                catch (Exception e) {
+                    e.getMessage();
+                }
+            }
+        });
 
         int angle = 0;
         for (int i = 0; i < 40; i++) {
@@ -823,11 +840,11 @@ public class GameScreen implements Screen {
             playerInfoTable.add(playerBalanceLabel).right().width(130);
         }
 
-        TextButton pauseButton = new TextButton("Pause", gameScreenSkin);
-
         Table gameInfoTable = new Table();
 
         rollDice = new TextButton("Roll dice", gameScreenSkin);
+        TextButton centerButton = new TextButton("Recenter view", gameScreenSkin);
+        TextButton pauseButton = new TextButton("Pause", gameScreenSkin);
 
         gameInfoTable.row().pad(10, 0, 0, 0);
         gameInfoTable.add(currPlayerTable).left();
@@ -837,6 +854,8 @@ public class GameScreen implements Screen {
         gameInfoTable.add(playerInfoTable).left();
         gameInfoTable.row().pad(10, 0, 0, 0);
         gameInfoTable.add(rollDice).left();
+        gameInfoTable.row().pad(40, 0, 0, 0);
+        gameInfoTable.add(centerButton).left();
         gameInfoTable.row().pad(10, 0, 0, 0);
         gameInfoTable.add(pauseButton).left();
 
@@ -904,27 +923,17 @@ public class GameScreen implements Screen {
             }
         });
 
+        centerButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage.recenter(tiledMap);
+            }
+        });
+
         pauseButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new PauseScreen(game));
-            }
-        });
-
-        stage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                camera.unproject(mouse);
-                try {
-                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-                    //if((tile instanceof Property|| tile instanceof Station)) {
-                    openPopUpWindow(tile);
-                    //}
-                }
-                catch (Exception e) {
-                    e.getMessage();
-                }
             }
         });
     }
@@ -965,6 +974,8 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 closeAllWindows();
                 Player p = gameCon.getCurrentPlayer();
+                p.makePurchase(50);
+                p.setInJail(false);
                 Coordinate visitingCoordinate = gameCon.freePlayerFromJail(p);
                 p.getPlayerToken().setPosition(visitingCoordinate.getX(), visitingCoordinate.getY());
             }
@@ -978,8 +989,8 @@ public class GameScreen implements Screen {
                     closeAllWindows();
                     p.removeGetOutOfJailFreeCard();
                     p.setInJail(false);
-                    // NEED TO MOVE PLAYER TOKEN TO JUST VISITING
-                    //p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
+                    Coordinate visitingCoordinate = gameCon.freePlayerFromJail(p);
+                    p.getPlayerToken().setPosition(visitingCoordinate.getX(), visitingCoordinate.getY());
                 }
                 else {
                     quickPopUpWindow("You do not have a get out of jail free card!", 150, 300, 1);
@@ -1104,6 +1115,10 @@ public class GameScreen implements Screen {
                 ownedProperties.add(s);
             }
         }
+    }
+
+    public OrthographicCamera getCam() {
+        return camera;
     }
 
     /**
