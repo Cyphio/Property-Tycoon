@@ -30,7 +30,7 @@ public class CellToTileBuilder {
         int count=0;
 
         int dynamicY= 10;
-        int dynamicX=27;
+        int dynamicX=28;
 
         //x=27
         //y = 10
