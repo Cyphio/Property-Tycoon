@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -25,6 +22,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
+import main.GameBoard;
 import main.GameController;
 import main.Player;
 import misc.Coordinate;
@@ -110,8 +108,6 @@ public class GameScreen implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
-        gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
-        gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
         gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
         //SOUNDS
@@ -187,6 +183,84 @@ public class GameScreen implements Screen {
             }
         }
 
+        setTileCellColors();
+
+
+
+    }
+
+    public void setTileCellColors(){
+        TiledMapTileSet set = tiledMap.getTileSets().getTileSet(0);
+        for (int i = 0; i <40; i++) {
+
+            GameBoard board = gameCon.getBoard();
+            Tile t = board.getTile(i);
+
+            int id = 0;
+
+            if (t instanceof Property) {
+
+                ArrayList<Coordinate> coords = board.getTile(i).getAllCoordinates();
+                System.out.println(((Property) t).getColourAsString().toUpperCase());
+
+                switch (((Property) t).getColourAsString().toUpperCase()) {
+                    case "BLUE":
+                        id = 14;
+                        System.out.println("blue");
+                        break;
+                    case "SKY":
+                        id = 15;
+                        System.out.println("sky");
+                        break;
+                    case "YELLOW":
+                        System.out.println("yellow");
+                        id = 16;
+                        break;
+                    case "GREEN":
+                        System.out.println("green");
+                        id = 17;
+                        break;
+                    case "ORANGE":
+                        System.out.println("orange");
+                        id = 18;
+                        break;
+                    case "BROWN":
+                        System.out.println("brown");
+                        id = 19;
+                        break;
+                    case "PURPLE":
+                        System.out.println("purple");
+                        id = 20;
+                        break;
+                    case "RED":
+                        System.out.println("red");
+                        id = 21;
+                        break;
+                    default:
+                        System.out.println("default");
+                        id =1;
+                        break;
+
+                }
+
+                layer.getCell(coords.get(3).getX() / 64, coords.get(3).getY() / 64).setTile(set.getTile(id));
+                layer.getCell(coords.get(7).getX() / 64, coords.get(7).getY() / 64).setTile(set.getTile(id));
+                layer.getCell(coords.get(11).getX() / 64, coords.get(11).getY() / 64).setTile(set.getTile(id));
+
+            }
+        }
+
+
+
+
+    }
+
+
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+        //stage.setDebugAll(true);
         stage.addListener(clickListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -203,12 +277,6 @@ public class GameScreen implements Screen {
                 }
             }
         });
-    }
-
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(stage);
-        //stage.setDebugAll(true);
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
@@ -1154,6 +1222,12 @@ public class GameScreen implements Screen {
         else {
             stage.addListener(clickListener);
         }
+
+//        propertyPopUpWindowSetUp();
+//        stationPopUpWindowSetUp();
+//        gameInfoTableSetUp();
+//        jailPopUpWindowSetUp();
+//        auctionPopUpWindowSetUp();
 
         updateBalances();
 
