@@ -129,7 +129,7 @@ public class Player implements PlayerInterface {
         properties.add(property);
     }
 
-    public void removeProperty(Property property) {
+    public void removeProperty(Ownable property) {
         property.removePlayer(this);
         properties.remove(property);
     }
