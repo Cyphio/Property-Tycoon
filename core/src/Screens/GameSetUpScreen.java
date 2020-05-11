@@ -128,7 +128,7 @@ public class GameSetUpScreen implements Screen {
         token5SB = new SelectBox(gameSetUpScreenSkin);
         token6SB = new SelectBox(gameSetUpScreenSkin);
 
-        String[] valueList = new String[]{"white", "blue", "green", "yellow", "orange", "rainbow"};
+        String[] valueList = new String[]{"boot", "smartphone", "goblet", "hat", "cat", "spoon"};
 
         token1SB.setItems(valueList);
         token2SB.setItems(valueList);
@@ -385,17 +385,17 @@ public class GameSetUpScreen implements Screen {
      * @param s2str the second Sprite object
      */
     private void swapSprites(int s1pos, String s2str) {
-        if (s2str.equals("white")) {
+        if (s2str.equals("boot")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite1));
-        } else if (s2str.equals("blue")) {
+        } else if (s2str.equals("smartphone")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite2));
-        } else if (s2str.equals("green")) {
+        } else if (s2str.equals("goblet")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite3));
-        } else if (s2str.equals("yellow")) {
+        } else if (s2str.equals("hat")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite4));
-        } else if (s2str.equals("orange")) {
+        } else if (s2str.equals("cat")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite5));
-        } else if (s2str.equals("rainbow")) {
+        } else if (s2str.equals("spoon")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite6));
         }
     }
@@ -407,17 +407,17 @@ public class GameSetUpScreen implements Screen {
      */
     private String getSpriteTitle(Sprite sprite) {
         if (sprite == sprite1) {
-            return "white";
+            return "boot";
         } else if (sprite == sprite2) {
-            return "blue";
+            return "smartphone";
         } else if (sprite == sprite3) {
-            return "green";
+            return "goblet";
         } else if (sprite == sprite4) {
-            return "yellow";
+            return "hat";
         } else if (sprite == sprite5) {
-            return "orange";
+            return "cat";
         } else if (sprite == sprite6) {
-            return "rainbow";
+            return "spoon";
         }
         return "ERROR";
     }
