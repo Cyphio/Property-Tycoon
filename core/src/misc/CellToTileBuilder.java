@@ -51,11 +51,13 @@ public class CellToTileBuilder {
         // vertical row 10
         cellCoordinates=new ArrayList<>();
         for(int y=4+dynamicY;y< 31+dynamicY;y++){
+            System.out.println(board.getTile(tileNUm));
             if(count==3){
                 board.getTile(tileNUm).setCoordinates(cellCoordinates);
                 cellCoordinates=new ArrayList<>();
                 count=0;
                 tileNUm++;
+
             }
             for(int x=0+dynamicX;x< 4+dynamicX;x++){
                 cellToTile.put(l.getCell(x,y),board.getTile(tileNUm));

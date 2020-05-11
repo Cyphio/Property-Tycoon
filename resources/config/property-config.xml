@@ -41,6 +41,7 @@
     </tile>
     <tile>
         <type>tax</type>
+        <name>Tax</name>
         <amount>200</amount>
     </tile>
     <tile>
@@ -370,6 +371,7 @@
     </tile>
     <tile>
         <type>tax</type>
+        <name>Super Tax</name>
         <amount>100</amount>
     </tile>
     <tile>

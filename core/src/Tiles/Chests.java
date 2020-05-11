@@ -1,7 +1,5 @@
 package Tiles;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import misc.Coordinate;
 
@@ -9,21 +7,9 @@ import java.util.ArrayList;
 
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
-public class Tax extends SmallTile implements TaxInterface {
+public class Chests extends SmallTile {
 
-    int taxAmount;
     protected Sprite icon;
-
-    public Tax(){
-
-        tileName = "Tax";
-        Texture texture = new Texture(Gdx.files.internal("tile-images/tax.png"));
-        icon = new Sprite(texture);
-        icon.setOriginCenter();
-        icon.setAlpha(0.5f);
-
-    }
-
 
     @Override
     public void setCoordinates(ArrayList<Coordinate> coordinates) {
@@ -35,12 +21,12 @@ public class Tax extends SmallTile implements TaxInterface {
         }
 
         int tilePosition = 7; // used to determine which cell in a card is the label position one (makes it easier for us to change as we go)
+
         int iconPosition = 5;
 
 
         Coordinate iconCoordinate = new Coordinate(0,0);
         Coordinate labelCoordinate = new Coordinate(0,0);
-
 
         labelCoordinate.setCoordinate(coordinates.get(tilePosition).getX()+32,coordinates.get(tilePosition).getY()+32);
         iconCoordinate.setCoordinate(coordinates.get(iconPosition).getX()-64,coordinates.get(iconPosition).getY()-64);
@@ -72,14 +58,9 @@ public class Tax extends SmallTile implements TaxInterface {
 
 
 
-
     public Sprite getIcon(){return icon;}
-    public int getTaxAmount(){
-        return this.taxAmount;
-    }
 
-    public void setTaxAmount(int tax){
 
-       this.taxAmount = tax;
-    }
+
+
 }

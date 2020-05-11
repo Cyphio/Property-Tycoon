@@ -23,13 +23,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
 import main.GameController;
 import main.Player;
 import misc.Coordinate;
 import misc.RotatableLabel;
+import misc.ScrollableStage;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +38,7 @@ public class GameScreen implements Screen {
 
     private final PropertyTycoon game;
     private OrthographicCamera camera;
-    private Stage stage;
+    private ScrollableStage stage;
     private Texture gameScreenTexture;
     private Skin gameScreenSkin;
     private TiledMapTileLayer layer;
@@ -53,7 +53,7 @@ public class GameScreen implements Screen {
 
     private Window propertyPopUpWindow;
     private Table propInfoBox;
-    private Property clickedProperty;
+    private Ownable clickedProperty;
     private TextButton buyPropertyButton;
     private TextButton sellPropertyButton;
     private TextButton mortgagePropertyButton;
@@ -89,28 +89,28 @@ public class GameScreen implements Screen {
 
     private ArrayList<Label> playerBalanceLabels;
 
-    private Texture oneHouseTexture ;
+    private Texture oneHouseTexture;
     private Texture twoHouseTexture;
-    private Texture threeHouseTexture ;
-    private Texture fourHouseTexture ;
-    private Texture hotelTexture ;
+    private Texture threeHouseTexture;
+    private Texture fourHouseTexture;
+    private Texture hotelTexture;
 
     ArrayList<Sprite> propertySprites;
     private ArrayList<Sprite> ownedProperties;
 
     ArrayList<Sprite> propertyIcons;
 
-
     private Sound rollDiceFX;
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
-        this.stage = new Stage(new ScreenViewport());
+        stage = new ScrollableStage(this);
 
         Gdx.input.setInputProcessor(stage);
-        this.gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
-        this.gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
-        this.gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
+
+        gameScreenTexture = new Texture(Gdx.files.internal("board/board.PNG"));
+        gameScreenTexture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
+        gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
         //SOUNDS
         rollDiceFX = Gdx.audio.newSound(Gdx.files.internal("sound/dice_roll.mp3"));
@@ -169,32 +169,66 @@ public class GameScreen implements Screen {
 
         camera.position.set(2880, 1760, 0);
 
+        stage.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(mouse);
+                try {
+                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
+                    //if((tile instanceof Property|| tile instanceof Station)) {
+                    openPopUpWindow(tile);
+                    //}
+                }
+                catch (Exception e) {
+                    e.getMessage();
+                }
+            }
+        });
+
         int angle = 0;
         for (int i = 0; i < 40; i++) {
             if (i == 1 || i == 11 || i == 21 || i == 31) {
                 angle -= 90;
             }
             Tile tile = gameCon.getBoard().getTile(i);
-            if(!(tile instanceof Jail) && !(tile instanceof Go) && !(tile instanceof FreeParking) && !(tile instanceof GoToJail)) {
-                Coordinate c = tile.getCenterLabelCoordinate();
-                RotatableLabel label = new RotatableLabel(new Label(tile.getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
+            if (tile instanceof SmallTile) {
+
+                Coordinate c = ((SmallTile)tile).getCenterLabelCoordinate();
+                RotatableLabel label = new RotatableLabel(new Label(((SmallTile) tile).getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
                 labelStage.addActor(label);
             }
 
-            if(tile instanceof Station){
+            if (tile instanceof GovProperties) {
 
-                propertyIcons.add(((Station) tile).getIcon());
+                propertyIcons.add(((GovProperties) tile).getIcon());
+
+            }
+
+            if(tile instanceof Tax){
+
+                propertyIcons.add(((Tax) tile).getIcon());
+
+            }
+            if(tile instanceof PotLuck){
+
+                propertyIcons.add(((PotLuck) tile).getIcon());
+
+            }
+            if(tile instanceof OpportunityKnocks){
+
+                propertyIcons.add(((OpportunityKnocks) tile).getIcon());
 
             }
 
 
         }
 
-        camera.zoom = (float) (((64*90)/h)/2);
+        camera.zoom = (float) (((64 * 90) / h) / 2);
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
-        Pixmap pm = new Pixmap(1,1, Pixmap.Format.RGB565);
+        Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
         pm.setColor(colour);
         pm.fill();
         return new TextureRegionDrawable(new TextureRegion(new Texture(pm)));
@@ -204,136 +238,150 @@ public class GameScreen implements Screen {
         if (tile instanceof Property) {
             clickedProperty = (Property) tile;
 
-            if(!clickedProperty.getColourAsString().equals("WHITE")) {
-
-                if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
-                    buyPropertyButton.setVisible(true);
-                    auctionPropertyButton.setVisible(true);
-                } else {
-                    buyPropertyButton.setVisible(false);
-                    auctionPropertyButton.setVisible(false);
-                }
-
-                if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
-                    sellPropertyButton.setVisible(true);
-                    if(clickedProperty.getMortgaged()){
-                        mortgagePropertyButton.setText("Unmortgage");
-                    }
-                    else{
-                        mortgagePropertyButton.setText("Mortgage");
-                    }
-                    mortgagePropertyButton.setVisible(true);
-                    developPropertyButton.setVisible(true);
-                } else {
-                    sellPropertyButton.setVisible(false);
-                    mortgagePropertyButton.setVisible(false);
-                    developPropertyButton.setVisible(false);
-                }
-
-                if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                    closePropertyButton.setVisible(false);
-                }
-                else {
-                    closePropertyButton.setVisible(true);
-                }
-
-                if (clickedProperty.getOwned()) {
-                    closePropertyButton.setVisible(true);
-                }
-
-                propNameLabel.setText(clickedProperty.getTileName());
-                propOwnerLabel.setText(clickedProperty.getOwnerName());
-                propCostLabel.setText("$" + clickedProperty.getCost());
-                propInfoBox.setBackground(getColouredBackground(clickedProperty.getColor()));
-
-                for (int i = 0; i < clickedProperty.getDevPrices().size(); i++) {
-                    developmentPrices.get(i).setText("$" + clickedProperty.getDevPrices().get(i));
-                }
-                propHouseCostLabel.setText("$" + clickedProperty.getHousePrice());
-                propHotelCostLabel.setText("$" + clickedProperty.getHotelPrice());
-
-                closeAllWindows();
-                propertyPopUpWindow.setVisible(true);
-            }
-            else {
-                if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
-                    buyStationButton.setVisible(true);
-                    auctionStationButton.setVisible(true);
-                } else {
-                    buyStationButton.setVisible(false);
-                    auctionStationButton.setVisible(false);
-                }
-
-                if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
-                    sellStationButton.setVisible(true);
-                    if(clickedProperty.getMortgaged()){
-                        mortgageStationButton.setText("Unmortgage");
-                    }
-                    else{
-                        mortgageStationButton.setText("Mortgage");
-                    }
-                    mortgageStationButton.setVisible(true);
-                } else {
-                    sellStationButton.setVisible(false);
-                    mortgageStationButton.setVisible(false);
-                }
-
-                if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                    closeStationButton.setVisible(false);
-                }
-                else {
-                    closeStationButton.setVisible(true);
-                }
-
-                if (clickedProperty.getOwned()) {
-                    closeStationButton.setVisible(true);
-                }
-
-                stationNameLabel.setText(clickedProperty.getTileName());
-                stationOwnerLabel.setText(clickedProperty.getOwnerName());
-                stationCostLabel.setText("$" + clickedProperty.getCost());
-
-                closeAllWindows();
-                stationPopUpWindow.setVisible(true);
+            if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
+                buyPropertyButton.setVisible(true);
+                auctionPropertyButton.setVisible(true);
+            } else {
+                buyPropertyButton.setVisible(false);
+                auctionPropertyButton.setVisible(false);
             }
 
-        }
-        else if (tile instanceof Jail && gameCon.getCurrentPlayer().getIsInJail()) {
-            closeAllWindows();
-            jailPopUpWindow.setVisible(true);
-        }
-        else if (tile instanceof OpportunityKnocks) {
-            closeAllWindows();
-            quickPopUpWindow("Opportunity knocks", 100, 200, 1);
-        }
-        else if (tile instanceof PotLuck) {
-            closeAllWindows();
-            quickPopUpWindow("Pot luck", 100, 200, 1);
-        }
-        else if (tile instanceof Tax && tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
-            closeAllWindows();
-            quickPopUpWindow("You paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
-        }
-        else if (tile instanceof FreeParking) {
-            closeAllWindows();
-            if(tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                quickPopUpWindow("You picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
+            if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
+                sellPropertyButton.setVisible(true);
+                if (((Property) clickedProperty).getMortgaged()) {
+                    mortgagePropertyButton.setText("Unmortgage");
+                } else {
+                    mortgagePropertyButton.setText("Mortgage");
+                }
+                mortgagePropertyButton.setVisible(true);
+                developPropertyButton.setVisible(true);
+            } else {
+                sellPropertyButton.setVisible(false);
+                mortgagePropertyButton.setVisible(false);
+                developPropertyButton.setVisible(false);
             }
-            else {
-                quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
+
+            if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                closePropertyButton.setVisible(false);
+            } else {
+                closePropertyButton.setVisible(true);
             }
-        }
-        else if (tile instanceof Utility) {
+
+            if (clickedProperty.getOwned()) {
+                closePropertyButton.setVisible(true);
+            }
+
+            propNameLabel.setText(clickedProperty.getTileName());
+            propOwnerLabel.setText(clickedProperty.getOwnerName());
+            propCostLabel.setText("$" + clickedProperty.getCost());
+            propInfoBox.setBackground(getColouredBackground(((Property)clickedProperty).getColor()));
+
+            for (int i = 0; i < ((Property)clickedProperty).getDevPrices().size(); i++) {
+                developmentPrices.get(i).setText("$" + ((Property)clickedProperty).getDevPrices().get(i));
+            }
+            propHouseCostLabel.setText("$" + ((Property)clickedProperty).getHousePrice());
+            propHotelCostLabel.setText("$" + ((Property)clickedProperty).getHotelPrice());
+
             closeAllWindows();
-            quickPopUpWindow("Utility", 100, 200, 1);
-        }
-        else if (tile instanceof GoToJail) {
+            propertyPopUpWindow.setVisible(true);
+        } else if (tile instanceof Station) {
+
+            clickedProperty = (Station) tile;
+            if (clickedProperty instanceof Station && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
+                buyStationButton.setVisible(true);
+                auctionStationButton.setVisible(true);
+            } else {
+                buyStationButton.setVisible(false);
+                auctionStationButton.setVisible(false);
+            }
+
+            if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
+                sellStationButton.setVisible(true);
+                if (((Property)clickedProperty).getMortgaged()) {
+                    mortgageStationButton.setText("Unmortgage");
+                } else {
+                    mortgageStationButton.setText("Mortgage");
+                }
+                mortgageStationButton.setVisible(true);
+            } else {
+                sellStationButton.setVisible(false);
+                mortgageStationButton.setVisible(false);
+            }
+
+            if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                closeStationButton.setVisible(false);
+            } else {
+                closeStationButton.setVisible(true);
+            }
+
+            if (clickedProperty.getOwned()) {
+                closeStationButton.setVisible(true);
+            }
+
+            stationNameLabel.setText(clickedProperty.getTileName());
+            stationOwnerLabel.setText(clickedProperty.getOwnerName());
+            stationCostLabel.setText("$" + clickedProperty.getCost());
+
             closeAllWindows();
-            quickPopUpWindow("Go to jail", 100, 200, 1);
+            stationPopUpWindow.setVisible(true);
         }
 
 
+        else if(tile instanceof Jail &&gameCon.getCurrentPlayer().
+
+    getIsInJail())
+
+    {
+        closeAllWindows();
+        jailPopUpWindow.setVisible(true);
     }
+        else if(tile instanceof OpportunityKnocks)
+
+    {
+        closeAllWindows();
+        quickPopUpWindow("Opportunity knocks", 100, 200, 1);
+    }
+        else if(tile instanceof PotLuck)
+
+    {
+        closeAllWindows();
+        quickPopUpWindow("Pot luck", 100, 200, 1);
+    }
+        else if(tile instanceof Tax &&tile.getPlayers().
+
+    contains(gameCon.getCurrentPlayer()))
+
+    {
+        closeAllWindows();
+        quickPopUpWindow("You paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
+    }
+        else if(tile instanceof FreeParking)
+
+    {
+        closeAllWindows();
+        if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
+            quickPopUpWindow("You picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
+        } else {
+            quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
+        }
+    }
+        else if(tile instanceof Utility)
+
+    {
+        closeAllWindows();
+        quickPopUpWindow("Utility", 100, 200, 1);
+    }
+        else if(tile instanceof GoToJail)
+
+    {
+        closeAllWindows();
+        quickPopUpWindow("Go to jail", 100, 200, 1);
+    }
+
+}
+
+
+
 
     private void closeAllWindows() {
         propertyPopUpWindow.setVisible(false);
@@ -468,8 +516,8 @@ public class GameScreen implements Screen {
         sellPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(clickedProperty.getMortgaged()){
-                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), 0);
+                if(((Property)clickedProperty).getMortgaged()){
+                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
@@ -486,11 +534,11 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(mortgagePropertyButton.getText().toString().equals("Mortgage")) {
-                    clickedProperty.setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    ((Property)clickedProperty).setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgagePropertyButton.setText("Unmortgage");
                 }
                 else{
-                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgagePropertyButton.setText("Mortgage");
                 }
             }
@@ -499,7 +547,7 @@ public class GameScreen implements Screen {
         developPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(gameCon.developProperty(clickedProperty, gameCon.getCurrentPlayer())) {
+                if(gameCon.developProperty(((Property)clickedProperty), gameCon.getCurrentPlayer())) {
                     quickPopUpWindow("Able to develop", 100, 350, 0.5f);
                     updatePropertySprites();
                 }
@@ -625,8 +673,8 @@ public class GameScreen implements Screen {
         sellStationButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(clickedProperty.getMortgaged()){
-                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), 0);
+                if(((Property)clickedProperty).getMortgaged()){
+                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
@@ -643,11 +691,11 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(mortgageStationButton.getText().toString().equals("Mortgage")) {
-                    clickedProperty.setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    ((Property)clickedProperty).setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgageStationButton.setText("Unmortgage");
                 }
                 else{
-                    clickedProperty.unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgageStationButton.setText("Mortgage");
                 }
             }
@@ -692,7 +740,9 @@ public class GameScreen implements Screen {
         Table auctionPopUpTable = new Table();
 
         if(clickedProperty != null) {
-            auctionPopUpTable.setBackground(getColouredBackground(clickedProperty.getColor()));
+            if (clickedProperty instanceof Property) {
+                auctionPopUpTable.setBackground(getColouredBackground(((Property) clickedProperty).getColor()));
+            }
             auctionPopUpTable.add(new Label(clickedProperty.getTileName(), gameScreenSkin, "big"));
             auctionPopUpTable.row().pad(40, 0, 0, 0);
         }
@@ -823,11 +873,11 @@ public class GameScreen implements Screen {
             playerInfoTable.add(playerBalanceLabel).right().width(130);
         }
 
-        TextButton pauseButton = new TextButton("Pause", gameScreenSkin);
-
         Table gameInfoTable = new Table();
 
         rollDice = new TextButton("Roll dice", gameScreenSkin);
+        TextButton centerButton = new TextButton("Recenter view", gameScreenSkin);
+        TextButton pauseButton = new TextButton("Pause", gameScreenSkin);
 
         gameInfoTable.row().pad(10, 0, 0, 0);
         gameInfoTable.add(currPlayerTable).left();
@@ -837,6 +887,8 @@ public class GameScreen implements Screen {
         gameInfoTable.add(playerInfoTable).left();
         gameInfoTable.row().pad(10, 0, 0, 0);
         gameInfoTable.add(rollDice).left();
+        gameInfoTable.row().pad(40, 0, 0, 0);
+        gameInfoTable.add(centerButton).left();
         gameInfoTable.row().pad(10, 0, 0, 0);
         gameInfoTable.add(pauseButton).left();
 
@@ -904,33 +956,23 @@ public class GameScreen implements Screen {
             }
         });
 
+        centerButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage.recenter(tiledMap);
+            }
+        });
+
         pauseButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new PauseScreen(game));
             }
         });
-
-        stage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                camera.unproject(mouse);
-                try {
-                    Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-                    //if((tile instanceof Property|| tile instanceof Station)) {
-                    openPopUpWindow(tile);
-                    //}
-                }
-                catch (Exception e) {
-                    e.getMessage();
-                }
-            }
-        });
     }
 
     private void jailPopUpWindowSetUp() {
-        Label jailInfoLabel = new Label("Either buy your way out of Jail for $50 or roll a double on your next go!", gameScreenSkin, "title");
+        Label jailInfoLabel = new Label("Either buy your way out of Jail for $50, use a get out of jail free card or roll a double on your next go!", gameScreenSkin, "title");
         jailInfoLabel.setWrap(true);
         jailInfoLabel.setWidth(875);
         jailInfoLabel.setAlignment(Align.center);
@@ -965,6 +1007,8 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 closeAllWindows();
                 Player p = gameCon.getCurrentPlayer();
+                p.makePurchase(50);
+                p.setInJail(false);
                 Coordinate visitingCoordinate = gameCon.freePlayerFromJail(p);
                 p.getPlayerToken().setPosition(visitingCoordinate.getX(), visitingCoordinate.getY());
             }
@@ -978,8 +1022,8 @@ public class GameScreen implements Screen {
                     closeAllWindows();
                     p.removeGetOutOfJailFreeCard();
                     p.setInJail(false);
-                    // NEED TO MOVE PLAYER TOKEN TO JUST VISITING
-                    //p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
+                    Coordinate visitingCoordinate = gameCon.freePlayerFromJail(p);
+                    p.getPlayerToken().setPosition(visitingCoordinate.getX(), visitingCoordinate.getY());
                 }
                 else {
                     quickPopUpWindow("You do not have a get out of jail free card!", 150, 300, 1);
@@ -1082,9 +1126,9 @@ public class GameScreen implements Screen {
 
         for(Player p: game.players){
 
-            ArrayList<Property> props = p.getProperties(); // gets all the players owned properties
+            ArrayList<Ownable> props = p.getProperties(); // gets all the players owned properties
 
-            for (Property property: props) {
+            for (Ownable property: props) {
 
                 Sprite s = new Sprite(p.getPlayerToken().getTexture());
                 s.setAlpha(0.5f);
@@ -1106,6 +1150,10 @@ public class GameScreen implements Screen {
         }
     }
 
+    public OrthographicCamera getCam() {
+        return camera;
+    }
+
     /**
      * render() is called when the Screen should render itself
      * @param delta the time in seconds since the last render
@@ -1123,9 +1171,7 @@ public class GameScreen implements Screen {
 
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-        for (Player p : game.players) {
-            p.getPlayerToken().draw(spriteBatch);
-        }
+
         for (Sprite sprite: propertySprites) {
             sprite.draw(spriteBatch);
         }
@@ -1136,9 +1182,11 @@ public class GameScreen implements Screen {
         for (Sprite sprite: propertyIcons){
             sprite.draw(spriteBatch);
         }
+        for (Player p : game.players) {
+            p.getPlayerToken().draw(spriteBatch);
+        }
 
         spriteBatch.end();
-
 
         camera.update();
 

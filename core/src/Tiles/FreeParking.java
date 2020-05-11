@@ -1,6 +1,6 @@
 package Tiles;
 
-public class FreeParking extends Tile {
+public class FreeParking extends BigTiles {
 
     private int currentValue;
 
