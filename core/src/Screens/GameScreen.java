@@ -102,6 +102,8 @@ public class GameScreen implements Screen {
 
     private Sound rollDiceFX;
 
+    private ClickListener clickListener;
+
     public GameScreen(PropertyTycoon game) {
         this.game = game;
         stage = new ScrollableStage(this);
@@ -150,26 +152,47 @@ public class GameScreen implements Screen {
         propertySprites = new ArrayList<>();
         updatePropertySprites();
 
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, w, h);
+        view = new FitViewport(w, h, camera);
+        labelStage = new Stage(view);
+        camera.position.set(2880, 1760, 0);
+        camera.zoom = (float) (((64 * 90) / h) / 2);
+
+        int angle = 0;
+        for (int i = 0; i < 40; i++) {
+            if (i == 1 || i == 11 || i == 21 || i == 31) {
+                angle -= 90;
+            }
+            Tile tile = gameCon.getBoard().getTile(i);
+            if (tile instanceof SmallTile) {
+                Coordinate c = ((SmallTile)tile).getCenterLabelCoordinate();
+                RotatableLabel label = new RotatableLabel(new Label(((SmallTile) tile).getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
+                labelStage.addActor(label);
+            }
+            if (tile instanceof GovProperties) {
+                propertyIcons.add(((GovProperties) tile).getIcon());
+            }
+            if(tile instanceof Tax){
+                propertyIcons.add(((Tax) tile).getIcon());
+            }
+            if(tile instanceof PotLuck){
+                propertyIcons.add(((PotLuck) tile).getIcon());
+            }
+            if(tile instanceof OpportunityKnocks){
+                propertyIcons.add(((OpportunityKnocks) tile).getIcon());
+            }
+        }
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-
         //stage.setDebugAll(true);
-
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, w, h);
-        camera.update();
-
-        view = new FitViewport(w, h, camera);
-        labelStage = new Stage(view);
-
-        camera.position.set(2880, 1760, 0);
-
-        stage.addListener(new ClickListener() {
+        stage.addListener(clickListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -185,46 +208,6 @@ public class GameScreen implements Screen {
                 }
             }
         });
-
-        int angle = 0;
-        for (int i = 0; i < 40; i++) {
-            if (i == 1 || i == 11 || i == 21 || i == 31) {
-                angle -= 90;
-            }
-            Tile tile = gameCon.getBoard().getTile(i);
-            if (tile instanceof SmallTile) {
-
-                Coordinate c = ((SmallTile)tile).getCenterLabelCoordinate();
-                RotatableLabel label = new RotatableLabel(new Label(((SmallTile) tile).getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
-                labelStage.addActor(label);
-            }
-
-            if (tile instanceof GovProperties) {
-
-                propertyIcons.add(((GovProperties) tile).getIcon());
-
-            }
-
-            if(tile instanceof Tax){
-
-                propertyIcons.add(((Tax) tile).getIcon());
-
-            }
-            if(tile instanceof PotLuck){
-
-                propertyIcons.add(((PotLuck) tile).getIcon());
-
-            }
-            if(tile instanceof OpportunityKnocks){
-
-                propertyIcons.add(((OpportunityKnocks) tile).getIcon());
-
-            }
-
-
-        }
-
-        camera.zoom = (float) (((64 * 90) / h) / 2);
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
@@ -329,56 +312,56 @@ public class GameScreen implements Screen {
 
         else if(tile instanceof Jail &&gameCon.getCurrentPlayer().
 
-    getIsInJail())
+                getIsInJail())
 
-    {
-        closeAllWindows();
-        jailPopUpWindow.setVisible(true);
-    }
+        {
+            closeAllWindows();
+            jailPopUpWindow.setVisible(true);
+        }
         else if(tile instanceof OpportunityKnocks)
 
-    {
-        closeAllWindows();
-        quickPopUpWindow("Opportunity knocks", 100, 200, 1);
-    }
+        {
+            closeAllWindows();
+            quickPopUpWindow("Opportunity knocks", 100, 200, 1);
+        }
         else if(tile instanceof PotLuck)
 
-    {
-        closeAllWindows();
-        quickPopUpWindow("Pot luck", 100, 200, 1);
-    }
+        {
+            closeAllWindows();
+            quickPopUpWindow("Pot luck", 100, 200, 1);
+        }
         else if(tile instanceof Tax &&tile.getPlayers().
 
-    contains(gameCon.getCurrentPlayer()))
+                contains(gameCon.getCurrentPlayer()))
 
-    {
-        closeAllWindows();
-        quickPopUpWindow("You paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
-    }
+        {
+            closeAllWindows();
+            quickPopUpWindow("You paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
+        }
         else if(tile instanceof FreeParking)
 
-    {
-        closeAllWindows();
-        if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
-            quickPopUpWindow("You picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
-        } else {
-            quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
+        {
+            closeAllWindows();
+            if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                quickPopUpWindow("You picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
+            } else {
+                quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
+            }
         }
-    }
         else if(tile instanceof Utility)
 
-    {
-        closeAllWindows();
-        quickPopUpWindow("Utility", 100, 200, 1);
-    }
+        {
+            closeAllWindows();
+            quickPopUpWindow("Utility", 100, 200, 1);
+        }
         else if(tile instanceof GoToJail)
 
-    {
-        closeAllWindows();
-        quickPopUpWindow("Go to jail", 100, 200, 1);
-    }
+        {
+            closeAllWindows();
+            quickPopUpWindow("Go to jail", 100, 200, 1);
+        }
 
-}
+    }
 
 
 
@@ -519,14 +502,11 @@ public class GameScreen implements Screen {
                 if(((Property)clickedProperty).getMortgaged()){
                     ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
-                    gameCon.getCurrentPlayer().removeProperty((clickedProperty));
-
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
@@ -1166,6 +1146,19 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if(propertyPopUpWindow.isVisible() || stationPopUpWindow.isVisible() || jailPopUpWindow.isVisible() || auctionPopUpWindow.isVisible()) {
+            stage.removeListener(clickListener);
+        }
+        else {
+            stage.addListener(clickListener);
+        }
+
+//        propertyPopUpWindowSetUp();
+//        stationPopUpWindowSetUp();
+//        gameInfoTableSetUp();
+//        jailPopUpWindowSetUp();
+//        auctionPopUpWindowSetUp();
 
         updateBalances();
 
