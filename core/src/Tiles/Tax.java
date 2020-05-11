@@ -20,7 +20,7 @@ public class Tax extends SmallTile implements TaxInterface {
         Texture texture = new Texture(Gdx.files.internal("tile-images/tax.png"));
         icon = new Sprite(texture);
         icon.setOriginCenter();
-        icon.setAlpha(0.5f);
+        icon.setAlpha(0.8f);
 
     }
 
