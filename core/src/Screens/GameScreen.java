@@ -221,36 +221,36 @@ public class GameScreen implements Screen {
 
                 switch (((Property) t).getColourAsString().toUpperCase()) {
                     case "BLUE":
-                        id = 14;
+                        id = 15;
                         System.out.println("blue");
                         break;
                     case "SKY":
-                        id = 15;
+                        id = 16;
                         System.out.println("sky");
                         break;
                     case "YELLOW":
                         System.out.println("yellow");
-                        id = 16;
+                        id = 17;
                         break;
                     case "GREEN":
                         System.out.println("green");
-                        id = 17;
+                        id = 18;
                         break;
                     case "ORANGE":
                         System.out.println("orange");
-                        id = 18;
+                        id = 19;
                         break;
                     case "BROWN":
                         System.out.println("brown");
-                        id = 19;
+                        id = 20;
                         break;
                     case "PURPLE":
                         System.out.println("purple");
-                        id = 20;
+                        id = 21;
                         break;
                     case "RED":
                         System.out.println("red");
-                        id = 21;
+                        id = 22;
                         break;
                     default:
                         System.out.println("default");
