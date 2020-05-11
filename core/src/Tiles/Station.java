@@ -33,7 +33,7 @@ public class Station extends Property implements StationInterface {
 
         int tilePosition = 6; // used to determine which cell in a card is the label position one (makes it easier for us to change as we go)
         int propertyPosition = 7;// where the tile icon is placed
-        int iconPosition = 9;
+        int iconPosition = 5;
 
 //
 //        int iconPosition = 5;
@@ -51,7 +51,7 @@ public class Station extends Property implements StationInterface {
         labelCoordinate.setCoordinate(coordinates.get(tilePosition).getX()+32,coordinates.get(tilePosition).getY()+32);
         tempPropertyCoordinate.setCoordinate(coordinates.get(propertyPosition).getX()+32,coordinates.get(propertyPosition).getY()+32);
 
-        iconCoordinate.setCoordinate(coordinates.get(iconPosition).getX()+32,coordinates.get(iconPosition).getY()+32);
+        iconCoordinate.setCoordinate(coordinates.get(iconPosition).getX()-64,coordinates.get(iconPosition).getY()-64);
 
 
         centerLabelCoordinate = labelCoordinate;
@@ -63,17 +63,19 @@ public class Station extends Property implements StationInterface {
 
 
         if (this.getTilePos() < 11){
-            icon.setPosition(iconSpriteCoordinate.getX()-32,iconSpriteCoordinate.getY()+32);
+
             icon.rotate(-90);
         }   else   if (this.getTilePos() < 21){
-            icon.setPosition(iconSpriteCoordinate.getX()-32,iconSpriteCoordinate.getY()-96);
+
             icon.rotate(-180);
         }   else   if (this.getTilePos() <31){
-            icon.setPosition(iconSpriteCoordinate.getX()-96,iconSpriteCoordinate.getY()-32);
+
             icon.rotate(-270);
         }else{
-            icon.setPosition(iconSpriteCoordinate.getX()-32,iconSpriteCoordinate.getY()+32);
+
         }
+
+        icon.setPosition(iconSpriteCoordinate.getX(),iconSpriteCoordinate.getY());
 
 
 
