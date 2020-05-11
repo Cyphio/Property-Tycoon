@@ -121,11 +121,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
                             ((Property) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
 
-                            colour = tileElement.getElementsByTagName("colour").item(0).getTextContent().toUpperCase();
-                            ((Property) tile).setColour(colour);
-                            if(!allColours.contains(colour)) {
-                                allColours.add(colour);
-                            }
+
 
                             break;
                         case "parking":

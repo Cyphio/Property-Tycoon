@@ -34,6 +34,7 @@ public class Property extends Tile implements PropertyInterface {
     public Property(){
         housesOwned = 0;
         owned = false;
+        colour = "white";
     }
 
     /**

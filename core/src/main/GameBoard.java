@@ -32,7 +32,8 @@ public class GameBoard implements GameBoardInterface {
      */
     public GameBoard(ArrayList<Player> players) {
         goPayoutAmount = 200;
-        playerPos = new HashMap<Player, Integer>();
+        playerPos = new HashMap<>();
+
         this.players = players;
 
         // sets all players position to GO tile at 0

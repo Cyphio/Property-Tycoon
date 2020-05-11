@@ -186,6 +186,27 @@ public class GameScreen implements Screen {
                 propertyIcons.add(((Station) tile).getIcon());
 
             }
+            if(tile instanceof Utility){
+
+                propertyIcons.add(((Utility) tile).getIcon());
+
+            }
+            if(tile instanceof Tax){
+
+                propertyIcons.add(((Tax) tile).getIcon());
+
+            }
+            if(tile instanceof PotLuck){
+
+                propertyIcons.add(((PotLuck) tile).getIcon());
+
+            }
+            if(tile instanceof OpportunityKnocks){
+
+                propertyIcons.add(((OpportunityKnocks) tile).getIcon());
+
+            }
+
 
 
         }
@@ -256,7 +277,7 @@ public class GameScreen implements Screen {
                 propertyPopUpWindow.setVisible(true);
             }
             else {
-                if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
+                if (clickedProperty instanceof Station && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
                     buyStationButton.setVisible(true);
                     auctionStationButton.setVisible(true);
                 } else {

@@ -12,7 +12,6 @@ import static com.propertytycoonmakers.make.PropertyTycoon.players;
 public class Station extends Property implements StationInterface {
 
     private Sprite icon;
-    private Coordinate iconSpriteCoordinate;
 
     public Station(){
 
@@ -55,8 +54,8 @@ public class Station extends Property implements StationInterface {
 
 
         centerLabelCoordinate = labelCoordinate;
-        propertySpriteCoordinate = tempPropertyCoordinate;
-        iconSpriteCoordinate = iconCoordinate;
+
+
 
 
         allCoordinates = coordinates;
@@ -75,7 +74,7 @@ public class Station extends Property implements StationInterface {
 
         }
 
-        icon.setPosition(iconSpriteCoordinate.getX(),iconSpriteCoordinate.getY());
+        icon.setPosition(iconCoordinate.getX(),iconCoordinate.getY());
 
 
 
@@ -83,8 +82,4 @@ public class Station extends Property implements StationInterface {
 
     public Sprite getIcon(){return icon;}
 
-
-    public Coordinate getIconSpriteCoordinate() {
-        return iconSpriteCoordinate;
-    }
 }
