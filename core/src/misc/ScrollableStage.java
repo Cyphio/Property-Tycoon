@@ -19,7 +19,7 @@ public class ScrollableStage extends Stage {
 
     @Override
     public boolean scrolled(int amount) {
-        if (amount == -1 && scrollCount > -13) {
+        if (amount == -1 && scrollCount > -12) {
             gs.getCam().zoom -= .2f;
             scrollCount--;
         }
@@ -38,8 +38,8 @@ public class ScrollableStage extends Stage {
     }
 
     public void recenter(TiledMap map) {
-        TiledMapTileLayer layer0 = (TiledMapTileLayer) map.getLayers().get(0);
-        Vector3 center = new Vector3(layer0.getWidth() * layer0.getTileWidth() / 2, layer0.getHeight() * layer0.getTileHeight() / 2, 0);
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
+        Vector3 center = new Vector3(layer.getWidth() * layer.getTileWidth() / 2, layer.getHeight() * layer.getTileHeight() / 2, 0);
         gs.getCam().position.set(center);
     }
 }

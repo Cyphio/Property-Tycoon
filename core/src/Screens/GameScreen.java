@@ -1154,7 +1154,6 @@ public class GameScreen implements Screen {
 
         spriteBatch.end();
 
-
         camera.update();
 
         labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
