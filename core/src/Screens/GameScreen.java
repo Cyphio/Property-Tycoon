@@ -186,12 +186,7 @@ public class GameScreen implements Screen {
                 propertyIcons.add(((OpportunityKnocks) tile).getIcon());
             }
         }
-    }
 
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(stage);
-        //stage.setDebugAll(true);
         stage.addListener(clickListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -208,6 +203,12 @@ public class GameScreen implements Screen {
                 }
             }
         });
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+        //stage.setDebugAll(true);
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
