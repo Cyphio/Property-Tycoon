@@ -68,6 +68,7 @@ public class GameSetUpScreen implements Screen {
     private SelectBox<String> token6SB;
 
     private Table table;
+    private Container<Table> tableContainer;
     private Label numPlayers;
 
     private ArrayList<TextField> playerNamesList;
@@ -142,12 +143,26 @@ public class GameSetUpScreen implements Screen {
         tokenImageList = new Image[]{token1Image, token2Image, token3Image, token4Image, token5Image, token6Image};
         tokenSBList = new SelectBox[]{token1SB, token2SB, token3SB, token4SB, token5SB, token6SB};
 
-        table = new Table();
-        table.setFillParent(true);
+        float sw = Gdx.graphics.getWidth();
+        float sh = Gdx.graphics.getHeight();
 
+        float cw = sw * 0.2f;
+        float ch = sh * 0.5f;
+
+        tableContainer = new Container<Table>();
+        tableContainer.setSize(cw, ch);
+        tableContainer.setPosition((sw - cw) / 2.0f, (sh - ch) / 2.0f);
+        tableContainer.fillX();
+
+        table = new Table();
+
+        Table numPlayersTable = new Table();
         numPlayers = new Label("Number of players:", gameSetUpScreenSkin, "big");
         numPlayersBox = new SelectBox(gameSetUpScreenSkin, "big");
         numPlayersBox.setItems(new Integer[]{2, 3, 4, 5, 6});
+        numPlayersTable.row().fill().expandX();
+        numPlayersTable.add(numPlayers).width(cw/3);
+        numPlayersTable.add(numPlayersBox).width(cw/3).padLeft(160);
 
         startFullGame = new TextButton("Start full game", gameSetUpScreenSkin);
         startAbridgedGame = new TextButton("Start abridged game", gameSetUpScreenSkin);
@@ -166,32 +181,31 @@ public class GameSetUpScreen implements Screen {
             }
         });
 
-        table.add(numPlayers);
-        table.add(numPlayersBox);
-        table.row().pad(20, 0, 0, 20);
-        table.add(player1Field);
-        table.add(token1SB);
-        table.add(token1Image);
-        table.row().pad(10, 0, 0, 20);
-        table.add(player2Field);
-        table.add(token2SB);
-        table.add(token2Image);
-        table.row().pad(10, 0, 0, 20);
-        table.add(player3Field);
-        table.add(token3SB);
-        table.add(token3Image);
-        table.row().pad(10, 0, 0, 20);
-        table.add(player4Field);
-        table.add(token4SB);
-        table.add(token4Image);
-        table.row().pad(10, 0, 0, 20);
-        table.add(player5Field);
-        table.add(token5SB);
-        table.add(token5Image);
-        table.row().pad(10, 0, 0, 20);
-        table.add(player6Field);
-        table.add(token6SB);
-        table.add(token6Image);
+        table.add(numPlayersTable).colspan(3);
+        table.row().pad(20, 0, 0, 0);
+        table.add(player1Field).expandX().fillX();
+        table.add(token1SB).expandX().fillX().padLeft(10);
+        table.add(token1Image).width(64).height(64).padLeft(10);
+        table.row().pad(10, 0, 0, 0);
+        table.add(player2Field).expandX().fillX();
+        table.add(token2SB).expandX().fillX().padLeft(10);
+        table.add(token2Image).width(64).height(64).padLeft(10);
+        table.row().pad(10, 0, 0, 0);
+        table.add(player3Field).expandX().fillX();
+        table.add(token3SB).expandX().fillX().padLeft(10);
+        table.add(token3Image).width(64).height(64).padLeft(10);
+        table.row().pad(10, 0, 0, 0);
+        table.add(player4Field).expandX().fillX();
+        table.add(token4SB).expandX().fillX().padLeft(10);
+        table.add(token4Image).width(64).height(64).padLeft(10);
+        table.row().pad(10, 0, 0, 0);
+        table.add(player5Field).expandX().fillX();
+        table.add(token5SB).expandX().fillX().padLeft(10);
+        table.add(token5Image).width(64).height(64).padLeft(10);
+        table.row().pad(10, 0, 0, 0);
+        table.add(player6Field).expandX().fillX();
+        table.add(token6SB).expandX().fillX().padLeft(10);
+        table.add(token6Image).width(64).height(64).padLeft(10);
         table.row().pad(20, 0, 0, 0);
         table.add(startFullGame).colspan(3);
         table.row().pad(20, 0, 0, 0);
@@ -200,6 +214,8 @@ public class GameSetUpScreen implements Screen {
         table.add(abridgedLengthField).width(275).colspan(3);
         table.row().pad(20, 0, 0, 0);
         table.add(back).colspan(3);
+
+        tableContainer.setActor(table);
 
         token1SB.addListener(new ChangeListener() {
             @Override
@@ -268,7 +284,7 @@ public class GameSetUpScreen implements Screen {
         viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         stage.clear();
-        stage.addActor(table);
+        stage.addActor(tableContainer);
 
         abridgedLengthField.setTextFieldFilter(new TextField.TextFieldFilter() {
             @Override
