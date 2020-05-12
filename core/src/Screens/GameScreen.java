@@ -1240,7 +1240,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        camera.update();
         if(propertyPopUpWindow.isVisible() || stationPopUpWindow.isVisible() || jailPopUpWindow.isVisible() || auctionPopUpWindow.isVisible()) {
             stage.removeListener(clickListener);
         }
@@ -1290,7 +1290,7 @@ public class GameScreen implements Screen {
 
         spriteBatch.end();
 
-        camera.update();
+
 
         labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         labelStage.draw();
