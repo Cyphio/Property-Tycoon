@@ -13,6 +13,7 @@ public class ScrollableStage extends Stage {
     private GameScreen gs;
     private int scrollCount;
 
+
     public ScrollableStage(GameScreen gs) {
         this.gs = gs;
     }
@@ -35,6 +36,7 @@ public class ScrollableStage extends Stage {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         OrthographicCamera camera = gs.getCam();
         camera.translate(-Gdx.input.getDeltaX() * (camera.viewportWidth / Gdx.graphics.getWidth()), Gdx.input.getDeltaY() * (camera.viewportHeight / Gdx.graphics.getHeight()));
+
         return true;
     }
 
