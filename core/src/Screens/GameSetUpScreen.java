@@ -72,7 +72,9 @@ public class GameSetUpScreen implements Screen {
 
     private ArrayList<TextField> playerNamesList;
     private SelectBox<Integer> numPlayersBox;
-    private TextButton startGame;
+    private TextButton startFullGame;
+    private TextButton startAbridgedGame;
+    private TextField abridgedLengthField;
     private TextButton back;
 
     /**
@@ -128,7 +130,7 @@ public class GameSetUpScreen implements Screen {
         token5SB = new SelectBox(gameSetUpScreenSkin);
         token6SB = new SelectBox(gameSetUpScreenSkin);
 
-        String[] valueList = new String[]{"white", "blue", "green", "yellow", "orange", "rainbow"};
+        String[] valueList = new String[]{"boot", "smartphone", "goblet", "hat", "cat", "spoon"};
 
         token1SB.setItems(valueList);
         token2SB.setItems(valueList);
@@ -147,7 +149,12 @@ public class GameSetUpScreen implements Screen {
         numPlayersBox = new SelectBox(gameSetUpScreenSkin);
         numPlayersBox.setItems(new Integer[]{2, 3, 4, 5, 6});
 
-        startGame = new TextButton("Start", gameSetUpScreenSkin);
+        startFullGame = new TextButton("Start full game", gameSetUpScreenSkin);
+        startAbridgedGame = new TextButton("Start abridged game", gameSetUpScreenSkin);
+
+        abridgedLengthField = new TextField("", gameSetUpScreenSkin);
+        abridgedLengthField.setMessageText("No. minutes");
+
         playerNamesList = new ArrayList<TextField>();
         playerNamesList.addAll(Arrays.asList(player1Field, player2Field, player3Field, player4Field, player5Field, player6Field));
         back = new TextButton("Back", gameSetUpScreenSkin);
@@ -241,7 +248,11 @@ public class GameSetUpScreen implements Screen {
         table.add(token6SB);
         table.add(token6Image);
         table.row().pad(10, 0, 0, 20);
-        table.add(startGame).colspan(3);
+        table.add(startFullGame).colspan(3);
+        table.row().pad(10, 0, 0, 20);
+        table.add(abridgedLengthField).colspan(3);
+        table.row().pad(10, 0, 0, 20);
+        table.add(startAbridgedGame).colspan(3);
         table.row().pad(10, 0, 0, 20);
         table.add(back).colspan(3);
 
@@ -260,9 +271,17 @@ public class GameSetUpScreen implements Screen {
         stage.clear();
         stage.addActor(table);
 
-        startGame.addListener(new ChangeListener() {
+        abridgedLengthField.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return Character.toString(c).matches("^[0-9]");
+            }
+        });
+
+        startFullGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                game.getPreferences().setAbridged(false);
                 Boolean isEmpty = false;
                 for(TextField tf : playerNamesList) {
                     if (tf.getText().matches("^$|( )*")) {
@@ -290,6 +309,56 @@ public class GameSetUpScreen implements Screen {
                             window.setVisible(false);
                         }
                     }, 0.5f);
+                }
+            }
+        });
+
+        startAbridgedGame.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Boolean isEmpty = false;
+                for(TextField tf : playerNamesList) {
+                    if (tf.getText().matches("^$|( )*")) {
+                        isEmpty = true;
+                    }
+                }
+                if(isEmpty) {
+                    final Window window = new Window("", gameSetUpScreenSkin);
+                    final Label label = new Label("Name field left empty", gameSetUpScreenSkin, "big");
+                    window.add(label);
+                    window.setBounds((Gdx.graphics.getWidth() - 400) / 2, (Gdx.graphics.getHeight() - 100) / 2, 400, 100);
+                    stage.addActor(window);
+                    window.setVisible(true);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            window.setVisible(false);
+                        }
+                    }, 0.5f);
+                }
+                if(abridgedLengthField.getText().matches("^$|( )*")) {
+                    final Window window = new Window("", gameSetUpScreenSkin);
+                    final Label label = new Label("Length of game invalid", gameSetUpScreenSkin, "big");
+                    window.add(label);
+                    window.setBounds((Gdx.graphics.getWidth() - 400) / 2, (Gdx.graphics.getHeight() - 100) / 2, 400, 100);
+                    stage.addActor(window);
+                    window.setVisible(true);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            window.setVisible(false);
+                        }
+                    }, 0.5f);
+                }
+                if(!abridgedLengthField.getText().matches("^$|( )*") && !isEmpty) {
+                    game.getPreferences().setAbridged(true);
+                    game.getPreferences().setAbridgedLength(Integer.parseInt(abridgedLengthField.getText()));
+                    game.players = null;
+                    game.players = new ArrayList<>();
+                    for (int i = 0; i < numPlayersBox.getSelected(); i++) {
+                        game.players.add(new Player(playerNamesList.get(i).getText(), spriteList.get(i)));
+                    }
+                    game.changeScreen(game.GAME);
                 }
             }
         });
@@ -385,17 +454,17 @@ public class GameSetUpScreen implements Screen {
      * @param s2str the second Sprite object
      */
     private void swapSprites(int s1pos, String s2str) {
-        if (s2str.equals("white")) {
+        if (s2str.equals("boot")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite1));
-        } else if (s2str.equals("blue")) {
+        } else if (s2str.equals("smartphone")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite2));
-        } else if (s2str.equals("green")) {
+        } else if (s2str.equals("goblet")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite3));
-        } else if (s2str.equals("yellow")) {
+        } else if (s2str.equals("hat")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite4));
-        } else if (s2str.equals("orange")) {
+        } else if (s2str.equals("cat")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite5));
-        } else if (s2str.equals("rainbow")) {
+        } else if (s2str.equals("spoon")) {
             Collections.swap(spriteList, s1pos, spriteList.indexOf(sprite6));
         }
     }
@@ -407,17 +476,17 @@ public class GameSetUpScreen implements Screen {
      */
     private String getSpriteTitle(Sprite sprite) {
         if (sprite == sprite1) {
-            return "white";
+            return "boot";
         } else if (sprite == sprite2) {
-            return "blue";
+            return "smartphone";
         } else if (sprite == sprite3) {
-            return "green";
+            return "goblet";
         } else if (sprite == sprite4) {
-            return "yellow";
+            return "hat";
         } else if (sprite == sprite5) {
-            return "orange";
+            return "cat";
         } else if (sprite == sprite6) {
-            return "rainbow";
+            return "spoon";
         }
         return "ERROR";
     }

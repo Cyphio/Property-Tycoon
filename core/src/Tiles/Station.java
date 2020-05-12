@@ -16,7 +16,7 @@ public class Station extends GovProperties implements StationInterface {
         Texture texture = new Texture(Gdx.files.internal("tile-images/station.png"));
         icon = new Sprite(texture);
         icon.setOriginCenter();
-        icon.setAlpha(0.5f);
+        icon.setAlpha(1f);
 
     }
 

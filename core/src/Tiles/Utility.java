@@ -14,7 +14,7 @@ public class Utility extends GovProperties {
         Texture texture = new Texture(Gdx.files.internal("tile-images/utility.png"));
         icon = new Sprite(texture);
         icon.setOriginCenter();
-        icon.setAlpha(0.5f);
+        icon.setAlpha(1f);
 
 
     }

@@ -29,6 +29,7 @@ import misc.Coordinate;
 import misc.RotatableLabel;
 import misc.ScrollableStage;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -101,12 +102,20 @@ public class GameScreen implements Screen {
     private Sound rollDiceFX;
 
     private ClickListener clickListener;
+    private TextField auctionBid;
+
+    private float gameLength;
+    private float reverseTime;
+    private Label timerLabel;
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
         stage = new ScrollableStage(this);
 
         Gdx.input.setInputProcessor(stage);
+
+        gameLength = 0;
+        reverseTime = 0;
 
         gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
@@ -165,102 +174,24 @@ public class GameScreen implements Screen {
             }
             Tile tile = gameCon.getBoard().getTile(i);
             if (tile instanceof SmallTile) {
-                Coordinate c = ((SmallTile)tile).getCenterLabelCoordinate();
+                Coordinate c = ((SmallTile) tile).getCenterLabelCoordinate();
                 RotatableLabel label = new RotatableLabel(new Label(((SmallTile) tile).getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
                 labelStage.addActor(label);
             }
             if (tile instanceof GovProperties) {
                 propertyIcons.add(((GovProperties) tile).getIcon());
             }
-            if(tile instanceof Tax){
+            if (tile instanceof Tax) {
                 propertyIcons.add(((Tax) tile).getIcon());
             }
-            if(tile instanceof PotLuck){
+            if (tile instanceof PotLuck) {
                 propertyIcons.add(((PotLuck) tile).getIcon());
             }
-            if(tile instanceof OpportunityKnocks){
+            if (tile instanceof OpportunityKnocks) {
                 propertyIcons.add(((OpportunityKnocks) tile).getIcon());
             }
         }
 
-        setTileCellColors();
-
-
-
-    }
-
-    public void setTileCellColors(){
-        TiledMapTileSet set = tiledMap.getTileSets().getTileSet(0);
-        for (int i = 0; i <40; i++) {
-
-            GameBoard board = gameCon.getBoard();
-            Tile t = board.getTile(i);
-
-            int id = 0;
-
-            if (t instanceof Property) {
-
-                ArrayList<Coordinate> coords = board.getTile(i).getAllCoordinates();
-                System.out.println(((Property) t).getColourAsString().toUpperCase());
-
-                switch (((Property) t).getColourAsString().toUpperCase()) {
-                    case "BLUE":
-                        id = 14;
-                        System.out.println("blue");
-                        break;
-                    case "SKY":
-                        id = 15;
-                        System.out.println("sky");
-                        break;
-                    case "YELLOW":
-                        System.out.println("yellow");
-                        id = 16;
-                        break;
-                    case "GREEN":
-                        System.out.println("green");
-                        id = 17;
-                        break;
-                    case "ORANGE":
-                        System.out.println("orange");
-                        id = 18;
-                        break;
-                    case "BROWN":
-                        System.out.println("brown");
-                        id = 19;
-                        break;
-                    case "PURPLE":
-                        System.out.println("purple");
-                        id = 20;
-                        break;
-                    case "RED":
-                        System.out.println("red");
-                        id = 21;
-                        break;
-                    default:
-                        System.out.println("default");
-                        id =1;
-                        break;
-
-                }
-
-                layer.getCell(coords.get(3).getX() / 64, coords.get(3).getY() / 64).setTile(set.getTile(id));
-                layer.getCell(coords.get(7).getX() / 64, coords.get(7).getY() / 64).setTile(set.getTile(id));
-                layer.getCell(coords.get(11).getX() / 64, coords.get(11).getY() / 64).setTile(set.getTile(id));
-
-            }
-        }
-
-
-
-
-    }
-
-
-
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(stage);
-        //stage.setDebugAll(true);
         stage.addListener(clickListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -277,6 +208,68 @@ public class GameScreen implements Screen {
                 }
             }
         });
+
+        setTileCellColors();
+
+
+
+    }
+
+    public void setTileCellColors() {
+        TiledMapTileSet set = tiledMap.getTileSets().getTileSet(0);
+        for (int i = 0; i < 40; i++) {
+
+            GameBoard board = gameCon.getBoard();
+            Tile t = board.getTile(i);
+
+            int id = 0;
+
+            if (t instanceof Property) {
+
+                ArrayList<Coordinate> coords = board.getTile(i).getAllCoordinates();
+                System.out.println(((Property) t).getColourAsString().toUpperCase());
+
+                switch (((Property) t).getColourAsString().toUpperCase()) {
+                    case "BLUE":
+                        id = 15;
+                        break;
+                    case "SKY":
+                        id = 16;
+                        break;
+                    case "YELLOW":
+                        id = 17;
+                        break;
+                    case "GREEN":
+                        id = 18;
+                        break;
+                    case "ORANGE":
+                        id = 19;
+                        break;
+                    case "BROWN":
+                        id = 20;
+                        break;
+                    case "PURPLE":
+                        id = 21;
+                        break;
+                    case "RED":
+                        id = 22;
+                        break;
+                    default:
+                        id = 1;
+                        break;
+
+                }
+                layer.getCell(coords.get(3).getX() / 64, coords.get(3).getY() / 64).setTile(set.getTile(id));
+                layer.getCell(coords.get(7).getX() / 64, coords.get(7).getY() / 64).setTile(set.getTile(id));
+                layer.getCell(coords.get(11).getX() / 64, coords.get(11).getY() / 64).setTile(set.getTile(id));
+            }
+        }
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+        //stage.setDebugAll(true);
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
@@ -432,9 +425,6 @@ public class GameScreen implements Screen {
 
     }
 
-
-
-
     private void closeAllWindows() {
         propertyPopUpWindow.setVisible(false);
         stationPopUpWindow.setVisible(false);
@@ -550,7 +540,7 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
-
+                auctionBid.setVisible(true);
                 currBidder = gameCon.getCurrentPlayer();
                 bidderList = new ArrayList<>(game.players);
 
@@ -571,11 +561,13 @@ public class GameScreen implements Screen {
                 if(((Property)clickedProperty).getMortgaged()){
                     ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
+                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
@@ -782,7 +774,7 @@ public class GameScreen implements Screen {
         currBidderTable.add(currBidderLabel);
         currBidderTable.add(currBidderNameLabel);
 
-        final TextField auctionBid = new TextField("", gameScreenSkin);
+        auctionBid = new TextField("", gameScreenSkin);
 
         auctionBid.setMessageText("Enter Bid");
         auctionBid.setAlignment(Align.center);
@@ -873,8 +865,8 @@ public class GameScreen implements Screen {
 
                 if (bidderList.size() == 0 && highestBidder != null) {
                     auctionPopUpWindow.setVisible(false);
-                    highestBidder.addProperty(clickedProperty);
                     clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
+                    highestBidder = null;
                     updatePropertyOwnerIcons();
                     gameCon.setAuctionValue(0);
                     rollDice.setVisible(true);
@@ -891,6 +883,7 @@ public class GameScreen implements Screen {
 
                 if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
                     bidButton.setVisible(false);
+                    auctionBid.setVisible(false);
                     leaveButton.setText("Buy");
                 }
             }
@@ -950,6 +943,13 @@ public class GameScreen implements Screen {
 
         stage.addActor(gameInfoTable);
 
+        Table timerTable = new Table();
+        timerLabel = new Label("", gameScreenSkin, "title");
+        timerTable.add(timerLabel).width(380);
+        timerTable.setFillParent(true);
+        timerTable.right().padRight(10);
+        stage.addActor(timerTable);
+
         rollDice.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -990,6 +990,7 @@ public class GameScreen implements Screen {
                         game.players.remove(gameCon.getCurrentPlayer());
                         gameCon.getPlayerOrder().remove(0);
                         if (game.players.size() == 1) {
+                            game.getPreferences().setAbridged(false);
                             quickPopUpWindow("Congratulations to the winner " + gameCon.getCurrentPlayer().getName(), 200, 400, 5);
                             Timer.schedule(new Timer.Task() {
                                 @Override
@@ -1082,6 +1083,30 @@ public class GameScreen implements Screen {
                 }
             }
         });
+    }
+
+    private void congratsPopUpWindow(ArrayList<Player> players) {
+        Table congratsTable = new Table();
+        Label congratsLabel = new Label("Congratulations!", gameScreenSkin, "title");
+        congratsTable.add(congratsLabel);
+        congratsTable.row().pad(10, 0, 0, 0);
+        for(Player p : players) {
+            int value = 0;
+            for(Ownable o : p.getOwnables()) {
+                value += o.getCost();
+            }
+            value += p.getMoney();
+            congratsTable.add(new Label(p.getName() + " finished with $" + value, gameScreenSkin, "title"));
+
+            congratsTable.row().pad(10, 0, 0, 0);
+        }
+        Window congratsWindow = new Window("", gameScreenSkin);
+        congratsWindow.add(congratsTable);
+        float width = 600, height = 700;
+        congratsWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+        //congratsWindow.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
+        stage.addActor(congratsWindow);
+        congratsWindow.setVisible(true);
     }
 
     /**
@@ -1178,7 +1203,7 @@ public class GameScreen implements Screen {
 
         for(Player p: game.players){
 
-            ArrayList<Ownable> props = p.getProperties(); // gets all the players owned properties
+            ArrayList<Ownable> props = p.getOwnables(); // gets all the players owned properties
 
             for (Ownable property: props) {
 
@@ -1223,11 +1248,23 @@ public class GameScreen implements Screen {
             stage.addListener(clickListener);
         }
 
-//        propertyPopUpWindowSetUp();
-//        stationPopUpWindowSetUp();
-//        gameInfoTableSetUp();
-//        jailPopUpWindowSetUp();
-//        auctionPopUpWindowSetUp();
+
+        if(game.getPreferences().getAbridged()) {
+            gameLength += Gdx.graphics.getRawDeltaTime();
+            reverseTime = (game.getPreferences().getAbridgedLength()*60) - gameLength;
+            timerLabel.setText("Time left: " + LocalTime.MIN.plusSeconds(Math.round(reverseTime)).toString());
+            if(gameLength >= game.getPreferences().getAbridgedLength() * 60) {
+                game.getPreferences().setAbridged(false);
+                String names = "";
+                congratsPopUpWindow(gameCon.getRichestPlayers());
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new MainMenu(game));
+                    }
+                }, 5);
+            }
+        }
 
         updateBalances();
 
@@ -1263,7 +1300,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Called when OptionsScreen() should release all resources
+     * Called when GameScreen() should release all resources
      */
     @Override
     public void dispose() { stage.dispose(); }
@@ -1289,7 +1326,7 @@ public class GameScreen implements Screen {
     public void resume() {}
 
     /**
-     * Called when this OptionsScreen() is no longer the current screen for PropertyTycoon()
+     * Called when this GameScreen() is no longer the current screen for PropertyTycoon()
      */
     @Override
     public void hide() {}

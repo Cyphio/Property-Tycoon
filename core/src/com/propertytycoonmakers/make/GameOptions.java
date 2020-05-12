@@ -14,6 +14,8 @@ public class GameOptions {
     private static final String PREF_FX_VOL = "sound";
     private static final String PREFS_NAME = "Property Tycoon";
     private static final String PREFS_FULLSCREEN = "fullscreen";
+    private static final String PREFS_IS_ABRIDGED = "abridged";
+    private static final String PREFS_ABRIDGED_LENGTH = "abridged.length";
 
     /**
      * @return returns the preferences within GameOptions
@@ -93,5 +95,21 @@ public class GameOptions {
     public void setFxEnabled(boolean fxEnabled) {
         getPrefs().putBoolean(PREF_FX_ENABLED, fxEnabled);
         getPrefs().flush();
+    }
+
+    public void setAbridged(boolean abridged) {
+        getPrefs().putBoolean(PREFS_IS_ABRIDGED, abridged);
+    }
+
+    public boolean getAbridged() {
+        return getPrefs().getBoolean(PREFS_IS_ABRIDGED);
+    }
+
+    public void setAbridgedLength(int length) {
+        getPrefs().putInteger(PREFS_ABRIDGED_LENGTH, length);
+    }
+
+    public int getAbridgedLength() {
+        return getPrefs().getInteger(PREFS_ABRIDGED_LENGTH);
     }
 }
