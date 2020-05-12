@@ -77,6 +77,10 @@ public class GameScreen implements Screen {
     private Label stationOwnerLabel;
     private Label stationCostLabel;
 
+    private Label stationInfoLabel;
+    private Label stationRentLabel;
+    private Label stationRentPriceLabel;
+
     private Window auctionPopUpWindow;
     private Player currBidder;
     private Player highestBidder;
@@ -156,7 +160,7 @@ public class GameScreen implements Screen {
         propertyIcons = new ArrayList<>();
 
         propertyHouseandHotelSprites = new ArrayList<>();
-        updatePropertySprites();
+        updatePropertyDevelopmentSprites();
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -330,6 +334,10 @@ public class GameScreen implements Screen {
             closeAllWindows();
             propertyPopUpWindow.setVisible(true);
         } else if (tile instanceof GovProperties) {
+
+
+
+
 
             clickedProperty = (GovProperties) tile;
             if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
@@ -556,13 +564,13 @@ public class GameScreen implements Screen {
                     ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
                     updatePropertyOwnerIcons();
-                    updatePropertySprites();
+                    updatePropertyDevelopmentSprites();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     updatePropertyOwnerIcons();
-                    updatePropertySprites();
+                    updatePropertyDevelopmentSprites();
                     closeAllWindows();
                 }
             }
@@ -587,7 +595,7 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if(gameCon.developProperty(((Property)clickedProperty), gameCon.getCurrentPlayer())) {
                     quickPopUpWindow("Able to develop", 100, 350, 0.5f);
-                    updatePropertySprites();
+                    updatePropertyDevelopmentSprites();
                 }
                 else {
                     quickPopUpWindow("Not able to develop", 100, 350, 0.5f);
@@ -629,19 +637,18 @@ public class GameScreen implements Screen {
 
         Image trainImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
 
+        stationInfoLabel = new Label("Rent with two stations owned:", gameScreenSkin);
+        stationRentLabel = new Label("Rent with two stations owned:", gameScreenSkin);
+        stationRentPriceLabel = new Label("Rent with two stations owned:", gameScreenSkin);
+
         Table stationInfoBox2 = new Table();
 
-        stationInfoBox2.add(new Label("Rent with one station owned:", gameScreenSkin)).left().width(350);
-        stationInfoBox2.add(new Label("$50", gameScreenSkin)).right();
+        stationInfoBox2.add(stationInfoLabel);
         stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.add(new Label("Rent with two stations owned:", gameScreenSkin)).left();
-        stationInfoBox2.add(new Label("$100", gameScreenSkin)).right();
+        stationInfoBox2.add(stationRentLabel).left();
+        stationInfoBox2.add(stationRentPriceLabel).right();
         stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.add(new Label("Rent with three stations owned:", gameScreenSkin)).left();
-        stationInfoBox2.add(new Label("$150", gameScreenSkin)).right();
         stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.add(new Label("Rent with four stations owned:", gameScreenSkin)).left();
-        stationInfoBox2.add(new Label("$200", gameScreenSkin)).right();
         stationInfoBox2.row().pad(20, 0, 0, 0);
 
         stationPopUpWindow = new Window("", gameScreenSkin);
@@ -1185,7 +1192,7 @@ public class GameScreen implements Screen {
         }, time);
     }
 
-    public void updatePropertySprites(){
+    public void updatePropertyDevelopmentSprites(){
         ArrayList<Property> developedProperties = gameCon.getDevelopedProperties();
         propertyHouseandHotelSprites.clear();
         for (Property prop: developedProperties) {
