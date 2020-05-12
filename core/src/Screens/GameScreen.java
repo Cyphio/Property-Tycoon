@@ -352,7 +352,6 @@ public class GameScreen implements Screen {
             }
             else if (tile instanceof Utility){
                 serviceInfoBox2.clear();
-                serviceInfoBox2.row().pad(30, 0, 0, 0);
                 serviceInfoBox2.add(new Label("Rent with 1 utility owned:", gameScreenSkin)).left().width(270);
                 serviceInfoBox2.add(new Label("4 times dice value", gameScreenSkin)).right();
                 serviceInfoBox2.row().pad(20, 0, 0, 0);
@@ -529,21 +528,25 @@ public class GameScreen implements Screen {
         buyPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                try {
-                    if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                        if(gameCon.getCurrentPlayer().getMoney() >= clickedProperty.getCost()) {
-                            clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                            updatePropertyOwnerIcons();
-                            closeAllWindows();
-                            openPopUpWindow(clickedProperty);
-                            rollDice.setVisible(true);
+                if (gameCon.getCurrentPlayer().getFirstLap()) {
+                    try {
+                        if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                            if (gameCon.getCurrentPlayer().getMoney() >= clickedProperty.getCost()) {
+                                clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                                updatePropertyOwnerIcons();
+                                closeAllWindows();
+                                openPopUpWindow(clickedProperty);
+                                rollDice.setVisible(true);
+                            } else {
+                                quickPopUpWindow("Not enough money", 100, 350, 0.5f);
+                            }
                         }
-                        else {
-                            quickPopUpWindow("Not enough money", 100, 350,0.5f);
-                        }
+                    } catch (Exception e) {
+                        e.getMessage();
                     }
-                } catch (Exception e) {
-                    e.getMessage();
+                }
+                else{
+                    quickPopUpWindow("You have not gone round the board yet!", 100, 300, 2);
                 }
             }
         });
@@ -551,19 +554,23 @@ public class GameScreen implements Screen {
         auctionPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
-                auctionBid.setVisible(true);
-                currBidder = gameCon.getCurrentPlayer();
-                bidderList = new ArrayList<>(game.players);
+                if (gameCon.getCurrentPlayer().getFirstLap()) {
+                    auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
+                    auctionBid.setVisible(true);
+                    currBidder = gameCon.getCurrentPlayer();
+                    bidderList = new ArrayList<>(game.players);
 
-                for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
-                    bidderList.add(bidderList.get(i));
-                    bidderList.remove(i);
+                    for (int i = 0; i < bidderList.indexOf(currBidder) - 1; i++) {
+                        bidderList.add(bidderList.get(i));
+                        bidderList.remove(i);
+                    }
+
+                    currBidderNameLabel.setText(gameCon.getCurrentPlayer().getName());
+                    closeAllWindows();
+                    auctionPopUpWindow.setVisible(true);
                 }
-
-                currBidderNameLabel.setText(gameCon.getCurrentPlayer().getName());
-                closeAllWindows();
-                auctionPopUpWindow.setVisible(true);
+                else{quickPopUpWindow("You have not gone round the board yet!", 100, 300, 2);
+                }
             }
         });
 
@@ -671,21 +678,22 @@ public class GameScreen implements Screen {
         buyServiceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                try {
-                    if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                        if(gameCon.getCurrentPlayer().getMoney() >= clickedProperty.getCost()) {
-                            clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                            updatePropertyOwnerIcons();
-                            closeAllWindows();
-                            openPopUpWindow(clickedProperty);
-                            rollDice.setVisible(true);
+                if(gameCon.getCurrentPlayer().getFirstLap()) {
+                    try {
+                        if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                            if (gameCon.getCurrentPlayer().getMoney() >= clickedProperty.getCost()) {
+                                clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                                updatePropertyOwnerIcons();
+                                closeAllWindows();
+                                openPopUpWindow(clickedProperty);
+                                rollDice.setVisible(true);
+                            } else {
+                                quickPopUpWindow("Not enough money", 100, 350, 0.5f);
+                            }
                         }
-                        else {
-                            quickPopUpWindow("Not enough money", 100, 350,0.5f);
-                        }
+                    } catch (Exception e) {
+                        e.getMessage();
                     }
-                } catch (Exception e) {
-                    e.getMessage();
                 }
             }
         });
@@ -693,19 +701,24 @@ public class GameScreen implements Screen {
         auctionServiceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
+                if(gameCon.getCurrentPlayer().getFirstLap()) {
+                    auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
 
-                currBidder = gameCon.getCurrentPlayer();
-                bidderList = new ArrayList<>(game.players);
+                    currBidder = gameCon.getCurrentPlayer();
+                    bidderList = new ArrayList<>(game.players);
 
-                for(int i = 0; i < bidderList.indexOf(currBidder) -1; i++){
-                    bidderList.add(bidderList.get(i));
-                    bidderList.remove(i);
+                    for (int i = 0; i < bidderList.indexOf(currBidder) - 1; i++) {
+                        bidderList.add(bidderList.get(i));
+                        bidderList.remove(i);
+                    }
+
+                    currBidderNameLabel.setText(gameCon.getCurrentPlayer().getName());
+                    closeAllWindows();
+                    auctionPopUpWindow.setVisible(true);
                 }
-
-                currBidderNameLabel.setText(gameCon.getCurrentPlayer().getName());
-                closeAllWindows();
-                auctionPopUpWindow.setVisible(true);
+                else{
+                    quickPopUpWindow("You have not gone round the board yet!", 100, 300, 2);
+                }
             }
         });
 
@@ -969,29 +982,28 @@ public class GameScreen implements Screen {
                     die1.setDrawable(getDiceImage(gameCon.getLastD1()));
                     die2.setDrawable(getDiceImage(gameCon.getLastD2()));
 
-                    if(tile instanceof Ownable && ((Ownable)tile).getOwned() && ((Ownable)tile).getOwner() != gameCon.getCurrentPlayer()) {
-                        if(tile instanceof Property) {
-                            Property prop = (Property) tile;
-                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + prop.getOwner().getName() + " $" + prop.getCurrentRent() + " for landing on " + prop.getTileName(), 100, 450, 3);
+                        if (tile instanceof Ownable && ((Ownable) tile).getOwned() && ((Ownable) tile).getOwner() != gameCon.getCurrentPlayer()) {
+                            if (tile instanceof Property) {
+                                Property prop = (Property) tile;
+                                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + prop.getOwner().getName() + " $" + prop.getCurrentRent() + " for landing on " + prop.getTileName(), 100, 450, 3);
+                            } else if (tile instanceof Station) {
+                                Station stat = (Station) tile;
+                                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + stat.getOwner().getName() + " $" + stat.getRent() + " for landing on " + stat.getTileName(), 100, 450, 3);
+                            } else if (tile instanceof Utility) {
+                                Utility util = (Utility) tile;
+                                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + util.getOwner().getName() + " $" + util.getRent(gameCon.getLastD1() + gameCon.getLastD2()) + " for landing on " + util.getTileName(), 100, 450, 3);
+                            }
+                        } else {
+                            openPopUpWindow(tile);
                         }
-                        else if(tile instanceof Station) {
-                            Station stat = (Station) tile;
-                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + stat.getOwner().getName() + " $" + stat.getRent() + " for landing on " + stat.getTileName(), 100, 450, 3);
-                        }
-                        else if(tile instanceof Utility) {
-                            Utility util = (Utility) tile;
-                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + util.getOwner().getName() + " $" + util.getRent( gameCon.getLastD1()+gameCon.getLastD2()) + " for landing on " + util.getTileName(), 100, 450, 3);
-                        }
-                    }
-                    else {
-                        openPopUpWindow(tile);
-                    }
 
-                    if(tile instanceof Property){
-                        if(!((Property) tile).getOwned()) {
-                            rollDice.setVisible(false);
+                        if (tile instanceof Property) {
+                            if (!((Property) tile).getOwned()) {
+                                if(gameCon.getCurrentPlayer().getFirstLap()) {
+                                    rollDice.setVisible(false);
+                                }
+                            }
                         }
-                    }
 
                     if (!gameCon.getPlayAgain()) {
                         rollDice.setText("End turn");

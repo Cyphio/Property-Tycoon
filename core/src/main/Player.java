@@ -38,7 +38,7 @@ public class Player implements PlayerInterface {
 
         getOutJailCards = 0;
         balance = 1500;
-        firstLap = true;
+        firstLap = false;
     }
 
     public void addGetOutOfJailFreeCard(){
@@ -209,8 +209,8 @@ public class Player implements PlayerInterface {
      * as false.
      */
     @Override
-    public void endFirstLap() {
-        firstLap = false;
+    public void setFirstLap(boolean lap) {
+        this.firstLap = lap;
     }
 
     /**
