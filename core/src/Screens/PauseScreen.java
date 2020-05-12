@@ -35,7 +35,7 @@ public class PauseScreen implements Screen {
     public PauseScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
-        this.pauseScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
+        this.pauseScreenTexture = new Texture(Gdx.files.internal("backgrounds/optionScreenTexture.png"));
         this.pauseScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 

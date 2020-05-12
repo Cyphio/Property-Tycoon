@@ -32,7 +32,7 @@ public class OptionsScreen implements Screen {
     public OptionsScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
-        this.optionsScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
+        this.optionsScreenTexture = new Texture(Gdx.files.internal("backgrounds/optionScreenTexture.png"));
         this.optionsScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 

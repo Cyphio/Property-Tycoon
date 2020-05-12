@@ -84,7 +84,7 @@ public class GameSetUpScreen implements Screen {
     public GameSetUpScreen(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
-        this.gameSetUpScreenTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
+        this.gameSetUpScreenTexture = new Texture(Gdx.files.internal("backgrounds/optionScreenTexture.png"));
         this.gameSetUpScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
         Texture texture1 = new Texture(Gdx.files.internal("tokens/token1.png"));
@@ -166,6 +166,41 @@ public class GameSetUpScreen implements Screen {
             }
         });
 
+        table.add(numPlayers);
+        table.add(numPlayersBox);
+        table.row().pad(20, 0, 0, 20);
+        table.add(player1Field);
+        table.add(token1SB);
+        table.add(token1Image);
+        table.row().pad(10, 0, 0, 20);
+        table.add(player2Field);
+        table.add(token2SB);
+        table.add(token2Image);
+        table.row().pad(10, 0, 0, 20);
+        table.add(player3Field);
+        table.add(token3SB);
+        table.add(token3Image);
+        table.row().pad(10, 0, 0, 20);
+        table.add(player4Field);
+        table.add(token4SB);
+        table.add(token4Image);
+        table.row().pad(10, 0, 0, 20);
+        table.add(player5Field);
+        table.add(token5SB);
+        table.add(token5Image);
+        table.row().pad(10, 0, 0, 20);
+        table.add(player6Field);
+        table.add(token6SB);
+        table.add(token6Image);
+        table.row().pad(20, 0, 0, 0);
+        table.add(startFullGame).colspan(3);
+        table.row().pad(20, 0, 0, 0);
+        table.add(startAbridgedGame).colspan(3);
+        table.row();
+        table.add(abridgedLengthField).width(275).colspan(3);
+        table.row().pad(20, 0, 0, 0);
+        table.add(back).colspan(3);
+
         token1SB.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -219,42 +254,6 @@ public class GameSetUpScreen implements Screen {
                 updateTokenImageList();
             }
         });
-
-        table.row().pad(10, 0, 0, 20);
-        table.add(numPlayers).left();
-        table.add(numPlayersBox);
-        table.row().pad(20, 0, 0, 20);
-        table.add(player1Field);
-        table.add(token1SB);
-        table.add(token1Image);
-        table.row().pad(10, 0, 0, 20);
-        table.add(player2Field);
-        table.add(token2SB);
-        table.add(token2Image);
-        table.row().pad(10, 0, 0, 20);
-        table.add(player3Field);
-        table.add(token3SB);
-        table.add(token3Image);
-        table.row().pad(10, 0, 0, 20);
-        table.add(player4Field);
-        table.add(token4SB);
-        table.add(token4Image);
-        table.row().pad(10, 0, 0, 20);
-        table.add(player5Field);
-        table.add(token5SB);
-        table.add(token5Image);
-        table.row().pad(10, 0, 0, 20);
-        table.add(player6Field);
-        table.add(token6SB);
-        table.add(token6Image);
-        table.row().pad(20, 0, 0, 0);
-        table.add(startFullGame).colspan(3);
-        table.row().pad(20, 0, 0, 0);
-        table.add(startAbridgedGame).colspan(3);
-        table.row();
-        table.add(abridgedLengthField).width(275).colspan(3);
-        table.row().pad(20, 0, 0, 0);
-        table.add(back).colspan(3);
 
         updateSB();
         setUIVisibility();
