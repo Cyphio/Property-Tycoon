@@ -38,7 +38,17 @@ public class Ownable extends SmallTile{
         isBuyable = TrueOrFalse;
     }
 
-    public void sellProperty(Player player, int cost){}
+    public void sellProperty(Player player, int cost){
+
+        player.payPlayer(cost);
+        if (player.getOwnables().contains(this)) {
+            player.removeOwnable(this);
+        }
+        owned = false;
+        owner = null;
+        setBuyable(true);
+
+    }
 
 
     /**

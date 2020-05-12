@@ -716,8 +716,8 @@ public class GameScreen implements Screen {
         sellStationButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(((Property)clickedProperty).getMortgaged()){
-                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
+                if((clickedProperty).getMortgaged()){
+                    (clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
@@ -734,11 +734,11 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(mortgageStationButton.getText().toString().equals("Mortgage")) {
-                    ((Property)clickedProperty).setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    (clickedProperty).setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgageStationButton.setText("Unmortgage");
                 }
                 else{
-                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    (clickedProperty).unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgageStationButton.setText("Mortgage");
                 }
             }
