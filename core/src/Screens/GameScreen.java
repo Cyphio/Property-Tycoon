@@ -227,7 +227,6 @@ public class GameScreen implements Screen {
             if (t instanceof Property) {
 
                 ArrayList<Coordinate> coords = board.getTile(i).getAllCoordinates();
-                System.out.println(((Property) t).getColourAsString().toUpperCase());
 
                 switch (((Property) t).getColourAsString().toUpperCase()) {
                     case "BLUE":
@@ -561,14 +560,14 @@ public class GameScreen implements Screen {
                 if(((Property)clickedProperty).getMortgaged()){
                     ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
-                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
+                    updatePropertySprites();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
+                    updatePropertySprites();
                     closeAllWindows();
                 }
             }
