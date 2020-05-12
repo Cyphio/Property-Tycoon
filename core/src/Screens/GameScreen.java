@@ -426,6 +426,7 @@ public class GameScreen implements Screen {
             closeAllWindows();
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
                 quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
+                ((FreeParking) gameCon.getBoard().getTile(20)).reset();
             } else {
                 quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
             }
