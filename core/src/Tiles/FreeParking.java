@@ -4,11 +4,9 @@ public class FreeParking extends BigTiles {
 
     private int currentValue;
 
-
     public FreeParking() {
         currentValue = 0 ;
     }
-
 
     public int getCurrentValue() {
         return currentValue;
@@ -20,19 +18,10 @@ public class FreeParking extends BigTiles {
 
 
     public void addToPot(int amount){
-
-
         currentValue += amount;
-
-
     }
 
     public void reset(){
-
         currentValue = 0;
-
     }
-
-
-
 }
