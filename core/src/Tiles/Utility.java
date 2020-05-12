@@ -3,6 +3,7 @@ package Tiles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import main.Player;
 
 
 public class Utility extends GovProperties {
@@ -16,6 +17,22 @@ public class Utility extends GovProperties {
         icon.setOriginCenter();
         icon.setAlpha(1f);
 
+
+    }
+
+    public int getRent(Player p, int dice){
+        int i = 0;
+        for(Ownable prop : p.getOwnables()){
+            if(prop instanceof Utility){
+                i++;
+            }
+        }
+        if(i == 1){
+            return 4*dice;
+        }
+        else{
+            return 10*dice;
+        }
 
     }
 
