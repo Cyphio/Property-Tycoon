@@ -171,6 +171,7 @@ public class GameBoard implements GameBoardInterface {
         if (moveTo > 39) {
             //change this based on go tile amount set (for now 200)
             player.payPlayer(goPayoutAmount);
+            player.setFirstLap(true);
             this.setPlayerPos(player, moveTo - 40);
 
             if (moveTo < 0) {
