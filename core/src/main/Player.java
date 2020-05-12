@@ -132,7 +132,7 @@ public class Player implements PlayerInterface {
         }
     }
 
-    public void removeProperty(Ownable property) {
+    public void removeOwnable(Ownable property) {
         if(property.getOwner() != null) {
             property.removePlayer(this);
         }
