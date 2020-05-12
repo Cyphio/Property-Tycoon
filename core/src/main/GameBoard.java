@@ -243,7 +243,6 @@ public class GameBoard implements GameBoardInterface {
         }
         else if (x instanceof FreeParking) {
             currentPlayer.payPlayer(((FreeParking) board[20]).getCurrentValue());
-
         }
         else if (x instanceof Tax) {
             currentPlayer.makePurchase(((Tax) x).getTaxAmount());

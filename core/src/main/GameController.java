@@ -138,7 +138,7 @@ public class GameController{
     }
 
     public boolean developProperty(Property prop, Player player) {
-        if(player.getOwnables().containsAll(board.getIdentityPropMap().get(prop.getColourAsString())) && prop.getOwner() == player) {
+        if(player.getOwnables().containsAll(board.getIdentityPropMap().get(prop.getColourAsString())) && prop.getOwner() == player && prop.getHousesOwned() < 5) {
             prop.develop();
             return true;
         }
