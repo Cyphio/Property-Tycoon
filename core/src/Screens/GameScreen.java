@@ -78,8 +78,6 @@ public class GameScreen implements Screen {
     private Label serviceCostLabel;
     private Table serviceInfoBox2;
     private Image serviceImg;
-    private float serviceImgWidth;
-    private float serviceImgHeight;
 
     private Window auctionPopUpWindow;
     private Player currBidder;
@@ -121,9 +119,9 @@ public class GameScreen implements Screen {
 
         gameLength = 0;
         reverseTime = 0;
-        serviceImgWidth = 0;
-        serviceImgHeight = 0;
+
         serviceInfoBox2 = new Table();
+        serviceImg = new Image();
 
         gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
@@ -218,9 +216,6 @@ public class GameScreen implements Screen {
         });
 
         setTileCellColors();
-
-
-
     }
 
     public void setTileCellColors() {
@@ -276,7 +271,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
@@ -352,22 +347,20 @@ public class GameScreen implements Screen {
                 serviceInfoBox2.add(new Label("Rent with four stations owned:", gameScreenSkin)).left();
                 serviceInfoBox2.add(new Label("$200", gameScreenSkin)).right();
                 serviceInfoBox2.row().pad(20, 0, 0, 0);
-                serviceImgWidth = 392.92f;
-                serviceImgHeight = 100;
-                serviceImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
+                serviceImg.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
                 servicePopUpWindowSetUp();
             }
             else if (tile instanceof Utility){
                 serviceInfoBox2.clear();
+                serviceInfoBox2.row().pad(30, 0, 0, 0);
                 serviceInfoBox2.add(new Label("Rent with 1 utility owned:", gameScreenSkin)).left().width(270);
                 serviceInfoBox2.add(new Label("4 times dice value", gameScreenSkin)).right();
                 serviceInfoBox2.row().pad(20, 0, 0, 0);
                 serviceInfoBox2.add(new Label("Rent with > 1 utility owned:", gameScreenSkin)).left();
                 serviceInfoBox2.add(new Label("10 times dice value", gameScreenSkin)).right();
-                serviceInfoBox2.row().pad(20, 0, 0, 0);
-                serviceImgWidth = 100;
-                serviceImgHeight = 100;
-                serviceImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("utilityImage.png")))));
+                serviceInfoBox2.row();
+                serviceInfoBox2.add(new Label("", gameScreenSkin)).height(30);
+                serviceImg.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("utilityImage.png")))));
                 servicePopUpWindowSetUp();
             }
 
@@ -652,14 +645,12 @@ public class GameScreen implements Screen {
         serviceInfoBox.add(new Label("Cost:", gameScreenSkin)).left();
         serviceInfoBox.add(serviceCostLabel).right();
 
-        serviceImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
-
         servicePopUpWindow = new Window("", gameScreenSkin);
 
         servicePopUpWindow.add(serviceInfoBox).colspan(2).expand().fill();
-        servicePopUpWindow.row().pad(30, 0, 0, 0);
-        servicePopUpWindow.add(serviceImg).colspan(2).width(serviceImgWidth).height(serviceImgHeight);
-        servicePopUpWindow.row().pad(50, 0, 0, 0);
+        servicePopUpWindow.row().pad(20, 0, 0, 0);
+        servicePopUpWindow.add(serviceImg).colspan(2).width(300).height(100);
+        servicePopUpWindow.row().pad(60, 0, 0, 0);
         servicePopUpWindow.add(serviceInfoBox2).colspan(2);
         servicePopUpWindow.row().pad(20, 0, 0, 0);
         servicePopUpWindow.add(buyServiceButton).left();
