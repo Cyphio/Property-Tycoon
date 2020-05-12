@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
-public class GovProperties extends Ownable {
+public class Services extends Ownable {
 
     protected Sprite icon;
 

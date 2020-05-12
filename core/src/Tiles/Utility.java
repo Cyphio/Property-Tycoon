@@ -3,10 +3,9 @@ package Tiles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import main.Player;
 
 
-public class Utility extends GovProperties {
+public class Utility extends Services {
 
 
     public Utility(){

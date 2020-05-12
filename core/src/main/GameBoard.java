@@ -221,14 +221,10 @@ public class GameBoard implements GameBoardInterface {
                     currentPlayer.makePurchase(((Property) x).getCurrentRent());
                     ((Property) x).getOwner().payPlayer(((Property) x).getCurrentRent());
             }
-        }else if(x instanceof GovProperties) {
+        }else if(x instanceof Services) {
             if (((Ownable) x).getOwned() && !((Ownable) x).getOwner().getIsInJail()) {
-                String type = "UTILITY";
-                if (x instanceof Station) {
-                    type = "STATION";
-                }
 
-                int rentMultiplier = howManyStationUtilityDoesPlayerOwn(((Ownable) x).getOwner(), type);
+                int rentMultiplier = howManyStationUtilityDoesPlayerOwn(((Ownable) x).getOwner(), (Services) x);
 
                 if (rentMultiplier > 0) {
                     currentPlayer.makePurchase(50 * rentMultiplier);
@@ -367,22 +363,16 @@ public class GameBoard implements GameBoardInterface {
     public Dice getDice() { return dice; }
 
 
-    public boolean doesPlayerOwnAllOfIdentity(Player player , String identity){
-        if(identityPropMap.containsKey(identity)){
-            for (Ownable ownable : identityPropMap.get(identity)) {
-                if (ownable.getOwner() != player) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public int howManyStationUtilityDoesPlayerOwn(Player playerOwner , String identity){
+    public int howManyStationUtilityDoesPlayerOwn(Player playerOwner , Services tile){
         int i = 0;
 
-        if(identityPropMap.containsKey(identity)){
-            for (Ownable ownable : identityPropMap.get(identity)) {
+        String type = "UTILITY";
+        if (tile instanceof Station) {
+            type = "STATION";
+        }
+
+        if(identityPropMap.containsKey(type)){
+            for (Ownable ownable : identityPropMap.get(type)) {
                 if (ownable.getOwner() == playerOwner) {
                     i++;
                 }

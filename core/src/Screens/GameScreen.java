@@ -186,8 +186,8 @@ public class GameScreen implements Screen {
                 RotatableLabel label = new RotatableLabel(new Label(((SmallTile) tile).getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
                 labelStage.addActor(label);
             }
-            if (tile instanceof GovProperties) {
-                propertyIcons.add(((GovProperties) tile).getIcon());
+            if (tile instanceof Services) {
+                propertyIcons.add(((Services) tile).getIcon());
             }
             if (tile instanceof Tax) {
                 propertyIcons.add(((Tax) tile).getIcon());
@@ -337,7 +337,7 @@ public class GameScreen implements Screen {
             closeAllWindows();
             propertyPopUpWindow.setVisible(true);
         }
-        else if (tile instanceof GovProperties) {
+        else if (tile instanceof Services) {
             if (tile instanceof Station) {
                 serviceInfoBox2.clear();
                 serviceInfoBox2.add(new Label("Rent with one station owned:", gameScreenSkin)).left().width(350);
@@ -371,7 +371,7 @@ public class GameScreen implements Screen {
                 servicePopUpWindowSetUp();
             }
 
-            clickedProperty = (GovProperties) tile;
+            clickedProperty = (Services) tile;
             if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
                 buyServiceButton.setVisible(true);
                 auctionServiceButton.setVisible(true);
