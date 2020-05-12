@@ -328,9 +328,9 @@ public class GameScreen implements Screen {
 
             closeAllWindows();
             propertyPopUpWindow.setVisible(true);
-        } else if (tile instanceof Station) {
+        } else if (tile instanceof GovProperties) {
 
-            clickedProperty = (Station) tile;
+            clickedProperty = (GovProperties) tile;
             if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
                 buyStationButton.setVisible(true);
                 auctionStationButton.setVisible(true);
@@ -408,12 +408,6 @@ public class GameScreen implements Screen {
             } else {
                 quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
             }
-        }
-        else if(tile instanceof Utility)
-
-        {
-            closeAllWindows();
-            quickPopUpWindow("Utility", 100, 200, 1);
         }
         else if(tile instanceof GoToJail)
 
