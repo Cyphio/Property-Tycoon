@@ -57,6 +57,8 @@ public class GovProperties extends Ownable {
 
     }
 
+
+
     public Sprite getIcon(){return icon;}
 
 
