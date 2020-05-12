@@ -162,10 +162,10 @@ public class GameController{
         return board.getDevelopedProperties();
     }
 
-    public Coordinate freePlayerFromJail(Player player){
-        player.makePurchase(((Jail) board.getTile(10)).getBailPrice());
+    public void freePlayerFromJail(Player player){
         player.setInJail(false);
-        return board.getTile(10).getAvailableCoordinates();
+        Coordinate c = board.getTile(10).getAvailableCoordinates();
+        player.getPlayerToken().setPosition(c.getX(),c.getY());
     }
 
     // Would like to alter this to return a list of the players in order of their wealth

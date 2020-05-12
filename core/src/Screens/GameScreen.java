@@ -1060,9 +1060,7 @@ public class GameScreen implements Screen {
                 closeAllWindows();
                 Player p = gameCon.getCurrentPlayer();
                 p.makePurchase(50);
-                p.setInJail(false);
-                Coordinate visitingCoordinate = gameCon.freePlayerFromJail(p);
-                p.getPlayerToken().setPosition(visitingCoordinate.getX(), visitingCoordinate.getY());
+                gameCon.freePlayerFromJail(p);
             }
         });
 
@@ -1073,9 +1071,7 @@ public class GameScreen implements Screen {
                 if(p.hasGetOutOfJailFree()) {
                     closeAllWindows();
                     p.removeGetOutOfJailFreeCard();
-                    p.setInJail(false);
-                    Coordinate visitingCoordinate = gameCon.freePlayerFromJail(p);
-                    p.getPlayerToken().setPosition(visitingCoordinate.getX(), visitingCoordinate.getY());
+                    gameCon.freePlayerFromJail(p);
                 }
                 else {
                     quickPopUpWindow("You do not have a get out of jail free card!", 150, 300, 1);
