@@ -1,6 +1,5 @@
 package main;
 
-import Tiles.Jail;
 import Tiles.Property;
 import Tiles.Tile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -167,24 +166,6 @@ public class GameController{
         player.getPlayerToken().setPosition(c.getX(),c.getY());
     }
 
-    // Would like to alter this to return a list of the players in order of their wealth
-    public ArrayList<Player> getRichestPlayers() {
-        ArrayList<Player> richest = new ArrayList<>();
-        int prevVal = 0;
-        for(Player p : playerOrders) {
-            int value = p.getWealth();
-            if(value > prevVal) {
-                richest.clear();
-                richest.add(p);
-                prevVal = value;
-            }
-            else if(value == prevVal) {
-                richest.add(p);
-            }
-        }
-        return richest;
-    }
-
     // Quick sort algorithm
     public ArrayList<Player> getFinalStandings(ArrayList<Player> players, int start, int end) {
         if(start < end) {
@@ -211,7 +192,6 @@ public class GameController{
             Player tempEnd = players.get(end);
             players.set(i+1, tempEnd);
             players.set(end, tempIplus1);
-
             return i+1;
     }
 }
