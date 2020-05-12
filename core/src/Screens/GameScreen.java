@@ -77,6 +77,10 @@ public class GameScreen implements Screen {
     private Label stationOwnerLabel;
     private Label stationCostLabel;
 
+    private Label stationInfoLabel;
+    private Label stationRentLabel;
+    private Label stationRentPriceLabel;
+
     private Window auctionPopUpWindow;
     private Player currBidder;
     private Player highestBidder;
@@ -108,6 +112,8 @@ public class GameScreen implements Screen {
     private float gameLength;
     private float reverseTime;
     private Label timerLabel;
+    private Image trainImg;
+    private Image utilityImg;
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
@@ -156,7 +162,7 @@ public class GameScreen implements Screen {
         propertyIcons = new ArrayList<>();
 
         propertyHouseandHotelSprites = new ArrayList<>();
-        updatePropertySprites();
+        updatePropertyDevelopmentSprites();
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -293,7 +299,7 @@ public class GameScreen implements Screen {
 
             if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
                 sellPropertyButton.setVisible(true);
-                if (((Property) clickedProperty).getMortgaged()) {
+                if ((clickedProperty).getMortgaged()) {
                     mortgagePropertyButton.setText("Unmortgage");
                 } else {
                     mortgagePropertyButton.setText("Mortgage");
@@ -330,6 +336,19 @@ public class GameScreen implements Screen {
             closeAllWindows();
             propertyPopUpWindow.setVisible(true);
         } else if (tile instanceof GovProperties) {
+
+            if (tile instanceof Station) {
+                stationInfoLabel.setText("For every station a player owns they will get $50 when a player lands on any of their station.");
+                stationRentLabel.setText("Current rent for this property: ");
+                stationRentPriceLabel.setText(((Station) tile).getRent());
+                trainImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
+            }else if (tile instanceof Utility){
+                stationInfoLabel.setWrap(true);
+                stationInfoLabel.setText("Rent when 1 utility owned by a player: 4 times dice value.");
+                stationRentLabel.setText("Rent when more than 1 utility owned by a player: 10 times dice value.");
+                stationRentPriceLabel.setText(((Utility) tile).getRent(gameCon.getLastD1()+gameCon.getLastD2()));
+                trainImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("utilityImage.png")))));
+            }
 
             clickedProperty = (GovProperties) tile;
             if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
@@ -552,17 +571,17 @@ public class GameScreen implements Screen {
         sellPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(((Property)clickedProperty).getMortgaged()){
-                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
+                if((clickedProperty).getMortgaged()){
+                    (clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
                     updatePropertyOwnerIcons();
-                    updatePropertySprites();
+                    updatePropertyDevelopmentSprites();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     updatePropertyOwnerIcons();
-                    updatePropertySprites();
+                    updatePropertyDevelopmentSprites();
                     closeAllWindows();
                 }
             }
@@ -587,7 +606,7 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if(gameCon.developProperty(((Property)clickedProperty), gameCon.getCurrentPlayer())) {
                     quickPopUpWindow("Able to develop", 100, 350, 0.5f);
-                    updatePropertySprites();
+                    updatePropertyDevelopmentSprites();
                 }
                 else {
                     quickPopUpWindow("Not able to develop", 100, 350, 0.5f);
@@ -627,21 +646,21 @@ public class GameScreen implements Screen {
         stationInfoBox.add(new Label("Cost:", gameScreenSkin)).left();
         stationInfoBox.add(stationCostLabel).right();
 
-        Image trainImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
+        trainImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
+
+
+        stationInfoLabel = new Label("Rent with two stations owned:", gameScreenSkin);
+        stationRentLabel = new Label("Rent with two stations owned:", gameScreenSkin);
+        stationRentPriceLabel = new Label("Rent with two stations owned:", gameScreenSkin);
 
         Table stationInfoBox2 = new Table();
 
-        stationInfoBox2.add(new Label("Rent with one station owned:", gameScreenSkin)).left().width(350);
-        stationInfoBox2.add(new Label("$50", gameScreenSkin)).right();
+        stationInfoBox2.add(stationInfoLabel).left().width(425);
         stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.add(new Label("Rent with two stations owned:", gameScreenSkin)).left();
-        stationInfoBox2.add(new Label("$100", gameScreenSkin)).right();
+        stationInfoBox2.add(stationRentLabel).left().width(350);
+        stationInfoBox2.add(stationRentPriceLabel).right();
         stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.add(new Label("Rent with three stations owned:", gameScreenSkin)).left();
-        stationInfoBox2.add(new Label("$150", gameScreenSkin)).right();
         stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.add(new Label("Rent with four stations owned:", gameScreenSkin)).left();
-        stationInfoBox2.add(new Label("$200", gameScreenSkin)).right();
         stationInfoBox2.row().pad(20, 0, 0, 0);
 
         stationPopUpWindow = new Window("", gameScreenSkin);
@@ -975,11 +994,11 @@ public class GameScreen implements Screen {
                         }
                         else if(tile instanceof Station) {
                             Station stat = (Station) tile;
-                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + stat.getOwner().getName() + " $" + stat.getRent(stat.getOwner()) + " for landing on " + stat.getTileName(), 100, 450, 3);
+                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + stat.getOwner().getName() + " $" + stat.getRent() + " for landing on " + stat.getTileName(), 100, 450, 3);
                         }
                         else if(tile instanceof Utility) {
                             Utility util = (Utility) tile;
-                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + util.getOwner().getName() + " $" + util.getRent(util.getOwner(), gameCon.getLastD1()+gameCon.getLastD2()) + " for landing on " + util.getTileName(), 100, 450, 3);
+                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + util.getOwner().getName() + " $" + util.getRent( gameCon.getLastD1()+gameCon.getLastD2()) + " for landing on " + util.getTileName(), 100, 450, 3);
                         }
                     }
                     else {
@@ -1201,7 +1220,7 @@ public class GameScreen implements Screen {
         }, time);
     }
 
-    public void updatePropertySprites(){
+    public void updatePropertyDevelopmentSprites(){
         ArrayList<Property> developedProperties = gameCon.getDevelopedProperties();
         propertyHouseandHotelSprites.clear();
         for (Property prop: developedProperties) {

@@ -216,33 +216,13 @@
         <type>opportunityknocks</type>
     </tile>
     <tile>
-        <name>Mulan Rouge</name>
-        <type>property</type>
-        <cost>220</cost>
-        <rent>18</rent>
-        <one-house>90</one-house>
-        <two-house>250</two-house>
-        <three-house>700</three-house>
-        <four-house>875</four-house>
-        <hotel>1050</hotel>
-        <house-cost>150</house-cost>
-        <hotel-cost>150</hotel-cost>
-        <colour>red</colour>
+        <type>opportunityknocks</type>
     </tile>
     <tile>
-        <name>Han Xin Gardens</name>
-        <type>property</type>
-        <cost>240</cost>
-        <rent>20</rent>
-        <one-house>100</one-house>
-        <two-house>300</two-house>
-        <three-house>750</three-house>
-        <four-house>925</four-house>
-        <hotel>1100</hotel>
-        <house-cost>150</house-cost>
-        <hotel-cost>150</hotel-cost>
-        <colour>red</colour>
+        <type>opportunityknocks</type>
     </tile>
+
+
     <tile>
         <name>Falmer Station</name>
         <type>station</type>

@@ -20,20 +20,21 @@ public class Utility extends GovProperties {
 
     }
 
-    public int getRent(Player p, int dice){
-        int i = 0;
-        for(Ownable prop : p.getOwnables()){
-            if(prop instanceof Utility){
-                i++;
+    public int getRent( int dice){
+        if (this.owner!=null) {
+            int i = 0;
+            for (Ownable prop : this.owner.getOwnables()) {
+                if (prop instanceof Utility) {
+                    i++;
+                }
+            }
+            if (i == 1) {
+                return 4 * dice;
+            } else {
+                return 10 * dice;
             }
         }
-        if(i == 1){
-            return 4*dice;
-        }
-        else{
-            return 10*dice;
-        }
-
+        return 0;
     }
 
 }
