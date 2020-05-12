@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Player implements PlayerInterface {
 
-    private ArrayList<Ownable> properties;
+    private ArrayList<Ownable> ownables;
     private ArrayList<Property> mortgagedProperties;
     private int balance;
     private int tilePosition;
@@ -34,7 +34,7 @@ public class Player implements PlayerInterface {
         this.name = name;
         this.gameToken = token;
         setInJail(false);
-        properties = new ArrayList<Ownable>();
+        ownables = new ArrayList<Ownable>();
 
         getOutJailCards = 0;
         balance = 1500;
@@ -107,13 +107,13 @@ public class Player implements PlayerInterface {
      * @return returns properties, ArrayList with all the properties player owns
      */
     @Override
-    public ArrayList<Ownable> getProperties() {
-        return properties;
+    public ArrayList<Ownable> getOwnables() {
+        return ownables;
     }
 
     public int getTotalPropertyValue() {
         int sum = 0;
-        for(Ownable p: getProperties()) {
+        for(Ownable p: getOwnables()) {
             sum += p.getCost();
         }
         return sum;
@@ -126,9 +126,9 @@ public class Player implements PlayerInterface {
     @Override
     public void addProperty(Ownable property) {
 
-        if(!properties.contains(property)) {
+        if(!ownables.contains(property)) {
             property.addPlayer(this);
-            properties.add(property);
+            ownables.add(property);
         }
     }
 
@@ -136,7 +136,7 @@ public class Player implements PlayerInterface {
         if(property.getOwner() != null) {
             property.removePlayer(this);
         }
-        properties.remove(property);
+        ownables.remove(property);
     }
 
     /**
@@ -237,6 +237,15 @@ public class Player implements PlayerInterface {
      */
     public void setCurrentCoordinates(Coordinate currentCoordinate) {
         this.currentCoordinates = currentCoordinate;
+    }
+
+    public int getWealth() {
+        int wealth = 0;
+        for(Ownable o : ownables) {
+            wealth += o.getCost();
+        }
+        wealth += balance;
+        return wealth;
     }
 
 
