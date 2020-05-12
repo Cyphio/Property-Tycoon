@@ -10,7 +10,7 @@ public class OpportunityKnocks extends Chests {
 
     public OpportunityKnocks(){
 
-        Texture texture = new Texture(Gdx.files.internal("tile-images/chest.png"));
+        Texture texture = new Texture(Gdx.files.internal("tile-images/opportunityknocks.png"));
         icon = new Sprite(texture);
         icon.setOriginCenter();
         setTileName("Opportunity Knocks");

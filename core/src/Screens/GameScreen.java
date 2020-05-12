@@ -95,7 +95,7 @@ public class GameScreen implements Screen {
     private Texture fourHouseTexture;
     private Texture hotelTexture;
 
-    ArrayList<Sprite> propertySprites;
+    ArrayList<Sprite> propertyHouseandHotelSprites;
     private ArrayList<Sprite> ownedProperties;
 
     ArrayList<Sprite> propertyIcons;
@@ -155,7 +155,7 @@ public class GameScreen implements Screen {
         ownedProperties = new ArrayList<>();
         propertyIcons = new ArrayList<>();
 
-        propertySprites = new ArrayList<>();
+        propertyHouseandHotelSprites = new ArrayList<>();
         updatePropertySprites();
 
         float w = Gdx.graphics.getWidth();
@@ -228,7 +228,6 @@ public class GameScreen implements Screen {
             if (t instanceof Property) {
 
                 ArrayList<Coordinate> coords = board.getTile(i).getAllCoordinates();
-                System.out.println(((Property) t).getColourAsString().toUpperCase());
 
                 switch (((Property) t).getColourAsString().toUpperCase()) {
                     case "BLUE":
@@ -333,7 +332,7 @@ public class GameScreen implements Screen {
         } else if (tile instanceof Station) {
 
             clickedProperty = (Station) tile;
-            if (clickedProperty instanceof Station && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
+            if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
                 buyStationButton.setVisible(true);
                 auctionStationButton.setVisible(true);
             } else {
@@ -343,7 +342,7 @@ public class GameScreen implements Screen {
 
             if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
                 sellStationButton.setVisible(true);
-                if (((Property)clickedProperty).getMortgaged()) {
+                if (clickedProperty.getMortgaged()) {
                     mortgageStationButton.setText("Unmortgage");
                 } else {
                     mortgageStationButton.setText("Mortgage");
@@ -562,14 +561,14 @@ public class GameScreen implements Screen {
                 if(((Property)clickedProperty).getMortgaged()){
                     ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
-                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
+                    updatePropertySprites();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
+                    updatePropertySprites();
                     closeAllWindows();
                 }
             }
@@ -718,8 +717,8 @@ public class GameScreen implements Screen {
         sellStationButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(((Property)clickedProperty).getMortgaged()){
-                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
+                if((clickedProperty).getMortgaged()){
+                    (clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
@@ -736,11 +735,11 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(mortgageStationButton.getText().toString().equals("Mortgage")) {
-                    ((Property)clickedProperty).setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    (clickedProperty).setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgageStationButton.setText("Unmortgage");
                 }
                 else{
-                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    (clickedProperty).unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgageStationButton.setText("Mortgage");
                 }
             }
@@ -1083,9 +1082,7 @@ public class GameScreen implements Screen {
                 closeAllWindows();
                 Player p = gameCon.getCurrentPlayer();
                 p.makePurchase(50);
-                p.setInJail(false);
-                Coordinate visitingCoordinate = gameCon.freePlayerFromJail(p);
-                p.getPlayerToken().setPosition(visitingCoordinate.getX(), visitingCoordinate.getY());
+                gameCon.freePlayerFromJail(p);
             }
         });
 
@@ -1096,9 +1093,7 @@ public class GameScreen implements Screen {
                 if(p.hasGetOutOfJailFree()) {
                     closeAllWindows();
                     p.removeGetOutOfJailFreeCard();
-                    p.setInJail(false);
-                    Coordinate visitingCoordinate = gameCon.freePlayerFromJail(p);
-                    p.getPlayerToken().setPosition(visitingCoordinate.getX(), visitingCoordinate.getY());
+                    gameCon.freePlayerFromJail(p);
                 }
                 else {
                     quickPopUpWindow("You do not have a get out of jail free card!", 150, 300, 1);
@@ -1198,10 +1193,14 @@ public class GameScreen implements Screen {
 
     public void updatePropertySprites(){
         ArrayList<Property> developedProperties = gameCon.getDevelopedProperties();
-        propertySprites = new ArrayList<>();
+        propertyHouseandHotelSprites.clear();
         for (Property prop: developedProperties) {
-            Sprite sprite = new Sprite();
-            switch (prop.getHousesOwned()){
+            Sprite sprite;
+
+            switch (prop.getHousesOwned()) {
+                default:
+                    sprite = null;
+                    break;
                 case 1:
                     sprite = new Sprite(oneHouseTexture);
                     break;
@@ -1218,19 +1217,23 @@ public class GameScreen implements Screen {
                     sprite = new Sprite(hotelTexture);
                     break;
             }
-            sprite.setSize(192,64);
+
+            if (sprite != null) {
+            sprite.setSize(192, 64);
             sprite.setOriginCenter();
-            if (prop.getTilePos() < 11){
+            if (prop.getTilePos() < 11) {
                 sprite.rotate(-90);
-            }
-            else   if (prop.getTilePos() < 21){
+            } else if (prop.getTilePos() < 21) {
                 sprite.rotate(-180);
-            }
-            else   if (prop.getTilePos() <31){
+            } else if (prop.getTilePos() < 31) {
                 sprite.rotate(-270);
             }
-            sprite.setPosition(prop.getPropertySpriteCoordinate().getX()-192/2,prop.getPropertySpriteCoordinate().getY()-64/2);
-            propertySprites.add(sprite);
+            sprite.setPosition(prop.getPropertySpriteCoordinate().getX() - 192 / 2, prop.getPropertySpriteCoordinate().getY() - 64 / 2);
+            propertyHouseandHotelSprites.add(sprite);
+        }else{
+
+
+            }
         }
     }
 
@@ -1276,7 +1279,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        camera.update();
         if(propertyPopUpWindow.isVisible() || stationPopUpWindow.isVisible() || jailPopUpWindow.isVisible() || auctionPopUpWindow.isVisible()) {
             stage.removeListener(clickListener);
         }
@@ -1309,13 +1312,16 @@ public class GameScreen implements Screen {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
 
-        for (Sprite sprite: propertySprites) {
+
+        for (Sprite sprite: propertyHouseandHotelSprites) {
             sprite.draw(spriteBatch);
         }
 
         for (Sprite sprite: ownedProperties) {
             sprite.draw(spriteBatch);
         }
+
+
         for (Sprite sprite: propertyIcons){
             sprite.draw(spriteBatch);
         }
@@ -1325,7 +1331,7 @@ public class GameScreen implements Screen {
 
         spriteBatch.end();
 
-        camera.update();
+
 
         labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         labelStage.draw();

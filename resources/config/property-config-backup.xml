@@ -37,7 +37,7 @@
         <hotel>450</hotel>
         <house-cost>50</house-cost>
         <hotel-cost>50</hotel-cost>
-        <colour>blue</colour>
+        <colour>brown</colour>
     </tile>
     <tile>
         <type>tax</type>
@@ -47,6 +47,7 @@
     <tile>
         <type>station</type>
         <name>Brighton Station</name>
+        <colour>white</colour>
         <cost>200</cost>
     </tile>
     <tile>
@@ -128,7 +129,7 @@
         <hotel>750</hotel>
         <house-cost>100</house-cost>
         <hotel-cost>100</hotel-cost>
-        <colour>blue</colour>
+        <colour>purple</colour>
     </tile>
     <tile>
         <name>Rey Lane</name>
@@ -142,7 +143,7 @@
         <hotel>900</hotel>
         <house-cost>100</house-cost>
         <hotel-cost>100</hotel-cost>
-        <colour>blue</colour>
+        <colour>purple</colour>
     </tile>
     <tile>
         <name>Hove Station</name>
@@ -179,7 +180,7 @@
         <hotel>950</hotel>
         <house-cost>100</house-cost>
         <hotel-cost>100</hotel-cost>
-        <colour>blue</colour>
+        <colour>orange</colour>
     </tile>
     <tile>
         <name>Penny Lane</name>
@@ -193,7 +194,7 @@
         <hotel>1000</hotel>
         <house-cost>100</house-cost>
         <hotel-cost>100</hotel-cost>
-        <colour>blue</colour>
+        <colour>orange</colour>
     </tile>
     <tile>
         <type>parking</type>

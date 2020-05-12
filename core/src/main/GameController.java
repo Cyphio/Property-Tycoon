@@ -141,7 +141,6 @@ public class GameController{
     public boolean developProperty(Property prop, Player player) {
         if(player.getOwnables().containsAll(board.getIdentityPropMap().get(prop.getColourAsString())) && prop.getOwner() == player) {
             prop.develop();
-            board.checkForDevelopedProperties();
             return true;
         }
         else {
@@ -162,10 +161,10 @@ public class GameController{
         return board.getDevelopedProperties();
     }
 
-    public Coordinate freePlayerFromJail(Player player){
-        player.makePurchase(((Jail) board.getTile(10)).getBailPrice());
+    public void freePlayerFromJail(Player player){
         player.setInJail(false);
-        return board.getTile(10).getAvailableCoordinates();
+        Coordinate c = board.getTile(10).getAvailableCoordinates();
+        player.getPlayerToken().setPosition(c.getX(),c.getY());
     }
 
     // Would like to alter this to return a list of the players in order of their wealth

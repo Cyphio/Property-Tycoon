@@ -20,7 +20,6 @@ public class Property extends Ownable implements PropertyInterface {
     private int housePrice;
     private int hotelPrice;
     private int housesOwned;
-    private boolean isMortgaged;
 
     /**
      * The constructor for Property
@@ -128,7 +127,7 @@ public class Property extends Ownable implements PropertyInterface {
         if(owner == player && housesOwned == 0){
             player.payPlayer(cost);
             if (player.getOwnables().contains(this)) {
-                player.removeProperty(this);
+                player.removeOwnable(this);
             }
             owned = false;
             owner = null;
@@ -139,29 +138,6 @@ public class Property extends Ownable implements PropertyInterface {
 
         }
 
-    }
-
-    public void setMortgaged(Player player, int cost){
-        if((getOwned())){
-            isMortgaged = true;
-            player.payPlayer(cost/2);
-
-        }
-
-    }
-
-
-    public void unmortgage(Player player, int cost){
-        if(isMortgaged){
-            isMortgaged = false;
-            player.makePurchase(cost/2);
-
-        }
-
-    }
-
-    public boolean getMortgaged(){
-        return isMortgaged;
     }
 
 
