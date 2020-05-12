@@ -37,7 +37,7 @@
         <hotel>450</hotel>
         <house-cost>50</house-cost>
         <hotel-cost>50</hotel-cost>
-        <colour>blue</colour>
+        <colour>brown</colour>
     </tile>
     <tile>
         <type>tax</type>

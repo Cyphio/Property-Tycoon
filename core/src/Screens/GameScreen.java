@@ -977,15 +977,15 @@ public class GameScreen implements Screen {
                     if(tile instanceof Ownable && ((Ownable)tile).getOwned() && ((Ownable)tile).getOwner() != gameCon.getCurrentPlayer()) {
                         if(tile instanceof Property) {
                             Property prop = (Property) tile;
-                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + prop.getOwner().getName() + " $" + prop.getCurrentRent(), 100, 450, 1.5f);
+                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + prop.getOwner().getName() + " $" + prop.getCurrentRent() + " for landing on " + prop.getTileName(), 100, 450, 3);
                         }
                         else if(tile instanceof Station) {
                             Station stat = (Station) tile;
-                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + stat.getOwner().getName() + " $" + stat.getRent(), 100, 450, 1.5f);
+                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + stat.getOwner().getName() + " $" + stat.getRent(stat.getOwner()) + " for landing on " + stat.getTileName(), 100, 450, 3);
                         }
                         else if(tile instanceof Utility) {
                             Utility util = (Utility) tile;
-                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + util.getOwner().getName() + " $" + util.getRent(), 100, 450, 1.5f);
+                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + util.getOwner().getName() + " $" + util.getRent(util.getOwner(), gameCon.getLastD1()+gameCon.getLastD2()) + " for landing on " + util.getTileName(), 100, 450, 3);
                         }
                     }
                     else {
