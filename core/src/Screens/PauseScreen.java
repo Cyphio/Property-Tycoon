@@ -52,11 +52,11 @@ public class PauseScreen implements Screen {
         stage.clear();
         stage.addActor(table);
 
-        Label musicVolumeLabel = new Label("Music Volume", pauseScreenSkin);
-        Label musicOnOffLabel = new Label("Music On/Off", pauseScreenSkin);
-        Label fxVolumeLabel = new Label("FX Volume", pauseScreenSkin);
-        Label fxOnOffLabel = new Label("FX On/Off", pauseScreenSkin);
-        Label fullscreenOnOffLabel = new Label("Fullscreen", pauseScreenSkin);
+        Label musicVolumeLabel = new Label("Music Volume", pauseScreenSkin, "title");
+        Label musicOnOffLabel = new Label("Music On/Off", pauseScreenSkin, "title");
+        Label fxVolumeLabel = new Label("FX Volume", pauseScreenSkin, "title");
+        Label fxOnOffLabel = new Label("FX On/Off", pauseScreenSkin, "title");
+        Label fullscreenOnOffLabel = new Label("Fullscreen", pauseScreenSkin, "title");
 
         final Slider musicVolumeSlider = new Slider(0f, 1f, 0.1f, false, pauseScreenSkin);
         musicVolumeSlider.setValue(game.getPreferences().getMusicVolume());
@@ -135,19 +135,19 @@ public class PauseScreen implements Screen {
 
         table.row().pad(10, 0, 0, 20);
         table.add(musicVolumeLabel).left();
-        table.add(musicVolumeSlider);
+        table.add(musicVolumeSlider).padLeft(10);
         table.row().pad(10, 0, 0, 20);
         table.add(musicOnOffLabel).left();
-        table.add(musicOnOff);
+        table.add(musicOnOff).padLeft(10);
         table.row().pad(10, 0, 0, 20);
         table.add(fxVolumeLabel).left();
-        table.add(fxVolumeSlider);
+        table.add(fxVolumeSlider).padLeft(10);
         table.row().pad(10, 0, 0, 20);
         table.add(fxOnOffLabel).left();
-        table.add(fxOnOff);
+        table.add(fxOnOff).padLeft(10);
         table.row().pad(10, 0, 0, 20);
         table.add(fullscreenOnOffLabel).left();
-        table.add(fullscreenOnOff);
+        table.add(fullscreenOnOff).padLeft(10);
         table.row().pad(10, 0, 0, 20);
         table.add(resume).colspan(2);
         table.row().pad(10, 0, 0, 20);

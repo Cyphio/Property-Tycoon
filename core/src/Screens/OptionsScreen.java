@@ -49,11 +49,11 @@ public class OptionsScreen implements Screen {
         stage.clear();
         stage.addActor(table);
 
-        Label musicVolumeLabel = new Label("Music Volume", optionsScreenSkin);
-        Label musicOnOffLabel = new Label("Music On/Off", optionsScreenSkin);
-        Label fxVolumeLabel = new Label("FX Volume", optionsScreenSkin);
-        Label fxOnOffLabel = new Label("FX On/Off", optionsScreenSkin);
-        Label fullscreenOnOffLabel = new Label("Fullscreen", optionsScreenSkin);
+        Label musicVolumeLabel = new Label("Music Volume", optionsScreenSkin, "title");
+        Label musicOnOffLabel = new Label("Music On/Off", optionsScreenSkin, "title");
+        Label fxVolumeLabel = new Label("FX Volume", optionsScreenSkin, "title");
+        Label fxOnOffLabel = new Label("FX On/Off", optionsScreenSkin, "title");
+        Label fullscreenOnOffLabel = new Label("Fullscreen", optionsScreenSkin, "title");
 
         final Slider musicVolumeSlider = new Slider(0f, 1f, 0.1f, false, optionsScreenSkin);
         musicVolumeSlider.setValue(game.getPreferences().getMusicVolume());
@@ -126,19 +126,19 @@ public class OptionsScreen implements Screen {
 
         table.row().pad(10, 0, 0, 20);
         table.add(musicVolumeLabel).left();
-        table.add(musicVolumeSlider);
+        table.add(musicVolumeSlider).padLeft(10);
         table.row().pad(10, 0, 0, 20);
         table.add(musicOnOffLabel).left();
-        table.add(musicOnOff);
+        table.add(musicOnOff).padLeft(10);
         table.row().pad(10, 0, 0, 20);
         table.add(fxVolumeLabel).left();
-        table.add(fxVolumeSlider);
+        table.add(fxVolumeSlider).padLeft(10);
         table.row().pad(10, 0, 0, 20);
         table.add(fxOnOffLabel).left();
-        table.add(fxOnOff);
+        table.add(fxOnOff).padLeft(10);
         table.row().pad(10, 0, 0, 20);
         table.add(fullscreenOnOffLabel).left();
-        table.add(fullscreenOnOff);
+        table.add(fullscreenOnOff).padLeft(10);
         table.row().pad(10, 0, 0, 20);
         table.add(back).colspan(2);
     }
