@@ -331,7 +331,7 @@ public class GameScreen implements Screen {
         } else if (tile instanceof Station) {
 
             clickedProperty = (Station) tile;
-            if (clickedProperty instanceof Station && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
+            if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
                 buyStationButton.setVisible(true);
                 auctionStationButton.setVisible(true);
             } else {
@@ -341,7 +341,7 @@ public class GameScreen implements Screen {
 
             if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
                 sellStationButton.setVisible(true);
-                if (((Property)clickedProperty).getMortgaged()) {
+                if (clickedProperty.getMortgaged()) {
                     mortgageStationButton.setText("Unmortgage");
                 } else {
                     mortgageStationButton.setText("Mortgage");
