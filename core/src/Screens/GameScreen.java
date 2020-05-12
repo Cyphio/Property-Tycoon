@@ -819,6 +819,7 @@ public class GameScreen implements Screen {
         bidButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                System.out.println(currBidder.getName());
                 if(!auctionBid.getText().equals("")){
                     if (Integer.parseInt(auctionBid.getText()) > gameCon.getAuctionValue() && currBidder.getMoney() >= Integer.parseInt(auctionBid.getText())) {
                         gameCon.setAuctionValue(Integer.parseInt(auctionBid.getText()));
@@ -846,6 +847,7 @@ public class GameScreen implements Screen {
                     }
                     if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
                         bidButton.setVisible(false);
+                        currBidderNameLabel.setText(currBidder.getName());
                         leaveButton.setText("Buy");
                     }
                 }
@@ -856,6 +858,7 @@ public class GameScreen implements Screen {
         leaveButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                int index = bidderList.indexOf(currBidder);
                 bidderList.remove(currBidder);
                 if (bidderList.size() == 0 && highestBidder == null) {
                     auctionPopUpWindow.setVisible(false);
@@ -873,8 +876,8 @@ public class GameScreen implements Screen {
                 }
 
                 if (bidderList.size() != 0) {
-                    if (bidderList.indexOf(currBidder) < bidderList.size() - 1) {
-                        currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
+                    if (index < bidderList.size()) {
+                        currBidder = bidderList.get(index);
                     } else {
                         currBidder = bidderList.get(0);
                     }
@@ -986,20 +989,26 @@ public class GameScreen implements Screen {
                 }
                 else if (rollDice.getText().toString().equals("End turn")) {
                     closeAllWindows();
-                    if(gameCon.getCurrentPlayer().getMoney() + gameCon.getCurrentPlayer().getTotalPropertyValue() <= 0) { //need to add a check to see if their cumulative property worth also results in < $0
-                        game.players.remove(gameCon.getCurrentPlayer());
-                        gameCon.getPlayerOrder().remove(0);
-                        if (game.players.size() == 1) {
-                            game.getPreferences().setAbridged(false);
-                            quickPopUpWindow("Congratulations to the winner " + gameCon.getCurrentPlayer().getName(), 200, 400, 5);
-                            Timer.schedule(new Timer.Task() {
-                                @Override
-                                public void run() {
-                                    game.setScreen(new MainMenu(game));
-                                }
-                            }, 5);
+
+                        while (gameCon.getCurrentPlayer().getMoney() < 0 && gameCon.getCurrentPlayer().getOwnables().size() > 0){
+                            System.out.println("Selling " + gameCon.getCurrentPlayer().getOwnables().get(0).getTileName());
+                            gameCon.getCurrentPlayer().getOwnables().get(0).sellProperty(gameCon.getCurrentPlayer(), gameCon.getCurrentPlayer().getOwnables().get(0).getCost());
                         }
-                    }
+                        if(gameCon.getCurrentPlayer().getMoney() < 0) {
+                            game.players.remove(gameCon.getCurrentPlayer());
+                            gameCon.getPlayerOrder().remove(0);
+                            if (game.players.size() == 1) {
+                                game.getPreferences().setAbridged(false);
+                                quickPopUpWindow("Congratulations to the winner " + gameCon.getCurrentPlayer().getName(), 200, 400, 5);
+                                Timer.schedule(new Timer.Task() {
+                                    @Override
+                                    public void run() {
+                                        game.setScreen(new MainMenu(game));
+                                    }
+                                }, 5);
+                            }
+                        }
+
                     gameCon.endTurn();
                     die1.setDrawable(null);
                     die2.setDrawable(null);
