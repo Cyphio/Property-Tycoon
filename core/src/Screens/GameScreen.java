@@ -29,6 +29,7 @@ import misc.Coordinate;
 import misc.RotatableLabel;
 import misc.ScrollableStage;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -102,11 +103,18 @@ public class GameScreen implements Screen {
 
     private ClickListener clickListener;
 
+    private float gameLength;
+    private float reverseTime;
+    private Label timerLabel;
+
     public GameScreen(PropertyTycoon game) {
         this.game = game;
         stage = new ScrollableStage(this);
 
         Gdx.input.setInputProcessor(stage);
+
+        gameLength = 0;
+        reverseTime = 0;
 
         gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
@@ -413,9 +421,6 @@ public class GameScreen implements Screen {
         }
 
     }
-
-
-
 
     private void closeAllWindows() {
         propertyPopUpWindow.setVisible(false);
@@ -932,6 +937,13 @@ public class GameScreen implements Screen {
 
         stage.addActor(gameInfoTable);
 
+        Table timerTable = new Table();
+        timerLabel = new Label("", gameScreenSkin, "title");
+        timerTable.add(timerLabel).width(380);
+        timerTable.setFillParent(true);
+        timerTable.right().padRight(10);
+        stage.addActor(timerTable);
+
         rollDice.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -972,6 +984,7 @@ public class GameScreen implements Screen {
                         game.players.remove(gameCon.getCurrentPlayer());
                         gameCon.getPlayerOrder().remove(0);
                         if (game.players.size() == 1) {
+                            game.getPreferences().setAbridged(false);
                             quickPopUpWindow("Congratulations to the winner " + gameCon.getCurrentPlayer().getName(), 200, 400, 5);
                             Timer.schedule(new Timer.Task() {
                                 @Override
@@ -1064,6 +1077,30 @@ public class GameScreen implements Screen {
                 }
             }
         });
+    }
+
+    private void congratsPopUpWindow(ArrayList<Player> players) {
+        Table congratsTable = new Table();
+        Label congratsLabel = new Label("Congratulations!", gameScreenSkin, "title");
+        congratsTable.add(congratsLabel);
+        congratsTable.row().pad(10, 0, 0, 0);
+        for(Player p : players) {
+            int value = 0;
+            for(Ownable o : p.getOwnables()) {
+                value += o.getCost();
+            }
+            value += p.getMoney();
+            congratsTable.add(new Label(p.getName() + " finished with $" + value, gameScreenSkin, "title"));
+
+            congratsTable.row().pad(10, 0, 0, 0);
+        }
+        Window congratsWindow = new Window("", gameScreenSkin);
+        congratsWindow.add(congratsTable);
+        float width = 600, height = 700;
+        congratsWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+        //congratsWindow.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
+        stage.addActor(congratsWindow);
+        congratsWindow.setVisible(true);
     }
 
     /**
@@ -1160,7 +1197,7 @@ public class GameScreen implements Screen {
 
         for(Player p: game.players){
 
-            ArrayList<Ownable> props = p.getProperties(); // gets all the players owned properties
+            ArrayList<Ownable> props = p.getOwnables(); // gets all the players owned properties
 
             for (Ownable property: props) {
 
@@ -1205,6 +1242,24 @@ public class GameScreen implements Screen {
             stage.addListener(clickListener);
         }
 
+
+        if(game.getPreferences().getAbridged()) {
+            gameLength += Gdx.graphics.getRawDeltaTime();
+            reverseTime = (game.getPreferences().getAbridgedLength()*60) - gameLength;
+            timerLabel.setText("Time left: " + LocalTime.MIN.plusSeconds(Math.round(reverseTime)).toString());
+            if(gameLength >= game.getPreferences().getAbridgedLength() * 60) {
+                game.getPreferences().setAbridged(false);
+                String names = "";
+                congratsPopUpWindow(gameCon.getRichestPlayers());
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new MainMenu(game));
+                    }
+                }, 5);
+            }
+        }
+
         updateBalances();
 
         tiledMapRenderer.setView(camera);
@@ -1239,7 +1294,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Called when OptionsScreen() should release all resources
+     * Called when GameScreen() should release all resources
      */
     @Override
     public void dispose() { stage.dispose(); }
@@ -1265,7 +1320,7 @@ public class GameScreen implements Screen {
     public void resume() {}
 
     /**
-     * Called when this OptionsScreen() is no longer the current screen for PropertyTycoon()
+     * Called when this GameScreen() is no longer the current screen for PropertyTycoon()
      */
     @Override
     public void hide() {}

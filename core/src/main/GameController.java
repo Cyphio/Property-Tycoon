@@ -7,7 +7,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import misc.CellToTileBuilder;
 import misc.Coordinate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
@@ -138,7 +139,7 @@ public class GameController{
     }
 
     public boolean developProperty(Property prop, Player player) {
-        if(player.getProperties().containsAll(board.getIdentityPropMap().get(prop.getColourAsString())) && prop.getOwner() == player) {
+        if(player.getOwnables().containsAll(board.getIdentityPropMap().get(prop.getColourAsString())) && prop.getOwner() == player) {
             prop.develop();
             board.checkForDevelopedProperties();
             return true;
@@ -161,9 +162,27 @@ public class GameController{
         return board.getDevelopedProperties();
     }
 
-public Coordinate freePlayerFromJail(Player player){
+    public Coordinate freePlayerFromJail(Player player){
         player.makePurchase(((Jail) board.getTile(10)).getBailPrice());
         player.setInJail(false);
         return board.getTile(10).getAvailableCoordinates();
+    }
+
+    // Would like to alter this to return a list of the players in order of their wealth
+    public ArrayList<Player> getRichestPlayers() {
+        ArrayList<Player> richest = new ArrayList<>();
+        int prevVal = 0;
+        for(Player p : playerOrders) {
+            int value = p.getWealth();
+            if(value > prevVal) {
+                richest.clear();
+                richest.add(p);
+                prevVal = value;
+            }
+            else if(value == prevVal) {
+                richest.add(p);
+            }
+        }
+        return richest;
     }
 }

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.ArrayList;
 
 public interface PlayerInterface {
-    ArrayList<Ownable> getProperties(); // return properties the player owns
+    ArrayList<Ownable> getOwnables(); // return properties the player owns
 
     void addProperty(Ownable property);
 
