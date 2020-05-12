@@ -398,14 +398,14 @@ public class GameScreen implements Screen {
 
         {
             closeAllWindows();
-            quickPopUpWindow("You paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
+            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
         }
         else if(tile instanceof FreeParking)
 
         {
             closeAllWindows();
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                quickPopUpWindow("You picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
+                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
             } else {
                 quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
             }
@@ -974,7 +974,23 @@ public class GameScreen implements Screen {
                     die1.setDrawable(getDiceImage(gameCon.getLastD1()));
                     die2.setDrawable(getDiceImage(gameCon.getLastD2()));
 
-                    openPopUpWindow(tile);
+                    if(tile instanceof Ownable && ((Ownable)tile).getOwned() && ((Ownable)tile).getOwner() != gameCon.getCurrentPlayer()) {
+                        if(tile instanceof Property) {
+                            Property prop = (Property) tile;
+                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + prop.getOwner().getName() + " $" + prop.getCurrentRent(), 100, 450, 1.5f);
+                        }
+                        else if(tile instanceof Station) {
+                            Station stat = (Station) tile;
+                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + stat.getOwner().getName() + " $" + stat.getRent(), 100, 450, 1.5f);
+                        }
+                        else if(tile instanceof Utility) {
+                            Utility util = (Utility) tile;
+                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + util.getOwner().getName() + " $" + util.getRent(), 100, 450, 1.5f);
+                        }
+                    }
+                    else {
+                        openPopUpWindow(tile);
+                    }
 
                     if(tile instanceof Property){
                         if(!((Property) tile).getOwned()) {
@@ -1287,7 +1303,6 @@ public class GameScreen implements Screen {
             stage.addListener(clickListener);
         }
 
-
         if(game.getPreferences().getAbridged()) {
             gameLength += Gdx.graphics.getRawDeltaTime();
             reverseTime = (game.getPreferences().getAbridgedLength()*60) - gameLength;
@@ -1310,8 +1325,8 @@ public class GameScreen implements Screen {
         tiledMapRenderer.render();
 
         spriteBatch.setProjectionMatrix(camera.combined);
-        spriteBatch.begin();
 
+        spriteBatch.begin();
 
         for (Sprite sprite: propertyHouseandHotelSprites) {
             sprite.draw(spriteBatch);
@@ -1330,8 +1345,6 @@ public class GameScreen implements Screen {
         }
 
         spriteBatch.end();
-
-
 
         labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         labelStage.draw();

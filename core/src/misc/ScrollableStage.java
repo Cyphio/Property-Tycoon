@@ -19,7 +19,7 @@ public class ScrollableStage extends Stage {
 
     @Override
     public boolean scrolled(int amount) {
-        if (amount == -1 && scrollCount > -5) {
+        if (amount == -1 && scrollCount > -7) {
             gs.getCam().zoom -= .2f;
             scrollCount--;
         }
