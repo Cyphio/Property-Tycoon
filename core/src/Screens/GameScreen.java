@@ -227,7 +227,6 @@ public class GameScreen implements Screen {
             if (t instanceof Property) {
 
                 ArrayList<Coordinate> coords = board.getTile(i).getAllCoordinates();
-                System.out.println(((Property) t).getColourAsString().toUpperCase());
 
                 switch (((Property) t).getColourAsString().toUpperCase()) {
                     case "BLUE":
@@ -561,14 +560,14 @@ public class GameScreen implements Screen {
                 if(((Property)clickedProperty).getMortgaged()){
                     ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
-                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
+                    updatePropertySprites();
                     closeAllWindows();
                 }
                 else {
                     clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                    gameCon.getCurrentPlayer().removeProperty(clickedProperty);
                     updatePropertyOwnerIcons();
+                    updatePropertySprites();
                     closeAllWindows();
                 }
             }
@@ -1061,9 +1060,7 @@ public class GameScreen implements Screen {
                 closeAllWindows();
                 Player p = gameCon.getCurrentPlayer();
                 p.makePurchase(50);
-                p.setInJail(false);
-                Coordinate visitingCoordinate = gameCon.freePlayerFromJail(p);
-                p.getPlayerToken().setPosition(visitingCoordinate.getX(), visitingCoordinate.getY());
+                gameCon.freePlayerFromJail(p);
             }
         });
 
@@ -1074,9 +1071,7 @@ public class GameScreen implements Screen {
                 if(p.hasGetOutOfJailFree()) {
                     closeAllWindows();
                     p.removeGetOutOfJailFreeCard();
-                    p.setInJail(false);
-                    Coordinate visitingCoordinate = gameCon.freePlayerFromJail(p);
-                    p.getPlayerToken().setPosition(visitingCoordinate.getX(), visitingCoordinate.getY());
+                    gameCon.freePlayerFromJail(p);
                 }
                 else {
                     quickPopUpWindow("You do not have a get out of jail free card!", 150, 300, 1);
@@ -1240,7 +1235,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        camera.update();
         if(propertyPopUpWindow.isVisible() || stationPopUpWindow.isVisible() || jailPopUpWindow.isVisible() || auctionPopUpWindow.isVisible()) {
             stage.removeListener(clickListener);
         }
@@ -1290,7 +1285,7 @@ public class GameScreen implements Screen {
 
         spriteBatch.end();
 
-        camera.update();
+
 
         labelStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         labelStage.draw();
