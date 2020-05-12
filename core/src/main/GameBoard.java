@@ -345,17 +345,20 @@ public class GameBoard implements GameBoardInterface {
 
         developedProperties.clear();
 
-        for (Tile tile : board){
 
+        for (Tile tile : board){
             if (tile instanceof Property) {
                  if (((Property) tile).getHousesOwned() > 0){
                      developedProperties.add((Property) tile);
                  }
             }
         }
+        System.out.println("developed properties:" + developedProperties);
     }
 
     public ArrayList<Property> getDevelopedProperties(){
+
+        checkForDevelopedProperties();
 
         return developedProperties;
 
