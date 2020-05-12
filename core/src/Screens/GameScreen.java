@@ -94,7 +94,7 @@ public class GameScreen implements Screen {
     private Texture fourHouseTexture;
     private Texture hotelTexture;
 
-    ArrayList<Sprite> propertySprites;
+    ArrayList<Sprite> propertyHouseandHotelSprites;
     private ArrayList<Sprite> ownedProperties;
 
     ArrayList<Sprite> propertyIcons;
@@ -154,7 +154,7 @@ public class GameScreen implements Screen {
         ownedProperties = new ArrayList<>();
         propertyIcons = new ArrayList<>();
 
-        propertySprites = new ArrayList<>();
+        propertyHouseandHotelSprites = new ArrayList<>();
         updatePropertySprites();
 
         float w = Gdx.graphics.getWidth();
@@ -1157,10 +1157,14 @@ public class GameScreen implements Screen {
 
     public void updatePropertySprites(){
         ArrayList<Property> developedProperties = gameCon.getDevelopedProperties();
-        propertySprites = new ArrayList<>();
+        propertyHouseandHotelSprites.clear();
         for (Property prop: developedProperties) {
-            Sprite sprite = new Sprite();
-            switch (prop.getHousesOwned()){
+            Sprite sprite;
+
+            switch (prop.getHousesOwned()) {
+                default:
+                    sprite = null;
+                    break;
                 case 1:
                     sprite = new Sprite(oneHouseTexture);
                     break;
@@ -1177,19 +1181,23 @@ public class GameScreen implements Screen {
                     sprite = new Sprite(hotelTexture);
                     break;
             }
-            sprite.setSize(192,64);
+
+            if (sprite != null) {
+            sprite.setSize(192, 64);
             sprite.setOriginCenter();
-            if (prop.getTilePos() < 11){
+            if (prop.getTilePos() < 11) {
                 sprite.rotate(-90);
-            }
-            else   if (prop.getTilePos() < 21){
+            } else if (prop.getTilePos() < 21) {
                 sprite.rotate(-180);
-            }
-            else   if (prop.getTilePos() <31){
+            } else if (prop.getTilePos() < 31) {
                 sprite.rotate(-270);
             }
-            sprite.setPosition(prop.getPropertySpriteCoordinate().getX()-192/2,prop.getPropertySpriteCoordinate().getY()-64/2);
-            propertySprites.add(sprite);
+            sprite.setPosition(prop.getPropertySpriteCoordinate().getX() - 192 / 2, prop.getPropertySpriteCoordinate().getY() - 64 / 2);
+            propertyHouseandHotelSprites.add(sprite);
+        }else{
+
+
+            }
         }
     }
 
@@ -1269,13 +1277,16 @@ public class GameScreen implements Screen {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
 
-        for (Sprite sprite: propertySprites) {
+
+        for (Sprite sprite: propertyHouseandHotelSprites) {
             sprite.draw(spriteBatch);
         }
 
         for (Sprite sprite: ownedProperties) {
             sprite.draw(spriteBatch);
         }
+
+
         for (Sprite sprite: propertyIcons){
             sprite.draw(spriteBatch);
         }
