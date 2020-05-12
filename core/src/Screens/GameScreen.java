@@ -546,7 +546,7 @@ public class GameScreen implements Screen {
                     }
                 }
                 else{
-                    quickPopUpWindow("You have not gone round the board yet!", 100, 300, 2);
+                    quickPopUpWindow("You have not gone around the board yet!", 100, 300, 2);
                 }
             }
         });
@@ -569,7 +569,7 @@ public class GameScreen implements Screen {
                     closeAllWindows();
                     auctionPopUpWindow.setVisible(true);
                 }
-                else{quickPopUpWindow("You have not gone round the board yet!", 100, 300, 2);
+                else{quickPopUpWindow("You have not gone around the board yet!", 100, 300, 2);
                 }
             }
         });
@@ -695,6 +695,9 @@ public class GameScreen implements Screen {
                         e.getMessage();
                     }
                 }
+                else{
+                    quickPopUpWindow("You have not gone around the board yet!", 100, 300, 2);
+                }
             }
         });
 
@@ -717,7 +720,7 @@ public class GameScreen implements Screen {
                     auctionPopUpWindow.setVisible(true);
                 }
                 else{
-                    quickPopUpWindow("You have not gone round the board yet!", 100, 300, 2);
+                    quickPopUpWindow("You have not gone around the board yet!", 100, 300, 2);
                 }
             }
         });
