@@ -23,14 +23,17 @@ public class Station extends GovProperties implements StationInterface {
 
     }
 
-    public int getRent(Player p){
-        int i = 0;
-        for(Ownable prop : p.getOwnables()){
-           if(prop instanceof Station){
-               i++;
-           }
+    public int getRent(){
+        if (this.owner != null) {
+            int i = 0;
+            for (Ownable prop : this.owner.getOwnables()) {
+                if (prop instanceof Station) {
+                    i++;
+                }
+            }
+            return currentRent * i;
         }
-        return currentRent*i;
+        return 0;
 
     }
 
