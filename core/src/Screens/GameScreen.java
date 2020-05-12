@@ -67,19 +67,19 @@ public class GameScreen implements Screen {
     private Label propHotelCostLabel;
     private ArrayList<Label> developmentPrices;
 
-    private Window stationPopUpWindow;
-    private TextButton buyStationButton;
-    private TextButton sellStationButton;
-    private TextButton mortgageStationButton;
-    private TextButton auctionStationButton;
-    private TextButton closeStationButton;
-    private Label stationNameLabel;
-    private Label stationOwnerLabel;
-    private Label stationCostLabel;
-
-    private Label stationInfoLabel;
-    private Label stationRentLabel;
-    private Label stationRentPriceLabel;
+    private Window servicePopUpWindow;
+    private TextButton buyServiceButton;
+    private TextButton sellServiceButton;
+    private TextButton mortgageServiceButton;
+    private TextButton auctionServiceButton;
+    private TextButton closeServiceButton;
+    private Label serviceNameLabel;
+    private Label serviceOwnerLabel;
+    private Label serviceCostLabel;
+    private Table serviceInfoBox2;
+    private Image serviceImg;
+    private float serviceImgWidth;
+    private float serviceImgHeight;
 
     private Window auctionPopUpWindow;
     private Player currBidder;
@@ -99,7 +99,7 @@ public class GameScreen implements Screen {
     private Texture fourHouseTexture;
     private Texture hotelTexture;
 
-    ArrayList<Sprite> propertyHouseandHotelSprites;
+    ArrayList<Sprite> propertyHouseAndHotelSprites;
     private ArrayList<Sprite> ownedProperties;
 
     ArrayList<Sprite> propertyIcons;
@@ -112,8 +112,6 @@ public class GameScreen implements Screen {
     private float gameLength;
     private float reverseTime;
     private Label timerLabel;
-    private Image trainImg;
-    private Image utilityImg;
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
@@ -123,6 +121,9 @@ public class GameScreen implements Screen {
 
         gameLength = 0;
         reverseTime = 0;
+        serviceImgWidth = 0;
+        serviceImgHeight = 0;
+        serviceInfoBox2 = new Table();
 
         gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
@@ -147,7 +148,7 @@ public class GameScreen implements Screen {
 
         // POP UP WINDOW SET UP
         propertyPopUpWindowSetUp();
-        stationPopUpWindowSetUp();
+        servicePopUpWindowSetUp();
         gameInfoTableSetUp();
         jailPopUpWindowSetUp();
         auctionPopUpWindowSetUp();
@@ -161,7 +162,7 @@ public class GameScreen implements Screen {
         ownedProperties = new ArrayList<>();
         propertyIcons = new ArrayList<>();
 
-        propertyHouseandHotelSprites = new ArrayList<>();
+        propertyHouseAndHotelSprites = new ArrayList<>();
         updatePropertyDevelopmentSprites();
 
         float w = Gdx.graphics.getWidth();
@@ -275,7 +276,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        //stage.setDebugAll(true);
+        stage.setDebugAll(true);
     }
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
@@ -335,93 +336,101 @@ public class GameScreen implements Screen {
 
             closeAllWindows();
             propertyPopUpWindow.setVisible(true);
-        } else if (tile instanceof GovProperties) {
-
+        }
+        else if (tile instanceof GovProperties) {
             if (tile instanceof Station) {
-                stationInfoLabel.setText("For every station a player owns they will get $50 when a player lands on any of their station.");
-                stationRentLabel.setText("Current rent for this property: ");
-                stationRentPriceLabel.setText(((Station) tile).getRent());
-                trainImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
-            }else if (tile instanceof Utility){
-                stationInfoLabel.setWrap(true);
-                stationInfoLabel.setText("Rent when 1 utility owned by a player: 4 times dice value.");
-                stationRentLabel.setText("Rent when more than 1 utility owned by a player: 10 times dice value.");
-                stationRentPriceLabel.setText(((Utility) tile).getRent(gameCon.getLastD1()+gameCon.getLastD2()));
-                trainImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("utilityImage.png")))));
+                serviceInfoBox2.clear();
+                serviceInfoBox2.add(new Label("Rent with one station owned:", gameScreenSkin)).left().width(350);
+                serviceInfoBox2.add(new Label("$50", gameScreenSkin)).right();
+                serviceInfoBox2.row().pad(20, 0, 0, 0);
+                serviceInfoBox2.add(new Label("Rent with two stations owned:", gameScreenSkin)).left();
+                serviceInfoBox2.add(new Label("$100", gameScreenSkin)).right();
+                serviceInfoBox2.row().pad(20, 0, 0, 0);
+                serviceInfoBox2.add(new Label("Rent with three stations owned:", gameScreenSkin)).left();
+                serviceInfoBox2.add(new Label("$150", gameScreenSkin)).right();
+                serviceInfoBox2.row().pad(20, 0, 0, 0);
+                serviceInfoBox2.add(new Label("Rent with four stations owned:", gameScreenSkin)).left();
+                serviceInfoBox2.add(new Label("$200", gameScreenSkin)).right();
+                serviceInfoBox2.row().pad(20, 0, 0, 0);
+                serviceImgWidth = 392.92f;
+                serviceImgHeight = 100;
+                serviceImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
+                servicePopUpWindowSetUp();
+            }
+            else if (tile instanceof Utility){
+                serviceInfoBox2.clear();
+                serviceInfoBox2.add(new Label("Rent with 1 utility owned:", gameScreenSkin)).left().width(270);
+                serviceInfoBox2.add(new Label("4 times dice value", gameScreenSkin)).right();
+                serviceInfoBox2.row().pad(20, 0, 0, 0);
+                serviceInfoBox2.add(new Label("Rent with > 1 utility owned:", gameScreenSkin)).left();
+                serviceInfoBox2.add(new Label("10 times dice value", gameScreenSkin)).right();
+                serviceInfoBox2.row().pad(20, 0, 0, 0);
+                serviceImgWidth = 100;
+                serviceImgHeight = 100;
+                serviceImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("utilityImage.png")))));
+                servicePopUpWindowSetUp();
             }
 
             clickedProperty = (GovProperties) tile;
             if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
-                buyStationButton.setVisible(true);
-                auctionStationButton.setVisible(true);
-            } else {
-                buyStationButton.setVisible(false);
-                auctionStationButton.setVisible(false);
+                buyServiceButton.setVisible(true);
+                auctionServiceButton.setVisible(true);
+            }
+            else {
+                buyServiceButton.setVisible(false);
+                auctionServiceButton.setVisible(false);
             }
 
             if (clickedProperty.getOwner() == gameCon.getCurrentPlayer()) {
-                sellStationButton.setVisible(true);
+                sellServiceButton.setVisible(true);
                 if (clickedProperty.getMortgaged()) {
-                    mortgageStationButton.setText("Unmortgage");
-                } else {
-                    mortgageStationButton.setText("Mortgage");
+                    mortgageServiceButton.setText("Unmortgage");
                 }
-                mortgageStationButton.setVisible(true);
-            } else {
-                sellStationButton.setVisible(false);
-                mortgageStationButton.setVisible(false);
+                else {
+                    mortgageServiceButton.setText("Mortgage");
+                }
+                mortgageServiceButton.setVisible(true);
+            }
+            else {
+                sellServiceButton.setVisible(false);
+                mortgageServiceButton.setVisible(false);
             }
 
             if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                closeStationButton.setVisible(false);
-            } else {
-                closeStationButton.setVisible(true);
+                closeServiceButton.setVisible(false);
+            }
+            else {
+                closeServiceButton.setVisible(true);
             }
 
             if (clickedProperty.getOwned()) {
-                closeStationButton.setVisible(true);
+                closeServiceButton.setVisible(true);
             }
 
-            stationNameLabel.setText(clickedProperty.getTileName());
-            stationOwnerLabel.setText(clickedProperty.getOwnerName());
-            stationCostLabel.setText("$" + clickedProperty.getCost());
+            serviceNameLabel.setText(clickedProperty.getTileName());
+            serviceOwnerLabel.setText(clickedProperty.getOwnerName());
+            serviceCostLabel.setText("$" + clickedProperty.getCost());
 
             closeAllWindows();
-            stationPopUpWindow.setVisible(true);
+            servicePopUpWindow.setVisible(true);
         }
-
-
-        else if(tile instanceof Jail &&gameCon.getCurrentPlayer().
-
-                getIsInJail())
-
-        {
+        else if(tile instanceof Jail &&gameCon.getCurrentPlayer().getIsInJail()) {
             closeAllWindows();
             jailPopUpWindow.setVisible(true);
         }
-        else if(tile instanceof OpportunityKnocks)
-
-        {
+        else if(tile instanceof OpportunityKnocks) {
             closeAllWindows();
             quickPopUpWindow("Opportunity knocks", 100, 200, 1);
         }
-        else if(tile instanceof PotLuck)
-
-        {
+        else if(tile instanceof PotLuck) {
             closeAllWindows();
             quickPopUpWindow("Pot luck", 100, 200, 1);
         }
-        else if(tile instanceof Tax &&tile.getPlayers().
-
-                contains(gameCon.getCurrentPlayer()))
-
-        {
+        else if(tile instanceof Tax &&tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
             closeAllWindows();
             quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
         }
-        else if(tile instanceof FreeParking)
-
-        {
+        else if(tile instanceof FreeParking) {
             closeAllWindows();
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
                 quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
@@ -429,18 +438,15 @@ public class GameScreen implements Screen {
                 quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
             }
         }
-        else if(tile instanceof GoToJail)
-
-        {
+        else if(tile instanceof GoToJail) {
             closeAllWindows();
             quickPopUpWindow("Go to jail", 100, 200, 1);
         }
-
     }
 
     private void closeAllWindows() {
         propertyPopUpWindow.setVisible(false);
-        stationPopUpWindow.setVisible(false);
+        servicePopUpWindow.setVisible(false);
         auctionPopUpWindow.setVisible(false);
         jailPopUpWindow.setVisible(false);
     }
@@ -622,71 +628,56 @@ public class GameScreen implements Screen {
         });
     }
 
-    private void stationPopUpWindowSetUp() {
-        buyStationButton = new TextButton("Buy", gameScreenSkin);
-        sellStationButton = new TextButton("Sell", gameScreenSkin);
+    private void servicePopUpWindowSetUp() {
+        buyServiceButton = new TextButton("Buy", gameScreenSkin);
+        sellServiceButton = new TextButton("Sell", gameScreenSkin);
 
-        mortgageStationButton = new TextButton("Mortgage", gameScreenSkin);
-        auctionStationButton = new TextButton("Auction", gameScreenSkin);
+        mortgageServiceButton = new TextButton("Mortgage", gameScreenSkin);
+        auctionServiceButton = new TextButton("Auction", gameScreenSkin);
 
-        closeStationButton = new TextButton("Close", gameScreenSkin);
+        closeServiceButton = new TextButton("Close", gameScreenSkin);
 
-        Table stationInfoBox = new Table();
+        Table serviceInfoBox = new Table();
 
-        stationNameLabel = new Label("", gameScreenSkin, "big");
-        stationNameLabel.setAlignment(Align.center);
-        stationOwnerLabel = new Label("", gameScreenSkin);
-        stationCostLabel = new Label("",gameScreenSkin);
+        serviceNameLabel = new Label("", gameScreenSkin, "big");
+        serviceNameLabel.setAlignment(Align.center);
+        serviceOwnerLabel = new Label("", gameScreenSkin);
+        serviceCostLabel = new Label("",gameScreenSkin);
 
-        stationInfoBox.add(stationNameLabel).colspan(2).width(350);
-        stationInfoBox.row().pad(10, 0, 0, 0);
-        stationInfoBox.add(new Label("Owner:", gameScreenSkin)).left();
-        stationInfoBox.add(stationOwnerLabel).right();
-        stationInfoBox.row().pad(5, 0, 0, 0);
-        stationInfoBox.add(new Label("Cost:", gameScreenSkin)).left();
-        stationInfoBox.add(stationCostLabel).right();
+        serviceInfoBox.add(serviceNameLabel).colspan(2).width(350);
+        serviceInfoBox.row().pad(10, 0, 0, 0);
+        serviceInfoBox.add(new Label("Owner:", gameScreenSkin)).left();
+        serviceInfoBox.add(serviceOwnerLabel).right();
+        serviceInfoBox.row().pad(5, 0, 0, 0);
+        serviceInfoBox.add(new Label("Cost:", gameScreenSkin)).left();
+        serviceInfoBox.add(serviceCostLabel).right();
 
-        trainImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
+        serviceImg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
 
+        servicePopUpWindow = new Window("", gameScreenSkin);
 
-        stationInfoLabel = new Label("Rent with two stations owned:", gameScreenSkin);
-        stationRentLabel = new Label("Rent with two stations owned:", gameScreenSkin);
-        stationRentPriceLabel = new Label("Rent with two stations owned:", gameScreenSkin);
-
-        Table stationInfoBox2 = new Table();
-
-        stationInfoBox2.add(stationInfoLabel).left().width(425);
-        stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.add(stationRentLabel).left().width(350);
-        stationInfoBox2.add(stationRentPriceLabel).right();
-        stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.row().pad(20, 0, 0, 0);
-        stationInfoBox2.row().pad(20, 0, 0, 0);
-
-        stationPopUpWindow = new Window("", gameScreenSkin);
-
-        stationPopUpWindow.add(stationInfoBox).colspan(2).expand().fill();
-        stationPopUpWindow.row().pad(30, 0, 0, 0);
-        stationPopUpWindow.add(trainImg).colspan(2).width(392.92f).height(100);
-        stationPopUpWindow.row().pad(50, 0, 0, 0);
-        stationPopUpWindow.add(stationInfoBox2).colspan(2);
-        stationPopUpWindow.row().pad(20, 0, 0, 0);
-        stationPopUpWindow.add(buyStationButton).left();
-        stationPopUpWindow.add(auctionStationButton).right();
-        stationPopUpWindow.row().pad(10, 0, 0, 0);
-        stationPopUpWindow.add(sellStationButton).left().width(120);
-        stationPopUpWindow.add(mortgageStationButton).right().width(230);
-        stationPopUpWindow.row().pad(10, 0, 0, 0);
-        stationPopUpWindow.add(closeStationButton).colspan(2);
-        stationPopUpWindow.pack();
+        servicePopUpWindow.add(serviceInfoBox).colspan(2).expand().fill();
+        servicePopUpWindow.row().pad(30, 0, 0, 0);
+        servicePopUpWindow.add(serviceImg).colspan(2).width(serviceImgWidth).height(serviceImgHeight);
+        servicePopUpWindow.row().pad(50, 0, 0, 0);
+        servicePopUpWindow.add(serviceInfoBox2).colspan(2);
+        servicePopUpWindow.row().pad(20, 0, 0, 0);
+        servicePopUpWindow.add(buyServiceButton).left();
+        servicePopUpWindow.add(auctionServiceButton).right();
+        servicePopUpWindow.row().pad(10, 0, 0, 0);
+        servicePopUpWindow.add(sellServiceButton).left().width(120);
+        servicePopUpWindow.add(mortgageServiceButton).right().width(230);
+        servicePopUpWindow.row().pad(10, 0, 0, 0);
+        servicePopUpWindow.add(closeServiceButton).colspan(2);
+        servicePopUpWindow.pack();
 
         float width = 425, height = 600;
-        stationPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
-        stationPopUpWindow.setVisible(false);
+        servicePopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+        servicePopUpWindow.setVisible(false);
 
-        stage.addActor(stationPopUpWindow);
+        stage.addActor(servicePopUpWindow);
 
-        buyStationButton.addListener(new ClickListener() {
+        buyServiceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 try {
@@ -708,7 +699,7 @@ public class GameScreen implements Screen {
             }
         });
 
-        auctionStationButton.addListener(new ClickListener() {
+        auctionServiceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
@@ -727,7 +718,7 @@ public class GameScreen implements Screen {
             }
         });
 
-        sellStationButton.addListener(new ClickListener() {
+        sellServiceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if((clickedProperty).getMortgaged()){
@@ -744,24 +735,24 @@ public class GameScreen implements Screen {
             }
         });
 
-        mortgageStationButton.addListener(new ClickListener() {
+        mortgageServiceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(mortgageStationButton.getText().toString().equals("Mortgage")) {
+                if(mortgageServiceButton.getText().toString().equals("Mortgage")) {
                     (clickedProperty).setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                    mortgageStationButton.setText("Unmortgage");
+                    mortgageServiceButton.setText("Unmortgage");
                 }
                 else{
                     (clickedProperty).unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
-                    mortgageStationButton.setText("Mortgage");
+                    mortgageServiceButton.setText("Mortgage");
                 }
             }
         });
 
-        closeStationButton.addListener(new ClickListener() {
+        closeServiceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stationPopUpWindow.setVisible(false);
+                servicePopUpWindow.setVisible(false);
             }
         });
     }
@@ -1222,7 +1213,7 @@ public class GameScreen implements Screen {
 
     public void updatePropertyDevelopmentSprites(){
         ArrayList<Property> developedProperties = gameCon.getDevelopedProperties();
-        propertyHouseandHotelSprites.clear();
+        propertyHouseAndHotelSprites.clear();
         for (Property prop: developedProperties) {
             Sprite sprite;
 
@@ -1258,7 +1249,7 @@ public class GameScreen implements Screen {
                 sprite.rotate(-270);
             }
             sprite.setPosition(prop.getPropertySpriteCoordinate().getX() - 192 / 2, prop.getPropertySpriteCoordinate().getY() - 64 / 2);
-            propertyHouseandHotelSprites.add(sprite);
+            propertyHouseAndHotelSprites.add(sprite);
         }else{
 
 
@@ -1309,7 +1300,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-        if(propertyPopUpWindow.isVisible() || stationPopUpWindow.isVisible() || jailPopUpWindow.isVisible() || auctionPopUpWindow.isVisible()) {
+        if(propertyPopUpWindow.isVisible() || servicePopUpWindow.isVisible() || jailPopUpWindow.isVisible() || auctionPopUpWindow.isVisible()) {
             stage.removeListener(clickListener);
         }
         else {
@@ -1341,7 +1332,7 @@ public class GameScreen implements Screen {
 
         spriteBatch.begin();
 
-        for (Sprite sprite: propertyHouseandHotelSprites) {
+        for (Sprite sprite: propertyHouseAndHotelSprites) {
             sprite.draw(spriteBatch);
         }
 
