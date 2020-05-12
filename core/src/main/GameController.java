@@ -184,4 +184,34 @@ public class GameController{
         }
         return richest;
     }
+
+    // Quick sort algorithm
+    public ArrayList<Player> getFinalStandings(ArrayList<Player> players, int start, int end) {
+        if(start < end) {
+            int partitionPoint = partition(players, start, end);
+            getFinalStandings(players, start, partitionPoint - 1);
+            getFinalStandings(players, partitionPoint + 1, end);
+        }
+        return players;
+    }
+
+    public int partition(ArrayList<Player> players, int start, int end) {
+            int pivot = players.get(end).getWealth();
+            int i = start - 1;
+            for(int j=start; j<end; j++) {
+                if(players.get(j).getWealth() < pivot) {
+                    i++;
+                    Player tempI = players.get(i);
+                    Player tempJ = players.get(j);
+                    players.set(i, tempJ);
+                    players.set(j, tempI);
+                }
+            }
+            Player tempIplus1 = players.get(i+1);
+            Player tempEnd = players.get(end);
+            players.set(i+1, tempEnd);
+            players.set(end, tempIplus1);
+
+            return i+1;
+    }
 }

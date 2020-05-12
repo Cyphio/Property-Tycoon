@@ -31,6 +31,7 @@ import misc.ScrollableStage;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 public class GameScreen implements Screen {
@@ -839,6 +840,7 @@ public class GameScreen implements Screen {
                     }
                     if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
                         bidButton.setVisible(false);
+                        currBidderNameLabel.setText(currBidder.getName());
                         leaveButton.setText("Buy");
                     }
                 }
@@ -849,6 +851,7 @@ public class GameScreen implements Screen {
         leaveButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                int index = bidderList.indexOf(currBidder);
                 bidderList.remove(currBidder);
                 if (bidderList.size() == 0 && highestBidder == null) {
                     auctionPopUpWindow.setVisible(false);
@@ -866,8 +869,8 @@ public class GameScreen implements Screen {
                 }
 
                 if (bidderList.size() != 0) {
-                    if (bidderList.indexOf(currBidder) < bidderList.size() - 1) {
-                        currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
+                    if (index < bidderList.size()) {
+                        currBidder = bidderList.get(index);
                     } else {
                         currBidder = bidderList.get(0);
                     }
@@ -979,18 +982,37 @@ public class GameScreen implements Screen {
                 }
                 else if (rollDice.getText().toString().equals("End turn")) {
                     closeAllWindows();
+                        while (gameCon.getCurrentPlayer().getMoney() < 0 && gameCon.getCurrentPlayer().getOwnables().size() > 0){
+                            gameCon.getCurrentPlayer().getOwnables().get(0).sellProperty(gameCon.getCurrentPlayer(), gameCon.getCurrentPlayer().getOwnables().get(0).getCost());
+                        }
+                        updatePropertyOwnerIcons();
+                        if(gameCon.getCurrentPlayer().getMoney() < 0) {
+                            game.players.remove(gameCon.getCurrentPlayer());
+                            gameCon.getPlayerOrder().remove(0);
+                            if (game.players.size() == 1) {
+                                game.getPreferences().setAbridged(false);
+                                congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size()-1));
+                                Timer.schedule(new Timer.Task() {
+                                    @Override
+                                    public void run() {
+                                        game.setScreen(new MainMenu(game));
+                                    }
+                                }, 7.5f);
+                            }
+                        }
+
                     if(gameCon.getCurrentPlayer().getMoney() + gameCon.getCurrentPlayer().getTotalPropertyValue() <= 0) { //need to add a check to see if their cumulative property worth also results in < $0
                         game.players.remove(gameCon.getCurrentPlayer());
                         gameCon.getPlayerOrder().remove(0);
                         if (game.players.size() == 1) {
                             game.getPreferences().setAbridged(false);
-                            quickPopUpWindow("Congratulations to the winner " + gameCon.getCurrentPlayer().getName(), 200, 400, 5);
+                            congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size()-1));
                             Timer.schedule(new Timer.Task() {
                                 @Override
                                 public void run() {
                                     game.setScreen(new MainMenu(game));
                                 }
-                            }, 5);
+                            }, 7.5f);
                         }
                     }
                     gameCon.endTurn();
@@ -1075,23 +1097,37 @@ public class GameScreen implements Screen {
     }
 
     private void congratsPopUpWindow(ArrayList<Player> players) {
+        Collections.reverse(players);
         Table congratsTable = new Table();
         Label congratsLabel = new Label("Congratulations!", gameScreenSkin, "title");
         congratsTable.add(congratsLabel);
         congratsTable.row().pad(10, 0, 0, 0);
-        for(Player p : players) {
+        for(int i=0; i<players.size(); i++) {
+            Player p = players.get(i);
             int value = 0;
             for(Ownable o : p.getOwnables()) {
                 value += o.getCost();
             }
             value += p.getMoney();
-            congratsTable.add(new Label(p.getName() + " finished with $" + value, gameScreenSkin, "title"));
-
-            congratsTable.row().pad(10, 0, 0, 0);
+            if(i == 0) {
+                Table winnerTable = new Table();
+                winnerTable.add(new Label("", gameScreenSkin)).width(625);
+                winnerTable.row();
+                winnerTable.add(new Label("First place goes to " + p.getName(), gameScreenSkin, "title"));
+                winnerTable.row();
+                winnerTable.add(new Label("Total wealth: $" + value, gameScreenSkin, "title"));
+                winnerTable.setBackground(getColouredBackground(Color.GOLD));
+                congratsTable.add(winnerTable);
+                congratsTable.row().pad(20, 0, 0, 0);
+            }
+            else {
+                congratsTable.add(new Label(i + 1 + ". " + p.getName() + " finished with $" + value, gameScreenSkin, "title"));
+                congratsTable.row().pad(10, 0, 0, 0);
+            }
         }
         Window congratsWindow = new Window("", gameScreenSkin);
         congratsWindow.add(congratsTable);
-        float width = 600, height = 700;
+        float width = 650, height = 700;
         congratsWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         //congratsWindow.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
         stage.addActor(congratsWindow);
@@ -1252,14 +1288,13 @@ public class GameScreen implements Screen {
             timerLabel.setText("Time left: " + LocalTime.MIN.plusSeconds(Math.round(reverseTime)).toString());
             if(gameLength >= game.getPreferences().getAbridgedLength() * 60) {
                 game.getPreferences().setAbridged(false);
-                String names = "";
-                congratsPopUpWindow(gameCon.getRichestPlayers());
+                congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size()-1));
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
                         game.setScreen(new MainMenu(game));
                     }
-                }, 5);
+                }, 7.5f);
             }
         }
 

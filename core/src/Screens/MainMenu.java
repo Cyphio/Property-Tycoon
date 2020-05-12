@@ -32,7 +32,7 @@ public class MainMenu implements Screen {
     public MainMenu(PropertyTycoon game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
-        this.mainMenuTexture = new Texture(Gdx.files.internal("mainMenuTexture.png"));
+        this.mainMenuTexture = new Texture(Gdx.files.internal("backgrounds/mainMenuTexture.png"));
         this.mainMenuSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
     }
 
