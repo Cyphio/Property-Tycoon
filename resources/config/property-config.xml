@@ -6,7 +6,6 @@
 <config>
     <tile>
         <type>go</type>
-        <payout>200</payout>
     </tile>
     <tile>
         <name>Crapper Street</name>
