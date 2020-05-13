@@ -1,0 +1,243 @@
+<?xml version="1.0"?>
+
+<!--GAME TILES-->
+<!--DO NOT EDIT: COLOUR OR TYPE-->
+
+<config>
+    <tile>
+        <type>go</type>
+        <payout>200</payout>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>jail</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>parking</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>opportunityknocks</type>
+    </tile>
+    <tile>
+        <type>gotojail</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
+        <type>potluck</type>
+    </tile>
+
+    <!--POT LUCK CARDS-->
+    <potluckcard>
+        <action>You inherit</action>
+        <value>100</value>
+    </potluckcard>
+    <potluckcard>
+        <action>You have won 2nd prize in a beauty contest, collect</action>
+        <value>20</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Student loan refund. Collect</action>
+        <value>20</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Go back to</action>
+        <value>1</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Bank error in your favour. Collect</action>
+        <value>200</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Pay bill for text books of</action>
+        <value>100</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Mega late night taxi bill pay</action>
+        <value>50</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Advance to Go</action>
+    </potluckcard>
+    <potluckcard>
+        <action>From sale of Bitcoin you get</action>
+        <value>50</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Take opportunity knocks card or pay a fine of</action>
+        <value>10</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Pay insurance fee of</action>
+        <value>50</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Savings bond matures, collect</action>
+        <value>50</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Go to jail. Do not pass Go</action>
+    </potluckcard>
+    <potluckcard>
+        <action>Received interest on shares of</action>
+        <value>25</value>
+    </potluckcard>
+    <potluckcard>
+        <action>It's your birthday. Each player pays you</action>
+        <value>10</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Get out of jail free</action>
+    </potluckcard>
+
+    <!--OPPORTUNITY KNOCKS CARDS-->
+    <opportunityknockscard>
+        <action>Bank pays you dividend of</action>
+        <value>50</value>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>You have won a lip sync battle. Collect</action>
+        <value>100</value>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>Advance to</action>
+        <value>39</value>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>Advance to</action>
+        <value>24</value>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>Fined for speeding for</action>
+        <value>15</value>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>Pay university fees of</action>
+        <value>150</value>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>Loan matures, collect</action>
+        <value>150</value>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>Advance to Go</action>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>You are assessed for repairs, $40/house, $115/hotel</action>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>You are assessed for repairs, $25/house, $100/hotel</action>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>Go back 3 spaces</action>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>Go to jail. Do not pass Go</action>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>Drunk in charge of a skateboard. Fine</action>
+        <value>20</value>
+    </opportunityknockscard>
+    <opportunityknockscard>
+        <action>Get out of jail free</action>
+    </opportunityknockscard>
+</config>

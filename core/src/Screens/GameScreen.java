@@ -423,10 +423,10 @@ public class GameScreen implements Screen {
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
                 Card card = gameCon.getBoard().getLastCardPulled();
                 if(card.getAction().equals("Advance to")) {
-                    quickPopUpWindow(card.getAction() + " " + gameCon.getBoard().getTile(card.getValue()).getTileName(), 200, 300, 2.5f);
+                    quickPopUpWindow(card.getAction() + " " + gameCon.getBoard().getTile(card.getValue()).getTileName(), 200, 300, 2);
                 }
                 else {
-                    quickPopUpWindow(card.getCardMessage(), 200, 300, 2.5f);
+                    quickPopUpWindow(card.getCardMessage(), 200, 300, 2);
                 }
             }
         }
@@ -435,32 +435,32 @@ public class GameScreen implements Screen {
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
                 Card card = gameCon.getBoard().getLastCardPulled();
                 if(card.getAction().equals("Go back to")) {
-                    quickPopUpWindow(card.getAction() + " " + gameCon.getBoard().getTile(card.getValue()).getTileName(), 200, 300, 2.5f);
+                    quickPopUpWindow(card.getAction() + " " + gameCon.getBoard().getTile(card.getValue()).getTileName(), 200, 300, 2);
                 }
                 else if(card.getAction().equals("Take opportunity knocks card or pay a fine of")) {
                     choiceWindow(card);
                 }
                 else {
-                    quickPopUpWindow(card.getCardMessage(), 200, 300, 2.5f);
+                    quickPopUpWindow(card.getCardMessage(), 200, 300, 2);
                 }
             }
         }
         else if(tile instanceof Tax &&tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
             closeAllWindows();
-            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2.5f);
+            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
         }
         else if(tile instanceof FreeParking) {
             closeAllWindows();
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2.5f);
+                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
                 ((FreeParking) gameCon.getBoard().getTile(20)).reset();
             } else {
-                quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 2.5f);
+                quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 2);
             }
         }
         else if(tile instanceof GoToJail) {
             closeAllWindows();
-            quickPopUpWindow("Go to jail", 100, 200, 2.5f);
+            quickPopUpWindow("Go to jail", 100, 200, 2);
         }
     }
 
@@ -1116,8 +1116,10 @@ public class GameScreen implements Screen {
         jailPopUpTable.add(jailInfoLabel).width(width-50);
         jailPopUpTable.row().pad(10, 0, 0, 0);
         jailPopUpTable.add(buyOutOfJailButton);
-        jailPopUpTable.row().pad(10, 0, 0, 0);
-        jailPopUpTable.add(useJailFreeButton);
+        if(gameCon.getCurrentPlayer().hasGetOutOfJailFree()) {
+            jailPopUpTable.row().pad(10, 0, 0, 0);
+            jailPopUpTable.add(useJailFreeButton);
+        }
         jailPopUpTable.pack();
 
         jailPopUpTable.setBackground(getColouredBackground(Color.PINK));
@@ -1146,14 +1148,9 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Player p = gameCon.getCurrentPlayer();
-                if(p.hasGetOutOfJailFree()) {
-                    closeAllWindows();
-                    p.removeGetOutOfJailFreeCard();
-                    gameCon.freePlayerFromJail(p);
-                }
-                else {
-                    quickPopUpWindow("You do not have a get out of jail free card!", 150, 300, 1);
-                }
+                closeAllWindows();
+                p.removeGetOutOfJailFreeCard();
+                gameCon.freePlayerFromJail(p);
             }
         });
     }
@@ -1289,7 +1286,7 @@ public class GameScreen implements Screen {
                         gameCon.getBoard().drawOpportunityKnocksCard();
                         quickPopUpWindow.setVisible(false);
                         closeAllWindows();
-                        quickPopUpWindow(gameCon.getBoard().getLastCardPulled().getCardMessage(),200,300,2.5f);
+                        quickPopUpWindow(gameCon.getBoard().getLastCardPulled().getCardMessage(),200,300,2);
                     } catch (Exception e) {
                         e.getMessage();
                     }
