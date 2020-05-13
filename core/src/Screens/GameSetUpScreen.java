@@ -12,11 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
+import main.Bot;
 import main.Player;
 
 import java.util.ArrayList;
@@ -134,11 +136,17 @@ public class GameSetUpScreen implements Screen {
         String[] valueList = new String[]{"boot", "smartphone", "goblet", "hat", "cat", "spoon"};
 
         token1SB.setItems(valueList);
+        token1SB.setAlignment(Align.center);
         token2SB.setItems(valueList);
+        token2SB.setAlignment(Align.center);
         token3SB.setItems(valueList);
+        token3SB.setAlignment(Align.center);
         token4SB.setItems(valueList);
+        token4SB.setAlignment(Align.center);
         token5SB.setItems(valueList);
+        token5SB.setAlignment(Align.center);
         token6SB.setItems(valueList);
+        token6SB.setAlignment(Align.center);
 
         tokenImageList = new Image[]{token1Image, token2Image, token3Image, token4Image, token5Image, token6Image};
         tokenSBList = new SelectBox[]{token1SB, token2SB, token3SB, token4SB, token5SB, token6SB};
@@ -162,7 +170,7 @@ public class GameSetUpScreen implements Screen {
         numPlayersBox.setItems(new Integer[]{2, 3, 4, 5, 6});
         numPlayersTable.row().fill().expandX();
         numPlayersTable.add(numPlayers).width(cw/3);
-        numPlayersTable.add(numPlayersBox).width(cw/3).padLeft(160);
+        numPlayersTable.add(numPlayersBox).width(cw/3).padLeft(170);
 
         startFullGame = new TextButton("Start full game", gameSetUpScreenSkin);
         startAbridgedGame = new TextButton("Start abridged game", gameSetUpScreenSkin);
@@ -182,6 +190,8 @@ public class GameSetUpScreen implements Screen {
         });
 
         table.add(numPlayersTable).colspan(3);
+        table.row().pad(20, 0, 0, 0);
+        table.add(new Label("Name a player 'bot' to make it a CPU", gameSetUpScreenSkin, "title")).colspan(3);
         table.row().pad(20, 0, 0, 0);
         table.add(player1Field).expandX().fillX();
         table.add(token1SB).expandX().fillX().padLeft(10);
@@ -303,15 +313,7 @@ public class GameSetUpScreen implements Screen {
                         isEmpty = true;
                     }
                 }
-                if(!isEmpty) {
-                    game.players = null;
-                    game.players = new ArrayList<>();
-                    for (int i = 0; i < numPlayersBox.getSelected(); i++) {
-                        game.players.add(new Player(playerNamesList.get(i).getText(), spriteList.get(i)));
-                    }
-                    game.changeScreen(game.GAME);
-                }
-                else {
+                if(isEmpty) {
                     final Window window = new Window("", gameSetUpScreenSkin);
                     final Label label = new Label("Name field left empty", gameSetUpScreenSkin, "big");
                     window.add(label);
@@ -323,7 +325,34 @@ public class GameSetUpScreen implements Screen {
                         public void run() {
                             window.setVisible(false);
                         }
-                    }, 0.5f);
+                    }, 1);
+                }
+                else if(playerNamesList.get(0).getText().toLowerCase().equals("bot")) {
+                    final Window window = new Window("", gameSetUpScreenSkin);
+                    final Label label = new Label("First player cannot be a bot", gameSetUpScreenSkin, "big");
+                    window.add(label);
+                    window.setBounds((Gdx.graphics.getWidth() - 400) / 2, (Gdx.graphics.getHeight() - 100) / 2, 500, 100);
+                    stage.addActor(window);
+                    window.setVisible(true);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            window.setVisible(false);
+                        }
+                    }, 1);
+                }
+                else {
+                    game.players = null;
+                    game.players = new ArrayList<>();
+                    for (int i = 0; i < numPlayersBox.getSelected(); i++) {
+                        if(playerNamesList.get(i).getText().toLowerCase().equals("bot")) {
+                            game.players.add(new Bot(playerNamesList.get(i).getText().toLowerCase()+" "+i, spriteList.get(i)));
+                        }
+                        else {
+                            game.players.add(new Player(playerNamesList.get(i).getText(), spriteList.get(i)));
+                        }
+                    }
+                    game.changeScreen(game.GAME);
                 }
             }
         });
@@ -349,9 +378,9 @@ public class GameSetUpScreen implements Screen {
                         public void run() {
                             window.setVisible(false);
                         }
-                    }, 0.5f);
+                    }, 1);
                 }
-                if(abridgedLengthField.getText().matches("^$|( )*")) {
+                else if(abridgedLengthField.getText().matches("^$|( )*")) {
                     final Window window = new Window("", gameSetUpScreenSkin);
                     final Label label = new Label("Length of game invalid", gameSetUpScreenSkin, "big");
                     window.add(label);
@@ -363,15 +392,34 @@ public class GameSetUpScreen implements Screen {
                         public void run() {
                             window.setVisible(false);
                         }
-                    }, 0.5f);
+                    }, 1);
                 }
-                if(!abridgedLengthField.getText().matches("^$|( )*") && !isEmpty) {
+                else if(playerNamesList.get(0).getText().toLowerCase().equals("bot")) {
+                    final Window window = new Window("", gameSetUpScreenSkin);
+                    final Label label = new Label("First player cannot be a bot", gameSetUpScreenSkin, "big");
+                    window.add(label);
+                    window.setBounds((Gdx.graphics.getWidth() - 400) / 2, (Gdx.graphics.getHeight() - 100) / 2, 500, 100);
+                    stage.addActor(window);
+                    window.setVisible(true);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            window.setVisible(false);
+                        }
+                    }, 1);
+                }
+                else {
                     game.getPreferences().setAbridged(true);
                     game.getPreferences().setAbridgedLength(Integer.parseInt(abridgedLengthField.getText()));
                     game.players = null;
                     game.players = new ArrayList<>();
                     for (int i = 0; i < numPlayersBox.getSelected(); i++) {
-                        game.players.add(new Player(playerNamesList.get(i).getText(), spriteList.get(i)));
+                        if(playerNamesList.get(i).getText().toLowerCase().equals("bot")) {
+                            game.players.add(new Bot(playerNamesList.get(i).getText().toLowerCase()+" "+i, spriteList.get(i)));
+                        }
+                        else {
+                            game.players.add(new Player(playerNamesList.get(i).getText(), spriteList.get(i)));
+                        }
                     }
                     game.changeScreen(game.GAME);
                 }

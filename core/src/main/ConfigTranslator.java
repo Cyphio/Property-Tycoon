@@ -168,7 +168,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
                 } catch (Exception e) {
 
-                    System.out.println("error in config file setup");
+                    e.getMessage();
 
                 }
 

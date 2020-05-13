@@ -47,10 +47,6 @@ public class GameBoard implements GameBoardInterface {
 
         board = builder.getTiles();
 
-        System.out.println(builder.getTileIdentities());
-
-        System.out.println(board.length);
-
         identityPropMap = new HashMap<>();
         for(String identity : builder.getTileIdentities()) {
             ArrayList<Ownable> properties = new ArrayList<>();
@@ -79,7 +75,6 @@ public class GameBoard implements GameBoardInterface {
         opportunityKnocksCards = builder.getOpportunityCards();
         Collections.shuffle(opportunityKnocksCards);
 
-        System.out.println(players.size());
 
         developedProperties = new ArrayList<>();
 
@@ -96,12 +91,9 @@ public class GameBoard implements GameBoardInterface {
      */
     @Override
     public Boolean playerTurn(Player player) {
-        System.out.println("\nBOARD PLAYER TURN");
-
         currentPlayer = player;
 
         dice.rollDice();
-        System.out.println("DOUBLE: " + dice.wasItADouble());
         if(player.getIsInJail()) {
             if(dice.wasItADouble() || player.hasGetOutOfJailFree()) {
                 player.setInJail(false);
@@ -112,7 +104,6 @@ public class GameBoard implements GameBoardInterface {
             movePlayer(player, dice.getValue());
         }
 
-        System.out.println("finished");
         lastD1Rolled = dice.getD1();
         lastD2Rolled = dice.getD2();
         return checkBoardCircumstances();
@@ -147,7 +138,6 @@ public class GameBoard implements GameBoardInterface {
         playerPos.put(player, pos);
         board[pos].addPlayer(player);
         player.setTilePosition(pos);
-        System.out.println("Setting Player coordinates");
 
         Tile tile = board[playerPos.get(player)];
 
@@ -346,7 +336,6 @@ public class GameBoard implements GameBoardInterface {
 
                 break;
             default:
-                System.out.println("no action found");
         }
     }
 
@@ -388,7 +377,6 @@ public class GameBoard implements GameBoardInterface {
                  }
             }
         }
-        System.out.println("developed properties:" + developedProperties);
     }
 
     public ArrayList<Property> getDevelopedProperties(){

@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
+import main.Bot;
 import main.GameBoard;
 import main.GameController;
 import main.Player;
@@ -51,6 +52,9 @@ public class GameScreen implements Screen {
     private Stage labelStage;
 
     private TextButton rollDice;
+    private Image die1;
+    private Image die2;
+    private Label currPlayerLabel;
 
     private Window propertyPopUpWindow;
     private Table propInfoBox;
@@ -106,6 +110,7 @@ public class GameScreen implements Screen {
     private Sound rollDiceFX;
     private Sound popupSoundFX;
 
+    private ClickListener rollDiceListener;
     private ClickListener clickListener;
     private TextField auctionBid;
 
@@ -124,6 +129,9 @@ public class GameScreen implements Screen {
 
         serviceInfoBox2 = new Table();
         serviceImg = new Image();
+
+        die1 = new Image();
+        die2 = new Image();
 
         gameScreenSkin = new Skin(Gdx.files.internal("skin/comic-ui.json"));
 
@@ -568,7 +576,7 @@ public class GameScreen implements Screen {
         buyPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (gameCon.getCurrentPlayer().getFirstLap()) {
+                if (gameCon.getCurrentPlayer().completedFirstLap()) {
                     try {
                         if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
                             if (gameCon.getCurrentPlayer().getMoney() >= clickedProperty.getCost()) {
@@ -594,7 +602,7 @@ public class GameScreen implements Screen {
         auctionPropertyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (gameCon.getCurrentPlayer().getFirstLap()) {
+                if (gameCon.getCurrentPlayer().completedFirstLap()) {
                     auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
                     auctionBid.setVisible(true);
                     currBidder = gameCon.getCurrentPlayer();
@@ -651,7 +659,6 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(gameCon.developProperty(((Property)clickedProperty), gameCon.getCurrentPlayer())) {
-                    quickPopUpWindow("Able to develop", 100, 350, 0.5f);
                     updatePropertyDevelopmentSprites();
                 }
                 else {
@@ -718,7 +725,7 @@ public class GameScreen implements Screen {
         buyServiceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(gameCon.getCurrentPlayer().getFirstLap()) {
+                if(gameCon.getCurrentPlayer().completedFirstLap()) {
                     try {
                         if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
                             if (gameCon.getCurrentPlayer().getMoney() >= clickedProperty.getCost()) {
@@ -744,7 +751,7 @@ public class GameScreen implements Screen {
         auctionServiceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(gameCon.getCurrentPlayer().getFirstLap()) {
+                if(gameCon.getCurrentPlayer().completedFirstLap()) {
                     auctionPopUpWindowSetUp(); //called to add the title and colour of the property to the auction window
 
                     currBidder = gameCon.getCurrentPlayer();
@@ -888,6 +895,9 @@ public class GameScreen implements Screen {
                         }
                         highestBidderNameLabel.setText(highestBidder.getName());
                         currBidderNameLabel.setText(currBidder.getName());
+                        if(currBidder instanceof Bot){
+                            botBid();
+                        }
                     }
                     else if (Integer.parseInt(auctionBid.getText()) <= gameCon.getAuctionValue()) {
                         quickPopUpWindow("Bid not high enough", 100, 350, 0.5f);
@@ -932,6 +942,9 @@ public class GameScreen implements Screen {
                         currBidder = bidderList.get(0);
                     }
                     currBidderNameLabel.setText(currBidder.getName());
+                    if(currBidder instanceof Bot){
+                        botBid();
+                    }
                 }
 
                 if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
@@ -947,15 +960,12 @@ public class GameScreen implements Screen {
         Table currPlayerTable = new Table();
 
         Label currPlayerTitle = new Label("Current player: ", gameScreenSkin, "title");
-        final Label currPlayerLabel = new Label(gameCon.getCurrentPlayer().getName(), gameScreenSkin, "title");
+        currPlayerLabel = new Label(gameCon.getCurrentPlayer().getName(), gameScreenSkin, "title");
 
         currPlayerTable.add(currPlayerTitle).left().width(320);
         currPlayerTable.add(currPlayerLabel).right().width(170);
 
         Table diceTable = new Table();
-
-        final Image die1 = new Image();
-        final Image die2 = new Image();
 
         diceTable.add(die1).height(100).width(100).padRight(10);
         diceTable.add(die2).height(100).width(100);
@@ -1003,107 +1013,23 @@ public class GameScreen implements Screen {
         timerTable.right().padRight(10);
         stage.addActor(timerTable);
 
-        rollDice.addListener(new ClickListener() {
+
+        rollDice.addListener(rollDiceListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (rollDice.getText().toString().equals("Roll dice")) {
-                    if (game.getPreferences().isFxEnabled()) {
-                        rollDiceFX.play(game.getPreferences().getFxVolume());
-                        try {
-                            TimeUnit.MILLISECONDS.sleep(1750);
-                        } catch(Exception e) {
-                            e.getMessage();
-                        }
-                    }
-                    System.out.println("clicked");
-
-                    Tile tile = gameCon.playerTurn();
-
-                    Player p = gameCon.getCurrentPlayer();
-                    p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
-
-                    die1.setDrawable(getDiceImage(gameCon.getLastD1()));
-                    die2.setDrawable(getDiceImage(gameCon.getLastD2()));
-
-                        if (tile instanceof Ownable && ((Ownable) tile).getOwned() && ((Ownable) tile).getOwner() != gameCon.getCurrentPlayer()) {
-                            if (tile instanceof Property) {
-                                Property prop = (Property) tile;
-                                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + prop.getOwner().getName() + " $" + prop.getCurrentRent() + " for landing on " + prop.getTileName(), 100, 450, 3);
-                            } else if (tile instanceof Station) {
-                                Station stat = (Station) tile;
-                                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + stat.getOwner().getName() + " $" + stat.getRent() + " for landing on " + stat.getTileName(), 100, 450, 3);
-                            } else if (tile instanceof Utility) {
-                                Utility util = (Utility) tile;
-                                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + util.getOwner().getName() + " $" + util.getRent(gameCon.getLastD1() + gameCon.getLastD2()) + " for landing on " + util.getTileName(), 100, 450, 3);
-                            }
-                        } else {
-                            openPopUpWindow(tile);
-                        }
-
-                        if (tile instanceof Ownable) {
-                            if (!((Ownable) tile).getOwned()) {
-                                if(gameCon.getCurrentPlayer().getFirstLap()) {
-                                    rollDice.setVisible(false);
-                                }
-                            }
-                        }
+                    performRollDice();
 
                     if (!gameCon.getPlayAgain()) {
                         rollDice.setText("End turn");
                     }
                 }
                 else if (rollDice.getText().toString().equals("End turn")) {
-                    closeAllWindows();
-                    ArrayList<String> soldOwnables = new ArrayList<>();
-                    while (gameCon.getCurrentPlayer().getMoney() < 0 && gameCon.getCurrentPlayer().getOwnables().size() > 0){
-                        Ownable o = gameCon.getCurrentPlayer().getOwnables().get(0);
-                        o.sellProperty(gameCon.getCurrentPlayer(), o.getCost());
-                        if(!soldOwnables.contains(o.getTileName())) {
-                            soldOwnables.add(o.getTileName());
-                        }
-                    }
-                    updatePropertyOwnerIcons();
-                    updatePropertyDevelopmentSprites();
-                    if(soldOwnables.size() > 0) {
-                        quickPopUpWindow("Had to sell " + Arrays.toString(soldOwnables.toArray()).replaceAll("\\[", "").replaceAll("\\]","").replaceAll("\\,", "and"), 150, 500, 2);
-                    }
-                    if(gameCon.getCurrentPlayer().getMoney() < 0) {
-                        game.players.remove(gameCon.getCurrentPlayer());
-                        gameCon.getPlayerOrder().remove(0);
-                        if (game.players.size() == 1) {
-                            game.getPreferences().setAbridged(false);
-                            congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size()-1));
-                            Timer.schedule(new Timer.Task() {
-                                @Override
-                                public void run() {
-                                    game.setScreen(new MainMenu(game));
-                                }
-                            }, 7.5f);
-                        }
-                    }
-
-                    if(gameCon.getCurrentPlayer().getMoney() + gameCon.getCurrentPlayer().getTotalPropertyValue() <= 0) { //need to add a check to see if their cumulative property worth also results in < $0
-                        game.players.remove(gameCon.getCurrentPlayer());
-                        gameCon.getPlayerOrder().remove(0);
-                        if (game.players.size() == 1) {
-                            game.getPreferences().setAbridged(false);
-                            congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size()-1));
-                            Timer.schedule(new Timer.Task() {
-                                @Override
-                                public void run() {
-                                    game.setScreen(new MainMenu(game));
-                                }
-                            }, 7.5f);
-                        }
-                    }
-                    gameCon.endTurn();
-                    die1.setDrawable(null);
-                    die2.setDrawable(null);
-                    currPlayerLabel.setText(gameCon.getCurrentPlayer().getName());
-                    rollDice.setText("Roll dice");
+                    endTurn();
                 }
             }
         });
+
 
         centerButton.addListener(new ClickListener() {
             @Override
@@ -1118,6 +1044,104 @@ public class GameScreen implements Screen {
                 game.setScreen(new PauseScreen(game));
             }
         });
+    }
+
+    private void performRollDice() {
+        if (game.getPreferences().isFxEnabled()) {
+            rollDiceFX.play(game.getPreferences().getFxVolume());
+            try {
+                TimeUnit.MILLISECONDS.sleep(1750);
+            } catch(Exception e) {
+                e.getMessage();
+            }
+        }
+
+        Tile tile = gameCon.playerTurn();
+
+        Player p = gameCon.getCurrentPlayer();
+        p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
+
+        die1.setDrawable(getDiceImage(gameCon.getLastD1()));
+        die2.setDrawable(getDiceImage(gameCon.getLastD2()));
+
+        if (tile instanceof Ownable && ((Ownable) tile).getOwned() && ((Ownable) tile).getOwner() != gameCon.getCurrentPlayer()) {
+            if (tile instanceof Property) {
+                Property prop = (Property) tile;
+                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + prop.getOwner().getName() + " $" + prop.getCurrentRent() + " for landing on " + prop.getTileName(), 100, 450, 3);
+            } else if (tile instanceof Station) {
+                Station stat = (Station) tile;
+                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + stat.getOwner().getName() + " $" + stat.getRent() + " for landing on " + stat.getTileName(), 100, 450, 3);
+            } else if (tile instanceof Utility) {
+                Utility util = (Utility) tile;
+                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + util.getOwner().getName() + " $" + util.getRent(gameCon.getLastD1() + gameCon.getLastD2()) + " for landing on " + util.getTileName(), 100, 450, 3);
+            }
+        }
+        else if (!gameCon.getCurrentPlayer().isBot()){
+            openPopUpWindow(tile);
+        }
+
+        if (tile instanceof Ownable) {
+            if (!((Ownable) tile).getOwned()) {
+                if(gameCon.getCurrentPlayer().completedFirstLap()) {
+                    rollDice.setVisible(false);
+                }
+            }
+        }
+    }
+
+    private void endTurn() {
+        closeAllWindows();
+        ArrayList<String> soldOwnables = new ArrayList<>();
+        while (gameCon.getCurrentPlayer().getMoney() < 0 && gameCon.getCurrentPlayer().getOwnables().size() > 0){
+            Ownable o = gameCon.getCurrentPlayer().getOwnables().get(0);
+            o.sellProperty(gameCon.getCurrentPlayer(), o.getCost());
+            if(!soldOwnables.contains(o.getTileName())) {
+                soldOwnables.add(o.getTileName());
+            }
+        }
+        updatePropertyOwnerIcons();
+        updatePropertyDevelopmentSprites();
+        if(soldOwnables.size() > 0) {
+            quickPopUpWindow("Had to sell " + Arrays.toString(soldOwnables.toArray()).replaceAll("\\[", "").replaceAll("\\]","").replaceAll("\\,", "and"), 150, 500, 2);
+        }
+        if(gameCon.getCurrentPlayer().getMoney() < 0) {
+            game.players.remove(gameCon.getCurrentPlayer());
+            gameCon.getPlayerOrder().remove(0);
+            if (game.players.size() == 1) {
+                game.getPreferences().setAbridged(false);
+                congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size()-1));
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new MainMenu(game));
+                    }
+                }, 7.5f);
+            }
+        }
+
+        if(gameCon.getCurrentPlayer().getMoney() + gameCon.getCurrentPlayer().getTotalPropertyValue() <= 0) { //need to add a check to see if their cumulative property worth also results in < $0
+            game.players.remove(gameCon.getCurrentPlayer());
+            gameCon.getPlayerOrder().remove(0);
+            if (game.players.size() == 1) {
+                game.getPreferences().setAbridged(false);
+                congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size()-1));
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new MainMenu(game));
+                    }
+                }, 7.5f);
+            }
+        }
+        gameCon.endTurn();
+        die1.setDrawable(null);
+        die2.setDrawable(null);
+        currPlayerLabel.setText(gameCon.getCurrentPlayer().getName());
+        rollDice.setText("Roll dice");
+        if(gameCon.getCurrentPlayer().isBot()) {
+            rollDice.setVisible(false);
+            botTurn();
+        }
     }
 
     private void jailPopUpWindowSetUp() {
@@ -1390,6 +1414,76 @@ public class GameScreen implements Screen {
         return camera;
     }
 
+    private void botTurn() {
+        performRollDice();
+        Player bot = gameCon.getCurrentPlayer();
+        Tile tile = gameCon.getBoard().getTile(bot.getTilePosition());
+        if(tile instanceof Ownable) {
+            if(bot.getMoney() > 200 + ((Ownable) tile).getCost() && bot.completedFirstLap()) {
+                ((Ownable) tile).buyProperty(bot, ((Ownable) tile).getCost());
+            }
+        }
+        if(tile instanceof Jail) {
+            if(bot.getIsInJail() && bot.getMoney() >= 50) {
+                bot.makePurchase(50);
+                gameCon.freePlayerFromJail(bot);
+            }
+        }
+
+            endTurn();
+            rollDice.setVisible(true);
+    }
+
+    private void botBid() {
+        if (Math.round(gameCon.getAuctionValue() * 1.1f) < currBidder.getMoney() && bidderList.size() > 1) {
+            double randDouble = Math.random();
+
+            if (randDouble < 0.4) {
+                gameCon.setAuctionValue(Math.round(gameCon.getAuctionValue() * 1.1f + 1));
+                highestBidder = currBidder;
+                highestBidderNameLabel.setText(currBidder.getName());
+                highestBid.setText("$"+gameCon.getAuctionValue());
+                quickPopUpWindow("Bot says: I will raise you to $" + Integer.toString(gameCon.getAuctionValue()), 100, 300, 1);
+
+                    if (bidderList.indexOf(currBidder) < bidderList.size() - 1) {
+                        currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
+                    } else {
+                        currBidder = bidderList.get(0);
+                    }
+            }
+            else {
+                int index = bidderList.indexOf(currBidder);
+                bidderList.remove(currBidder);
+                if (bidderList.size() != 0) {
+                    if (index < bidderList.size()) {
+                        currBidder = bidderList.get(index);
+                    } else {
+                        currBidder = bidderList.get(0);
+                    }
+                    quickPopUpWindow("Bot says: Thats too much!", 100, 300, 1);
+                }
+            }
+
+            if (currBidder instanceof Bot) {
+                botBid();
+            }
+            currBidderNameLabel.setText(currBidder.getName());
+        }
+        else if(highestBidder != null){
+            auctionPopUpWindow.setVisible(false);
+            clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
+            highestBidder = null;
+            updatePropertyOwnerIcons();
+            gameCon.setAuctionValue(0);
+            rollDice.setVisible(true);
+        }
+        else{
+            auctionPopUpWindow.setVisible(false);
+            gameCon.setAuctionValue(0);
+            rollDice.setVisible(true);
+        }
+    }
+
     /**
      * render() is called when the Screen should render itself
      * @param delta the time in seconds since the last render
@@ -1439,7 +1533,6 @@ public class GameScreen implements Screen {
         for (Sprite sprite: ownedProperties) {
             sprite.draw(spriteBatch);
         }
-
 
         for (Sprite sprite: propertyIcons){
             sprite.draw(spriteBatch);

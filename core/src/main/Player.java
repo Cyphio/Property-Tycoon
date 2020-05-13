@@ -41,6 +41,10 @@ public class Player implements PlayerInterface {
         firstLap = false;
     }
 
+    public boolean isBot() {
+        return this instanceof Bot;
+    }
+
     public void addGetOutOfJailFreeCard(){
 
         getOutJailCards +=1;
@@ -218,7 +222,7 @@ public class Player implements PlayerInterface {
      * @return true if the player is on their first lap, false otherwise
      */
     @Override
-    public boolean getFirstLap() {
+    public boolean completedFirstLap() {
         return firstLap;
     }
 
