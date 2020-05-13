@@ -1014,7 +1014,6 @@ public class GameScreen implements Screen {
                             e.getMessage();
                         }
                     }
-                    System.out.println("clicked");
 
                     Tile tile = gameCon.playerTurn();
 
