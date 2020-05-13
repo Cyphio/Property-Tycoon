@@ -165,6 +165,8 @@ public class GameScreen implements Screen {
         ownedProperties = new ArrayList<>();
         propertyIcons = new ArrayList<>();
 
+        window = new Window("",gameScreenSkin);
+
         propertyHouseAndHotelSprites = new ArrayList<>();
         updatePropertyDevelopmentSprites();
 
@@ -516,6 +518,7 @@ public class GameScreen implements Screen {
         servicePopUpWindow.setVisible(false);
         auctionPopUpWindow.setVisible(false);
         jailPopUpWindow.setVisible(false);
+        window.setVisible(false);
     }
 
     private void propertyPopUpWindowSetUp() {
@@ -1287,12 +1290,12 @@ public class GameScreen implements Screen {
             window.add(takeOpportunityKnocksButton);
         } else {
 
-//            Timer.schedule(new Timer.Task() {
-//                @Override
-//                public void run() {
-//                    window.setVisible(false);
-//                }
-//            }, time);
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    window.setVisible(false);
+                }
+            }, time);
 
         }
         window.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
@@ -1300,18 +1303,6 @@ public class GameScreen implements Screen {
 
 
         window.setVisible(true);
-
-        if (msg.contains("Take opportunity knocks card or pay a fine of")) {
-
-            try {
-                TimeUnit.SECONDS.sleep((long) time);
-                window.setVisible(false);
-//
-            } catch (Exception e) {
-            }
-
-
-        }
     }
 
     public void updatePropertyDevelopmentSprites(){
