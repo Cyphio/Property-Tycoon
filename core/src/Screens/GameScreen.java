@@ -1284,7 +1284,7 @@ public class GameScreen implements Screen {
         label.setWrap(true);
         label.setAlignment(Align.center);
         window.add(label).width(width - 50);
-        if (msg.contains("Take opportunity knocks card or pay a fine of")) {
+        if (msg.contains("Take Opportunity Knocks card or pay a fine of")) {
             window.row().padTop(10);
             window.add(payFineButton);
             window.add(takeOpportunityKnocksButton);
