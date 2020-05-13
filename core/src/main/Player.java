@@ -41,6 +41,10 @@ public class Player implements PlayerInterface {
         firstLap = false;
     }
 
+    public boolean isBot() {
+        return this instanceof Bot;
+    }
+
     public void addGetOutOfJailFreeCard(){
 
         getOutJailCards +=1;

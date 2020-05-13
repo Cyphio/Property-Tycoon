@@ -1023,28 +1023,28 @@ public class GameScreen implements Screen {
                     die1.setDrawable(getDiceImage(gameCon.getLastD1()));
                     die2.setDrawable(getDiceImage(gameCon.getLastD2()));
 
-                        if (tile instanceof Ownable && ((Ownable) tile).getOwned() && ((Ownable) tile).getOwner() != gameCon.getCurrentPlayer()) {
-                            if (tile instanceof Property) {
-                                Property prop = (Property) tile;
-                                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + prop.getOwner().getName() + " $" + prop.getCurrentRent() + " for landing on " + prop.getTileName(), 100, 450, 3);
-                            } else if (tile instanceof Station) {
-                                Station stat = (Station) tile;
-                                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + stat.getOwner().getName() + " $" + stat.getRent() + " for landing on " + stat.getTileName(), 100, 450, 3);
-                            } else if (tile instanceof Utility) {
-                                Utility util = (Utility) tile;
-                                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + util.getOwner().getName() + " $" + util.getRent(gameCon.getLastD1() + gameCon.getLastD2()) + " for landing on " + util.getTileName(), 100, 450, 3);
-                            }
-                        } else {
-                            openPopUpWindow(tile);
+                    if (tile instanceof Ownable && ((Ownable) tile).getOwned() && ((Ownable) tile).getOwner() != gameCon.getCurrentPlayer()) {
+                        if (tile instanceof Property) {
+                            Property prop = (Property) tile;
+                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + prop.getOwner().getName() + " $" + prop.getCurrentRent() + " for landing on " + prop.getTileName(), 100, 450, 3);
+                        } else if (tile instanceof Station) {
+                            Station stat = (Station) tile;
+                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + stat.getOwner().getName() + " $" + stat.getRent() + " for landing on " + stat.getTileName(), 100, 450, 3);
+                        } else if (tile instanceof Utility) {
+                            Utility util = (Utility) tile;
+                            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid " + util.getOwner().getName() + " $" + util.getRent(gameCon.getLastD1() + gameCon.getLastD2()) + " for landing on " + util.getTileName(), 100, 450, 3);
                         }
+                    } else {
+                        openPopUpWindow(tile);
+                    }
 
-                        if (tile instanceof Ownable) {
-                            if (!((Ownable) tile).getOwned()) {
-                                if(gameCon.getCurrentPlayer().getFirstLap()) {
-                                    rollDice.setVisible(false);
-                                }
+                    if (tile instanceof Ownable) {
+                        if (!((Ownable) tile).getOwned()) {
+                            if(gameCon.getCurrentPlayer().getFirstLap()) {
+                                rollDice.setVisible(false);
                             }
                         }
+                    }
 
                     if (!gameCon.getPlayAgain()) {
                         rollDice.setText("End turn");
