@@ -4,12 +4,10 @@ public class FreeParking extends BigTiles {
 
     private int currentValue;
 
-
     public FreeParking() {
         currentValue = 0 ;
         tileName = "Free Parking";
     }
-
 
     public int getCurrentValue() {
         return currentValue;
@@ -25,11 +23,6 @@ public class FreeParking extends BigTiles {
     }
 
     public void reset(){
-
         currentValue = 0;
-
     }
-
-
-
 }

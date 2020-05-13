@@ -53,9 +53,9 @@ public class Card implements CardInterface {
     public String getCardMessage(){
 
 
-        if(value != null && !action.equals("Go back to")){
+        if(value != null && !action.equals("Go back to") && !action.equals("Advance to")){
 
-            return action+" "+value+".";
+            return action + " $" + value;
 
         }
 
