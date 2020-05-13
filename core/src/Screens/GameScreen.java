@@ -106,6 +106,7 @@ public class GameScreen implements Screen {
     ArrayList<Sprite> propertyIcons;
 
     private Sound rollDiceFX;
+    private Sound popupSoundFX;
 
     private ClickListener clickListener;
     private TextField auctionBid;
@@ -132,6 +133,7 @@ public class GameScreen implements Screen {
 
         //SOUNDS
         rollDiceFX = Gdx.audio.newSound(Gdx.files.internal("sound/dice_roll.mp3"));
+        popupSoundFX = Gdx.audio.newSound(Gdx.files.internal("sound/pop.mp3"));
 
         //TILED MAP INITIALIZATION
         tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
@@ -208,6 +210,17 @@ public class GameScreen implements Screen {
         stage.addListener(clickListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+                if (game.getPreferences().isFxEnabled()) {
+                    popupSoundFX.play(game.getPreferences().getFxVolume());
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(200);
+                    } catch(Exception e) {
+                        e.getMessage();
+                    }
+                }
+
+
                 Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 camera.unproject(mouse);
                 try {
@@ -480,7 +493,6 @@ public class GameScreen implements Screen {
                 quickPopUpWindow(card.getCardMessage(), 300, 600, 1);
             }else{
                 quickPopUpWindow("Opportunity Knocks", 300, 600, 1);
-
             }
 
         }
