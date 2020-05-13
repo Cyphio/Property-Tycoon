@@ -38,8 +38,6 @@ import java.util.concurrent.TimeUnit;
 public class GameScreen implements Screen {
 
     private final PropertyTycoon game;
-    private final TextButton payFineButton;
-    private final TextButton takeOpportunityKnocksButton;
     private OrthographicCamera camera;
     private ScrollableStage stage;
     private Texture gameScreenTexture;
@@ -92,6 +90,10 @@ public class GameScreen implements Screen {
 
     private Window jailPopUpWindow;
 
+    private Window quickPopUpWindow;
+
+    private Window choiceWindow;
+
     private ArrayList<Label> playerBalanceLabels;
 
     private Texture oneHouseTexture;
@@ -113,8 +115,6 @@ public class GameScreen implements Screen {
     private float gameLength;
     private float reverseTime;
     private Label timerLabel;
-    private Window window;
-
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
@@ -165,7 +165,8 @@ public class GameScreen implements Screen {
         ownedProperties = new ArrayList<>();
         propertyIcons = new ArrayList<>();
 
-        window = new Window("",gameScreenSkin);
+        quickPopUpWindow = new Window("",gameScreenSkin);
+        choiceWindow = new Window("", gameScreenSkin);
 
         propertyHouseAndHotelSprites = new ArrayList<>();
         updatePropertyDevelopmentSprites();
@@ -223,57 +224,6 @@ public class GameScreen implements Screen {
         });
 
         setTileCellColors();
-
-
-
-
-
-        payFineButton = new TextButton("Pay Fine",gameScreenSkin);
-        takeOpportunityKnocksButton = new TextButton("Take Card",gameScreenSkin);
-
-
-        payFineButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-
-                Card card = gameCon.getBoard().getLastCardPulled();
-                if (card != null) {
-                    try {
-                        gameCon.getCurrentPlayer().makePurchase(card.getValue());
-                        ((FreeParking) gameCon.getBoard().getTile(20)).addToPot(card.getValue());
-                        window.setVisible(false);
-                        closeAllWindows();
-
-                    } catch (Exception e) {
-                        e.getMessage();
-                    }
-                }
-            }
-        });
-
-        takeOpportunityKnocksButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-
-                Card card = gameCon.getBoard().getLastCardPulled();
-                if (card != null) {
-                    try {
-                        gameCon.getBoard().drawOpportunityKnocksCard();
-                        window.setVisible(false);
-                        closeAllWindows();
-                        quickPopUpWindow(gameCon.getBoard().getLastCardPulled().getCardMessage(),300,600,1);
-                    } catch (Exception e) {
-                        e.getMessage();
-                    }
-                }
-            }
-        });
-
-
-
-
-
-
     }
 
     public void setTileCellColors() {
@@ -472,44 +422,45 @@ public class GameScreen implements Screen {
             closeAllWindows();
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
                 Card card = gameCon.getBoard().getLastCardPulled();
-                if(card.getAction().equals("Go back to")){
-
-                    quickPopUpWindow(card.getCardMessage()+ " "+ gameCon.getBoard().getTile(card.getValue()).getTileName(), 300, 600, 1);
-
+                if(card.getAction().equals("Advance to")) {
+                    quickPopUpWindow(card.getAction() + " " + gameCon.getBoard().getTile(card.getValue()).getTileName(), 200, 300, 2.5f);
                 }
-                quickPopUpWindow(card.getCardMessage(), 300, 600, 1);
-            }else{
-                quickPopUpWindow("Opportunity Knocks", 300, 600, 1);
-
+                else {
+                    quickPopUpWindow(card.getCardMessage(), 200, 300, 2.5f);
+                }
             }
-
         }
         else if(tile instanceof PotLuck) {
             closeAllWindows();
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
                 Card card = gameCon.getBoard().getLastCardPulled();
-                quickPopUpWindow(card.getCardMessage(), 300, 600, 1);
-            }else{
-                quickPopUpWindow("Pot Luck", 300, 600, 1);
-
+                if(card.getAction().equals("Go back to")) {
+                    quickPopUpWindow(card.getAction() + " " + gameCon.getBoard().getTile(card.getValue()).getTileName(), 200, 300, 2.5f);
+                }
+                else if(card.getAction().equals("Take opportunity knocks card or pay a fine of")) {
+                    choiceWindow(card);
+                }
+                else {
+                    quickPopUpWindow(card.getCardMessage(), 200, 300, 2.5f);
+                }
             }
         }
         else if(tile instanceof Tax &&tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
             closeAllWindows();
-            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
+            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2.5f);
         }
         else if(tile instanceof FreeParking) {
             closeAllWindows();
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
+                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2.5f);
                 ((FreeParking) gameCon.getBoard().getTile(20)).reset();
             } else {
-                quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 1.5f);
+                quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 2.5f);
             }
         }
         else if(tile instanceof GoToJail) {
             closeAllWindows();
-            quickPopUpWindow("Go to jail", 100, 200, 1);
+            quickPopUpWindow("Go to jail", 100, 200, 2.5f);
         }
     }
 
@@ -518,7 +469,8 @@ public class GameScreen implements Screen {
         servicePopUpWindow.setVisible(false);
         auctionPopUpWindow.setVisible(false);
         jailPopUpWindow.setVisible(false);
-        window.setVisible(false);
+        quickPopUpWindow.setVisible(false);
+        choiceWindow.setVisible(false);
     }
 
     private void propertyPopUpWindowSetUp() {
@@ -1279,30 +1231,71 @@ public class GameScreen implements Screen {
     }
 
     private void quickPopUpWindow(String msg, float height, float width, float time) {
-        window = new Window("", gameScreenSkin);
+        quickPopUpWindow.clear();
         final Label label = new Label(msg, gameScreenSkin, "big");
         label.setWrap(true);
         label.setAlignment(Align.center);
-        window.add(label).width(width - 50);
-        if (msg.contains("Take opportunity knocks card or pay a fine of")) {
-            window.row().padTop(10);
-            window.add(payFineButton);
-            window.add(takeOpportunityKnocksButton);
-        } else {
+        quickPopUpWindow.add(label).width(width - 50);
+        quickPopUpWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+        stage.addActor(quickPopUpWindow);
+        quickPopUpWindow.setVisible(true);
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                quickPopUpWindow.setVisible(false);
+            }
+        }, time);
+    }
 
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    window.setVisible(false);
+    private void choiceWindow(Card card) {
+        choiceWindow.clear();
+        TextButton payFineButton = new TextButton("Pay Fine",gameScreenSkin);
+        TextButton takeOpportunityKnocksButton = new TextButton("Take Card",gameScreenSkin);
+        Table table = new Table();
+        table.add(new Label("Take opportunity knocks card or pay a fine of $" + card.getValue(), gameScreenSkin, "big"));
+        table.row().pad(10, 0, 0, 0);
+        table.add(payFineButton);
+        table.row().pad(10, 0, 0, 0);
+        table.add(takeOpportunityKnocksButton);
+        choiceWindow.add(table);
+        float width = 800, height = 200;
+        choiceWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
+        stage.addActor(choiceWindow);
+        choiceWindow.setVisible(true);
+        payFineButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Card card = gameCon.getBoard().getLastCardPulled();
+                if (card != null) {
+                    try {
+                        gameCon.getCurrentPlayer().makePurchase(card.getValue());
+                        ((FreeParking) gameCon.getBoard().getTile(20)).addToPot(card.getValue());
+                        quickPopUpWindow.setVisible(false);
+                        closeAllWindows();
+
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
                 }
-            }, time);
+            }
+        });
 
-        }
-        window.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
-        stage.addActor(window);
-
-
-        window.setVisible(true);
+        takeOpportunityKnocksButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Card card = gameCon.getBoard().getLastCardPulled();
+                if (card != null) {
+                    try {
+                        gameCon.getBoard().drawOpportunityKnocksCard();
+                        quickPopUpWindow.setVisible(false);
+                        closeAllWindows();
+                        quickPopUpWindow(gameCon.getBoard().getLastCardPulled().getCardMessage(),200,300,2.5f);
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
+                }
+            }
+        });
     }
 
     public void updatePropertyDevelopmentSprites(){
@@ -1333,20 +1326,19 @@ public class GameScreen implements Screen {
             }
 
             if (sprite != null) {
-            sprite.setSize(192, 64);
-            sprite.setOriginCenter();
-            if (prop.getTilePos() < 11) {
-                sprite.rotate(-90);
-            } else if (prop.getTilePos() < 21) {
-                sprite.rotate(-180);
-            } else if (prop.getTilePos() < 31) {
-                sprite.rotate(-270);
-            }
-            sprite.setPosition(prop.getPropertySpriteCoordinate().getX() - 192 / 2, prop.getPropertySpriteCoordinate().getY() - 64 / 2);
-            propertyHouseAndHotelSprites.add(sprite);
-        }else{
-
-
+                sprite.setSize(192, 64);
+                sprite.setOriginCenter();
+                if (prop.getTilePos() < 11) {
+                    sprite.rotate(-90);
+                }
+                else if (prop.getTilePos() < 21) {
+                    sprite.rotate(-180);
+                }
+                else if (prop.getTilePos() < 31) {
+                    sprite.rotate(-270);
+                }
+                sprite.setPosition(prop.getPropertySpriteCoordinate().getX() - 192 / 2, prop.getPropertySpriteCoordinate().getY() - 64 / 2);
+                propertyHouseAndHotelSprites.add(sprite);
             }
         }
     }
