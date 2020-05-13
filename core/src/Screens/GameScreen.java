@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.propertytycoonmakers.make.PropertyTycoon;
+import main.Bot;
 import main.GameBoard;
 import main.GameController;
 import main.Player;
@@ -109,6 +110,7 @@ public class GameScreen implements Screen {
     private Sound rollDiceFX;
     private Sound popupSoundFX;
 
+    private ClickListener rollDiceListener;
     private ClickListener clickListener;
     private TextField auctionBid;
 
@@ -893,6 +895,9 @@ public class GameScreen implements Screen {
                         }
                         highestBidderNameLabel.setText(highestBidder.getName());
                         currBidderNameLabel.setText(currBidder.getName());
+                        if(currBidder instanceof Bot){
+                            botBid();
+                        }
                     }
                     else if (Integer.parseInt(auctionBid.getText()) <= gameCon.getAuctionValue()) {
                         quickPopUpWindow("Bid not high enough", 100, 350, 0.5f);
@@ -937,6 +942,9 @@ public class GameScreen implements Screen {
                         currBidder = bidderList.get(0);
                     }
                     currBidderNameLabel.setText(currBidder.getName());
+                    if(currBidder instanceof Bot){
+                        botBid();
+                    }
                 }
 
                 if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
@@ -1005,7 +1013,8 @@ public class GameScreen implements Screen {
         timerTable.right().padRight(10);
         stage.addActor(timerTable);
 
-        rollDice.addListener(new ClickListener() {
+
+        rollDice.addListener(rollDiceListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (rollDice.getText().toString().equals("Roll dice")) {
@@ -1020,6 +1029,7 @@ public class GameScreen implements Screen {
                 }
             }
         });
+
 
         centerButton.addListener(new ClickListener() {
             @Override
@@ -1419,8 +1429,59 @@ public class GameScreen implements Screen {
                 gameCon.freePlayerFromJail(bot);
             }
         }
-        else {
+
             endTurn();
+            rollDice.setVisible(true);
+    }
+
+    private void botBid() {
+        if (Math.round(gameCon.getAuctionValue() * 1.1f) < currBidder.getMoney() && bidderList.size() > 1) {
+            double randDouble = Math.random();
+
+            if (randDouble < 0.4) {
+                gameCon.setAuctionValue(Math.round(gameCon.getAuctionValue() * 1.1f + 1));
+                highestBidder = currBidder;
+                highestBidderNameLabel.setText(currBidder.getName());
+                highestBid.setText(gameCon.getAuctionValue());
+                quickPopUpWindow("Bot says: I will raise you to $" + Integer.toString(gameCon.getAuctionValue()), 100, 300, 1);
+
+                    if (bidderList.indexOf(currBidder) < bidderList.size() - 1) {
+                        currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
+                    } else {
+                        currBidder = bidderList.get(0);
+                    }
+
+
+            }
+            else {
+                int index = bidderList.indexOf(currBidder);
+                bidderList.remove(currBidder);
+                if (bidderList.size() != 0) {
+                    if (index < bidderList.size()) {
+                        currBidder = bidderList.get(index);
+                    } else {
+                        currBidder = bidderList.get(0);
+                    }
+                    quickPopUpWindow("Bot says: That's too much!", 100, 300, 1);
+                }
+            }
+
+            if (currBidder instanceof Bot) {
+                botBid();
+            }
+            currBidderNameLabel.setText(currBidder.getName());
+        }
+        else if(highestBidder != null){
+            auctionPopUpWindow.setVisible(false);
+            clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
+            highestBidder = null;
+            updatePropertyOwnerIcons();
+            gameCon.setAuctionValue(0);
+            rollDice.setVisible(true);
+        }
+        else{
+            auctionPopUpWindow.setVisible(false);
+            gameCon.setAuctionValue(0);
             rollDice.setVisible(true);
         }
     }
