@@ -32,6 +32,7 @@ import misc.ScrollableStage;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -40,7 +41,6 @@ public class GameScreen implements Screen {
     private final PropertyTycoon game;
     private OrthographicCamera camera;
     private ScrollableStage stage;
-    private Texture gameScreenTexture;
     private Skin gameScreenSkin;
     private TiledMapTileLayer layer;
     private GameController gameCon;
@@ -90,9 +90,9 @@ public class GameScreen implements Screen {
 
     private Window jailPopUpWindow;
 
-    private Window quickPopUpWindow;
-
-    private Window choiceWindow;
+//    private Window quickPopUpWindow;
+//
+//    private Window choiceWindow;
 
     private ArrayList<Label> playerBalanceLabels;
 
@@ -165,8 +165,8 @@ public class GameScreen implements Screen {
         ownedProperties = new ArrayList<>();
         propertyIcons = new ArrayList<>();
 
-        quickPopUpWindow = new Window("",gameScreenSkin);
-        choiceWindow = new Window("", gameScreenSkin);
+//        quickPopUpWindow = new Window("",gameScreenSkin);
+//        choiceWindow = new Window("", gameScreenSkin);
 
         propertyHouseAndHotelSprites = new ArrayList<>();
         updatePropertyDevelopmentSprites();
@@ -469,8 +469,8 @@ public class GameScreen implements Screen {
         servicePopUpWindow.setVisible(false);
         auctionPopUpWindow.setVisible(false);
         jailPopUpWindow.setVisible(false);
-        quickPopUpWindow.setVisible(false);
-        choiceWindow.setVisible(false);
+//        quickPopUpWindow.setVisible(false);
+//        choiceWindow.setVisible(false);
     }
 
     private void propertyPopUpWindowSetUp() {
@@ -1044,24 +1044,33 @@ public class GameScreen implements Screen {
                 }
                 else if (rollDice.getText().toString().equals("End turn")) {
                     closeAllWindows();
-                        while (gameCon.getCurrentPlayer().getMoney() < 0 && gameCon.getCurrentPlayer().getOwnables().size() > 0){
-                            gameCon.getCurrentPlayer().getOwnables().get(0).sellProperty(gameCon.getCurrentPlayer(), gameCon.getCurrentPlayer().getOwnables().get(0).getCost());
+                    ArrayList<String> soldOwnables = new ArrayList<>();
+                    while (gameCon.getCurrentPlayer().getMoney() < 0 && gameCon.getCurrentPlayer().getOwnables().size() > 0){
+                        Ownable o = gameCon.getCurrentPlayer().getOwnables().get(0);
+                        o.sellProperty(gameCon.getCurrentPlayer(), o.getCost());
+                        if(!soldOwnables.contains(o.getTileName())) {
+                            soldOwnables.add(o.getTileName());
                         }
-                        updatePropertyOwnerIcons();
-                        if(gameCon.getCurrentPlayer().getMoney() < 0) {
-                            game.players.remove(gameCon.getCurrentPlayer());
-                            gameCon.getPlayerOrder().remove(0);
-                            if (game.players.size() == 1) {
-                                game.getPreferences().setAbridged(false);
-                                congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size()-1));
-                                Timer.schedule(new Timer.Task() {
-                                    @Override
-                                    public void run() {
-                                        game.setScreen(new MainMenu(game));
-                                    }
-                                }, 7.5f);
-                            }
+                    }
+                    updatePropertyOwnerIcons();
+                    updatePropertyDevelopmentSprites();
+                    if(soldOwnables.size() > 0) {
+                        quickPopUpWindow("Had to sell " + Arrays.toString(soldOwnables.toArray()).replaceAll("\\[", "").replaceAll("\\]","").replaceAll("\\,", "and"), 150, 500, 2);
+                    }
+                    if(gameCon.getCurrentPlayer().getMoney() < 0) {
+                        game.players.remove(gameCon.getCurrentPlayer());
+                        gameCon.getPlayerOrder().remove(0);
+                        if (game.players.size() == 1) {
+                            game.getPreferences().setAbridged(false);
+                            congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size()-1));
+                            Timer.schedule(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    game.setScreen(new MainMenu(game));
+                                }
+                            }, 7.5f);
                         }
+                    }
 
                     if(gameCon.getCurrentPlayer().getMoney() + gameCon.getCurrentPlayer().getTotalPropertyValue() <= 0) { //need to add a check to see if their cumulative property worth also results in < $0
                         game.players.remove(gameCon.getCurrentPlayer());
@@ -1228,7 +1237,7 @@ public class GameScreen implements Screen {
     }
 
     private void quickPopUpWindow(String msg, float height, float width, float time) {
-        quickPopUpWindow.clear();
+        Window quickPopUpWindow = new Window("", gameScreenSkin);
         final Label label = new Label(msg, gameScreenSkin, "big");
         label.setWrap(true);
         label.setAlignment(Align.center);
@@ -1245,7 +1254,7 @@ public class GameScreen implements Screen {
     }
 
     private void choiceWindow(Card card) {
-        choiceWindow.clear();
+        Window choiceWindow = new Window("", gameScreenSkin);
         TextButton payFineButton = new TextButton("Pay Fine",gameScreenSkin);
         TextButton takeOpportunityKnocksButton = new TextButton("Take Card",gameScreenSkin);
         Table table = new Table();
@@ -1267,8 +1276,7 @@ public class GameScreen implements Screen {
                     try {
                         gameCon.getCurrentPlayer().makePurchase(card.getValue());
                         ((FreeParking) gameCon.getBoard().getTile(20)).addToPot(card.getValue());
-                        quickPopUpWindow.setVisible(false);
-                        closeAllWindows();
+                        choiceWindow.setVisible(false);
 
                     } catch (Exception e) {
                         e.getMessage();
@@ -1284,8 +1292,7 @@ public class GameScreen implements Screen {
                 if (card != null) {
                     try {
                         gameCon.getBoard().drawOpportunityKnocksCard();
-                        quickPopUpWindow.setVisible(false);
-                        closeAllWindows();
+                        choiceWindow.setVisible(false);
                         quickPopUpWindow(gameCon.getBoard().getLastCardPulled().getCardMessage(),200,300,2);
                     } catch (Exception e) {
                         e.getMessage();
