@@ -243,6 +243,9 @@ public class Player implements PlayerInterface {
         int wealth = 0;
         for(Ownable o : ownables) {
             wealth += o.getCost();
+            if(o instanceof Property){
+                wealth += ((Property) o).getHousesOwned() * ((Property) o).getHousePrice();
+            }
         }
         wealth += balance;
         return wealth;
