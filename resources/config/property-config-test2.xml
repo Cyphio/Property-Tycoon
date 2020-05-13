@@ -9,6 +9,9 @@
         <payout>200</payout>
     </tile>
     <tile>
+        <type>potluck</type>
+    </tile>
+    <tile>
         <name>Crapper Street</name>
         <type>property</type>
         <cost>60</cost>
@@ -25,20 +28,7 @@
     <tile>
         <type>potluck</type>
     </tile>
-    <tile>
-        <name>Gangster's Paradise</name>
-        <type>property</type>
-        <cost>60</cost>
-        <rent>4</rent>
-        <one-house>20</one-house>
-        <two-house>60</two-house>
-        <three-house>180</three-house>
-        <four-house>320</four-house>
-        <hotel>450</hotel>
-        <house-cost>50</house-cost>
-        <hotel-cost>50</hotel-cost>
-        <colour>brown</colour>
-    </tile>
+
     <tile>
         <type>tax</type>
         <name>Tax</name>
