@@ -214,6 +214,8 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
                     } catch (Exception e) {
 
+                        System.out.println(card.getAction());
+
                         System.out.println("error in config file card setup");
 
                     }
