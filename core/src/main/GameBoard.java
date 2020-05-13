@@ -25,6 +25,8 @@ public class GameBoard implements GameBoardInterface {
     private ArrayList<Property> developedProperties;
     private int lastD1Rolled;
     private int lastD2Rolled;
+    private Card lastCardPulled;
+
 
     /**
      * The GameBoard class constructor
@@ -144,6 +146,7 @@ public class GameBoard implements GameBoardInterface {
         board[playerPos.get(player)].removePlayer(player);
         playerPos.put(player, pos);
         board[pos].addPlayer(player);
+        player.setTilePosition(pos);
         System.out.println("Setting Player coordinates");
 
         Tile tile = board[playerPos.get(player)];
@@ -211,13 +214,8 @@ public class GameBoard implements GameBoardInterface {
     public Boolean checkBoardCircumstances() {
         Tile x = board[playerPos.get(currentPlayer)];
 
-        if (x instanceof OpportunityKnocks) {
 
-            Card card = opportunityKnocksCards.remove(0);
-            performCardAction(card);
-            opportunityKnocksCards.add(card);
-        }
-        else if(x instanceof Property){
+        if(x instanceof Property){
                 if(((Property) x).getOwned() && !((Property) x).getMortgaged() && !((Property) x).getOwner().getIsInJail()){
                     currentPlayer.makePurchase(((Property) x).getCurrentRent());
                     ((Property) x).getOwner().payPlayer(((Property) x).getCurrentRent());
@@ -235,11 +233,14 @@ public class GameBoard implements GameBoardInterface {
                     ((Ownable) x).getOwner().payPlayer(50);
                 }
             }
+        }else if (x instanceof OpportunityKnocks) {
+
+            drawOpportunityKnocksCard();
         }
         else if (x instanceof PotLuck) {
-            Card card = potluckCards.remove(0);
-            performCardAction(card);
-            potluckCards.add(card);
+
+            drawPotluckCard();
+
         }
         else if (x instanceof FreeParking) {
             currentPlayer.payPlayer(((FreeParking) board[20]).getCurrentValue());
@@ -277,7 +278,7 @@ public class GameBoard implements GameBoardInterface {
             case "pay": // Bank pays player
             case "You have won 2nd prize in a beauty contest, collect":
             case "You inherit" : // Bank pays player - Inherits
-            case "Student loan refund. Collect ": // Student loan - bank pays player
+            case "Student loan refund. Collect": // Student loan - bank pays player
             case "Bank error in your favour. Collect": // Bank error - bank pays player
             case "From sale of Bitcoin you get": // Sale - bank pays player
             case "Savings bond matures, collect": // Savings - bank pays player
@@ -285,17 +286,20 @@ public class GameBoard implements GameBoardInterface {
 
                 currentPlayer.payPlayer(card.getValue());
                 break;
-            case "Go back to": // Go back to Crapper Street
-                currentPlayer.setTilePosition(card.getValue());
+            case "Go back to":
+            case "Advance to": // Go back to Crapper Street
+                setPlayerPos(currentPlayer, card.getValue());
+                checkBoardCircumstances();
                 break;
             case "Pay bill for text books of"://Player pays bill
             case "Mega late night taxi bill pay": // Player pays bank
                 currentPlayer.makePurchase(card.getValue());
                 break;
-            case "Advance to go": // go to Go tile
-                currentPlayer.setTilePosition(0);
+            case "Advance to Go": // go to Go tile
+                setPlayerPos(currentPlayer,0);
+                currentPlayer.payPlayer(goPayoutAmount);
                 break;
-            case "Go to jail. Do not pass GO, do not collect": // sends player to jail
+            case "Go to jail. Do not pass Go": // sends player to jail
                 sendToJail(currentPlayer);
                 break;
             case "It's your birthday. Each player pays you":// Each player pays current player
@@ -311,6 +315,7 @@ public class GameBoard implements GameBoardInterface {
                 currentPlayer.addGetOutOfJailFreeCard();
                 break;
             case "Pay insurance fee of":
+            case "Fined for speeding for":
                 currentPlayer.makePurchase(card.getValue());
                 ((FreeParking) board[20]).addToPot(card.getValue());
                 break;
@@ -320,21 +325,30 @@ public class GameBoard implements GameBoardInterface {
         }
     }
 
-    /**
-     * assigns a property to a player and makes them pay for it.
-     * @param player the player purchasing the property
-     * @param prop the property purchased
-     */
     @Override
     public void purchaseProperty(Player player, Property prop) {
-        if (player.getFirstLap() == false) {
-            if (player.getMoney() >= prop.getCost()) {
-                prop.buy();
-                player.makePurchase(prop.getCost());
-                player.addProperty(prop);
-            }
-        }
+
     }
+
+
+    // why does this not use the property.buyPropertymethod
+
+//
+//    /**
+//     * assigns a property to a player and makes them pay for it.
+//     * @param player the player purchasing the property
+//     * @param prop the property purchased
+//     */
+//    @Override
+//    public void purchaseProperty(Player player, Property prop) {
+//        if (player.getFirstLap() == false) {
+//            if (player.getMoney() >= prop.getCost()) {
+//                prop.buy();
+//                player.makePurchase(prop.getCost());
+//                player.addProperty(prop);
+//            }
+//        }
+//    }
 
 
     public void checkForDevelopedProperties(){
@@ -379,6 +393,32 @@ public class GameBoard implements GameBoardInterface {
             }
         }
         return i;
+    }
+
+
+    public Card getLastCardPulled(){
+
+        return lastCardPulled;
+
+    }
+
+
+    public void drawPotluckCard(){
+
+        lastCardPulled = potluckCards.remove(0);
+        performCardAction(lastCardPulled);
+        potluckCards.add(lastCardPulled);
+
+
+    }
+
+    public void drawOpportunityKnocksCard(){
+
+        lastCardPulled = opportunityKnocksCards.remove(0);
+        performCardAction(lastCardPulled);
+        opportunityKnocksCards.add(lastCardPulled);
+
+
     }
 
 

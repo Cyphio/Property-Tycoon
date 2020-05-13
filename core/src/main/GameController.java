@@ -132,9 +132,7 @@ public class GameController{
      * @return returns an ArrayList of players in their current play order (current player is at index 0, next player at index 1 etc.)
      */
     public ArrayList<Player> getPlayerOrder(){
-
         return playerOrders;
-
     }
 
     public boolean developProperty(Property prop, Player player) {
@@ -194,4 +192,6 @@ public class GameController{
             players.set(end, tempIplus1);
             return i+1;
     }
+
+
 }

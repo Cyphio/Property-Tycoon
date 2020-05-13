@@ -62,10 +62,7 @@ public class Tax extends SmallTile implements TaxInterface {
         }else{
 
         }
-
         icon.setPosition(iconCoordinate.getX(),iconCoordinate.getY());
-
-
 
     }
 

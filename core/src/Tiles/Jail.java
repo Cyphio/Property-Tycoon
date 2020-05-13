@@ -11,6 +11,12 @@ public class Jail extends BigTiles {
     ArrayList<Coordinate> jailCoordinates;
     private int bailPrice = 50;
 
+
+    public Jail(){
+        tileName = "Jail";
+    }
+
+
     @Override
     public void setCoordinates(ArrayList<Coordinate> coordinates){
         this.playerPosCoordinates = new ArrayList<>();

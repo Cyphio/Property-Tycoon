@@ -7,6 +7,7 @@ public class FreeParking extends BigTiles {
 
     public FreeParking() {
         currentValue = 0 ;
+        tileName = "Free Parking";
     }
 
 
@@ -20,11 +21,7 @@ public class FreeParking extends BigTiles {
 
 
     public void addToPot(int amount){
-
-
         currentValue += amount;
-
-
     }
 
     public void reset(){

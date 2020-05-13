@@ -6,7 +6,8 @@ package misc;
 public class Card implements CardInterface {
 
     private String action;
-    private int value;
+    private Integer value;
+
 
     /**
      * used to change the action that a card performs
@@ -47,6 +48,20 @@ public class Card implements CardInterface {
      */
     @Override
     public void runAction() {
+    }
+
+    public String getCardMessage(){
+
+
+        if(value != null && !action.equals("Go back to")){
+
+            return action+" "+value+".";
+
+        }
+
+        return action;
 
     }
+
+
 }

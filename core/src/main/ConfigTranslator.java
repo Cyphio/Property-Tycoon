@@ -207,9 +207,9 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
 
 
                     try {
-
-                        card.setValue(Integer.parseInt(cardElement.getElementsByTagName("value").item(0).getTextContent()));
                         card.setAction(cardElement.getElementsByTagName("action").item(0).getTextContent());
+                        card.setValue(Integer.parseInt(cardElement.getElementsByTagName("value").item(0).getTextContent()));
+
                         cardList.add(card);
 
                     } catch (Exception e) {
