@@ -186,6 +186,7 @@ public class GameScreen implements Screen {
         labelStage = new Stage(view);
         camera.position.set(2880, 1760, 0);
         camera.zoom = (float) (((64 * 90) / h) / 2);
+        stage.recenter(tiledMap);
 
         int angle = 0;
         for (int i = 0; i < 40; i++) {
