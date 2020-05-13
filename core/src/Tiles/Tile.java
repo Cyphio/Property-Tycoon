@@ -12,11 +12,20 @@ import static com.propertytycoonmakers.make.PropertyTycoon.players;
  */
 public class Tile {
 
+
+    protected String tileName;
     private int tilePosition;
     ArrayList<Player> tilePlayers = new ArrayList<>();
 
     protected ArrayList<Coordinate> playerPosCoordinates;
     protected ArrayList<Coordinate> allCoordinates;
+
+    public Tile(){
+
+        tileName = "";
+
+    }
+
 
     /**
      * Returns the Players on the current tile.
@@ -98,4 +107,24 @@ public class Tile {
     public ArrayList<Coordinate> getAllCoordinates() {
         return allCoordinates;
     }
+
+    /**
+     * Returns the tile name.
+     * @return Tiles.Tile name.
+     */
+
+    public String getTileName() {
+        return tileName;
+    }
+
+    /**
+     * Sets the tile name.
+     * @param name The desired name of the tile.
+     */
+
+    public void setTileName(String name) {
+        tileName = name;
+    }
+
+
 }

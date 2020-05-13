@@ -47,6 +47,7 @@
     <tile>
         <type>station</type>
         <name>Brighton Station</name>
+        <colour>white</colour>
         <cost>200</cost>
     </tile>
     <tile>
@@ -128,7 +129,7 @@
         <hotel>750</hotel>
         <house-cost>100</house-cost>
         <hotel-cost>100</hotel-cost>
-        <colour>blue</colour>
+        <colour>purple</colour>
     </tile>
     <tile>
         <name>Rey Lane</name>
@@ -142,7 +143,7 @@
         <hotel>900</hotel>
         <house-cost>100</house-cost>
         <hotel-cost>100</hotel-cost>
-        <colour>blue</colour>
+        <colour>purple</colour>
     </tile>
     <tile>
         <name>Hove Station</name>
@@ -179,7 +180,7 @@
         <hotel>950</hotel>
         <house-cost>100</house-cost>
         <hotel-cost>100</hotel-cost>
-        <colour>blue</colour>
+        <colour>orange</colour>
     </tile>
     <tile>
         <name>Penny Lane</name>
@@ -193,7 +194,7 @@
         <hotel>1000</hotel>
         <house-cost>100</house-cost>
         <hotel-cost>100</hotel-cost>
-        <colour>blue</colour>
+        <colour>orange</colour>
     </tile>
     <tile>
         <type>parking</type>
@@ -216,13 +217,33 @@
         <type>opportunityknocks</type>
     </tile>
     <tile>
-        <type>opportunityknocks</type>
+        <name>Mulan Rouge</name>
+        <type>property</type>
+        <cost>220</cost>
+        <rent>18</rent>
+        <one-house>90</one-house>
+        <two-house>250</two-house>
+        <three-house>700</three-house>
+        <four-house>875</four-house>
+        <hotel>1050</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
+        <colour>red</colour>
     </tile>
     <tile>
-        <type>opportunityknocks</type>
+        <name>Han Xin Gardens</name>
+        <type>property</type>
+        <cost>240</cost>
+        <rent>20</rent>
+        <one-house>100</one-house>
+        <two-house>300</two-house>
+        <three-house>750</three-house>
+        <four-house>925</four-house>
+        <hotel>1100</hotel>
+        <house-cost>150</house-cost>
+        <hotel-cost>150</hotel-cost>
+        <colour>red</colour>
     </tile>
-
-
     <tile>
         <name>Falmer Station</name>
         <type>station</type>
@@ -370,70 +391,132 @@
 
     <!--POT LUCK CARDS-->
     <potluckcard>
-        <action>pay</action>
+        <action>You inherit</action>
         <value>100</value>
     </potluckcard>
     <potluckcard>
-        <action>eachplayerpays</action>
+        <action>You have won 2nd prize in a beauty contest, collect</action>
+        <value>20</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Student loan refund. Collect</action>
+        <value>20</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Go back to</action>
+        <value>1</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Bank error in your favour. Collect</action>
+        <value>200</value>
+    </potluckcard>
+    <potluckcard>
+        <action>Pay bill for text books of</action>
         <value>100</value>
     </potluckcard>
     <potluckcard>
-        <action>inherit</action>
-        <value>100</value>
+        <action>Mega late night taxi bill pay</action>
+        <value>50</value>
     </potluckcard>
     <potluckcard>
-        <action>student loan</action>
-        <value>100</value>
+        <action>Advance to Go</action>
     </potluckcard>
     <potluckcard>
-        <action>bank error</action>
-        <value>100</value>
+        <action>From sale of Bitcoin you get</action>
+        <value>50</value>
     </potluckcard>
     <potluckcard>
-        <action>sale</action>
-        <value>100</value>
+        <action>Take Opportunity Knocks card or pay a fine of</action>
+        <value>10</value>
     </potluckcard>
     <potluckcard>
-        <action>savings</action>
-        <value>100</value>
+        <action>Pay insurance fee of</action>
+        <value>50</value>
     </potluckcard>
     <potluckcard>
-        <action>go to</action>
-        <value>100</value>
+        <action>Savings bond matures, collect</action>
+        <value>50</value>
     </potluckcard>
     <potluckcard>
-        <action>bill</action>
-        <value>100</value>
+        <action>Go to jail. Do not pass Go</action>
     </potluckcard>
     <potluckcard>
-        <action>advance</action>
-        <value>100</value>
+        <action>Received interest on shares of</action>
+        <value>25</value>
     </potluckcard>
     <potluckcard>
-        <action>jail</action>
-        <value>100</value>
+        <action>It's your birthday. Each player pays you</action>
+        <value>10</value>
     </potluckcard>
     <potluckcard>
-        <action>birthday</action>
-        <value>100</value>
+        <action>Get out of jail free</action>
     </potluckcard>
-    <potluckcard>
-        <action>get out of jail free</action>
-        <value>100</value>
-    </potluckcard>
-    <potluckcard>
-        <action>insurance</action>
-        <value>100</value>
-    </potluckcard>
+
 
     <!--COMMUNITY CHEST CARDS-->
     <opportunityknockscard>
-        <action>jail</action>
+        <action>Bank pays you divided of</action>
+        <value>50</value>
+    </opportunityknockscard>
+
+    <opportunityknockscard>
+        <action>You have won a lip sync battle. Collect</action>
         <value>100</value>
     </opportunityknockscard>
+
     <opportunityknockscard>
-        <action>jail</action>
-        <value>100</value>
+        <action>Advance to</action>
+        <value>39</value>
+    </opportunityknockscard>
+
+    <opportunityknockscard>
+        <action>Advance to</action>
+        <value>24</value>
+    </opportunityknockscard>
+
+
+    <opportunityknockscard>
+        <action>Fined for speeding for</action>
+        <value>15</value>
+    </opportunityknockscard>
+
+    <opportunityknockscard>
+        <action>Pay university fees of</action>
+        <value>150</value>
+    </opportunityknockscard>
+
+    <opportunityknockscard>
+        <action>Loan matures, collect</action>
+        <value>150</value>
+    </opportunityknockscard>
+
+    <opportunityknockscard>
+        <action>Advance to Go</action>
+    </opportunityknockscard>
+
+    <opportunityknockscard>
+        <action>You are assessed for repairs, $40/house, $115/hotel</action>
+    </opportunityknockscard>
+
+    <opportunityknockscard>
+        <action>You are assessed for repairs, $25/house, $100/hotel</action>
+    </opportunityknockscard>
+
+    <opportunityknockscard>
+        <action>Go back 3 spaces</action>
+    </opportunityknockscard>
+
+    <opportunityknockscard>
+        <action>Go to jail. Do not pass Go</action>
+    </opportunityknockscard>
+
+    <opportunityknockscard>
+        <action>Drunk in charge of a skateboard. Fine</action>
+        <value>20</value>
+    </opportunityknockscard>
+
+    <opportunityknockscard>
+        <action>Get out of jail free</action>
     </opportunityknockscard>
 
 </config>

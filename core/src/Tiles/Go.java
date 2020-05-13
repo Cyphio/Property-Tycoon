@@ -10,5 +10,10 @@ import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 public class Go extends BigTiles {
 
+    public Go(){
+        tileName = "Go";
+
+    }
+
 
 }

@@ -3,14 +3,8 @@ package Tiles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import main.Player;
-import misc.Coordinate;
 
-import java.util.ArrayList;
-
-import static com.propertytycoonmakers.make.PropertyTycoon.players;
-
-public class Station extends GovProperties implements StationInterface {
+public class Station extends Services implements StationInterface {
 
     private int currentRent;
 
