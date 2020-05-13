@@ -25,6 +25,7 @@ import com.propertytycoonmakers.make.PropertyTycoon;
 import main.GameBoard;
 import main.GameController;
 import main.Player;
+import misc.Card;
 import misc.Coordinate;
 import misc.RotatableLabel;
 import misc.ScrollableStage;
@@ -37,6 +38,8 @@ import java.util.concurrent.TimeUnit;
 public class GameScreen implements Screen {
 
     private final PropertyTycoon game;
+    private final TextButton payFineButton;
+    private final TextButton takeOpportunityKnocksButton;
     private OrthographicCamera camera;
     private ScrollableStage stage;
     private Texture gameScreenTexture;
@@ -110,6 +113,8 @@ public class GameScreen implements Screen {
     private float gameLength;
     private float reverseTime;
     private Label timerLabel;
+    private Window window;
+
 
     public GameScreen(PropertyTycoon game) {
         this.game = game;
@@ -160,6 +165,8 @@ public class GameScreen implements Screen {
         ownedProperties = new ArrayList<>();
         propertyIcons = new ArrayList<>();
 
+        window = new Window("",gameScreenSkin);
+
         propertyHouseAndHotelSprites = new ArrayList<>();
         updatePropertyDevelopmentSprites();
 
@@ -184,8 +191,8 @@ public class GameScreen implements Screen {
                 RotatableLabel label = new RotatableLabel(new Label(((SmallTile) tile).getTileName(), gameScreenSkin), c.getX(), c.getY(), angle, 1);
                 labelStage.addActor(label);
             }
-            if (tile instanceof GovProperties) {
-                propertyIcons.add(((GovProperties) tile).getIcon());
+            if (tile instanceof Services) {
+                propertyIcons.add(((Services) tile).getIcon());
             }
             if (tile instanceof Tax) {
                 propertyIcons.add(((Tax) tile).getIcon());
@@ -205,9 +212,9 @@ public class GameScreen implements Screen {
                 camera.unproject(mouse);
                 try {
                     Tile tile = gameCon.retTile(layer.getCell((((int) mouse.x) / 64), (((int) mouse.y) / 64)));
-                    //if((tile instanceof Property|| tile instanceof Station)) {
+                    if(!(tile instanceof Chests)) {
                     openPopUpWindow(tile);
-                    //}
+                    }
                 }
                 catch (Exception e) {
                     e.getMessage();
@@ -216,6 +223,57 @@ public class GameScreen implements Screen {
         });
 
         setTileCellColors();
+
+
+
+
+
+        payFineButton = new TextButton("Pay Fine",gameScreenSkin);
+        takeOpportunityKnocksButton = new TextButton("Take Card",gameScreenSkin);
+
+
+        payFineButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                Card card = gameCon.getBoard().getLastCardPulled();
+                if (card != null) {
+                    try {
+                        gameCon.getCurrentPlayer().makePurchase(card.getValue());
+                        ((FreeParking) gameCon.getBoard().getTile(20)).addToPot(card.getValue());
+                        window.setVisible(false);
+                        closeAllWindows();
+
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
+                }
+            }
+        });
+
+        takeOpportunityKnocksButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                Card card = gameCon.getBoard().getLastCardPulled();
+                if (card != null) {
+                    try {
+                        gameCon.getBoard().drawOpportunityKnocksCard();
+                        window.setVisible(false);
+                        closeAllWindows();
+                        quickPopUpWindow(gameCon.getBoard().getLastCardPulled().getCardMessage(),300,600,1);
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
+                }
+            }
+        });
+
+
+
+
+
+
     }
 
     public void setTileCellColors() {
@@ -332,7 +390,7 @@ public class GameScreen implements Screen {
             closeAllWindows();
             propertyPopUpWindow.setVisible(true);
         }
-        else if (tile instanceof GovProperties) {
+        else if (tile instanceof Services) {
             if (tile instanceof Station) {
                 serviceInfoBox2.clear();
                 serviceInfoBox2.add(new Label("Rent with one station owned:", gameScreenSkin)).left().width(350);
@@ -363,7 +421,7 @@ public class GameScreen implements Screen {
                 servicePopUpWindowSetUp();
             }
 
-            clickedProperty = (GovProperties) tile;
+            clickedProperty = (Services) tile;
             if (clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer()) && clickedProperty.getBuyable()) {
                 buyServiceButton.setVisible(true);
                 auctionServiceButton.setVisible(true);
@@ -412,11 +470,29 @@ public class GameScreen implements Screen {
         }
         else if(tile instanceof OpportunityKnocks) {
             closeAllWindows();
-            quickPopUpWindow("Opportunity knocks", 100, 200, 1);
+            if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                Card card = gameCon.getBoard().getLastCardPulled();
+                if(card.getAction().equals("Go back to")){
+
+                    quickPopUpWindow(card.getCardMessage()+ " "+ gameCon.getBoard().getTile(card.getValue()).getTileName(), 300, 600, 1);
+
+                }
+                quickPopUpWindow(card.getCardMessage(), 300, 600, 1);
+            }else{
+                quickPopUpWindow("Opportunity Knocks", 300, 600, 1);
+
+            }
+
         }
         else if(tile instanceof PotLuck) {
             closeAllWindows();
-            quickPopUpWindow("Pot luck", 100, 200, 1);
+            if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
+                Card card = gameCon.getBoard().getLastCardPulled();
+                quickPopUpWindow(card.getCardMessage(), 300, 600, 1);
+            }else{
+                quickPopUpWindow("Pot Luck", 300, 600, 1);
+
+            }
         }
         else if(tile instanceof Tax &&tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
             closeAllWindows();
@@ -442,6 +518,7 @@ public class GameScreen implements Screen {
         servicePopUpWindow.setVisible(false);
         auctionPopUpWindow.setVisible(false);
         jailPopUpWindow.setVisible(false);
+        window.setVisible(false);
     }
 
     private void propertyPopUpWindowSetUp() {
@@ -598,11 +675,11 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(mortgagePropertyButton.getText().toString().equals("Mortgage")) {
-                    ((Property)clickedProperty).setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    (clickedProperty).setMortgaged(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgagePropertyButton.setText("Unmortgage");
                 }
                 else{
-                    ((Property)clickedProperty).unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    (clickedProperty).unmortgage(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     mortgagePropertyButton.setText("Mortgage");
                 }
             }
@@ -1202,20 +1279,30 @@ public class GameScreen implements Screen {
     }
 
     private void quickPopUpWindow(String msg, float height, float width, float time) {
-        final Window window = new Window("", gameScreenSkin);
+        window = new Window("", gameScreenSkin);
         final Label label = new Label(msg, gameScreenSkin, "big");
         label.setWrap(true);
         label.setAlignment(Align.center);
-        window.add(label).width(width-50);
+        window.add(label).width(width - 50);
+        if (msg.contains("Take opportunity knocks card or pay a fine of")) {
+            window.row().padTop(10);
+            window.add(payFineButton);
+            window.add(takeOpportunityKnocksButton);
+        } else {
+
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    window.setVisible(false);
+                }
+            }, time);
+
+        }
         window.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         stage.addActor(window);
+
+
         window.setVisible(true);
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                window.setVisible(false);
-            }
-        }, time);
     }
 
     public void updatePropertyDevelopmentSprites(){

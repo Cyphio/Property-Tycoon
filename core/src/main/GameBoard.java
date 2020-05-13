@@ -25,6 +25,8 @@ public class GameBoard implements GameBoardInterface {
     private ArrayList<Property> developedProperties;
     private int lastD1Rolled;
     private int lastD2Rolled;
+    private Card lastCardPulled;
+
 
     /**
      * The GameBoard class constructor
@@ -144,6 +146,7 @@ public class GameBoard implements GameBoardInterface {
         board[playerPos.get(player)].removePlayer(player);
         playerPos.put(player, pos);
         board[pos].addPlayer(player);
+        player.setTilePosition(pos);
         System.out.println("Setting Player coordinates");
 
         Tile tile = board[playerPos.get(player)];
@@ -211,25 +214,16 @@ public class GameBoard implements GameBoardInterface {
     public Boolean checkBoardCircumstances() {
         Tile x = board[playerPos.get(currentPlayer)];
 
-        if (x instanceof OpportunityKnocks) {
 
-            Card card = opportunityKnocksCards.remove(0);
-            performCardAction(card);
-            opportunityKnocksCards.add(card);
-        }
-        else if(x instanceof Property){
+        if(x instanceof Property){
                 if(((Property) x).getOwned() && !((Property) x).getMortgaged() && !((Property) x).getOwner().getIsInJail()){
                     currentPlayer.makePurchase(((Property) x).getCurrentRent());
                     ((Property) x).getOwner().payPlayer(((Property) x).getCurrentRent());
             }
-        }else if(x instanceof GovProperties) {
+        }else if(x instanceof Services) {
             if (((Ownable) x).getOwned() && !((Ownable) x).getOwner().getIsInJail()) {
-                String type = "UTILITY";
-                if (x instanceof Station) {
-                    type = "STATION";
-                }
 
-                int rentMultiplier = howManyStationUtilityDoesPlayerOwn(((Ownable) x).getOwner(), type);
+                int rentMultiplier = howManyStationUtilityDoesPlayerOwn(((Ownable) x).getOwner(), (Services) x);
 
                 if (rentMultiplier > 0) {
                     currentPlayer.makePurchase(50 * rentMultiplier);
@@ -239,11 +233,14 @@ public class GameBoard implements GameBoardInterface {
                     ((Ownable) x).getOwner().payPlayer(50);
                 }
             }
+        }else if (x instanceof OpportunityKnocks) {
+
+            drawOpportunityKnocksCard();
         }
         else if (x instanceof PotLuck) {
-            Card card = potluckCards.remove(0);
-            performCardAction(card);
-            potluckCards.add(card);
+
+            drawPotluckCard();
+
         }
         else if (x instanceof FreeParking) {
             currentPlayer.payPlayer(((FreeParking) board[20]).getCurrentValue());
@@ -277,29 +274,41 @@ public class GameBoard implements GameBoardInterface {
      */
     @Override
     public void performCardAction(Card card) {
+        Integer[] counts = getNumberOfHousesOwned(currentPlayer);
         switch (card.getAction()) {
             case "pay": // Bank pays player
             case "You have won 2nd prize in a beauty contest, collect":
             case "You inherit" : // Bank pays player - Inherits
-            case "Student loan refund. Collect ": // Student loan - bank pays player
+            case "Student loan refund. Collect": // Student loan - bank pays player
             case "Bank error in your favour. Collect": // Bank error - bank pays player
             case "From sale of Bitcoin you get": // Sale - bank pays player
             case "Savings bond matures, collect": // Savings - bank pays player
             case "Received interest on shares of":
+            case "Bank pays you divided of":
+            case "Pay university fees of":
+            case "You have won a lip sync battle. Collect":
+            case "Loan matures, collect":
+
 
                 currentPlayer.payPlayer(card.getValue());
                 break;
-            case "Go back to": // Go back to Crapper Street
-                currentPlayer.setTilePosition(card.getValue());
+            case "Go back to":// Go back to Crapper Street
+            case "Advance to": //Advance to Turing Heights
+                setPlayerPos(currentPlayer, card.getValue());
+                if(card.getValue() == 11 || card.getValue() == 15 || card.getValue() == 24 && currentPlayer.getTilePosition() >= card.getValue()) { // 11 Skywalker Drive Tile Pos - 15 Han Xin Gardens Pos - 24 Hove Station Pos
+                        currentPlayer.payPlayer(goPayoutAmount);
+                }
+                checkBoardCircumstances();
                 break;
             case "Pay bill for text books of"://Player pays bill
             case "Mega late night taxi bill pay": // Player pays bank
                 currentPlayer.makePurchase(card.getValue());
                 break;
-            case "Advance to go": // go to Go tile
-                currentPlayer.setTilePosition(0);
+            case "Advance to Go": // go to Go tile
+                setPlayerPos(currentPlayer,0);
+                currentPlayer.payPlayer(goPayoutAmount);
                 break;
-            case "Go to jail. Do not pass GO, do not collect": // sends player to jail
+            case "Go to jail. Do not pass Go": // sends player to jail
                 sendToJail(currentPlayer);
                 break;
             case "It's your birthday. Each player pays you":// Each player pays current player
@@ -315,30 +324,54 @@ public class GameBoard implements GameBoardInterface {
                 currentPlayer.addGetOutOfJailFreeCard();
                 break;
             case "Pay insurance fee of":
+            case "Fined for speeding, pay":
+            case "Drunk in charge of a skateboard. Fine":
                 currentPlayer.makePurchase(card.getValue());
                 ((FreeParking) board[20]).addToPot(card.getValue());
                 break;
+            case "Go back 3 spaces":
+                movePlayer(currentPlayer, -3);
+            case "You are assessed for repairs, $25/house, $100/hotel":
 
+                currentPlayer.makePurchase(counts[0]*25);
+                currentPlayer.makePurchase(counts[1]*100);
+
+                break;
+            case "You are assessed for repairs, $40/house, $115/hotel":
+
+                currentPlayer.makePurchase(counts[0]*40);
+                currentPlayer.makePurchase(counts[1]*115);
+
+                break;
             default:
                 System.out.println("no action found");
         }
     }
 
-    /**
-     * assigns a property to a player and makes them pay for it.
-     * @param player the player purchasing the property
-     * @param prop the property purchased
-     */
     @Override
     public void purchaseProperty(Player player, Property prop) {
-        if (player.getFirstLap() == false) {
-            if (player.getMoney() >= prop.getCost()) {
-                prop.buy();
-                player.makePurchase(prop.getCost());
-                player.addProperty(prop);
-            }
-        }
+
     }
+
+
+    // why does this not use the property.buyPropertymethod
+
+//
+//    /**
+//     * assigns a property to a player and makes them pay for it.
+//     * @param player the player purchasing the property
+//     * @param prop the property purchased
+//     */
+//    @Override
+//    public void purchaseProperty(Player player, Property prop) {
+//        if (player.getFirstLap() == false) {
+//            if (player.getMoney() >= prop.getCost()) {
+//                prop.buy();
+//                player.makePurchase(prop.getCost());
+//                player.addProperty(prop);
+//            }
+//        }
+//    }
 
 
     public void checkForDevelopedProperties(){
@@ -367,28 +400,87 @@ public class GameBoard implements GameBoardInterface {
     public Dice getDice() { return dice; }
 
 
-    public boolean doesPlayerOwnAllOfIdentity(Player player , String identity){
-        if(identityPropMap.containsKey(identity)){
-            for (Ownable ownable : identityPropMap.get(identity)) {
-                if (ownable.getOwner() != player) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public int howManyStationUtilityDoesPlayerOwn(Player playerOwner , String identity){
+    public int howManyStationUtilityDoesPlayerOwn(Player playerOwner , Services tile){
         int i = 0;
 
-        if(identityPropMap.containsKey(identity)){
-            for (Ownable ownable : identityPropMap.get(identity)) {
+        String type = "UTILITY";
+        if (tile instanceof Station) {
+            type = "STATION";
+        }
+
+        if(identityPropMap.containsKey(type)){
+            for (Ownable ownable : identityPropMap.get(type)) {
                 if (ownable.getOwner() == playerOwner) {
                     i++;
                 }
             }
         }
         return i;
+    }
+
+
+    public Card getLastCardPulled(){
+
+        return lastCardPulled;
+
+    }
+
+
+    public void drawPotluckCard(){
+
+        lastCardPulled = potluckCards.remove(0);
+        performCardAction(lastCardPulled);
+        potluckCards.add(lastCardPulled);
+
+
+    }
+
+
+    //collects number of properties, used to calculate repair costs in the card action method
+    public Integer[] getNumberOfHousesOwned(Player player){
+
+        Integer[] counts = new Integer[2];
+
+        int hotels = 0;
+        int houses = 0;
+
+        for (Ownable tile:player.getOwnables()) {
+
+            if (tile instanceof Property) {
+
+
+                int developments = ((Property) tile).getHousesOwned();
+
+                if (developments == 5){
+
+                    hotels += 1;
+
+                }else{
+
+                    houses += developments;
+
+                }
+
+
+            }
+        }
+
+        counts[0]= houses;
+        counts[1] = hotels;
+
+        return counts;
+
+        }
+
+
+
+    public void drawOpportunityKnocksCard(){
+
+        lastCardPulled = opportunityKnocksCards.remove(0);
+        performCardAction(lastCardPulled);
+        opportunityKnocksCards.add(lastCardPulled);
+
+
     }
 
 

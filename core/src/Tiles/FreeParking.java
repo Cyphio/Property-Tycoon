@@ -6,6 +6,7 @@ public class FreeParking extends BigTiles {
 
     public FreeParking() {
         currentValue = 0 ;
+        tileName = "Free Parking";
     }
 
     public int getCurrentValue() {
