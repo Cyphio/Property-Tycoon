@@ -74,7 +74,7 @@ public class GameController{
      * displayed on.
      * @return the tile the player has landed on
      */
-    public Tile playerTurn(){
+    public Tile playerTurn() {
         playAgain = board.playerTurn(getCurrentPlayer());
         Tile tile = board.getTile(board.getPlayerPos(getCurrentPlayer()));
         return tile;
