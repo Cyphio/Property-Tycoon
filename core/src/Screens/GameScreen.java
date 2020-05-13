@@ -1141,6 +1141,8 @@ public class GameScreen implements Screen {
         if(gameCon.getCurrentPlayer().isBot()) {
             rollDice.setVisible(false);
             botTurn();
+            updatePropertyDevelopmentSprites();
+            updatePropertyOwnerIcons();
         }
     }
 
@@ -1421,10 +1423,18 @@ public class GameScreen implements Screen {
         if(tile instanceof Ownable) {
             if(bot.getMoney() > 200 + ((Ownable) tile).getCost() && bot.completedFirstLap()) {
                 ((Ownable) tile).buyProperty(bot, ((Ownable) tile).getCost());
+                if(((Ownable) tile).getOwner() == bot && tile instanceof Property){
+                    gameCon.developProperty((Property) tile, bot);
+                }
             }
         }
         if(tile instanceof Jail) {
-            if(bot.getIsInJail() && bot.getMoney() >= 50) {
+
+            if (bot.getIsInJail() && bot.hasGetOutOfJailFree()){
+                gameCon.freePlayerFromJail(bot);
+                bot.removeGetOutOfJailFreeCard();
+            }else if(bot.getIsInJail() && bot.getMoney() >= 50) {
+
                 bot.makePurchase(50);
                 gameCon.freePlayerFromJail(bot);
             }
