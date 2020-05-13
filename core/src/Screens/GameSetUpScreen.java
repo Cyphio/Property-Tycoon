@@ -339,9 +339,6 @@ public class GameSetUpScreen implements Screen {
                         }
                     }
                     game.changeScreen(game.GAME);
-                    for(Player p : game.players) {
-                        System.out.println(p.getName() + " is a bot: " + p.isBot());
-                    }
                 }
             }
         });

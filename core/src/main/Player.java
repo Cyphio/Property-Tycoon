@@ -222,7 +222,7 @@ public class Player implements PlayerInterface {
      * @return true if the player is on their first lap, false otherwise
      */
     @Override
-    public boolean getFirstLap() {
+    public boolean completedFirstLap() {
         return firstLap;
     }
 
