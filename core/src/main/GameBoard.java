@@ -331,6 +331,8 @@ public class GameBoard implements GameBoardInterface {
                 break;
             case "Go back 3 spaces":
                 movePlayer(currentPlayer, -3);
+                checkBoardCircumstances();
+                break;
             case "You are assessed for repairs, $25/house, $100/hotel":
 
                 currentPlayer.makePurchase(counts[0]*25);
