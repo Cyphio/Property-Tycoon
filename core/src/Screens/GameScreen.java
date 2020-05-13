@@ -1442,7 +1442,7 @@ public class GameScreen implements Screen {
                 gameCon.setAuctionValue(Math.round(gameCon.getAuctionValue() * 1.1f + 1));
                 highestBidder = currBidder;
                 highestBidderNameLabel.setText(currBidder.getName());
-                highestBid.setText(gameCon.getAuctionValue());
+                highestBid.setText("$"+gameCon.getAuctionValue());
                 quickPopUpWindow("Bot says: I will raise you to $" + Integer.toString(gameCon.getAuctionValue()), 100, 300, 1);
 
                     if (bidderList.indexOf(currBidder) < bidderList.size() - 1) {
@@ -1450,8 +1450,6 @@ public class GameScreen implements Screen {
                     } else {
                         currBidder = bidderList.get(0);
                     }
-
-
             }
             else {
                 int index = bidderList.indexOf(currBidder);
@@ -1462,7 +1460,7 @@ public class GameScreen implements Screen {
                     } else {
                         currBidder = bidderList.get(0);
                     }
-                    quickPopUpWindow("Bot says: That's too much!", 100, 300, 1);
+                    quickPopUpWindow("Bot says: Thats too much!", 100, 300, 1);
                 }
             }
 
@@ -1535,7 +1533,6 @@ public class GameScreen implements Screen {
         for (Sprite sprite: ownedProperties) {
             sprite.draw(spriteBatch);
         }
-
 
         for (Sprite sprite: propertyIcons){
             sprite.draw(spriteBatch);

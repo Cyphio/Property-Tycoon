@@ -325,14 +325,28 @@ public class GameSetUpScreen implements Screen {
                         public void run() {
                             window.setVisible(false);
                         }
-                    }, 0.5f);
+                    }, 1);
+                }
+                else if(playerNamesList.get(0).getText().toLowerCase().equals("bot")) {
+                    final Window window = new Window("", gameSetUpScreenSkin);
+                    final Label label = new Label("First player cannot be a bot", gameSetUpScreenSkin, "big");
+                    window.add(label);
+                    window.setBounds((Gdx.graphics.getWidth() - 400) / 2, (Gdx.graphics.getHeight() - 100) / 2, 500, 100);
+                    stage.addActor(window);
+                    window.setVisible(true);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            window.setVisible(false);
+                        }
+                    }, 1);
                 }
                 else {
                     game.players = null;
                     game.players = new ArrayList<>();
                     for (int i = 0; i < numPlayersBox.getSelected(); i++) {
                         if(playerNamesList.get(i).getText().toLowerCase().equals("bot")) {
-                            game.players.add(new Bot(playerNamesList.get(i).getText(), spriteList.get(i)));
+                            game.players.add(new Bot(playerNamesList.get(i).getText().toLowerCase()+" "+i, spriteList.get(i)));
                         }
                         else {
                             game.players.add(new Player(playerNamesList.get(i).getText(), spriteList.get(i)));
@@ -364,9 +378,9 @@ public class GameSetUpScreen implements Screen {
                         public void run() {
                             window.setVisible(false);
                         }
-                    }, 0.5f);
+                    }, 1);
                 }
-                if(abridgedLengthField.getText().matches("^$|( )*")) {
+                else if(abridgedLengthField.getText().matches("^$|( )*")) {
                     final Window window = new Window("", gameSetUpScreenSkin);
                     final Label label = new Label("Length of game invalid", gameSetUpScreenSkin, "big");
                     window.add(label);
@@ -378,16 +392,30 @@ public class GameSetUpScreen implements Screen {
                         public void run() {
                             window.setVisible(false);
                         }
-                    }, 0.5f);
+                    }, 1);
                 }
-                if(!abridgedLengthField.getText().matches("^$|( )*") && !isEmpty) {
+                else if(playerNamesList.get(0).getText().toLowerCase().equals("bot")) {
+                    final Window window = new Window("", gameSetUpScreenSkin);
+                    final Label label = new Label("First player cannot be a bot", gameSetUpScreenSkin, "big");
+                    window.add(label);
+                    window.setBounds((Gdx.graphics.getWidth() - 400) / 2, (Gdx.graphics.getHeight() - 100) / 2, 500, 100);
+                    stage.addActor(window);
+                    window.setVisible(true);
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            window.setVisible(false);
+                        }
+                    }, 1);
+                }
+                else {
                     game.getPreferences().setAbridged(true);
                     game.getPreferences().setAbridgedLength(Integer.parseInt(abridgedLengthField.getText()));
                     game.players = null;
                     game.players = new ArrayList<>();
                     for (int i = 0; i < numPlayersBox.getSelected(); i++) {
                         if(playerNamesList.get(i).getText().toLowerCase().equals("bot")) {
-                            game.players.add(new Bot(playerNamesList.get(i).getText(), spriteList.get(i)));
+                            game.players.add(new Bot(playerNamesList.get(i).getText().toLowerCase()+" "+i, spriteList.get(i)));
                         }
                         else {
                             game.players.add(new Player(playerNamesList.get(i).getText(), spriteList.get(i)));
