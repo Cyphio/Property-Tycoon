@@ -81,7 +81,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                             List<String> houses = Arrays.asList("rent", "one-house", "two-house", "three-house", "four-house", "hotel");
 
                             tile = new Property();
-                            ((Property) tile).setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
+                            tile.setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             ((Property) tile).setBuyable(true);
 
                             ((Property) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
@@ -213,11 +213,6 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                         cardList.add(card);
 
                     } catch (Exception e) {
-
-                        System.out.println(card.getAction());
-
-                        System.out.println("error in config file card setup");
-
                     }
 
 
