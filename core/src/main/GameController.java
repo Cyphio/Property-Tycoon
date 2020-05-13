@@ -22,7 +22,6 @@ public class GameController{
     private int currentAuction;
     private ArrayList<Player> playerOrders;
 
-
     /**
      * the constructor for GameController
      * @param layer the TiledMapTileLayer used to create the cell to Tile mapping
@@ -30,7 +29,6 @@ public class GameController{
     public GameController(TiledMapTileLayer layer) {
 
         playerOrders = new ArrayList<>(players);
-
 
     cellToTile = new HashMap<>();
     board = new GameBoard(players);
@@ -50,10 +48,8 @@ public class GameController{
      * Changes the current player to the next player in the list players
      */
     private void nextPlayer(){
-
         Player p = playerOrders.remove(0);
         playerOrders.add(p);
-
     }
 
     /**
@@ -80,15 +76,7 @@ public class GameController{
      */
     public Tile playerTurn(){
         playAgain = board.playerTurn(getCurrentPlayer());
-
         Tile tile = board.getTile(board.getPlayerPos(getCurrentPlayer()));
-        System.out.println("-------------------------");
-        System.out.println(board.getTile(board.getPlayerPos(getCurrentPlayer())));
-        System.out.println(board.getPlayerPos(getCurrentPlayer()));
-        System.out.println(getCurrentPlayer());
-        System.out.println("-------------------------");
-
-        System.out.println(tile);
         return tile;
     }
 
@@ -114,7 +102,6 @@ public class GameController{
      */
     public void endTurn(){
         if (!playAgain){
-            System.out.println("new player");
             nextPlayer();
         }
     }
@@ -152,7 +139,6 @@ public class GameController{
     public int getLastD2() {
         return board.getLastD2();
     }
-
 
     public ArrayList<Property> getDevelopedProperties(){
         return board.getDevelopedProperties();
@@ -192,6 +178,4 @@ public class GameController{
         players.set(end, tempIplus1);
         return i+1;
     }
-
-
 }

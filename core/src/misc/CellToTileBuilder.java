@@ -51,7 +51,6 @@ public class CellToTileBuilder {
         // vertical row 10
         cellCoordinates=new ArrayList<>();
         for(int y=4+dynamicY;y< 31+dynamicY;y++){
-            System.out.println(board.getTile(tileNUm));
             if(count==3){
                 board.getTile(tileNUm).setCoordinates(cellCoordinates);
                 cellCoordinates=new ArrayList<>();
@@ -165,8 +164,6 @@ public class CellToTileBuilder {
             count++;
         }
         board.getTile(tileNUm).setCoordinates(cellCoordinates);
-
-        System.out.println("built");
     }
 
     /**

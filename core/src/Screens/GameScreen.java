@@ -651,7 +651,6 @@ public class GameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(gameCon.developProperty(((Property)clickedProperty), gameCon.getCurrentPlayer())) {
-                    quickPopUpWindow("Able to develop", 100, 350, 0.5f);
                     updatePropertyDevelopmentSprites();
                 }
                 else {
