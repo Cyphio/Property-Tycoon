@@ -274,6 +274,7 @@ public class GameBoard implements GameBoardInterface {
      */
     @Override
     public void performCardAction(Card card) {
+        Integer[] counts = getNumberOfHousesOwned(currentPlayer);
         switch (card.getAction()) {
             case "pay": // Bank pays player
             case "You have won 2nd prize in a beauty contest, collect":
@@ -283,12 +284,20 @@ public class GameBoard implements GameBoardInterface {
             case "From sale of Bitcoin you get": // Sale - bank pays player
             case "Savings bond matures, collect": // Savings - bank pays player
             case "Received interest on shares of":
+            case "Bank pays you divided of":
+            case "Pay university fees of":
+            case "You have won a lip sync battle. Collect":
+            case "Loan matures, collect":
+
 
                 currentPlayer.payPlayer(card.getValue());
                 break;
-            case "Go back to":
-            case "Advance to": // Go back to Crapper Street
+            case "Go back to":// Go back to Crapper Street
+            case "Advance to": //Advance to Turing Heights
                 setPlayerPos(currentPlayer, card.getValue());
+                if(card.getValue() == 11 || card.getValue() == 15 || card.getValue() == 24 && currentPlayer.getTilePosition() >= card.getValue()) { // 11 Skywalker Drive Tile Pos - 15 Han Xin Gardens Pos - 24 Hove Station Pos
+                        currentPlayer.payPlayer(goPayoutAmount);
+                }
                 checkBoardCircumstances();
                 break;
             case "Pay bill for text books of"://Player pays bill
@@ -315,11 +324,25 @@ public class GameBoard implements GameBoardInterface {
                 currentPlayer.addGetOutOfJailFreeCard();
                 break;
             case "Pay insurance fee of":
-            case "Fined for speeding for":
+            case "Fined for speeding, pay":
+            case "Drunk in charge of a skateboard. Fine":
                 currentPlayer.makePurchase(card.getValue());
                 ((FreeParking) board[20]).addToPot(card.getValue());
                 break;
+            case "Go back 3 spaces":
+                movePlayer(currentPlayer, -3);
+            case "You are assessed for repairs, $25/house, $100/hotel":
 
+                currentPlayer.makePurchase(counts[0]*25);
+                currentPlayer.makePurchase(counts[1]*100);
+
+                break;
+            case "You are assessed for repairs, $40/house, $115/hotel":
+
+                currentPlayer.makePurchase(counts[0]*40);
+                currentPlayer.makePurchase(counts[1]*115);
+
+                break;
             default:
                 System.out.println("no action found");
         }
@@ -411,6 +434,45 @@ public class GameBoard implements GameBoardInterface {
 
 
     }
+
+
+    //collects number of properties, used to calculate repair costs in the card action method
+    public Integer[] getNumberOfHousesOwned(Player player){
+
+        Integer[] counts = new Integer[2];
+
+        int hotels = 0;
+        int houses = 0;
+
+        for (Ownable tile:player.getOwnables()) {
+
+            if (tile instanceof Property) {
+
+
+                int developments = ((Property) tile).getHousesOwned();
+
+                if (developments == 5){
+
+                    hotels += 1;
+
+                }else{
+
+                    houses += developments;
+
+                }
+
+
+            }
+        }
+
+        counts[0]= houses;
+        counts[1] = hotels;
+
+        return counts;
+
+        }
+
+
 
     public void drawOpportunityKnocksCard(){
 

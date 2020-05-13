@@ -1280,26 +1280,38 @@ public class GameScreen implements Screen {
         final Label label = new Label(msg, gameScreenSkin, "big");
         label.setWrap(true);
         label.setAlignment(Align.center);
-        window.add(label).width(width-50);
-        if(msg.contains("Take opportunity knocks card or pay a fine of")) {
+        window.add(label).width(width - 50);
+        if (msg.contains("Take opportunity knocks card or pay a fine of")) {
             window.row().padTop(10);
             window.add(payFineButton);
             window.add(takeOpportunityKnocksButton);
-        }else{
+        } else {
 
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    window.setVisible(false);
-                }
-            }, time);
+//            Timer.schedule(new Timer.Task() {
+//                @Override
+//                public void run() {
+//                    window.setVisible(false);
+//                }
+//            }, time);
 
         }
         window.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
         stage.addActor(window);
+
+
         window.setVisible(true);
 
+        if (msg.contains("Take opportunity knocks card or pay a fine of")) {
 
+            try {
+                TimeUnit.SECONDS.sleep((long) time);
+                window.setVisible(false);
+//
+            } catch (Exception e) {
+            }
+
+
+        }
     }
 
     public void updatePropertyDevelopmentSprites(){
