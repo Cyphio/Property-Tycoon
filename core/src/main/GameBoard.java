@@ -296,7 +296,7 @@ public class GameBoard implements GameBoardInterface {
             case "Advance to": //Advance to Turing Heights
                 setPlayerPos(currentPlayer, card.getValue());
                 if(card.getValue() == 11 || card.getValue() == 15 || card.getValue() == 24 && currentPlayer.getTilePosition() >= card.getValue()) { // 11 Skywalker Drive Tile Pos - 15 Han Xin Gardens Pos - 24 Hove Station Pos
-                        currentPlayer.payPlayer(goPayoutAmount);
+                    currentPlayer.payPlayer(goPayoutAmount);
                 }
                 checkBoardCircumstances();
                 break;
@@ -331,6 +331,8 @@ public class GameBoard implements GameBoardInterface {
                 break;
             case "Go back 3 spaces":
                 movePlayer(currentPlayer, -3);
+                checkBoardCircumstances();
+                break;
             case "You are assessed for repairs, $25/house, $100/hotel":
 
                 currentPlayer.makePurchase(counts[0]*25);
