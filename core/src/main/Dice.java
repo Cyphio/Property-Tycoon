@@ -73,7 +73,7 @@ public class Dice implements DiceInterface {
 
     /**
      * getD1 returns the value of the first die as an int
-     * @return
+     * @return the value of the first die
      */
     @Override
     public int getD1() {
@@ -82,7 +82,7 @@ public class Dice implements DiceInterface {
 
     /**
      * getD2 returns the value of the second die as an int
-     * @return
+     * @return the value of the second die
      */
     @Override
     public int getD2() {

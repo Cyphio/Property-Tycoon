@@ -66,6 +66,33 @@ public class Player implements PlayerInterface {
     }
 
     /**
+     * getOutOfJailFree will return true if player has at least one card and false otherwise
+     * @return returns true or false depending if "get out of jail" card is present or not
+     */
+    @Override
+    public boolean hasGetOutOfJailFree() {
+        return getOutJailCards > 0;
+    }
+
+    /**
+     * setInJail takes a Boolean parameter that defines whether or not a player is in jail
+     * @param isInJail true if player is in jail, false otherwise
+     */
+    @Override
+    public void setInJail(boolean isInJail) {
+        this.isInJail = isInJail;
+    }
+
+    /**
+     * getIsInJail returns a Boolean judgement as to whether a player is in jail or not
+     * @return true if player is in jail, false otherwise
+     */
+    @Override
+    public boolean getIsInJail() {
+        return isInJail;
+    }
+
+    /**
      * getName returns the name of a player as a String
      * @return a String representation of the player's name
      */
@@ -189,39 +216,6 @@ public class Player implements PlayerInterface {
     @Override
     public void makePurchase(int cost) {
         balance -= cost;
-    }
-
-    /**
-     * getOutOfJailFree will return true if player has at least one card and false otherwise
-     * @return returns true or false depending if "get out of jail" card is present or not
-     */
-    @Override
-    public boolean hasGetOutOfJailFree() {
-        if(getOutJailCards > 0) {
-            getOutJailCards--;
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    /**
-     * setInJail takes a Boolean parameter that defines whether or not a player is in jail
-     * @param isInJail true if player is in jail, false otherwise
-     */
-    @Override
-    public void setInJail(boolean isInJail) {
-        this.isInJail = isInJail;
-    }
-
-    /**
-     * getIsInJail returns a Boolean judgement as to whether a player is in jail or not
-     * @return true if player is in jail, false otherwise
-     */
-    @Override
-    public boolean getIsInJail() {
-        return isInJail;
     }
 
     /**
