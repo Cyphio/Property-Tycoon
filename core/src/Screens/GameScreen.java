@@ -400,7 +400,7 @@ public class GameScreen implements Screen {
                 serviceInfoBox2.add(new Label("Rent with four stations owned:", gameScreenSkin)).left();
                 serviceInfoBox2.add(new Label("$200", gameScreenSkin)).right();
                 serviceInfoBox2.row().pad(20, 0, 0, 0);
-                serviceImg.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("trainImage.png")))));
+                serviceImg.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("serviceImages/trainImage.png")))));
                 servicePopUpWindowSetUp();
             }
             else if (tile instanceof Utility){
@@ -412,7 +412,7 @@ public class GameScreen implements Screen {
                 serviceInfoBox2.add(new Label("10 times dice value", gameScreenSkin)).right();
                 serviceInfoBox2.row();
                 serviceInfoBox2.add(new Label("", gameScreenSkin)).height(30);
-                serviceImg.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("utilityImage.png")))));
+                serviceImg.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("serviceImages/utilityImage.png")))));
                 servicePopUpWindowSetUp();
             }
 
