@@ -46,10 +46,4 @@ public class PropertyTest {
         p.setHotelPrice(50);
         assertEquals(50, p.getHotelPrice());
     }
-
-    @Test
-    public void developTest() {
-        p.develop();
-        assert(p.getHousesOwned() == 1);
-    }
 }
