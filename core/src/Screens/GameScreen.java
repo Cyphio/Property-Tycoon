@@ -30,7 +30,6 @@ import misc.Card;
 import misc.Coordinate;
 import misc.RotatableLabel;
 import misc.ScrollableStage;
-
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -296,11 +295,13 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * show() defines the layout, elements and interactivity of the GUI
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
-
 
     private TextureRegionDrawable getColouredBackground(Color colour) {
         Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
@@ -459,7 +460,6 @@ public class GameScreen implements Screen {
                     quickPopUpWindow(card.getCardMessage(), 100, 400, 2);
                 }
             }
-
         }
         else if(tile instanceof PotLuck) {
             closeAllWindows();
