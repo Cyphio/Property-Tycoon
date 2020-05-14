@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="DiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2020-05-04T17:28:50" hostname="Harry-Desktop" time="0.003">
+<testsuite name="DiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2020-05-14T14:01:03" hostname="DESKTOP-FH38GRJ" time="0.003">
   <properties/>
   <testcase name="rollDiceTest1" classname="DiceTest" time="0.002"/>
-  <testcase name="rollDiceTest2" classname="DiceTest" time="0.001"/>
+  <testcase name="rollDiceTest2" classname="DiceTest" time="0.0"/>
   <testcase name="jailCheckTestFalse" classname="DiceTest" time="0.0"/>
   <testcase name="wasItADoubleTest" classname="DiceTest" time="0.0"/>
   <testcase name="resetTest" classname="DiceTest" time="0.0"/>

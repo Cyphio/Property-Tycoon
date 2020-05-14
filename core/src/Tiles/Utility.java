@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Utility extends Services {
 
-
+    /**
+     * constructor for utility
+     */
     public Utility(){
 
         tileName = "";
@@ -19,6 +21,10 @@ public class Utility extends Services {
 
     }
 
+    /**
+     * @param dice the player's dice roll
+     * @return the rent based on the dice roll
+     */
     public int getRent( int dice){
         if (this.owner!=null) {
             int i = 0;

@@ -14,6 +14,9 @@ public class Tax extends SmallTile implements TaxInterface {
     int taxAmount;
     protected Sprite icon;
 
+    /**
+     * constructor for tax tile
+     */
     public Tax(){
 
         tileName = "Tax";
@@ -67,9 +70,10 @@ public class Tax extends SmallTile implements TaxInterface {
     }
 
 
-
-
-
+    /**
+     *
+     * @return returns the icon placed on the tax tile
+     */
     public Sprite getIcon(){return icon;}
     public int getTaxAmount(){
         return this.taxAmount;

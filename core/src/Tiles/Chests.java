@@ -11,6 +11,10 @@ public class Chests extends SmallTile {
 
     protected Sprite icon;
 
+    /**
+     * sets the coordinates of where sprites should appear on the tile
+     * @param coordinates the arraylist of coordinates for each tile.
+     */
     @Override
     public void setCoordinates(ArrayList<Coordinate> coordinates) {
         playerPosCoordinates = new ArrayList<>();
