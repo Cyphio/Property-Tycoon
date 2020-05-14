@@ -141,7 +141,9 @@ public class Property extends Ownable implements PropertyInterface {
     }
 
 
-    // basically undevelop
+    /**
+     * sells a developed house on the property
+     */
     public void sellHouse(){
 
         if(housesOwned <= 4 && housesOwned > 0){
@@ -187,7 +189,10 @@ public class Property extends Ownable implements PropertyInterface {
     }
 
 
-
+    /**
+     * returns the number of houses on the property
+     * @return
+     */
     public int getHousesOwned(){
 
         return housesOwned;
