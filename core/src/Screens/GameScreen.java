@@ -110,7 +110,6 @@ public class GameScreen implements Screen {
     private Sound rollDiceFX;
     private Sound popupSoundFX;
 
-    private ClickListener rollDiceListener;
     private ClickListener clickListener;
     private TextField auctionBid;
 
@@ -169,7 +168,6 @@ public class GameScreen implements Screen {
         ownedProperties = new ArrayList<>();
         propertyIcons = new ArrayList<>();
 
-
         propertyHouseAndHotelSprites = new ArrayList<>();
         updatePropertyDevelopmentSprites();
 
@@ -180,7 +178,7 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, w, h);
         view = new FitViewport(w, h, camera);
         labelStage = new Stage(view);
-        camera.position.set(2880, 1760, 0);
+        camera.position.set(new Vector3(layer.getWidth() * layer.getTileWidth() / 2, layer.getHeight() * layer.getTileHeight() / 2, 0));
         camera.zoom = (float) (((64 * 90) / h) / 2);
 
         int angle = 0;
@@ -436,10 +434,10 @@ public class GameScreen implements Screen {
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
                 Card card = gameCon.getBoard().getLastCardPulled();
                 if(card.getAction().equals("Advance to")) {
-                    quickPopUpWindow(card.getAction() + " " + gameCon.getBoard().getTile(card.getValue()).getTileName(), 200, 300, 2);
+                    quickPopUpWindow(card.getAction() + " " + gameCon.getBoard().getTile(card.getValue()).getTileName(), 100, 400, 2);
                 }
                 else {
-                    quickPopUpWindow(card.getCardMessage(), 200, 300, 2);
+                    quickPopUpWindow(card.getCardMessage(), 100, 400, 2);
                 }
             }
 
@@ -449,32 +447,31 @@ public class GameScreen implements Screen {
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
                 Card card = gameCon.getBoard().getLastCardPulled();
                 if(card.getAction().equals("Go back to")) {
-                    quickPopUpWindow(card.getAction() + " " + gameCon.getBoard().getTile(card.getValue()).getTileName(), 200, 300, 2);
+                    quickPopUpWindow(card.getAction() + " " + gameCon.getBoard().getTile(card.getValue()).getTileName(), 100, 400, 2);
                 }
-                else if(card.getAction().equals("Take opportunity knocks card or pay a fine of")) {
+                else if(card.getAction().equals("Take Opportunity Knocks card or pay a fine of")) {
                     choiceWindow(card);
                 }
                 else {
-                    quickPopUpWindow(card.getCardMessage(), 200, 300, 2);
+                    quickPopUpWindow(card.getCardMessage(), 100, 400, 2);
                 }
             }
         }
         else if(tile instanceof Tax &&tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
             closeAllWindows();
-            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 350, 2);
+            quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " paid $" + ((Tax) tile).getTaxAmount() + " worth of tax!", 100, 400, 2);
         }
         else if(tile instanceof FreeParking) {
             closeAllWindows();
             if (tile.getPlayers().contains(gameCon.getCurrentPlayer())) {
-                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 350, 2);
+                quickPopUpWindow(gameCon.getCurrentPlayer().getName() + " picked up $" + ((FreeParking) tile).getCurrentValue() + "!", 100, 400, 2);
                 ((FreeParking) gameCon.getBoard().getTile(20)).reset();
             } else {
-                quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 350, 2);
+                quickPopUpWindow("Free parking value stands at $" + ((FreeParking) tile).getCurrentValue(), 100, 400, 2);
             }
         }
         else if(tile instanceof GoToJail) {
             closeAllWindows();
-            quickPopUpWindow("Go to jail", 100, 200, 2);
         }
     }
 
@@ -483,8 +480,6 @@ public class GameScreen implements Screen {
         servicePopUpWindow.setVisible(false);
         auctionPopUpWindow.setVisible(false);
         jailPopUpWindow.setVisible(false);
-//        quickPopUpWindow.setVisible(false);
-//        choiceWindow.setVisible(false);
     }
 
     private void propertyPopUpWindowSetUp() {
@@ -1009,13 +1004,11 @@ public class GameScreen implements Screen {
         timerTable.right().padRight(10);
         stage.addActor(timerTable);
 
-
-        rollDice.addListener(rollDiceListener = new ClickListener() {
+        rollDice.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (rollDice.getText().toString().equals("Roll dice")) {
                     performRollDice();
-
                     if (!gameCon.getPlayAgain()) {
                         rollDice.setText("End turn");
                     }
@@ -1025,7 +1018,6 @@ public class GameScreen implements Screen {
                 }
             }
         });
-
 
         centerButton.addListener(new ClickListener() {
             @Override
@@ -1143,12 +1135,12 @@ public class GameScreen implements Screen {
     }
 
     private void jailPopUpWindowSetUp() {
-        Label jailInfoLabel = new Label("Either buy your way out of Jail for $50, use a get out of jail free card or roll a double on your next go!", gameScreenSkin, "title");
+        Label jailInfoLabel = new Label("You're in jail! Post your bail or roll a double on your next go!", gameScreenSkin, "title");
         jailInfoLabel.setWrap(true);
         jailInfoLabel.setWidth(875);
         jailInfoLabel.setAlignment(Align.center);
-        TextButton buyOutOfJailButton = new TextButton("Buy way out of Jail", gameScreenSkin);
-        TextButton useJailFreeButton = new TextButton("Use get out of jail free card", gameScreenSkin);
+        TextButton buyOutOfJailButton = new TextButton("Buy way out of Jail for $50", gameScreenSkin);
+        TextButton useJailFreeButton = new TextButton("Use your get out of jail free card", gameScreenSkin);
 
         Table jailPopUpTable = new Table();
 
@@ -1162,8 +1154,6 @@ public class GameScreen implements Screen {
             jailPopUpTable.add(useJailFreeButton);
         }
         jailPopUpTable.pack();
-
-        jailPopUpTable.setBackground(getColouredBackground(Color.PINK));
 
         jailPopUpWindow = new Window("", gameScreenSkin);
         //jailPopUpWindow.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("gameScreenJail.png")))));
@@ -1425,17 +1415,14 @@ public class GameScreen implements Screen {
             }
         }
         if(tile instanceof Jail) {
-
             if (bot.getIsInJail() && bot.hasGetOutOfJailFree()){
                 gameCon.freePlayerFromJail(bot);
                 bot.removeGetOutOfJailFreeCard();
-            }else if(bot.getIsInJail() && bot.getMoney() >= 50) {
-
+            } else if(bot.getIsInJail() && bot.getMoney() >= 50) {
                 bot.makePurchase(50);
                 gameCon.freePlayerFromJail(bot);
             }
         }
-
             endTurn();
             rollDice.setVisible(true);
     }
@@ -1449,13 +1436,12 @@ public class GameScreen implements Screen {
                 highestBidder = currBidder;
                 highestBidderNameLabel.setText(currBidder.getName());
                 highestBid.setText("$"+gameCon.getAuctionValue());
-                quickPopUpWindow("Bot says: I will raise you to $" + Integer.toString(gameCon.getAuctionValue()), 100, 300, 1);
-
-                    if (bidderList.indexOf(currBidder) < bidderList.size() - 1) {
-                        currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
-                    } else {
-                        currBidder = bidderList.get(0);
-                    }
+                quickPopUpWindow(currBidder.getName() + " says: I will raise you to $" + Integer.toString(gameCon.getAuctionValue()), 100, 300, 1);
+                if (bidderList.indexOf(currBidder) < bidderList.size() - 1) {
+                    currBidder = bidderList.get(bidderList.indexOf(currBidder) + 1);
+                } else {
+                    currBidder = bidderList.get(0);
+                }
             }
             else {
                 int index = bidderList.indexOf(currBidder);
@@ -1466,7 +1452,7 @@ public class GameScreen implements Screen {
                     } else {
                         currBidder = bidderList.get(0);
                     }
-                    quickPopUpWindow("Bot says: Thats too much!", 100, 300, 1);
+                    quickPopUpWindow(currBidder.getName() + " says: That's too much!", 100, 300, 1);
                 }
             }
 

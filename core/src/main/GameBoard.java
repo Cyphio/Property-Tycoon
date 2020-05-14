@@ -274,7 +274,7 @@ public class GameBoard implements GameBoardInterface {
             case "From sale of Bitcoin you get": // Sale - bank pays player
             case "Savings bond matures, collect": // Savings - bank pays player
             case "Received interest on shares of":
-            case "Bank pays you divided of":
+            case "Bank pays you dividend of":
             case "Pay university fees of":
             case "You have won a lip sync battle. Collect":
             case "Loan matures, collect":
