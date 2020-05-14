@@ -65,9 +65,6 @@ public class GameBoard implements GameBoardInterface {
             identityPropMap.put(identity, properties);
         }
 
-        ConfigValidator validator = new ConfigValidator(board);
-        validator.validate(board);
-
         dice = new Dice();
 
         potluckCards = builder.getPotluckChestCards();
