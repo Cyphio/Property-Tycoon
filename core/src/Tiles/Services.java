@@ -11,6 +11,10 @@ public class Services extends Ownable {
 
     protected Sprite icon;
 
+    /**
+     * sets the coordinates for sprites within the service tiles
+     * @param coordinates the arraylist of coordinates for each tile.
+     */
     public void setCoordinates(ArrayList<Coordinate> coordinates) {
         playerPosCoordinates = new ArrayList<>();
         for(int i =0 ; i < players.size();i++) {

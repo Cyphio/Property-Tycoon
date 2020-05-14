@@ -8,6 +8,9 @@ public class Station extends Services implements StationInterface {
 
     private int currentRent;
 
+    /**
+     * constructor for station
+     */
     public Station(){
         currentRent = 50;
         Texture texture = new Texture(Gdx.files.internal("tile-images/station.png"));
@@ -17,6 +20,10 @@ public class Station extends Services implements StationInterface {
 
     }
 
+    /**
+     *
+     * @return rent paid by opponents who land on the tile
+     */
     public int getRent(){
         if (this.owner != null) {
             int i = 0;

@@ -17,6 +17,10 @@ public class Jail extends BigTiles {
     }
 
 
+    /**
+     * sets coordinates of where sprites should appear on the tile
+     * @param coordinates the arraylist of coordinates for each tile.
+     */
     @Override
     public void setCoordinates(ArrayList<Coordinate> coordinates){
         this.playerPosCoordinates = new ArrayList<>();
@@ -40,6 +44,10 @@ public class Jail extends BigTiles {
 
     }
 
+    /**
+     * gets coordinates within the small orange square in jail that are free
+     * @return coordinate within square
+     */
     public Coordinate getNextJailCoordinate(){
         Coordinate coordinate = jailCoordinates.remove(0);
         jailCoordinates.add(coordinate);

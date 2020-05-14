@@ -36,6 +36,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * gameScreen is the UI for the main game, this shows the board, the players moving around, and all other information
+ * during the game.
+ */
 public class GameScreen implements Screen {
 
     private final PropertyTycoon game;
@@ -116,6 +120,11 @@ public class GameScreen implements Screen {
     private float reverseTime;
     private Label timerLabel;
 
+
+    /**
+     * the constructor for gameScreen
+     * @param game the current game
+     */
     public GameScreen(PropertyTycoon game) {
         this.game = game;
         stage = new ScrollableStage(this);
@@ -303,6 +312,11 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     *  takes a colour and returns a TextureRegionDrawable filled with that colour
+     * @param colour the colour to set the background
+     * @return a TextureRegionDrawable based on the colour
+     */
     private TextureRegionDrawable getColouredBackground(Color colour) {
         Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGB565);
         pm.setColor(colour);
