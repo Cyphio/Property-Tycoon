@@ -38,6 +38,11 @@ public class Ownable extends SmallTile{
         isBuyable = TrueOrFalse;
     }
 
+    /**
+     * method used to sell the property
+     * @param player the player selling
+     * @param cost the cost of the property
+     */
     public void sellProperty(Player player, int cost){
 
         player.payPlayer(cost);
@@ -96,6 +101,11 @@ public class Ownable extends SmallTile{
         return "Nobody";
     }
 
+    /**
+     * method to buy properties
+     * @param player the player buying
+     * @param cost the cost of the property
+     */
     public void buyProperty(Player player, int cost) {
         if (!getOwned() && player.getMoney()>= cost){
             player.makePurchase(cost);
@@ -106,13 +116,20 @@ public class Ownable extends SmallTile{
         }
     }
 
+    /**
+     * @return the coordinate of the propertysprite
+     */
     public Coordinate getPropertySpriteCoordinate(){
         return propertySpriteCoordinate;
 
     }
 
 
-
+    /**
+     * method to mortgage a property
+     * @param player the player mortgaging
+     * @param cost the cost of the property
+     */
     public void setMortgaged(Player player, int cost){
         if((getOwned())){
             isMortgaged = true;
@@ -122,7 +139,11 @@ public class Ownable extends SmallTile{
 
     }
 
-
+    /**
+     * method to unmortgage a property
+     * @param player the player unmortgaging
+     * @param cost the cost of the property
+     */
     public void unmortgage(Player player, int cost){
         if(isMortgaged){
             isMortgaged = false;
@@ -132,6 +153,9 @@ public class Ownable extends SmallTile{
 
     }
 
+    /**
+     * @return returns true if the property is mortgaged
+     */
     public boolean getMortgaged(){
         return isMortgaged;
     }

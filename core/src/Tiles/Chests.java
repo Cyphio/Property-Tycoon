@@ -60,8 +60,9 @@ public class Chests extends SmallTile {
     }
 
 
-
-
+    /**
+     * @return icon to be placed on chests
+     */
     public Sprite getIcon(){return icon;}
 
 
