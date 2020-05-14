@@ -17,7 +17,6 @@ public class Station extends Services implements StationInterface {
         icon = new Sprite(texture);
         icon.setOriginCenter();
         icon.setAlpha(1f);
-
     }
 
     /**
@@ -35,12 +34,9 @@ public class Station extends Services implements StationInterface {
             return currentRent * i;
         }
         return 0;
-
     }
 
     public void setCurrentRent(int rent){
         this.currentRent = rent;
     }
-
-
 }

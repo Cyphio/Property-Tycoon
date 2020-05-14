@@ -4,18 +4,17 @@ import misc.Coordinate;
 
 import java.util.ArrayList;
 
-import static com.propertytycoonmakers.make.PropertyTycoon.players;
-
 public class Jail extends BigTiles {
 
     ArrayList<Coordinate> jailCoordinates;
     private int bailPrice = 50;
 
-
+    /**
+     * The constructor for Jail
+     */
     public Jail(){
         tileName = "Jail";
     }
-
 
     /**
      * sets coordinates of where sprites should appear on the tile
@@ -25,23 +24,15 @@ public class Jail extends BigTiles {
     public void setCoordinates(ArrayList<Coordinate> coordinates){
         this.playerPosCoordinates = new ArrayList<>();
         jailCoordinates = new ArrayList<>();
-
         for (int i =0; i < 15 ; i++) {
-
             if (i == 0 || i == 4 || i == 8 || i == 12 || i == 13 || i == 14 || i == 15) {
-
                 playerPosCoordinates.add(coordinates.get(i));
-
-            } else {
-
+            }
+            else {
                 jailCoordinates.add(coordinates.get(i));
-
-
             }
         }
-
         allCoordinates = coordinates;
-
     }
 
     /**
@@ -53,7 +44,6 @@ public class Jail extends BigTiles {
         jailCoordinates.add(coordinate);
         return coordinate;
     }
-
 
     public int getBailPrice() {
         return bailPrice;

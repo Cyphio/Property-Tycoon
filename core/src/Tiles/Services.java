@@ -27,7 +27,6 @@ public class Services extends Ownable {
         int propertyPosition = 7;// where the tile icon is placed
         int iconPosition = 5;
 
-
         Coordinate iconCoordinate = new Coordinate(0,0);
         Coordinate labelCoordinate = new Coordinate(0,0);
         Coordinate tempPropertyCoordinate = new Coordinate(0,0);
@@ -36,11 +35,9 @@ public class Services extends Ownable {
         tempPropertyCoordinate.setCoordinate(coordinates.get(propertyPosition).getX()+32,coordinates.get(propertyPosition).getY()+32);
         iconCoordinate.setCoordinate(coordinates.get(iconPosition).getX()-64,coordinates.get(iconPosition).getY()-64);
 
-
         centerLabelCoordinate = labelCoordinate;
         propertySpriteCoordinate = tempPropertyCoordinate;
         allCoordinates = coordinates;
-
 
         if (this.getTilePos() < 11){
 
@@ -54,16 +51,8 @@ public class Services extends Ownable {
         }else{
 
         }
-
         icon.setPosition(iconCoordinate.getX(),iconCoordinate.getY());
-
-
-
     }
 
-
-
     public Sprite getIcon(){return icon;}
-
-
 }

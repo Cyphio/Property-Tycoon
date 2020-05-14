@@ -147,7 +147,7 @@ public class GameScreen implements Screen {
         popupSoundFX = Gdx.audio.newSound(Gdx.files.internal("sound/pop.mp3"));
 
         //TILED MAP INITIALIZATION
-        tiledMap = new TmxMapLoader().load("core/assets/board/board.tmx");
+        tiledMap = new TmxMapLoader().load("board/board.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("Tile Layer 1");
 

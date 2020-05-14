@@ -11,20 +11,15 @@ public class Ownable extends SmallTile{
     protected Coordinate propertySpriteCoordinate;
     private boolean isMortgaged;
 
-
     public Ownable(){
-
         owned = false;
         owner = null;
-
     }
-
 
     /**
      * getBuyable returns true if property is buyable and false if it is not.
      * @return returns isBuyable , Boolean true or false.
      */
-
     public boolean getBuyable() {
         return isBuyable;
     }
@@ -33,7 +28,6 @@ public class Ownable extends SmallTile{
      * setBuyable sets isBuyable to true or false.
      * @param TrueOrFalse wether the property is buyable or not (true if yes, else false).
      */
-
     public void setBuyable(boolean TrueOrFalse) {
         isBuyable = TrueOrFalse;
     }
@@ -52,23 +46,19 @@ public class Ownable extends SmallTile{
         owned = false;
         owner = null;
         setBuyable(true);
-
     }
-
 
     /**
      * setCost will set the cost of a single property within game board
      * @param cost will be used to enter the cost of the property that player will need to pay
      *             in order to own the property
      */
-
     public void setCost(int cost){ this.cost = cost; }
 
     /**
      * getCost will return an integer that will represent a cost of the property
      * @return returns cost, integer that represents the cost of property
      */
-
     public int getCost(){ return cost; }
 
 
@@ -76,13 +66,7 @@ public class Ownable extends SmallTile{
      * getOwned will return a boolean value that will represent if the property is owned by any player or not
      * @return returns owned, boolean value that represent if property is owned
      */
-
     public boolean getOwned(){ return owned; }
-
-    public void buy() {
-        owned = true;
-    }
-
 
     /**
      * @return returns the player object that is assigned to the property
@@ -121,22 +105,18 @@ public class Ownable extends SmallTile{
      */
     public Coordinate getPropertySpriteCoordinate(){
         return propertySpriteCoordinate;
-
     }
-
 
     /**
      * method to mortgage a property
      * @param player the player mortgaging
      * @param cost the cost of the property
      */
-    public void setMortgaged(Player player, int cost){
-        if((getOwned())){
+    public void setMortgaged(Player player, int cost) {
+        if ((getOwned())) {
             isMortgaged = true;
-            player.payPlayer(cost/2);
-
+            player.payPlayer(cost / 2);
         }
-
     }
 
     /**
@@ -148,9 +128,7 @@ public class Ownable extends SmallTile{
         if(isMortgaged){
             isMortgaged = false;
             player.makePurchase(cost/2);
-
         }
-
     }
 
     /**
