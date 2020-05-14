@@ -36,6 +36,10 @@ public class Station extends Services implements StationInterface {
         return 0;
     }
 
+    /**
+     * sets the rent of the tile
+     * @param rent the rent wanted
+     */
     public void setCurrentRent(int rent){
         this.currentRent = rent;
     }

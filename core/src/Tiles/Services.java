@@ -54,5 +54,8 @@ public class Services extends Ownable {
         icon.setPosition(iconCoordinate.getX(),iconCoordinate.getY());
     }
 
+    /**
+     * @return returns the icon sprite associated with the service tile
+     */
     public Sprite getIcon(){return icon;}
 }

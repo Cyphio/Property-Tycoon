@@ -25,6 +25,10 @@ public class Tax extends SmallTile implements TaxInterface {
         icon.setAlpha(1f);
     }
 
+    /**
+     * sets coordinates for sprites within the tax tile
+     * @param coordinates the arraylist of coordinates for each tile.
+     */
     @Override
     public void setCoordinates(ArrayList<Coordinate> coordinates) {
         playerPosCoordinates = new ArrayList<>();

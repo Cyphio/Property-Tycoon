@@ -11,6 +11,9 @@ public class Ownable extends SmallTile{
     protected Coordinate propertySpriteCoordinate;
     private boolean isMortgaged;
 
+    /**
+     * constructor for ownable
+     */
     public Ownable(){
         owned = false;
         owner = null;

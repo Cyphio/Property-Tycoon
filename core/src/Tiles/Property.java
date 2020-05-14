@@ -60,23 +60,41 @@ public class Property extends Ownable implements PropertyInterface {
         }
     }
 
+
+    /**
+     * sets the price of a house for the property
+     * @param housePrice the price of the house
+     */
     public void setHousePrice(int housePrice) {
         this.housePrice = housePrice;
     }
 
+    /**
+     * @return returns the price of a house
+     */
     public int getHousePrice() {
         return housePrice;
     }
 
-
+    /**
+     * sets the price of a hotel
+     * @param hotelPrice the price required
+     */
     public void setHotelPrice(int hotelPrice) {
         this.hotelPrice = hotelPrice;
     }
 
+    /**
+     *
+     * @return returns the hotel price
+     */
     public int getHotelPrice() {
         return hotelPrice;
     }
 
+    /**
+     * develops a house on the property
+     */
     public void develop(){
         if(housesOwned < 5){
             housesOwned +=1;
@@ -87,6 +105,9 @@ public class Property extends Ownable implements PropertyInterface {
         }
     }
 
+    /**
+     * @return returns the current rent for the property
+     */
     public int getCurrentRent() {
         return developmentPrices.get(housesOwned);
     }

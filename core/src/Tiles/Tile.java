@@ -18,6 +18,9 @@ public class Tile {
     protected ArrayList<Coordinate> playerPosCoordinates;
     protected ArrayList<Coordinate> allCoordinates;
 
+    /**
+     * the constructor for the tile class
+     */
     public Tile(){
         tileName = "";
     }
