@@ -1,5 +1,6 @@
 import Tiles.Property;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import main.Bot;
 import main.Player;
 
 import org.junit.Before;
@@ -47,7 +48,7 @@ public class PlayerTest{
 	public void testSelling(){
 		testPlayer.addOwnable(testProperty);
 		assertEquals(testPlayer.getOwnables().get(0), testProperty);
-		testPlayer.removeProperty(testProperty);
+		testPlayer.removeOwnable(testProperty);
 		assertEquals(testPlayer.getOwnables().size(), 0);
 
 
@@ -57,6 +58,11 @@ public class PlayerTest{
 	public void testInJail(){
 		testPlayer.setInJail(true);
 		assertEquals(testPlayer.getIsInJail(), true);
+
+	}
+	@Test
+	public void botTest(){
+		assertEquals(false, testPlayer instanceof Bot);
 
 	}
 
