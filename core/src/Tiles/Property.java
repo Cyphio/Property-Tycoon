@@ -3,7 +3,6 @@ package Tiles;
 import com.badlogic.gdx.graphics.Color;
 import main.Player;
 import misc.Coordinate;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -129,15 +128,6 @@ public class Property extends Ownable implements PropertyInterface {
      */
     public ArrayList<Integer> getDevPrices() {
         return developmentPrices;
-    }
-
-
-    /**
-     * getRent returns the rent of the property with 0 development
-     * @return the rent of the property with 0 development
-     */
-    public int getInitialRent() {
-        return developmentPrices.get(0);
     }
 
     /**

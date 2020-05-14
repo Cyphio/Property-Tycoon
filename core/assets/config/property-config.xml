@@ -46,7 +46,6 @@
     <tile>
         <type>station</type>
         <name>Brighton Station</name>
-        <colour>white</colour>
         <cost>200</cost>
     </tile>
     <tile>
@@ -148,7 +147,6 @@
         <name>Hove Station</name>
         <type>station</type>
         <cost>200</cost>
-        <colour>white</colour>
     </tile>
     <tile>
         <name>Cooper Drive</name>
@@ -247,7 +245,6 @@
         <name>Falmer Station</name>
         <type>station</type>
         <cost>200</cost>
-        <colour>white</colour>
     </tile>
     <tile>
         <name>Kirk Close</name>
@@ -348,7 +345,6 @@
         <name>Lewes Station</name>
         <type>station</type>
         <cost>200</cost>
-        <colour>white</colour>
     </tile>
 
     <tile>

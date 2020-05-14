@@ -239,7 +239,6 @@ public class GameBoard implements GameBoardInterface {
             case "Savings bond matures, collect": // Savings - bank pays player
             case "Received interest on shares of":
             case "Bank pays you dividend of":
-            case "Pay university fees of":
             case "You have won a lip sync battle. Collect":
             case "Loan matures, collect":
                 currentPlayer.payPlayer(card.getValue());
@@ -256,6 +255,7 @@ public class GameBoard implements GameBoardInterface {
 
             case "Pay bill for text books of"://Player pays bill
             case "Mega late night taxi bill pay": // Player pays bank
+            case "Pay university fees of":
                 currentPlayer.makePurchase(card.getValue());
                 break;
 

@@ -25,7 +25,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
      */
     public ConfigTranslator() {
         try {
-            File file = new File("resources/config/property-config.xml");
+            File file = new File("config/property-config.xml");
             docBuilderFactory = DocumentBuilderFactory.newInstance();
             docBuilder = docBuilderFactory.newDocumentBuilder();
             document = docBuilder.parse(file);
