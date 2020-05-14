@@ -110,7 +110,6 @@ public class GameScreen implements Screen {
     private Sound rollDiceFX;
     private Sound popupSoundFX;
 
-    private ClickListener rollDiceListener;
     private ClickListener clickListener;
     private TextField auctionBid;
 
@@ -146,14 +145,11 @@ public class GameScreen implements Screen {
 
         //GAME CONTROLLER
         gameCon = new GameController(layer);
-        //Thread controllerThread = new Thread(gameCon);
-        //controllerThread.start();
 
         //TOKEN ADDED TO GO SCREEN
         spriteBatch = new SpriteBatch();
         for (Player p : game.players) {
             p.getPlayerToken().setPosition(p.getCurrentCoordinates().getX(), p.getCurrentCoordinates().getY());
-            p.addGetOutOfJailFreeCard();
         }
 
         // POP UP WINDOW SET UP
@@ -1008,7 +1004,7 @@ public class GameScreen implements Screen {
         timerTable.right().padRight(10);
         stage.addActor(timerTable);
 
-        rollDice.addListener(rollDiceListener = new ClickListener() {
+        rollDice.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (rollDice.getText().toString().equals("Roll dice")) {
@@ -1133,6 +1129,8 @@ public class GameScreen implements Screen {
         if(gameCon.getCurrentPlayer().isBot()) {
             rollDice.setVisible(false);
             botTurn();
+            updatePropertyDevelopmentSprites();
+            updatePropertyOwnerIcons();
         }
     }
 
@@ -1411,15 +1409,20 @@ public class GameScreen implements Screen {
         if(tile instanceof Ownable) {
             if(bot.getMoney() > 200 + ((Ownable) tile).getCost() && bot.completedFirstLap()) {
                 ((Ownable) tile).buyProperty(bot, ((Ownable) tile).getCost());
+                if(((Ownable) tile).getOwner() == bot && tile instanceof Property){
+                    gameCon.developProperty((Property) tile, bot);
+                }
             }
         }
         if(tile instanceof Jail) {
-            if(bot.getIsInJail() && bot.getMoney() >= 50) {
+            if (bot.getIsInJail() && bot.hasGetOutOfJailFree()){
+                gameCon.freePlayerFromJail(bot);
+                bot.removeGetOutOfJailFreeCard();
+            } else if(bot.getIsInJail() && bot.getMoney() >= 50) {
                 bot.makePurchase(50);
                 gameCon.freePlayerFromJail(bot);
             }
         }
-
             endTurn();
             rollDice.setVisible(true);
     }

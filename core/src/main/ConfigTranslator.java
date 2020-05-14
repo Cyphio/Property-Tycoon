@@ -114,7 +114,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                         case "tax":
 
                             tile = new Tax();
-                            ((Tax) tile).setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
+                            (tile).setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             ((Tax) tile).setTaxAmount(Integer.parseInt(tileElement.getElementsByTagName("amount").item(0).getTextContent()));
 
                             break;
@@ -125,7 +125,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                         case "station":
 
                             tile = new Station();
-                            ((Station)tile).setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
+                            (tile).setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             ((Station)tile).setBuyable(true);
                             ((Station) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
 
@@ -150,7 +150,7 @@ public class ConfigTranslator implements ConfigTranslatorInterface {
                         case "utility":
                             tile = new Utility();
 
-                            ((Utility) tile).setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
+                            (tile).setTileName(tileElement.getElementsByTagName("name").item(0).getTextContent());
                             ((Utility) tile).setCost(Integer.parseInt(tileElement.getElementsByTagName("cost").item(0).getTextContent()));
                             ((Utility)tile).setBuyable(true);
 
