@@ -146,8 +146,6 @@ public class GameScreen implements Screen {
 
         //GAME CONTROLLER
         gameCon = new GameController(layer);
-        //Thread controllerThread = new Thread(gameCon);
-        //controllerThread.start();
 
         //TOKEN ADDED TO GO SCREEN
         spriteBatch = new SpriteBatch();
@@ -171,8 +169,6 @@ public class GameScreen implements Screen {
         ownedProperties = new ArrayList<>();
         propertyIcons = new ArrayList<>();
 
-//        quickPopUpWindow = new Window("",gameScreenSkin);
-//        choiceWindow = new Window("", gameScreenSkin);
 
         propertyHouseAndHotelSprites = new ArrayList<>();
         updatePropertyDevelopmentSprites();
