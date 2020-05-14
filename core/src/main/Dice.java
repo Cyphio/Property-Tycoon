@@ -71,10 +71,20 @@ public class Dice implements DiceInterface {
         return d1 + d2;
     }
 
+    /**
+     * getD1 returns the value of the first die as an int
+     * @return the value of the first die
+     */
+    @Override
     public int getD1() {
         return d1;
     }
 
+    /**
+     * getD2 returns the value of the second die as an int
+     * @return the value of the second die
+     */
+    @Override
     public int getD2() {
         return d2;
     }
@@ -83,6 +93,7 @@ public class Dice implements DiceInterface {
      * wasItADouble returns a Boolean judgement as to whether a the dice rolled a double
      * @return true if the dice rolled a double, false otherwise
      */
+    @Override
     public boolean wasItADouble(){
         return wasDouble;
     }

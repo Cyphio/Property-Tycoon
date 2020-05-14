@@ -14,12 +14,10 @@ import java.util.ArrayList;
 public class Player implements PlayerInterface {
 
     private ArrayList<Ownable> ownables;
-    private ArrayList<Property> mortgagedProperties;
     private int balance;
     private int tilePosition;
     private int getOutJailCards;
     private boolean isInJail;
-
     private Sprite gameToken;
     private String name;
     private boolean firstLap;
@@ -34,39 +32,71 @@ public class Player implements PlayerInterface {
         this.name = name;
         this.gameToken = token;
         setInJail(false);
-        ownables = new ArrayList<Ownable>();
-
+        ownables = new ArrayList<>();
         getOutJailCards = 0;
         balance = 1500;
         firstLap = false;
     }
 
+    /**
+     * isBot gives a boolean judgement as to whether the instance of the class is Player's subclass Bot, or not
+     * @return true if the instance of the class is a Bot, false otherwise
+     */
+    @Override
     public boolean isBot() {
         return this instanceof Bot;
     }
 
+    /**
+     * addGetOutOfJailFreeCard gives the player a get out of jail free card when called
+     */
+    @Override
     public void addGetOutOfJailFreeCard(){
-
         getOutJailCards +=1;
-
-
     }
 
+    /**
+     * removeGetOutOfJailFreeCard removes a get out of jail free card from the player when called
+     */
+    @Override
     public void removeGetOutOfJailFreeCard(){
-
         if(getOutJailCards > 0) {
-
             getOutJailCards -= 1;
-
         }
-
     }
 
+    /**
+     * getOutOfJailFree will return true if player has at least one card and false otherwise
+     * @return returns true or false depending if "get out of jail" card is present or not
+     */
+    @Override
+    public boolean hasGetOutOfJailFree() {
+        return getOutJailCards > 0;
+    }
+
+    /**
+     * setInJail takes a Boolean parameter that defines whether or not a player is in jail
+     * @param isInJail true if player is in jail, false otherwise
+     */
+    @Override
+    public void setInJail(boolean isInJail) {
+        this.isInJail = isInJail;
+    }
+
+    /**
+     * getIsInJail returns a Boolean judgement as to whether a player is in jail or not
+     * @return true if player is in jail, false otherwise
+     */
+    @Override
+    public boolean getIsInJail() {
+        return isInJail;
+    }
 
     /**
      * getName returns the name of a player as a String
      * @return a String representation of the player's name
      */
+    @Override
     public String getName() {
         return this.name;
     }
@@ -94,6 +124,7 @@ public class Player implements PlayerInterface {
      * tilePosition
      * @param i an Integer representation of where the player is on the board
      */
+    @Override
     public void setTilePosition(int i) {
         tilePosition = i;
     }
@@ -102,45 +133,55 @@ public class Player implements PlayerInterface {
      * getTilePosition returns the Integer representation of the player position on the board
      * @return an Integer representation of where the player is on the board
      */
+    @Override
     public int getTilePosition() {
         return tilePosition;
     }
 
     /**
-     * getProperties returns an array list with all the properties that the player owns
-     * @return returns properties, ArrayList with all the properties player owns
+     * getOwnables returns an array list with all the ownables that the player owns
+     * @return returns ownables: an ArrayList with all the ownables the player owns
      */
     @Override
     public ArrayList<Ownable> getOwnables() {
         return ownables;
     }
 
-    public int getTotalPropertyValue() {
+    /**
+     * getTotalOwnableValue calculates and returns the total worth of all ownables a player owns
+     * @return the total worth of all ownables a player owns as an int
+     */
+    @Override
+    public int getTotalOwnableValue() {
         int sum = 0;
-        for(Ownable p: getOwnables()) {
-            sum += p.getCost();
+        for(Ownable o: getOwnables()) {
+            sum += o.getCost();
         }
         return sum;
     }
 
     /**
-     * addProperties adds a Property object to the array list of Property Tile objects
-     * @param property
+     * addOwnables adds a Ownable object to the array list of Ownable Tile objects
+     * @param ownable
      */
     @Override
-    public void addProperty(Ownable property) {
-
-        if(!ownables.contains(property)) {
-            property.addPlayer(this);
-            ownables.add(property);
+    public void addOwnable(Ownable ownable) {
+        if(!ownables.contains(ownable)) {
+            ownable.addPlayer(this);
+            ownables.add(ownable);
         }
     }
 
-    public void removeOwnable(Ownable property) {
-        if(property.getOwner() != null) {
-            property.removePlayer(this);
+    /**
+     * removeOwnable removes an Ownable object from the array list of Ownable Tile objects
+     * @param ownable the Ownable object to be removed
+     */
+    @Override
+    public void removeOwnable(Ownable ownable) {
+        if(ownable.getOwner() != null) {
+            ownable.removePlayer(this);
         }
-        ownables.remove(property);
+        ownables.remove(ownable);
     }
 
     /**
@@ -178,37 +219,6 @@ public class Player implements PlayerInterface {
     }
 
     /**
-     * getOutOfJailFree will return true if player has at least one card and false otherwise
-     * @return returns true or false depending if "get out of jail" card is present or not
-     */
-    @Override
-    public boolean hasGetOutOfJailFree() {
-        if(getOutJailCards > 0) {
-            getOutJailCards--;
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    /**
-     * setInJail takes a Boolean parameter that defines whether or not a player is in jail
-     * @param isInJail true if player is in jail, false otherwise
-     */
-    public void setInJail(boolean isInJail) {
-        this.isInJail = isInJail;
-    }
-
-    /**
-     * getIsInJail returns a Boolean judgement as to whether a player is in jail or not
-     * @return true if player is in jail, false otherwise
-     */
-    public boolean getIsInJail() {
-        return isInJail;
-    }
-
-    /**
      * endFirstLap sets firstLap: a Boolean representation of whether or not the player has gone around the board once,
      * as false.
      */
@@ -230,6 +240,7 @@ public class Player implements PlayerInterface {
      * getCurrentCoordinates returns a Coordinate object that represents the coordinates of a player on the board
      * @return a Coordinate object that represents the coordinates of a player on a board
      */
+    @Override
     public Coordinate getCurrentCoordinates() {
         return currentCoordinates;
     }
@@ -239,10 +250,17 @@ public class Player implements PlayerInterface {
      * player's current coordinates to be that Coordinate object
      * @param currentCoordinate a Coordinate object that represents the new coordinates of a player
      */
+    @Override
     public void setCurrentCoordinates(Coordinate currentCoordinate) {
         this.currentCoordinates = currentCoordinate;
     }
 
+    /**
+     * getWealth calculates a players total wealth, taking into account the worth of properties, houses/hotels placed
+     * on them along with the worth of other ownables such as utilities and stations
+     * @return the total wealth of a player as an int
+     */
+    @Override
     public int getWealth() {
         int wealth = 0;
         for(Ownable o : ownables) {
@@ -254,56 +272,4 @@ public class Player implements PlayerInterface {
         wealth += balance;
         return wealth;
     }
-
-
-//    /**
-//     * getPlayerTile will return the object tile that the player is currently standing on
-//     * @return returns position as an tile object
-//     */
-//    @Override
-//    public Tile getPlayerTile(){
-//        return position;
-//    }
-//
-//    /**
-//     * getPlayerTile will return the object tile that the player is currently standing on
-//     * @return returns position as an tile object
-//     */
-//    @Override
-//    public void setPlayerTile(Tile tile){
-//
-//        position = tile;
-//    }
-//
-//    /**
-//     * getPlayerTile will return the object tile that the player is currently standing on
-//     * @return returns position as an tile object
-//     */
-//    @Override
-//    public int getPlayerPosition(){
-//        return tilePosition;
-//    }
-//
-//    /**
-//     * getPlayerTile will return the object tile that the player is currently standing on
-//     * @return returns position as an tile object
-//     */
-//    @Override
-//    public void setPlayerPosition(int position){
-//
-//        this.tilePosition = position;
-//    }
-//
-//    boolean getIsBankrupt(int cost){
-//        if (balance < cost){
-//            int subcost = 0;
-//            for(int i = 0; i<properties.size();i++){
-//            // Need to implement properties first
-//                subcost += properties[i].
-//            }
-//        }
-//        else{
-//            return false;
-//        }
-//    }
 }

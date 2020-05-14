@@ -4,14 +4,12 @@ import main.Player;
 import misc.Coordinate;
 
 import java.util.ArrayList;
-import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
 /**
  * The tile class is the superclass for all further tiles, this allows all tiles to have in general the same
  * functionality
  */
 public class Tile {
-
 
     protected String tileName;
     private int tilePosition;
@@ -20,18 +18,17 @@ public class Tile {
     protected ArrayList<Coordinate> playerPosCoordinates;
     protected ArrayList<Coordinate> allCoordinates;
 
+    /**
+     * the constructor for the tile class
+     */
     public Tile(){
-
         tileName = "";
-
     }
-
 
     /**
      * Returns the Players on the current tile.
      * @return List of Players on the tile.
      */
-
     public ArrayList<Player> getPlayers() {
         return tilePlayers;
     }
@@ -40,7 +37,6 @@ public class Tile {
      * Adds player to list of players positioned on the tile.
      * @param player The main.Player to be added to the list of players on the tile.
      */
-
     public void addPlayer(Player player) {
         tilePlayers.add(player);
     }
@@ -49,19 +45,14 @@ public class Tile {
      * Removes player from the list of players positioned on the tile.
      * @param player The main.Player to remove.
      */
-
     public void removePlayer(Player player) {
         tilePlayers.remove(player);
     }
-
-
 
     /**
      * Returns the position of the tile on the game board.
      * @return int number of position of tile on the board.
      */
-
-
     public int getTilePos() {
         return tilePosition;
     }
@@ -70,7 +61,6 @@ public class Tile {
      * Sets the value of the position of the tile on the game board.
      * @param position The desired position.
      */
-
     public void setTilePos(int position) {
         tilePosition = position;
     }
@@ -79,7 +69,6 @@ public class Tile {
      * sets the coordinates of tiles on the GameBoard, this allows for mouse interactivity.
      * @param coordinates the arraylist of coordinates for each tile.
      */
-
     public void setCoordinates(ArrayList<Coordinate> coordinates){
     }
 
@@ -92,7 +81,6 @@ public class Tile {
         playerPosCoordinates.add(coordinate);
         return coordinate;
     }
-
 
     /**
      * @return returns the arraylist of all player coordinates
@@ -112,7 +100,6 @@ public class Tile {
      * Returns the tile name.
      * @return Tiles.Tile name.
      */
-
     public String getTileName() {
         return tileName;
     }
@@ -121,10 +108,7 @@ public class Tile {
      * Sets the tile name.
      * @param name The desired name of the tile.
      */
-
     public void setTileName(String name) {
         tileName = name;
     }
-
-
 }

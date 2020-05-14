@@ -16,7 +16,7 @@ public class GameBoardTest {
     private ArrayList<Sprite> spriteList;
 
     private GameBoard testBoard;
-    private Player[] testPlayers;
+    private ArrayList<Player> testPlayers;
 
     @Before
     public void setUp() {
@@ -28,11 +28,10 @@ public class GameBoardTest {
         this.sprite5 = new Sprite();
         this.sprite6 = new Sprite();
         this.spriteList = new ArrayList<>(Arrays.asList(sprite1, sprite2, sprite3, sprite4, sprite5, sprite6));
-        this.testPlayers = new Player[6];
 
         int i = 0;
         for (Sprite x : this.spriteList) {
-            testPlayers[i] = new Player("player " + i, x);
+            testPlayers.add(new Player("player " + i, x));
             i++;
         }
 
