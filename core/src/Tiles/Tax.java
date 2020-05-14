@@ -67,7 +67,6 @@ public class Tax extends SmallTile implements TaxInterface {
 
 
     /**
-     *
      * @return returns the icon placed on the tax tile
      */
     public Sprite getIcon(){return icon;}

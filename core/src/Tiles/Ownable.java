@@ -29,7 +29,7 @@ public class Ownable extends SmallTile{
 
     /**
      * setBuyable sets isBuyable to true or false.
-     * @param TrueOrFalse wether the property is buyable or not (true if yes, else false).
+     * @param TrueOrFalse whether the property is buyable or not (true if yes, else false).
      */
     public void setBuyable(boolean TrueOrFalse) {
         isBuyable = TrueOrFalse;
