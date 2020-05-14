@@ -8,7 +8,6 @@ public class Card implements CardInterface {
     private String action;
     private Integer value;
 
-
     /**
      * used to change the action that a card performs
      * @param action the action to be performed
@@ -19,7 +18,7 @@ public class Card implements CardInterface {
     }
 
     /**
-     * @return returns the action of the card object
+     * @return  the action of the card object
      */
     @Override
     public String getAction(){
@@ -36,7 +35,7 @@ public class Card implements CardInterface {
     }
 
     /**
-     * @return returns the int value assigned to the card
+     * @return the int value assigned to the card
      */
     @Override
     public int getValue(){
@@ -50,18 +49,15 @@ public class Card implements CardInterface {
     public void runAction() {
     }
 
+    /**
+     * gets the action/value of the card and formats it into a message
+     * @return a formatted message that takes into account the cards action and value
+     */
+    @Override
     public String getCardMessage(){
-
-
         if(value != null && !action.equals("Go back to") && !action.equals("Advance to")){
-
             return action + " $" + value;
-
         }
-
         return action;
-
     }
-
-
 }

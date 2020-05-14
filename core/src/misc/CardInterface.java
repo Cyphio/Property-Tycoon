@@ -1,7 +1,6 @@
 package misc;
 
 public interface CardInterface {
-
     void setAction(String action);
 
     String getAction();
@@ -11,4 +10,6 @@ public interface CardInterface {
     int getValue();
 
     void runAction();
+
+    String getCardMessage();
 }

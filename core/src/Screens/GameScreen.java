@@ -1063,7 +1063,7 @@ public class GameScreen implements Screen {
         centerButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stage.recenter(tiledMap);
+                camera.position.set(new Vector3(layer.getWidth() * layer.getTileWidth() / 2, layer.getHeight() * layer.getTileHeight() / 2, 0));
             }
         });
 
