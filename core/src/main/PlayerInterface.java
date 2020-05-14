@@ -1,27 +1,57 @@
 package main;
-import Tiles.*;
+
+import Tiles.Ownable;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import misc.Coordinate;
 
 import java.util.ArrayList;
 
 public interface PlayerInterface {
-    ArrayList<Ownable> getOwnables(); // return properties the player owns
+    boolean isBot();
 
-    void addProperty(Ownable property);
+    void addGetOutOfJailFreeCard();
 
-    int getMoney(); // return how much money the player has
-    void setMoney(int value);
+    void removeGetOutOfJailFreeCard();
 
-    boolean hasGetOutOfJailFree(); // return whether the player has GOJF card
-    //boolean getIsBankrupt(); // return whether the player is bankrupt
-    Sprite getPlayerToken(); // return a string representation of the player's token
+    String getName();
 
+    Sprite getPlayerToken();
 
     void setPlayerToken(Sprite token);
 
+    void setTilePosition(int i);
+
+    int getTilePosition();
+
+    ArrayList<Ownable> getOwnables();
+
+    int getTotalOwnableValue();
+
+    void addOwnable(Ownable ownable);
+
+    void removeOwnable(Ownable ownable);
+
+    int getMoney();
+
+    void setMoney(int amount);
+
     void payPlayer(int amount);
 
-    void setFirstLap(boolean lap);
-    boolean completedFirstLap();
     void makePurchase(int cost);
+
+    boolean hasGetOutOfJailFree();
+
+    void setInJail(boolean isInJail);
+
+    boolean getIsInJail();
+
+    void setFirstLap(boolean lap);
+
+    boolean completedFirstLap();
+
+    Coordinate getCurrentCoordinates();
+
+    void setCurrentCoordinates(Coordinate currentCoordinate);
+
+    int getWealth();
 }

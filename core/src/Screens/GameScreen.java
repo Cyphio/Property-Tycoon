@@ -1107,7 +1107,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        if(gameCon.getCurrentPlayer().getMoney() + gameCon.getCurrentPlayer().getTotalPropertyValue() <= 0) { //need to add a check to see if their cumulative property worth also results in < $0
+        if(gameCon.getCurrentPlayer().getMoney() + gameCon.getCurrentPlayer().getTotalOwnableValue() <= 0) { //need to add a check to see if their cumulative property worth also results in < $0
             game.players.remove(gameCon.getCurrentPlayer());
             gameCon.getPlayerOrder().remove(0);
             if (game.players.size() == 1) {

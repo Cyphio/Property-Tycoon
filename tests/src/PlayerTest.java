@@ -36,7 +36,7 @@ public class PlayerTest{
 
 	@Test
 	public void testBuying(){
-		testPlayer.addProperty(testProperty);
+		testPlayer.addOwnable(testProperty);
 		testPlayer.makePurchase(testProperty.getCost());
 		assertEquals(testPlayer.getOwnables().get(0), testProperty);
 		assertEquals(testPlayer.getMoney(), 1300);
@@ -45,7 +45,7 @@ public class PlayerTest{
 
 	@Test
 	public void testSelling(){
-		testPlayer.addProperty(testProperty);
+		testPlayer.addOwnable(testProperty);
 		assertEquals(testPlayer.getOwnables().get(0), testProperty);
 		testPlayer.removeProperty(testProperty);
 		assertEquals(testPlayer.getOwnables().size(), 0);

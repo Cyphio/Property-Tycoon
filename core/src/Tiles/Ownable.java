@@ -99,7 +99,7 @@ public class Ownable extends SmallTile{
     public void buyProperty(Player player, int cost) {
         if (!getOwned() && player.getMoney()>= cost){
             player.makePurchase(cost);
-            player.addProperty(this);
+            player.addOwnable(this);
             owned = true;
             owner = player;
             setBuyable(false);
@@ -135,11 +135,4 @@ public class Ownable extends SmallTile{
     public boolean getMortgaged(){
         return isMortgaged;
     }
-
-
-
-
 }
-
-
-
