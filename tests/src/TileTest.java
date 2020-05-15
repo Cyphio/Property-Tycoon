@@ -51,6 +51,4 @@ public class TileTest {
     public void getCoordinates(){
         assertEquals(null,tile.getAllCoordinates());
     }
-
-
 }
