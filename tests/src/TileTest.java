@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 
 public class TileTest {
-
     Tile tile;
     private Player player;
     ArrayList<Coordinate> coords;
@@ -45,18 +44,13 @@ public class TileTest {
         tile.addPlayer(player);
         tile.addPlayer(player);
         tile.removePlayer(player);
-
         assertEquals(null,tile.getPlayers().get(0));
-
     }
 
     @Test
     public void getCoordinates(){
-
         assertEquals(null,tile.getAllCoordinates());
-
     }
-
 
 
 }
