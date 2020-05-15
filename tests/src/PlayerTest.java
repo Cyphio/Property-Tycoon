@@ -3,6 +3,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import main.Bot;
 import main.Player;
 
+import misc.Coordinate;
 import org.junit.Before;
 import org.junit.Test;
 import static junit.framework.TestCase.assertEquals;
@@ -14,6 +15,7 @@ public class PlayerTest{
 	private static Sprite testSprite;
 	private static Player testPlayer;
 	private Property testProperty;
+	private Coordinate testCoord;
 
 	@Before
 	public void setUp(){
@@ -116,7 +118,26 @@ public class PlayerTest{
 		assertTrue(testPlayer.completedFirstLap());
 	}
 
+	@Test
+	public void addOwnableTest(){
+		testPlayer.addOwnable(testProperty);
+		assertEquals(1, testPlayer.getOwnables().size());
+	}
 
+	@Test
+	public void removeOwnableTest(){
+		testPlayer.addOwnable(testProperty);
+		testPlayer.removeOwnable(testProperty);
+		assertEquals(0, testPlayer.getOwnables().size());
+
+	}
+
+	@Test
+	public void coordinateTest(){
+		testPlayer.setCurrentCoordinates(testCoord);
+		assertEquals(testCoord, testPlayer.getCurrentCoordinates());
+
+	}
 
 
 }
