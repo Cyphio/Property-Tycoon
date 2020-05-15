@@ -46,4 +46,6 @@ public class OwnableTest {
         testOwn.unmortgage(testPlayer,0);
         assertEquals(false, testOwn.getMortgaged());
     }
+
+    
 }
