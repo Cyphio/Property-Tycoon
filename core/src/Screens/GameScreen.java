@@ -1053,7 +1053,7 @@ public class GameScreen implements Screen {
 
         Table timerTable = new Table();
         timerLabel = new Label("", gameScreenSkin, "title");
-        timerTable.add(timerLabel).width(380);
+        timerTable.add(timerLabel).width(380).right();
         timerTable.setFillParent(true);
         timerTable.right().padRight(10);
         stage.addActor(timerTable);
@@ -1286,7 +1286,6 @@ public class GameScreen implements Screen {
         congratsWindow.add(congratsTable);
         float width = 650, height = 700;
         congratsWindow.setBounds((Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
-
         stage.addActor(congratsWindow);
         congratsWindow.setVisible(true);
     }
@@ -1593,14 +1592,19 @@ public class GameScreen implements Screen {
             reverseTime = (game.getPreferences().getAbridgedLength()*60) - gameLength;
             timerLabel.setText("Time left: " + LocalTime.MIN.plusSeconds(Math.round(reverseTime)).toString());
             if(gameLength >= game.getPreferences().getAbridgedLength() * 60) {
-                game.getPreferences().setAbridged(false);
-                congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size()-1));
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        game.setScreen(new MainMenu(game));
-                    }
-                }, 7.5f);
+                if(gameCon.getCurrentPlayer() == game.players.get(0)) {
+                    game.getPreferences().setAbridged(false);
+                    congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size() - 1));
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            game.setScreen(new MainMenu(game));
+                        }
+                    }, 7.5f);
+                }
+                else {
+                    timerLabel.setText("Final round");
+                }
             }
         }
 
