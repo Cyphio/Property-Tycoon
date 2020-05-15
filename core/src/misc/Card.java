@@ -42,12 +42,6 @@ public class Card implements CardInterface {
         return value;
     }
 
-    /**
-     * carries out the action of the card
-     */
-    @Override
-    public void runAction() {
-    }
 
     /**
      * gets the action/value of the card and formats it into a message
