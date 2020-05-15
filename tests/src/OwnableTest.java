@@ -1,8 +1,11 @@
 import Tiles.Ownable;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import main.Player;
+import misc.Coordinate;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,6 +14,7 @@ public class OwnableTest {
     private Ownable testOwn;
     private Player testPlayer;
     private static Sprite testSprite;
+    private Coordinate testCoord;
 
     @Before
     public void setUp(){
@@ -46,4 +50,14 @@ public class OwnableTest {
         testOwn.unmortgage(testPlayer,0);
         assertEquals(false, testOwn.getMortgaged());
     }
+
+    @Test
+    public void priceTest(){
+        testOwn.setCost(200);
+        assertEquals(200, testOwn.getCost());
+
+    }
+
+
+
 }
