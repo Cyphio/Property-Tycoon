@@ -1539,6 +1539,7 @@ public class GameScreen implements Screen {
                 }
             }
             else {
+                quickPopUpWindow(currBidder.getName() + " says: That's too much!", 100, 300, 1);
                 int index = bidderList.indexOf(currBidder);
                 bidderList.remove(currBidder);
                 if (bidderList.size() != 0) {
@@ -1547,7 +1548,6 @@ public class GameScreen implements Screen {
                     } else {
                         currBidder = bidderList.get(0);
                     }
-                    quickPopUpWindow(currBidder.getName() + " says: That's too much!", 100, 300, 1);
                 }
             }
 
