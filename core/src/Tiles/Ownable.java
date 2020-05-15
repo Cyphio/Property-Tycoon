@@ -8,7 +8,7 @@ public class Ownable extends SmallTile{
     private boolean isBuyable = false;
     protected boolean owned;
     protected Player owner;
-    protected Coordinate propertySpriteCoordinate;
+    protected Coordinate ownableSpriteCoordinate;
     private boolean isMortgaged;
 
     /**
@@ -36,11 +36,11 @@ public class Ownable extends SmallTile{
     }
 
     /**
-     * method used to sell the property
+     * method used to sell the ownable
      * @param player the player selling
-     * @param cost the cost of the property
+     * @param cost the cost of the ownable
      */
-    public void sellProperty(Player player, int cost){
+    public void sellOwnable(Player player, int cost){
 
         player.payPlayer(cost);
         if (player.getOwnables().contains(this)) {
@@ -89,11 +89,11 @@ public class Ownable extends SmallTile{
     }
 
     /**
-     * method to buy properties
+     * method to buy ownable
      * @param player the player buying
-     * @param cost the cost of the property
+     * @param cost the cost of the ownable
      */
-    public void buyProperty(Player player, int cost) {
+    public void buyOwnable(Player player, int cost) {
         if (!getOwned() && player.getMoney()>= cost){
             player.makePurchase(cost);
             player.addOwnable(this);
@@ -106,8 +106,8 @@ public class Ownable extends SmallTile{
     /**
      * @return the coordinate of the propertysprite
      */
-    public Coordinate getPropertySpriteCoordinate(){
-        return propertySpriteCoordinate;
+    public Coordinate getOwnableSpriteCoordinate(){
+        return ownableSpriteCoordinate;
     }
 
     /**

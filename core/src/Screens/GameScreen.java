@@ -120,7 +120,6 @@ public class GameScreen implements Screen {
     private float reverseTime;
     private Label timerLabel;
 
-
     /**
      * the constructor for gameScreen
      * @param game the current game
@@ -611,7 +610,7 @@ public class GameScreen implements Screen {
                     try {
                         if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
                             if (gameCon.getCurrentPlayer().getMoney() >= clickedProperty.getCost()) {
-                                clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                                clickedProperty.buyOwnable(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                                 updatePropertyOwnerIcons();
                                 closeAllWindows();
                                 openPopUpWindow(clickedProperty);
@@ -660,13 +659,13 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if((clickedProperty).getMortgaged()){
                     (clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
-                    clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
+                    clickedProperty.sellOwnable(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
                     updatePropertyOwnerIcons();
                     updatePropertyDevelopmentSprites();
                     closeAllWindows();
                 }
                 else {
-                    clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    clickedProperty.sellOwnable(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     updatePropertyOwnerIcons();
                     updatePropertyDevelopmentSprites();
                     closeAllWindows();
@@ -767,7 +766,7 @@ public class GameScreen implements Screen {
                     try {
                         if (clickedProperty.getBuyable() && clickedProperty.getPlayers().contains(gameCon.getCurrentPlayer())) {
                             if (gameCon.getCurrentPlayer().getMoney() >= clickedProperty.getCost()) {
-                                clickedProperty.buyProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                                clickedProperty.buyOwnable(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                                 updatePropertyOwnerIcons();
                                 closeAllWindows();
                                 openPopUpWindow(clickedProperty);
@@ -815,12 +814,12 @@ public class GameScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if((clickedProperty).getMortgaged()){
                     (clickedProperty).unmortgage(gameCon.getCurrentPlayer(), 0);
-                    clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
+                    clickedProperty.sellOwnable(gameCon.getCurrentPlayer(), clickedProperty.getCost()/2);
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
                 else {
-                    clickedProperty.sellProperty(gameCon.getCurrentPlayer(), clickedProperty.getCost());
+                    clickedProperty.sellOwnable(gameCon.getCurrentPlayer(), clickedProperty.getCost());
                     updatePropertyOwnerIcons();
                     closeAllWindows();
                 }
@@ -969,7 +968,7 @@ public class GameScreen implements Screen {
 
                 if (bidderList.size() == 0 && highestBidder != null) {
                     auctionPopUpWindow.setVisible(false);
-                    clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
+                    clickedProperty.buyOwnable(highestBidder, gameCon.getAuctionValue());
                     highestBidder = null;
                     updatePropertyOwnerIcons();
                     gameCon.setAuctionValue(0);
@@ -1143,7 +1142,7 @@ public class GameScreen implements Screen {
         ArrayList<String> soldOwnables = new ArrayList<>();
         while (gameCon.getCurrentPlayer().getMoney() < 0 && gameCon.getCurrentPlayer().getOwnables().size() > 0){
             Ownable o = gameCon.getCurrentPlayer().getOwnables().get(0);
-            o.sellProperty(gameCon.getCurrentPlayer(), o.getCost());
+            o.sellOwnable(gameCon.getCurrentPlayer(), o.getCost());
             if(!soldOwnables.contains(o.getTileName())) {
                 soldOwnables.add(o.getTileName());
             }
@@ -1448,7 +1447,7 @@ public class GameScreen implements Screen {
                 else if (prop.getTilePos() < 31) {
                     sprite.rotate(-270);
                 }
-                sprite.setPosition(prop.getPropertySpriteCoordinate().getX() - 192 / 2, prop.getPropertySpriteCoordinate().getY() - 64 / 2);
+                sprite.setPosition(prop.getOwnableSpriteCoordinate().getX() - 192 / 2, prop.getOwnableSpriteCoordinate().getY() - 64 / 2);
                 propertyHouseAndHotelSprites.add(sprite);
             }
         }
@@ -1470,16 +1469,16 @@ public class GameScreen implements Screen {
                 s.setAlpha(0.5f);
                 s.setOriginCenter();
                 if (property.getTilePos() < 11){
-                    s.setPosition(property.getPropertySpriteCoordinate().getX()+32,property.getPropertySpriteCoordinate().getY()-32);
+                    s.setPosition(property.getOwnableSpriteCoordinate().getX()+32,property.getOwnableSpriteCoordinate().getY()-32);
                     s.rotate(-90);
                 }   else   if (property.getTilePos() < 21){
-                    s.setPosition(property.getPropertySpriteCoordinate().getX()-32,property.getPropertySpriteCoordinate().getY()-96);
+                    s.setPosition(property.getOwnableSpriteCoordinate().getX()-32,property.getOwnableSpriteCoordinate().getY()-96);
                     s.rotate(-180);
                 }   else   if (property.getTilePos() <31){
-                    s.setPosition(property.getPropertySpriteCoordinate().getX()-96,property.getPropertySpriteCoordinate().getY()-32);
+                    s.setPosition(property.getOwnableSpriteCoordinate().getX()-96,property.getOwnableSpriteCoordinate().getY()-32);
                     s.rotate(-270);
                 }else{
-                    s.setPosition(property.getPropertySpriteCoordinate().getX()-32,property.getPropertySpriteCoordinate().getY()+32);
+                    s.setPosition(property.getOwnableSpriteCoordinate().getX()-32,property.getOwnableSpriteCoordinate().getY()+32);
                 }
                 ownedProperties.add(s);
             }
@@ -1499,7 +1498,7 @@ public class GameScreen implements Screen {
         Tile tile = gameCon.getBoard().getTile(bot.getTilePosition());
         if(tile instanceof Ownable) {
             if(bot.getMoney() > 200 + ((Ownable) tile).getCost() && bot.completedFirstLap()) {
-                ((Ownable) tile).buyProperty(bot, ((Ownable) tile).getCost());
+                ((Ownable) tile).buyOwnable(bot, ((Ownable) tile).getCost());
                 if(((Ownable) tile).getOwner() == bot && tile instanceof Property){
                     gameCon.developProperty((Property) tile, bot);
                 }
@@ -1557,7 +1556,7 @@ public class GameScreen implements Screen {
         }
         else if(highestBidder != null){
             auctionPopUpWindow.setVisible(false);
-            clickedProperty.buyProperty(highestBidder, gameCon.getAuctionValue());
+            clickedProperty.buyOwnable(highestBidder, gameCon.getAuctionValue());
             highestBidder = null;
             updatePropertyOwnerIcons();
             gameCon.setAuctionValue(0);

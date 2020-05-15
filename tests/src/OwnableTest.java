@@ -33,18 +33,17 @@ public class OwnableTest {
 
     @Test
     public void ownerTest(){
-        testOwn.buyProperty(testPlayer, 0);
+        testOwn.buyOwnable(testPlayer, 0);
         assertEquals(testOwn.getOwner(), testPlayer);
         assertEquals(true, testOwn.getOwned());
     }
 
     @Test
     public void mortgageTest(){
-        testOwn.buyProperty(testPlayer, 0);
+        testOwn.buyOwnable(testPlayer, 0);
         testOwn.setMortgaged(testPlayer, 0);
         assertEquals(true,testOwn.getMortgaged());
         testOwn.unmortgage(testPlayer,0);
         assertEquals(false, testOwn.getMortgaged());
     }
-
 }
