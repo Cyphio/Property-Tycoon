@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="PropertyTest" tests="22" skipped="0" failures="0" errors="0" timestamp="2020-05-15T02:11:35" hostname="Harry-Desktop" time="0.007">
+<testsuite name="PropertyTest" tests="22" skipped="0" failures="0" errors="0" timestamp="2020-05-15T09:36:41" hostname="Harry-Desktop" time="0.011">
   <properties/>
-  <testcase name="getColourAsStringTest" classname="PropertyTest" time="0.001"/>
+  <testcase name="getColourAsStringTest" classname="PropertyTest" time="0.0"/>
   <testcase name="testGetHousesOwned2" classname="PropertyTest" time="0.0"/>
   <testcase name="testGetHousesOwned3" classname="PropertyTest" time="0.0"/>
   <testcase name="testSellOwnable" classname="PropertyTest" time="0.0"/>
   <testcase name="testGetCurrentRent2" classname="PropertyTest" time="0.0"/>
-  <testcase name="testGetCurrentRent" classname="PropertyTest" time="0.003"/>
+  <testcase name="testGetCurrentRent" classname="PropertyTest" time="0.004"/>
   <testcase name="testSellHouse2" classname="PropertyTest" time="0.0"/>
   <testcase name="testSellHouse" classname="PropertyTest" time="0.0"/>
   <testcase name="getHousePriceTest" classname="PropertyTest" time="0.0"/>
-  <testcase name="getColourTest2" classname="PropertyTest" time="0.0"/>
+  <testcase name="getColourTest2" classname="PropertyTest" time="0.001"/>
   <testcase name="testAdd_GetDevPrice2" classname="PropertyTest" time="0.0"/>
   <testcase name="testGetHousesOwned" classname="PropertyTest" time="0.0"/>
   <testcase name="getColorTest1" classname="PropertyTest" time="0.0"/>
-  <testcase name="getColorTest3" classname="PropertyTest" time="0.0"/>
+  <testcase name="getColorTest3" classname="PropertyTest" time="0.001"/>
   <testcase name="testDevelop" classname="PropertyTest" time="0.0"/>
   <testcase name="getHotelPriceTest" classname="PropertyTest" time="0.001"/>
   <testcase name="testAdd_GetDevPrice" classname="PropertyTest" time="0.0"/>

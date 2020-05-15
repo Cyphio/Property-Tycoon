@@ -97,18 +97,32 @@ public class GameOptions {
         getPrefs().flush();
     }
 
+    /**
+     * sets the value of PREFS_IS_ABRIDGED to true or false
+     * @param abridged boolean as to whether game is abridged or not
+     */
     public void setAbridged(boolean abridged) {
         getPrefs().putBoolean(PREFS_IS_ABRIDGED, abridged);
     }
 
+    /**
+     * @return boolean as to whether game is abridged or not
+     */
     public boolean getAbridged() {
         return getPrefs().getBoolean(PREFS_IS_ABRIDGED);
     }
 
+    /**
+     * sets the value of PREFS_ABRIDGED_LENGTH to the desired int
+     * @param length the length of the game as an integer
+     */
     public void setAbridgedLength(int length) {
         getPrefs().putInteger(PREFS_ABRIDGED_LENGTH, length);
     }
 
+    /**
+     * @return the length of the game as an integer
+     */
     public int getAbridgedLength() {
         return getPrefs().getInteger(PREFS_ABRIDGED_LENGTH);
     }

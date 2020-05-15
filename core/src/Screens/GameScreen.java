@@ -1052,7 +1052,7 @@ public class GameScreen implements Screen {
 
         Table timerTable = new Table();
         timerLabel = new Label("", gameScreenSkin, "title");
-        timerTable.add(timerLabel).width(380).right();
+        timerTable.add(timerLabel).width(380);
         timerTable.setFillParent(true);
         timerTable.right().padRight(10);
         stage.addActor(timerTable);
@@ -1281,6 +1281,8 @@ public class GameScreen implements Screen {
                 congratsTable.row().pad(10, 0, 0, 0);
             }
         }
+        timerLabel.setAlignment(Align.right);
+        timerLabel.setText("Game over");
         Window congratsWindow = new Window("", gameScreenSkin);
         congratsWindow.add(congratsTable);
         float width = 650, height = 700;
@@ -1586,25 +1588,26 @@ public class GameScreen implements Screen {
             stage.addListener(clickListener);
         }
 
-        if(game.getPreferences().getAbridged()) {
+        if(game.getPreferences().getAbridged() && gameLength >= game.getPreferences().getAbridgedLength() * 60) {
+            if(gameCon.getCurrentPlayer() == game.players.get(0)) {
+                game.getPreferences().setAbridged(false);
+                congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size() - 1));
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new MainMenu(game));
+                    }
+                }, 7.5f);
+            }
+            else {
+                timerLabel.setAlignment(Align.right);
+                timerLabel.setText("Final round");
+            }
+        }
+        else if(game.getPreferences().getAbridged()) {
             gameLength += Gdx.graphics.getRawDeltaTime();
             reverseTime = (game.getPreferences().getAbridgedLength()*60) - gameLength;
             timerLabel.setText("Time left: " + LocalTime.MIN.plusSeconds(Math.round(reverseTime)).toString());
-            if(gameLength >= game.getPreferences().getAbridgedLength() * 60) {
-                if(gameCon.getCurrentPlayer() == game.players.get(0)) {
-                    game.getPreferences().setAbridged(false);
-                    congratsPopUpWindow(gameCon.getFinalStandings(game.players, 0, game.players.size() - 1));
-                    Timer.schedule(new Timer.Task() {
-                        @Override
-                        public void run() {
-                            game.setScreen(new MainMenu(game));
-                        }
-                    }, 7.5f);
-                }
-                else {
-                    timerLabel.setText("Final round");
-                }
-            }
         }
 
         updateBalances();
