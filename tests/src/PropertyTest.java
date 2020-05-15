@@ -46,4 +46,5 @@ public class PropertyTest {
         p.setHotelPrice(50);
         assertEquals(50, p.getHotelPrice());
     }
+
 }
