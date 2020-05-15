@@ -36,7 +36,7 @@ public class Services extends Ownable {
         iconCoordinate.setCoordinate(coordinates.get(iconPosition).getX()-64,coordinates.get(iconPosition).getY()-64);
 
         centerLabelCoordinate = labelCoordinate;
-        propertySpriteCoordinate = tempPropertyCoordinate;
+        ownableSpriteCoordinate = tempPropertyCoordinate;
         allCoordinates = coordinates;
 
         if (this.getTilePos() < 11){

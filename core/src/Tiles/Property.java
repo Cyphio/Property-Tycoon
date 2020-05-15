@@ -59,7 +59,6 @@ public class Property extends Ownable implements PropertyInterface {
         }
     }
 
-
     /**
      * sets the price of a house for the property
      * @param housePrice the price of the house
@@ -95,10 +94,10 @@ public class Property extends Ownable implements PropertyInterface {
      * develops a house on the property
      */
     public void develop(){
-        if(housesOwned < 5){
+        if(housesOwned < 4){
             housesOwned +=1;
             owner.makePurchase(housePrice);
-        } else if(housesOwned == 5){
+        } else if(housesOwned == 4){
             housesOwned += 1;
             owner.makePurchase(hotelPrice);
         }
@@ -112,7 +111,7 @@ public class Property extends Ownable implements PropertyInterface {
     }
 
     /**
-     * addHousePrice adds a house/hotel price to the ArrayList development prices
+     * addDevPrice adds a house/hotel price to the ArrayList development prices
      * @param devPrice the house/hotel price to be added
      */
     @Override
@@ -121,7 +120,7 @@ public class Property extends Ownable implements PropertyInterface {
     }
 
     /**
-     * getHousePrice returns the ArrayList developmentPrices which stores the cost for development in increasing order.
+     * getDevPrice returns the ArrayList developmentPrices which stores the cost for development in increasing order.
      * I.e. developmentPrices.get(0) returns the cost to add 1 house, developmentPrices.get(4) returns the cost to add
      * a hotel
      * @return the ArrayList developmentPrices
@@ -135,9 +134,8 @@ public class Property extends Ownable implements PropertyInterface {
      * @param player the player buying the property
      * @param cost the price of the property
      */
-
     @Override
-    public void sellProperty(Player player, int cost){
+    public void sellOwnable(Player player, int cost){
         if(owner == player && housesOwned == 0){
             player.payPlayer(cost);
             if (player.getOwnables().contains(this)) {
@@ -189,7 +187,7 @@ public class Property extends Ownable implements PropertyInterface {
         tempPropertyCoordinate.setCoordinate(coordinates.get(propertyPosition).getX()+32,coordinates.get(propertyPosition).getY()+32);
 
         centerLabelCoordinate = labelCoordinate;
-        propertySpriteCoordinate = tempPropertyCoordinate;
+        ownableSpriteCoordinate = tempPropertyCoordinate;
         allCoordinates = coordinates;
     }
 
