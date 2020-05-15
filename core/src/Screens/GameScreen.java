@@ -253,7 +253,7 @@ public class GameScreen implements Screen {
     /**
      * SetTileCellColors looks at the PNG holding the tiles in order to select what tiles should be what colour based on the config
      */
-    public void setTileCellColors() {
+    private void setTileCellColors() {
         TiledMapTileSet set = tiledMap.getTileSets().getTileSet(0);
         for (int i = 0; i < 40; i++) {
 
