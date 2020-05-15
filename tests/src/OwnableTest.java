@@ -46,4 +46,12 @@ public class OwnableTest {
         testOwn.unmortgage(testPlayer,0);
         assertEquals(false, testOwn.getMortgaged());
     }
+
+    @Test
+    public void priceTest(){
+        testOwn.setCost(200);
+        assertEquals(200, testOwn.getCost());
+
+    }
+
 }
