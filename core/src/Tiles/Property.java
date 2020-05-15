@@ -95,10 +95,10 @@ public class Property extends Ownable implements PropertyInterface {
      * develops a house on the property
      */
     public void develop(){
-        if(housesOwned < 5){
+        if(housesOwned < 4){
             housesOwned +=1;
             owner.makePurchase(housePrice);
-        } else if(housesOwned == 5){
+        } else if(housesOwned == 4){
             housesOwned += 1;
             owner.makePurchase(hotelPrice);
         }
