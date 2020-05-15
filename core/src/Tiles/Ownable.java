@@ -20,7 +20,7 @@ public class Ownable extends SmallTile{
     }
 
     /**
-     * getBuyable returns true if property is buyable and false if it is not.
+     * getBuyable returns true if ownable is buyable and false if it is not.
      * @return returns isBuyable , Boolean true or false.
      */
     public boolean getBuyable() {
@@ -29,7 +29,7 @@ public class Ownable extends SmallTile{
 
     /**
      * setBuyable sets isBuyable to true or false.
-     * @param TrueOrFalse whether the property is buyable or not (true if yes, else false).
+     * @param TrueOrFalse whether the ownable is buyable or not (true if yes, else false).
      */
     public void setBuyable(boolean TrueOrFalse) {
         isBuyable = TrueOrFalse;
@@ -52,34 +52,34 @@ public class Ownable extends SmallTile{
     }
 
     /**
-     * setCost will set the cost of a single property within game board
-     * @param cost will be used to enter the cost of the property that player will need to pay
-     *             in order to own the property
+     * setCost will set the cost of a single ownable within game board
+     * @param cost will be used to enter the cost of the ownable that player will need to pay
+     *             in order to own the ownable
      */
     public void setCost(int cost){ this.cost = cost; }
 
     /**
-     * getCost will return an integer that will represent a cost of the property
-     * @return returns cost, integer that represents the cost of property
+     * getCost will return an integer that will represent a cost of the ownable
+     * @return returns cost, integer that represents the cost of ownable
      */
     public int getCost(){ return cost; }
 
 
     /**
-     * getOwned will return a boolean value that will represent if the property is owned by any player or not
-     * @return returns owned, boolean value that represent if property is owned
+     * getOwned will return a boolean value that will represent if the ownable is owned by any player or not
+     * @return returns owned, boolean value that represent if ownable is owned
      */
     public boolean getOwned(){ return owned; }
 
     /**
-     * @return returns the player object that is assigned to the property
+     * @return returns the player object that is assigned to the ownable
      */
     public Player getOwner() {
         return owner;
     }
 
     /**
-     * @return returns the name assigned to the player object that owns the property
+     * @return returns the name assigned to the player object that owns the ownable
      */
     public String getOwnerName(){
         if (owner != null){
@@ -104,16 +104,16 @@ public class Ownable extends SmallTile{
     }
 
     /**
-     * @return the coordinate of the propertysprite
+     * @return the coordinate of the ownablesprite
      */
     public Coordinate getOwnableSpriteCoordinate(){
         return ownableSpriteCoordinate;
     }
 
     /**
-     * method to mortgage a property
+     * method to mortgage a ownable
      * @param player the player mortgaging
-     * @param cost the cost of the property
+     * @param cost the cost of the ownable
      */
     public void setMortgaged(Player player, int cost) {
         if ((getOwned())) {
@@ -123,9 +123,9 @@ public class Ownable extends SmallTile{
     }
 
     /**
-     * method to unmortgage a property
+     * method to unmortgage a ownable
      * @param player the player unmortgaging
-     * @param cost the cost of the property
+     * @param cost the cost of the ownable
      */
     public void unmortgage(Player player, int cost){
         if(isMortgaged){
@@ -135,7 +135,7 @@ public class Ownable extends SmallTile{
     }
 
     /**
-     * @return returns true if the property is mortgaged
+     * @return returns true if the ownable is mortgaged
      */
     public boolean getMortgaged(){
         return isMortgaged;
