@@ -41,7 +41,6 @@ public class PlayerTest{
 		testPlayer.makePurchase(testProperty.getCost());
 		assertEquals(testPlayer.getOwnables().get(0), testProperty);
 		assertEquals(testPlayer.getMoney(), 1300);
-
 	}
 
 	@Test
@@ -50,8 +49,6 @@ public class PlayerTest{
 		assertEquals(testPlayer.getOwnables().get(0), testProperty);
 		testPlayer.removeOwnable(testProperty);
 		assertEquals(testPlayer.getOwnables().size(), 0);
-
-
 	}
 
 	@Test
@@ -60,10 +57,9 @@ public class PlayerTest{
 		assertEquals(testPlayer.getIsInJail(), true);
 
 	}
+
 	@Test
 	public void botTest(){
 		assertEquals(false, testPlayer instanceof Bot);
-
 	}
-
 }

@@ -128,29 +128,72 @@ public class PropertyTest {
     }
 
     @Test
-    public void testSellProperty(){
+    public void testSellOwnable(){
         p.buyOwnable(player, 0);
         p.sellOwnable(player, -200);
         assertEquals(1300, player.getMoney());
     }
 
     @Test
-    public void testSellProperty2(){
+    public void testSellOwnable2(){
         p.sellOwnable(player, 200);
         assertEquals(1500, player.getMoney());
     }
 
     @Test
-    public void testSellProperty3() {
+    public void testSellOwnable3() {
         p.buyOwnable(player, 200);
         p.sellOwnable(player, 200);
         assertEquals(1500, player.getMoney());
     }
 
     @Test
-    public void testBuyProperty(){
-        p.buyOwnable(player, 10000);
-        assertEquals(1500, player.getMoney());
+    public void testSellHouse() {
+        p.buyOwnable(player, 50);
+        p.setHousePrice(50);
+        p.develop();
+        p.sellHouse();
+        assertEquals(1425, player.getMoney());
     }
 
+    @Test
+    public void testSellHouse2() {
+        p.buyOwnable(player, 50);
+        p.setHousePrice(50);
+        p.develop();
+        p.develop();
+        p.sellHouse();
+        assertEquals(1375, player.getMoney());
+    }
+
+    @Test
+    public void testGetHousesOwned() {
+        p.buyOwnable(player, 50);
+        p.setHousePrice(50);
+        p.develop();
+        p.develop();
+        assertEquals(2, p.getHousesOwned());
+    }
+
+    @Test
+    public void testGetHousesOwned2() {
+        p.buyOwnable(player, 50);
+        p.setHousePrice(50);
+        p.develop();
+        p.develop();
+        p.sellHouse();
+        p.sellHouse();
+        p.sellHouse();
+        assertEquals(0, p.getHousesOwned());
+    }
+
+    @Test
+    public void testGetHousesOwned3() {
+        p.buyOwnable(player, 50);
+        p.setHousePrice(50);
+        p.develop();
+        p.develop();
+        p.sellHouse();
+        assertEquals(1, p.getHousesOwned());
+    }
 }
