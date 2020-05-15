@@ -53,7 +53,4 @@ public class OwnableTest {
         assertEquals(200, testOwn.getCost());
 
     }
-
-
-
 }
