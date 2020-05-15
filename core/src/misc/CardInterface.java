@@ -9,7 +9,5 @@ public interface CardInterface {
 
     int getValue();
 
-    void runAction();
-
     String getCardMessage();
 }
