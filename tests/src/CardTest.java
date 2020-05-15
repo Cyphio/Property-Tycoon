@@ -15,7 +15,6 @@ public class CardTest {
         card.setValue(5);
     }
 
-
     @Test
     public void testGetValue(){
         assertEquals(5, card.getValue());
@@ -33,17 +32,15 @@ public class CardTest {
 
     @Test
     public void testGetMessage2(){
-
         card.setAction("Go back to");
         assertEquals("Go back to", card.getCardMessage());
     }
+
     @Test
     public void testSetActionAndValue(){
-
         card.setAction("Pay me");
         card.setValue(10);
         assertEquals("Pay me $10", card.getCardMessage());
     }
-
 
 }

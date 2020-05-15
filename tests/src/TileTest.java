@@ -32,14 +32,12 @@ public class TileTest {
         assertEquals(5,tile.getTilePos());
     }
 
-
     @Test
     public void addPlayer(){
         player = new Player("hello",new Sprite());
         tile.addPlayer(player);
 
         assertEquals(player,tile.getPlayers().get(0));
-
     }
 
     @Test
@@ -52,16 +50,12 @@ public class TileTest {
 
     }
 
-
     @Test
     public void getCoordinates(){
 
         assertEquals(null,tile.getAllCoordinates());
 
     }
-
-
-
 
 
 
