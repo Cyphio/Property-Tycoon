@@ -616,7 +616,7 @@ public class GameScreen implements Screen {
                                 openPopUpWindow(clickedProperty);
                                 rollDice.setVisible(true);
                             } else {
-                                quickPopUpWindow("Not enough money", 100, 350, 0.5f);
+                                quickPopUpWindow("Not enough money", 100, 400, 0.5f);
                             }
                         }
                     } catch (Exception e) {
@@ -624,7 +624,7 @@ public class GameScreen implements Screen {
                     }
                 }
                 else{
-                    quickPopUpWindow("You have not gone around the board yet!", 100, 300, 2);
+                    quickPopUpWindow("You have not gone around the board yet!", 100, 400, 2);
                 }
             }
         });
@@ -648,7 +648,7 @@ public class GameScreen implements Screen {
                     closeAllWindows();
                     auctionPopUpWindow.setVisible(true);
                 }
-                else{quickPopUpWindow("You have not gone around the board yet!", 100, 300, 2);
+                else{quickPopUpWindow("You have not gone around the board yet!", 100, 400, 2);
                 }
             }
         });
@@ -696,7 +696,7 @@ public class GameScreen implements Screen {
                     updatePropertyDevelopmentSprites();
                 }
                 else {
-                    quickPopUpWindow("Not able to develop", 100, 350, 0.5f);
+                    quickPopUpWindow("Not able to develop", 100, 400, 0.5f);
                 }
             }
         });
@@ -772,7 +772,7 @@ public class GameScreen implements Screen {
                                 openPopUpWindow(clickedProperty);
                                 rollDice.setVisible(true);
                             } else {
-                                quickPopUpWindow("Not enough money", 100, 350, 0.5f);
+                                quickPopUpWindow("Not enough money", 100, 400, 0.5f);
                             }
                         }
                     } catch (Exception e) {
@@ -780,7 +780,7 @@ public class GameScreen implements Screen {
                     }
                 }
                 else{
-                    quickPopUpWindow("You have not gone around the board yet!", 100, 300, 2);
+                    quickPopUpWindow("You have not gone around the board yet!", 100, 400, 2);
                 }
             }
         });
@@ -804,7 +804,7 @@ public class GameScreen implements Screen {
                     auctionPopUpWindow.setVisible(true);
                 }
                 else{
-                    quickPopUpWindow("You have not gone around the board yet!", 100, 300, 2);
+                    quickPopUpWindow("You have not gone around the board yet!", 100, 400, 2);
                 }
             }
         });
@@ -940,10 +940,10 @@ public class GameScreen implements Screen {
                         }
                     }
                     else if (Integer.parseInt(auctionBid.getText()) <= gameCon.getAuctionValue()) {
-                        quickPopUpWindow("Bid not high enough", 100, 350, 0.5f);
+                        quickPopUpWindow("Bid not high enough", 100, 400, 0.5f);
                     }
                     else if (currBidder.getMoney() < Integer.parseInt(auctionBid.getText())) {
-                        quickPopUpWindow("Not enough money", 100, 350,0.5f);
+                        quickPopUpWindow("Not enough money", 100, 400,0.5f);
                     }
                     if(bidderList.size() == 1 && gameCon.getAuctionValue() != 0) {
                         bidButton.setVisible(false);
