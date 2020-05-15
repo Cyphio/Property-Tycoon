@@ -25,6 +25,7 @@ task debug(dependsOn: classes, type: JavaExec) {
 }
 
 task dist(type: Jar) {
+    baseName = "PropertyTycoon"
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
@@ -37,4 +38,4 @@ task dist(type: Jar) {
 
 dist.dependsOn classes
 
-eclipse.project.name = appName + "-desktop"
+eclipse.project.name = 'appName + "-PropertyTycoon"'

@@ -14,17 +14,21 @@ public class Tax extends SmallTile implements TaxInterface {
     int taxAmount;
     protected Sprite icon;
 
-    public Tax(){
-
+    /**
+     * constructor for tax tile
+     */
+    public Tax() {
         tileName = "Tax";
         Texture texture = new Texture(Gdx.files.internal("tile-images/tax.png"));
         icon = new Sprite(texture);
         icon.setOriginCenter();
         icon.setAlpha(1f);
-
     }
 
-
+    /**
+     * sets coordinates for sprites within the tax tile
+     * @param coordinates the arraylist of coordinates for each tile.
+     */
     @Override
     public void setCoordinates(ArrayList<Coordinate> coordinates) {
         playerPosCoordinates = new ArrayList<>();
@@ -37,18 +41,14 @@ public class Tax extends SmallTile implements TaxInterface {
         int tilePosition = 7; // used to determine which cell in a card is the label position one (makes it easier for us to change as we go)
         int iconPosition = 5;
 
-
         Coordinate iconCoordinate = new Coordinate(0,0);
         Coordinate labelCoordinate = new Coordinate(0,0);
-
 
         labelCoordinate.setCoordinate(coordinates.get(tilePosition).getX()+32,coordinates.get(tilePosition).getY()+32);
         iconCoordinate.setCoordinate(coordinates.get(iconPosition).getX()-64,coordinates.get(iconPosition).getY()-64);
 
-
         centerLabelCoordinate = labelCoordinate;
         allCoordinates = coordinates;
-
 
         if (this.getTilePos() < 11){
 
@@ -63,13 +63,12 @@ public class Tax extends SmallTile implements TaxInterface {
 
         }
         icon.setPosition(iconCoordinate.getX(),iconCoordinate.getY());
-
     }
 
 
-
-
-
+    /**
+     * @return returns the icon placed on the tax tile
+     */
     public Sprite getIcon(){return icon;}
     public int getTaxAmount(){
         return this.taxAmount;

@@ -32,10 +32,6 @@ public class CellToTileBuilder {
         int dynamicY= 10;
         int dynamicX=28;
 
-        //x=27
-        //y = 10
-
-        //go tile
         cellCoordinates=new ArrayList<>();
         for(int y=dynamicY;y< 4+dynamicY;y++){
             for(int x=dynamicX;x< 4+dynamicX;x++){
@@ -169,7 +165,6 @@ public class CellToTileBuilder {
     /**
      * @return returns the hashmap of what cells are assigned to what tiles
      */
-
     public HashMap getReferenceList(){
         return cellToTile;
     }

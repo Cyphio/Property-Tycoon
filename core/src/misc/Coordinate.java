@@ -24,7 +24,6 @@ public class Coordinate {
      * @param x x coord
      * @param y y coord
      */
-
     public void setCoordinate(int x, int y) {
         this.x = x;
         this.y= y;

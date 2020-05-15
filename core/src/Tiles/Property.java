@@ -1,11 +1,10 @@
 package Tiles;
 
+import com.badlogic.gdx.graphics.Color;
 import main.Player;
-
+import misc.Coordinate;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import com.badlogic.gdx.graphics.Color;
-import misc.Coordinate;
 
 import static com.propertytycoonmakers.make.PropertyTycoon.players;
 
@@ -38,6 +37,10 @@ public class Property extends Ownable implements PropertyInterface {
         this.colour = colour;
     }
 
+    /**
+     * getColourAsString returns the colour of the Property as a string
+     * @return the colour of the Property as a string
+     */
     public String getColourAsString() {
         return colour;
     }
@@ -56,23 +59,41 @@ public class Property extends Ownable implements PropertyInterface {
         }
     }
 
+
+    /**
+     * sets the price of a house for the property
+     * @param housePrice the price of the house
+     */
     public void setHousePrice(int housePrice) {
         this.housePrice = housePrice;
     }
 
+    /**
+     * @return returns the price of a house
+     */
     public int getHousePrice() {
         return housePrice;
     }
 
-
+    /**
+     * sets the price of a hotel
+     * @param hotelPrice the price required
+     */
     public void setHotelPrice(int hotelPrice) {
         this.hotelPrice = hotelPrice;
     }
 
+    /**
+     *
+     * @return returns the hotel price
+     */
     public int getHotelPrice() {
         return hotelPrice;
     }
 
+    /**
+     * develops a house on the property
+     */
     public void develop(){
         if(housesOwned < 5){
             housesOwned +=1;
@@ -83,6 +104,9 @@ public class Property extends Ownable implements PropertyInterface {
         }
     }
 
+    /**
+     * @return returns the current rent for the property
+     */
     public int getCurrentRent() {
         return developmentPrices.get(housesOwned);
     }
@@ -106,16 +130,6 @@ public class Property extends Ownable implements PropertyInterface {
         return developmentPrices;
     }
 
-
-    /**
-     * getRent returns the rent of the property with 0 development
-     * @return the rent of the property with 0 development
-     */
-    public int getInitialRent() {
-        return developmentPrices.get(0);
-    }
-
-
     /**
      * Checks if a property is owned, and if so, allows it to be sold by the player
      * @param player the player buying the property
@@ -132,32 +146,25 @@ public class Property extends Ownable implements PropertyInterface {
             owned = false;
             owner = null;
             setBuyable(true);
-        }else if(owner == player && housesOwned >0){
-
-            sellHouse();
-
         }
-
+        else if(owner == player && housesOwned >0){
+            sellHouse();
+        }
     }
 
-
-    // basically undevelop
+    /**
+     * sells a developed house on the property
+     */
     public void sellHouse(){
-
         if(housesOwned <= 4 && housesOwned > 0){
-
             owner.payPlayer(housePrice/2);
             housesOwned -=1;
-
-        }else if(housesOwned == 5){
-
+        }
+        else if(housesOwned == 5){
             owner.payPlayer(hotelPrice/2);
             housesOwned -=1;
-
         }
     }
-
-
 
     /**
      * sets the coordinates of tiles on the GameBoard, this allows for mouse interactivity.
@@ -186,14 +193,11 @@ public class Property extends Ownable implements PropertyInterface {
         allCoordinates = coordinates;
     }
 
-
-
+    /**
+     * returns the number of houses on the property
+     * @return
+     */
     public int getHousesOwned(){
-
         return housesOwned;
-
     }
-
-
-
 }
