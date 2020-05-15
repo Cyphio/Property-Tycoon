@@ -51,7 +51,6 @@ public class PlayerTest{
 		testPlayer.removeOwnable(testProperty);
 		assertEquals(testPlayer.getOwnables().size(), 0);
 
-
 	}
 
 	@Test
@@ -63,6 +62,21 @@ public class PlayerTest{
 	@Test
 	public void botTest(){
 		assertEquals(false, testPlayer instanceof Bot);
+
+	}
+
+	@Test
+	public void negativeBuyTest(){
+		testProperty.buyProperty(testPlayer, -200);
+		assertEquals(1700, testPlayer.getMoney());
+
+	}
+
+	@Test
+	public void negativeSellTest(){
+		testProperty.buyProperty(testPlayer, 0);
+		testProperty.sellProperty(testPlayer, -200);
+		assertEquals(1300, testPlayer.getMoney());
 
 	}
 

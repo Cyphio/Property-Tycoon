@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="PlayerTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2020-05-15T00:18:21" hostname="Harry-Desktop" time="0.005">
+<testsuite name="PlayerTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2020-05-15T00:51:02" hostname="DESKTOP-FH38GRJ" time="0.005">
   <properties/>
-  <testcase name="moneyTest" classname="PlayerTest" time="0.003"/>
-  <testcase name="botTest" classname="PlayerTest" time="0.001"/>
+  <testcase name="negativeSellTest" classname="PlayerTest" time="0.003"/>
+  <testcase name="moneyTest" classname="PlayerTest" time="0.001"/>
+  <testcase name="botTest" classname="PlayerTest" time="0.0"/>
+  <testcase name="negativeBuyTest" classname="PlayerTest" time="0.0"/>
   <testcase name="testBuying" classname="PlayerTest" time="0.0"/>
   <testcase name="testInJail" classname="PlayerTest" time="0.0"/>
-  <testcase name="testSelling" classname="PlayerTest" time="0.001"/>
+  <testcase name="testSelling" classname="PlayerTest" time="0.0"/>
   <testcase name="nameTest" classname="PlayerTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
